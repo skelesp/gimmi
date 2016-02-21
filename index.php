@@ -1,5 +1,7 @@
 <?php
-// MAIN
+//////////
+// MAIN //
+//////////
 
 //Variables
 $sSiteTitle = "Geemee v0.1";
