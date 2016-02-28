@@ -18,6 +18,14 @@ include "processes/activities/act_".$activity.".php";
 //Create site content
 $sSiteContent = $output;
 
+//DEBUGGING: voeg $_SESSION['DEBUG_message'] toe aan code om een debugbericht te tonen vanuit gelijk welke plaats in de code.
+if ( isset($_SESSION['DEBUG_message']) && !empty($_SESSION['DEBUG_message']) ) {
+	$debugMessage = "<br /><br />DEBUGGING<br /><br />".$_SESSION['DEBUG_message'];
+	$sSiteContent = $sSiteContent.$debugMessage;
+	unset( $_SESSION['DEBUG_message'] );
+}
+
+
 $sBody = "";
 $sBody = $sBody.html_wrapper($sSiteTitle, "h1");
 $sBody = $sBody.html_wrapper($activity." - ".$activityState."<br/>", "h2");
