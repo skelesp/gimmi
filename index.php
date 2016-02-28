@@ -4,7 +4,7 @@
 //////////
 
 //Variables
-$sSiteTitle = "Geemee v0.1";
+$sSiteTitle = "Geemee v0.1 - POF V0.3";
 $sSiteContent = "Content under construction";
 
 //Create header
