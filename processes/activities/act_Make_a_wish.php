@@ -215,12 +215,17 @@ switch ($activityState) {
 		 $output = $output." ".$formHTML;
 		
 		 break;
+	// case 'handle registered wish : 
 	
 	case 'wish registered':
-		$output = $output." "."The wish is registered.";
 		header("Refresh: ".$activityRefreshRate);
 		
 		// Next activity + save process instance info
+		$_SESSION[$activityID] = "wish has been created";
+		break;
+	
+	case 'wish has been created':
+		$output = $output." "."The wish is created.";
 		session_destroy(); //**TEST
 		break;
 } // end of $activityState switch
