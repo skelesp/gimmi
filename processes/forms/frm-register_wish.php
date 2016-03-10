@@ -4,7 +4,7 @@ use PFBC\Form;
 use PFBC\Element;
 use PFBC\View;
 
-include_once "/lib/PFBC/form.php";
+include_once "./lib/PFBC/form.php";
 
 /**
  * This form will ask for the name of the wish owner.

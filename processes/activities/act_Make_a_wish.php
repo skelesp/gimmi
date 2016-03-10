@@ -1,6 +1,6 @@
 <?php
-require_once "/lib/GIMMI/Wish.php";
-require_once "/lib/GIMMI/Person.php";
+require_once "./lib/GIMMI/Wish.php";
+require_once "./lib/GIMMI/Person.php";
 
 session_start();
 /**
@@ -45,7 +45,7 @@ switch ($activityState) {
 		 * Check if the wish owner is known
 		 */
 		$o_Wish = $_SESSION['o_Wish'];
-		include "processes/services/srv-Check_Wish_Owner.php";
+		include "./processes/services/srv-Check_Wish_Owner.php";
 		
 		// Next activity + save process instance info
 		$_SESSION[$activityID] = "ask for owner";	
@@ -68,7 +68,7 @@ switch ($activityState) {
 			 * Ask for wish owner
 			 */
 			$frmID = "ask_for_owner";
-			include "processes/forms/frm-".$frmID.".php";
+			include "./processes/forms/frm-".$frmID.".php";
 			$output = $output." ".$formHTML;
 			
 			// Next activity + save process instance info
@@ -156,7 +156,7 @@ switch ($activityState) {
 		 * Check if the wish creator is also the wish owner?
 		 */ 
 		$frmID = "ask_creator_is_owner";
-		include "/processes/forms/frm-".$frmID.".php";
+		include "./processes/forms/frm-".$frmID.".php";
 		
 		$output = $output." ".$formHTML;
 		
@@ -208,7 +208,7 @@ switch ($activityState) {
 		 $o_Owner = $_SESSION['o_Owner'];
 		 
 		 $frmID = "register_wish";
-		 include "processes/forms/frm-".$frmID.".php";
+		 include "./processes/forms/frm-".$frmID.".php";
 		
 		// Next activity + save process instance info
 		 $_SESSION[$activityID] = "wish registered";
