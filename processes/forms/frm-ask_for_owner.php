@@ -38,13 +38,13 @@ include_once "/lib/PFBC/form.php";
 	// Hidden field with form name
 	$form->addElement(new Element\Hidden("frm", $frmID));
 	// Textfield for Wish Owner firstname
-	$form->addElement(new Element\Textbox("Voornaam", "owner_first", array("required" => 0)));
+	$form->addElement(new Element\Textbox("Voornaam", "owner_first", array("required" => 0, "style" => "height: 35px;")));
 	// Textfield for Wish Owner lastname
-	$form->addElement(new Element\Textbox("Familienaam", "owner_last", array("required" => 0)));
+	$form->addElement(new Element\Textbox("Familienaam", "owner_last", array("required" => 0, "style" => "height: 35px;")));
 	// Textfield for Wish Owner email
-	$form->addElement(new Element\Email("Emailadres", "owner_email", array("required" => 0)));
+	$form->addElement(new Element\Email("Emailadres", "owner_email", array("required" => 0, "style" => "height: 35px;")));
 	// Textfield for Wish Owner nickname
-	$form->addElement(new Element\Textbox("Nickname", "owner_nick", array("required" => 0)));
+	$form->addElement(new Element\Textbox("Nickname", "owner_nick", array("required" => 0, "style" => "height: 35px;")));
 	// Button to send the form
 	$form->addElement(new Element\Button("Verder", "submit", array("name" => $frmID)));
 
