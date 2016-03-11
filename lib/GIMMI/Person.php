@@ -83,7 +83,7 @@ class Person
 	}
 	
 	public function check_for_account () {
-		require '/db_config.php';
+		require './db_config.php';
 		//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
 		try 
 		{ 
