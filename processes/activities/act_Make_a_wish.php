@@ -1,6 +1,6 @@
 <?php
-require_once "./lib/GIMMI/Wish.php";
-require_once "./lib/GIMMI/Person.php";
+require_once "./lib/GIMMI/Wish.class.php";
+require_once "./lib/GIMMI/Person.class.php";
 
 session_start();
 /**

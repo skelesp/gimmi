@@ -3,17 +3,40 @@
 // MAIN //
 //////////
 
-//Variables
+require_once "./lib/WebsiteBuilder/template.class.php";
+require_once "./lib/POF/processInstance.class.php";
+
+//Site / Page Info (uit WebsiteBuilder database)
 $siteTitle = "GIMMI";
 $siteSubtitle = "Making wishes come true";
 $siteContent = "GIMMI v0.1 - POF V0.3 +++ Content under construction";
+$templateFile = "/ResponsiveDesignTXT/overview.html";
+
+//Process Info (uit POF database)
 $activity = "Choose your gift idea action";
 $activityInfo = "Search, Order, Give or Add a gift idea";
+$activityState = "";
+$activityID = "";
+$processID =  (isset($_GET['pid'])) ? htmlspecialchars($_GET['pid']) : 0;
+$processInstance = new ProcessInstance ($processID);
+
+//Variables
+$output = "";
 
 // Generate content
-$activity = "Make_a_wish";
-$activityInfo = "Maak een wens aan.";
-include "processes/activities/act_".$activity.".php";
+if ( isset($_SESSION[$activityID]) && !empty($_SESSION[$activityID]) ) {
+	
+	$activity = "Make_a_wish";
+	$activityInfo = "Maak een wens aan.";
+	include "./processes/activities/act_".$activity.".php";
+	$templateFile = "/ResponsiveDesignTXT/activity.html";
+	
+} else if ( isset($processID) && !empty($processID) ) {
+	
+	$processInstance->start();
+	$templateFile = "/ResponsiveDesignTXT/activity.html";
+	
+}
 
 // Create site content
 $siteContent = $output;
@@ -25,43 +48,21 @@ if ( isset($_SESSION['DEBUG_message']) && !empty($_SESSION['DEBUG_message']) ) {
 	unset( $_SESSION['DEBUG_message'] );
 }
 
-$pageLayout = new Template("layout/ResponsiveDesignTXT/activity.html");
+//Get template
+$pageLayout = new Template("./layout".$templateFile);
+
+//Create tokens
 $pageLayout->setToken("site.title",$siteTitle);
 $pageLayout->setToken("site.subtitle", $siteSubtitle);
 $pageLayout->setToken("site.content", $siteContent);
 $pageLayout->setToken("activity.name", $activity);
 $pageLayout->setToken("activity.info", $activityState);
+$pageLayout->setToken("process.name", $processInstance);
 $pageLayout->setToken("process.activity", $activity." - ".$activityInfo);
+$pageLayout->setToken("content.header", $activity);
+$pageLayout->setToken("content.text", $activityInfo);
 
+//Parse template
 print $pageLayout->parse();
-
-// Template class
-
-class Template {
-	protected $file;
-	protected $values = array();
-	
-	public function __construct($file) {
-		$this->file = $file;
-	}
-	
-	public function setToken($key, $value) {
-		$this->values[$key] = $value;
-	}
-	
-	public function parse() {
-		if (!file_exists($this->file)) {
-			return "Error loading template file".$this->file.".";
-		}
-		$output = file_get_contents($this->file);
-		
-		foreach ($this->values as $key => $value) {
-			$tagToReplace = "[@".$key."]";
-			$output = str_replace($tagToReplace, $value, $output);
-		}
-		
-		return $output;
-	}
-}
 
 ?>

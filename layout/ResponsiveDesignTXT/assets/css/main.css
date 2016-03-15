@@ -1539,7 +1539,7 @@
 	form input[type="email"],
 	form input[type="password"],
 	form select {
-		line-height: 3em;
+		/* line-height: 3em; */
 		padding: 0 1em;
 	}
 

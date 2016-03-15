@@ -1,0 +1,94 @@
+<NotepadPlus>
+    <Project name="Gimmi">
+        <Folder name="layout">
+            <Folder name="ResponsiveDesignTXT">
+                <Folder name="assets">
+                    <Folder name="css">
+                        <Folder name="images">
+                            <File name="layout\ResponsiveDesignTXT\assets\css\images\highlight.png" />
+                            <File name="layout\ResponsiveDesignTXT\assets\css\images\overlay.png" />
+                        </Folder>
+                        <File name="layout\ResponsiveDesignTXT\assets\css\font-awesome.css" />
+                        <File name="layout\ResponsiveDesignTXT\assets\css\font-awesome.min.css" />
+                        <File name="layout\ResponsiveDesignTXT\assets\css\ie8.css" />
+                        <File name="layout\ResponsiveDesignTXT\assets\css\main.css" />
+                    </Folder>
+                    <Folder name="fonts">
+                        <File name="layout\ResponsiveDesignTXT\assets\fonts\fontawesome-webfont.eot" />
+                        <File name="layout\ResponsiveDesignTXT\assets\fonts\fontawesome-webfont.svg" />
+                        <File name="layout\ResponsiveDesignTXT\assets\fonts\fontawesome-webfont.ttf" />
+                        <File name="layout\ResponsiveDesignTXT\assets\fonts\fontawesome-webfont.woff" />
+                        <File name="layout\ResponsiveDesignTXT\assets\fonts\fontawesome-webfont.woff2" />
+                        <File name="layout\ResponsiveDesignTXT\assets\fonts\FontAwesome.otf" />
+                    </Folder>
+                    <Folder name="js">
+                        <Folder name="ie">
+                            <File name="layout\ResponsiveDesignTXT\assets\js\ie\backgroundsize.min.htc" />
+                            <File name="layout\ResponsiveDesignTXT\assets\js\ie\html5shiv.js" />
+                            <File name="layout\ResponsiveDesignTXT\assets\js\ie\PIE.htc" />
+                            <File name="layout\ResponsiveDesignTXT\assets\js\ie\respond.min.js" />
+                        </Folder>
+                        <File name="layout\ResponsiveDesignTXT\assets\js\jquery.dropotron.min.js" />
+                        <File name="layout\ResponsiveDesignTXT\assets\js\jquery.min.js" />
+                        <File name="layout\ResponsiveDesignTXT\assets\js\main.js" />
+                        <File name="layout\ResponsiveDesignTXT\assets\js\skel-viewport.min.js" />
+                        <File name="layout\ResponsiveDesignTXT\assets\js\skel.min.js" />
+                        <File name="layout\ResponsiveDesignTXT\assets\js\util.js" />
+                    </Folder>
+                    <Folder name="sass">
+                        <Folder name="libs">
+                            <File name="layout\ResponsiveDesignTXT\assets\sass\libs\_functions.scss" />
+                            <File name="layout\ResponsiveDesignTXT\assets\sass\libs\_mixins.scss" />
+                            <File name="layout\ResponsiveDesignTXT\assets\sass\libs\_skel.scss" />
+                            <File name="layout\ResponsiveDesignTXT\assets\sass\libs\_vars.scss" />
+                        </Folder>
+                        <File name="layout\ResponsiveDesignTXT\assets\sass\ie8.scss" />
+                        <File name="layout\ResponsiveDesignTXT\assets\sass\main.scss" />
+                    </Folder>
+                </Folder>
+                <Folder name="images">
+                    <File name="layout\ResponsiveDesignTXT\images\banner.jpg" />
+                    <File name="layout\ResponsiveDesignTXT\images\pic01.jpg" />
+                    <File name="layout\ResponsiveDesignTXT\images\pic02.jpg" />
+                    <File name="layout\ResponsiveDesignTXT\images\pic03.jpg" />
+                    <File name="layout\ResponsiveDesignTXT\images\pic04.jpg" />
+                    <File name="layout\ResponsiveDesignTXT\images\pic05.jpg" />
+                </Folder>
+                <File name="layout\ResponsiveDesignTXT\activity.html" />
+                <File name="layout\ResponsiveDesignTXT\overview.html" />
+            </Folder>
+        </Folder>
+        <Folder name="lib">
+            <Folder name="GIMMI">
+                <File name="lib\GIMMI\Person.php" />
+                <File name="lib\GIMMI\Wish.php" />
+            </Folder>
+        </Folder>
+        <Folder name="processes">
+            <Folder name="activities">
+                <File name="processes\activities\act_Make_a_wish.php" />
+            </Folder>
+            <Folder name="forms">
+                <File name="processes\forms\frm-ask_creator_is_owner.php" />
+                <File name="processes\forms\frm-ask_for_owner.php" />
+                <File name="processes\forms\frm-register_wish.php" />
+            </Folder>
+            <Folder name="services">
+                <File name="processes\services\srv-Ask_for_owner.php" />
+                <File name="processes\services\srv-Check_Wish_Owner.php" />
+            </Folder>
+        </Folder>
+        <File name="db_config.php" />
+        <File name="index.php" />
+        <File name="test_db.php" />
+    </Project>
+    <Project name="POF">
+        <Folder name="POF">
+            <File name="lib\POF\Process.php" />
+            <File name="lib\POF\ProcessElement.php" />
+        </Folder>
+    </Project>
+    <Project name="WebsiteBuilder">
+        <File name="lib\WebsiteBuilder\template.class.php" />
+    </Project>
+</NotepadPlus>
