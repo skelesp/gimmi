@@ -6,18 +6,25 @@
 require_once "./lib/WebsiteBuilder/template.class.php";
 require_once "./lib/POF/processInstance.class.php";
 
-//Site / Page Info (uit WebsiteBuilder database)
+//Site / Page Info (uit WebsiteBuilder database in de toekomst)
+// Pagina's die nodig zijn:
+//		Page     |    Template    |      Title      |       Content      |
+//      ---------|----------------|-----------------|--------------------|
+//      Portal   | portal.html    |   "Fix string"  |    "Fix content"   |
+//      Activity | activity.html  | "Variable name" | "Variable content" |
+//		Help	 | help.html      |   "Fix string"  |    "Fix content"   |
+
 $siteTitle = "GIMMI";
 $siteSubtitle = "Making wishes come true";
 $siteContent = "GIMMI v0.1 - POF V0.3 +++ Content under construction";
-$templateFile = "/ResponsiveDesignTXT/overview.html";
+$templateFile = "/ResponsiveDesignTXT/portal.html";
 
 //Process Info (uit POF database)
-$activity = "Choose your gift idea action";
-$activityInfo = "Search, Order, Give or Add a gift idea";
+$activity = "Add or Search a gift idea";
+$activityInfo = "";
 $activityState = "";
 $activityID = "";
-$processID =  (isset($_GET['pid'])) ? htmlspecialchars($_GET['pid']) : 0;
+$processID =  (isset($_GET['pid']) && is_numeric($_GET['pid'])) ? htmlspecialchars($_GET['pid']) : 0;
 $processInstance = new ProcessInstance ($processID);
 
 //Variables
@@ -33,7 +40,7 @@ if ( isset($_SESSION[$activityID]) && !empty($_SESSION[$activityID]) ) {
 	
 } else if ( isset($processID) && !empty($processID) ) {
 	
-	$processInstance->start();
+	$processInstance->trigger();
 	$templateFile = "/ResponsiveDesignTXT/activity.html";
 	
 }
@@ -57,7 +64,7 @@ $pageLayout->setToken("site.subtitle", $siteSubtitle);
 $pageLayout->setToken("site.content", $siteContent);
 $pageLayout->setToken("activity.name", $activity);
 $pageLayout->setToken("activity.info", $activityState);
-$pageLayout->setToken("process.name", $processInstance);
+$pageLayout->setToken("process.name", ($processInstance->checkPrerequisites()==true) ? "Prereqs are ok" : "Prereqs missing");
 $pageLayout->setToken("process.activity", $activity." - ".$activityInfo);
 $pageLayout->setToken("content.header", $activity);
 $pageLayout->setToken("content.text", $activityInfo);

@@ -7,15 +7,19 @@ require_once ('Process.class.php');
  * @version 0.1
  * @created 15-mar-2016 23:37:24
  */
-class ProcessInstance
+class ProcessInstance 
 {	
-	protected $id;
-	protected $process;
-	protected $status;
+	protected $id; // @var Process Instance ID
+	protected $process; // @var Process class object
+	protected $status; // @var Status of the process instance
+	protected $currentElement; // @var Current element in which the process instance is active now
+	protected $variables; // @array Array of variables for this process instance
 	
 	
 	public function __construct ($processID) {
 		$this->process = new Process($processID);
+		$this->status = "created";
+		$this->variables = array();
 	}
 	
 	public function getProcess (){
@@ -30,9 +34,24 @@ class ProcessInstance
 		return $this->status;
 	}
 	
-	public function start () {
-		//check preconditions of process
-		//go to next element
+	public function checkPrerequisites (){
+		// Check de prerequisites
+		$ok = true;
+		foreach ($this->process->getPrerequisites() as $prereq => $value) {
+			if (empty($value)) {
+				$this->variables[$prereq] = null;
+				$ok = false;
+			} else {
+				$this->variables[$prereq] = $value;
+			}
+		}
+		return $ok;
+	}	
+	public function trigger () {
+		$this->status = "started";	
+	}
+	
+	public function getNextElement () {
 	}
 	
 	public function end () {

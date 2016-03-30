@@ -9,23 +9,26 @@
  */
 class Process
 {	
-	protected $id;
-	protected $name;
-		
+	protected $id; //@var ID of the process definition
+	protected $name; //@var name of the process
+	protected $prerequisites; //@var array of prerequisites to be able to start the process
+	protected $elements; //@var array of elements of the process
+	
 	public function __construct ($processID) {
 		$this->id = $processID;
+		$this->prerequisites = array();
+		$this->elements = array();
+		//TODO: Change switch to database query to link processID with a process name
 		switch ($processID) {
 			case 1:
 				$this->name = "Add a wish";
+				$this->prerequisites = [
+										"giver" => "Stijn",
+										"receiver" => ""
+									];
 				break;
 			case 2:
 				$this->name = "Search a wish";
-				break;
-			case 3:
-				$this->name = "Buy a gift";
-				break;
-			case 4:
-				$this->name = "Give a gift";
 				break;
 			default:
 				$this->name = "Unknown";
@@ -34,11 +37,15 @@ class Process
 	}
 	
 	public function __toString () {
-		
+		return "This is process '".$this->name."'";
 	}
 	
 	public function getName () {
 		return $this->name;
+	}
+	
+	public function getPrerequisites() {
+		return $this->prerequisites;
 	}
 }
 
