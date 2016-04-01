@@ -14,12 +14,9 @@ include_once "./lib/PFBC/form.php";
  * @created 15-nov-2015 16:29:14
  */
 
- // Calling activity
- $callingActivity = "act_Make_a_wish.php";
-  
  // Create a new form with name "Wish Owner?"
-	$frmName = "Wish registration";
-	$frmID = "wishRegistration";
+	$frmName = "Input a person";
+	//$frmID = "input_person";
 	$form = new Form($frmName);
 
 // Configure the form
@@ -33,17 +30,15 @@ include_once "./lib/PFBC/form.php";
 		
 // Create form elements
 	// Add form title
-	$form->addElement(new Element\HTML('<legend>Wat wil je wensen voor '.$wishReceiver->getfirstName()." ".$wishReceiver->getlastName().'?</legend>'));
+	$form->addElement(new Element\HTML("<legend>".$legend."</legend>"));
 	// Hidden field with form name
 	$form->addElement(new Element\Hidden("frm", $frmID));
 	// Text field for Wish Title
-	$form->addElement(new Element\Textbox("Titel", "wish_title"));
+	$form->addElement(new Element\Textbox("Voornaam", "person_first"));
 	// Textarea for Wish Description
-	$form->addElement(new Element\Textarea("Beschrijving", "wish_description"));
+	$form->addElement(new Element\Textbox("Familienaam", "person_last"));
 	// Number field for Wish Price Range
-	$form->addElement(new Element\Number("Prijsschatting (in euro)", "wish_price", array("style" => "height: 30px;")));
-	// Checkbox for Wish privacy
-	$form->addElement(new Element\Checkbox("", "Wish_private", array("ja" => "Deze wens niet publiek zichtbaar maken.")));
+	$form->addElement(new Element\Textbox("Email", "person_email"));
 	// Button to send the form
 	$form->addElement(new Element\Button("Registreer", "submit", array("name" => $frmID)));
 

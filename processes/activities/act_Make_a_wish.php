@@ -2,7 +2,6 @@
 require_once "./lib/GIMMI/Wish.class.php";
 require_once "./lib/GIMMI/Person.class.php";
 
-session_start();
 /**
  * This activity will make it possible to create a wish.
  * 
@@ -13,8 +12,8 @@ session_start();
 
 // Process variables
 $activityID = 'p1_a1';
-$activityRefreshRate = 1;
-$output = "";
+$activityRefreshRate = 0;
+$_SESSION['content'] = "";
 
 // Check activity state
 if ( !isset($_SESSION[$activityID]) || empty($_SESSION[$activityID]) ) {
@@ -53,7 +52,7 @@ switch ($activityState) {
 		$_SESSION['b_ownerKnown'] = $b_ownerKnown;
 		
 		// automatic activity --> refresh page immediately
-		header("Refresh: ".$activityRefreshRate);
+		//header("Refresh: ".$activityRefreshRate);
 		
 		break;		
 	
@@ -69,7 +68,7 @@ switch ($activityState) {
 			 */
 			$frmID = "ask_for_owner";
 			include "./processes/forms/frm-".$frmID.".php";
-			$output = $output." ".$formHTML;
+			$_SESSION['content'] = $_SESSION['content']." ".$formHTML;
 			
 			// Next activity + save process instance info
 			$_SESSION[$activityID] = "handle owner info";
@@ -81,20 +80,20 @@ switch ($activityState) {
 		
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
 			// Store the form info in a Person object
-			$o_Owner = new Person();
+			$wishReceiver = new Person();
 			
-			$o_Owner->setlastName($_POST['owner_last']);
-			$o_Owner->setfirstName($_POST['owner_first']);
-			$o_Owner->setemail($_POST['owner_email']);
+			$wishReceiver->setlastName($_POST['owner_last']);
+			$wishReceiver->setfirstName($_POST['owner_first']);
+			$wishReceiver->setemail($_POST['owner_email']);
 			
-			$output = $output." ".$o_Owner;
+			$_SESSION['content'] = $_SESSION['content']." ".$wishReceiver;
 			
 			// Next activity + save process instance info
-			$_SESSION['o_Owner'] = $o_Owner;
+			$_SESSION['wishReceiver'] = $wishReceiver;
 			$_SESSION[$activityID] = "check owner account";
 			
 		} else {
-			$output = $output." "."Geen ownergegevens beschikbaar";
+			$_SESSION['content'] = $_SESSION['content']." "."Geen ownergegevens beschikbaar";
 			
 			// Next activity + save process instance info
 			$_SESSION[$activityID] = "ask for owner";
@@ -109,11 +108,13 @@ switch ($activityState) {
 		 * ACT
 		 * Check if there is an account which corresponds to the given data
 		 */
-		$o_Owner = $_SESSION['o_Owner'];
+		$wishReceiver = $_SESSION['wishReceiver'];
 		
 		// Next activity + save process instance info
 		$_SESSION[$activityID] = "create new account";
-		$_SESSION['b_ownerHasAccount'] = $o_Owner->check_for_account();
+		$wishReceiver->check_for_account();
+		
+		$_SESSION['wishReceiver'] = $wishReceiver;
 		
 		// automatic activity --> refresh page immediately
 		//header("Refresh: ".$activityRefreshRate);
@@ -125,20 +126,20 @@ switch ($activityState) {
 		 * DN
 		 * Wish owner has an account?
 		 */	
-		$o_Owner = $_SESSION['o_Owner'];
+		$wishReceiver = $_SESSION['wishReceiver'];
 		
-		if (!$_SESSION['b_ownerHasAccount']) { /* owner doesn't have an account */
+		if (!$wishReceiver->isSubscribed()) { /* owner doesn't have an account */
 		/**
 		 * ACT
 		 * Create a new person account
 		 */ 
 			
-			// Voer "$o_Owner->register();" uit (method nog te maken in Person class)
-			$output = $output." ".(string)$o_Owner."<br />Deze persoon heeft GEEN account.";
+			// Voer "$wishReceiver->register();" uit (method nog te maken in Person class)
+			$_SESSION['content'] = $_SESSION['content']." ".(string)$wishReceiver."<br />Deze persoon heeft GEEN account.";
 			
 		} else {
 			
-			$output = $output." ".(string)$o_Owner."<br />Deze persoon heeft EEN account.";
+			$_SESSION['content'] = $_SESSION['content']." ".(string)$wishReceiver."<br />Deze persoon heeft EEN account.";
 			
 		}
 		
@@ -158,7 +159,7 @@ switch ($activityState) {
 		$frmID = "ask_creator_is_owner";
 		include "./processes/forms/frm-".$frmID.".php";
 		
-		$output = $output." ".$formHTML;
+		$_SESSION['content'] = $_SESSION['content']." ".$formHTML;
 		
 		// Next activity + save process instance info
 		$_SESSION[$activityID] = "handle creator is owner respons";
@@ -205,14 +206,14 @@ switch ($activityState) {
 		 * ACT
 		 * Register a new wish
 		 */
-		 $o_Owner = $_SESSION['o_Owner'];
+		 $wishReceiver = $_SESSION['wishReceiver'];
 		 
 		 $frmID = "register_wish";
 		 include "./processes/forms/frm-".$frmID.".php";
 		
 		// Next activity + save process instance info
 		 $_SESSION[$activityID] = "wish registered";
-		 $output = $output." ".$formHTML;
+		 $_SESSION['content'] = $_SESSION['content']." ".$formHTML;
 		
 		 break;
 	// case 'handle registered wish : 
@@ -225,7 +226,7 @@ switch ($activityState) {
 		break;
 	
 	case 'wish has been created':
-		$output = $output." "."The wish is created.";
+		$_SESSION['content'] = $_SESSION['content']." "."The wish is created.";
 		session_destroy(); //**TEST
 		break;
 } // end of $activityState switch

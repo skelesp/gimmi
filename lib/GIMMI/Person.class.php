@@ -15,11 +15,14 @@ class Person
 	private $lastName;
 	private $email;
 	private $nickname;
+	private $subscribed;
+	private $type; //TODO: Verwijder deze variabele! --> moet vervangen worden door Giver en Receiver classes!
 
 // Magic Methods
 
-	function __construct()
+	function __construct($type)
 	{
+		$this->type = $type;
 	}
 
 	function __destruct()
@@ -55,6 +58,10 @@ class Person
 	{
 		return $this->firstName;
 	}
+	
+	public function isSubscribed(){
+		return $this->subscribed;
+	}
 	/**
 	 * 
 	 * @param newVal
@@ -79,7 +86,41 @@ class Person
 
 // Methods
 	public function register () {
+		$frmID = "input_person";
 		
+		if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
+						
+			$this->setlastName($_POST['person_last']);
+			$this->setfirstName($_POST['person_first']);
+			$this->setemail($_POST['person_email']);
+			
+			switch ($this->type) {//TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
+				case 'Giver': 
+					$_SESSION['user'] = $this;
+					break;
+				case 'Receiver':
+					$_SESSION['wishReceiver'] = $this;
+					break;
+			}
+			
+			return "Registered ".$this->type;
+			
+		} else {
+			switch ($this->type) { //TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
+				case 'Giver': 
+					$legend = "Gelieve de uw gegevens op te geven.";
+					break;				
+				case 'Receiver': 
+					$legend = "Voor wie is de wens bestemd?";
+					break;
+				default : 
+					$legend = "Gelieve de persoonsgegevens op te geven.";
+					break;
+			}
+			include"./processes/forms/frm-input_person.php";
+			return $formHTML;
+			
+		}
 	}
 	
 	public function check_for_account () {
@@ -108,9 +149,9 @@ class Person
 			$results = $oStmt->fetch(PDO::FETCH_ASSOC);
 			
 			if (empty($results)){
-				return false;
+				$this->subscribed = false;
 			} else {
-				return true;
+				$this->subscribed = true;
 			}
 		} 
 		catch(PDOException $e) 

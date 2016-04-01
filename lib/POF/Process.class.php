@@ -23,12 +23,28 @@ class Process
 			case 1:
 				$this->name = "Add a wish";
 				$this->prerequisites = [
-										"giver" => "Stijn",
-										"receiver" => ""
-									];
+										"giver" => array(
+											"value" => (isset($_SESSION['user'])) ? $_SESSION['user'] : null,
+											"type" =>	"Giver"
+											),
+										"receiver" => array(
+											"value" => (isset($_SESSION['wishReceiver'])) ? $_SESSION['wishReceiver'] : null,
+											"type" =>	"Receiver"
+											)
+										];
 				break;
 			case 2:
 				$this->name = "Search a wish";
+				$this->prerequisites = [
+										"giver" => array(
+											"value" => (isset($_SESSION['user'])) ? $_SESSION['user'] : null,
+											"type" =>	"Giver"
+											),
+										"receiver" => array(
+											"value" => (isset($_SESSION['wishReceiver'])) ? $_SESSION['wishReceiver'] : null,
+											"type" =>	"Receiver"
+											)
+										];
 				break;
 			default:
 				$this->name = "Unknown";

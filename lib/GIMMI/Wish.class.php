@@ -1,5 +1,5 @@
 <?php
-require_once ('Person.php');
+require_once ('./lib/GIMMI/Person.class.php');
 /**
  * This class describes a wish that someone has. The purpose of this wish is to
  * make clear to others what a person would like to receive.

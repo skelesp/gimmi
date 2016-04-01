@@ -5,7 +5,9 @@
 
 require_once "./lib/WebsiteBuilder/template.class.php";
 require_once "./lib/POF/processInstance.class.php";
+require_once "./lib/POF/processEngine.class.php";
 
+session_start();
 //Site / Page Info (uit WebsiteBuilder database in de toekomst)
 // Pagina's die nodig zijn:
 //		Page     |    Template    |      Title      |       Content      |
@@ -28,7 +30,7 @@ $processID =  (isset($_GET['pid']) && is_numeric($_GET['pid'])) ? htmlspecialcha
 $processInstance = new ProcessInstance ($processID);
 
 //Variables
-$output = "";
+$_SESSION['content'] = "";
 
 // Generate content
 if ( isset($_SESSION[$activityID]) && !empty($_SESSION[$activityID]) ) {
@@ -40,13 +42,14 @@ if ( isset($_SESSION[$activityID]) && !empty($_SESSION[$activityID]) ) {
 	
 } else if ( isset($processID) && !empty($processID) ) {
 	
-	$processInstance->trigger();
+	$processEngine = new ProcessEngine ($processInstance);
+	$processEngine->determineNextAction();
 	$templateFile = "/ResponsiveDesignTXT/activity.html";
 	
 }
 
 // Create site content
-$siteContent = $output;
+$siteContent = $_SESSION['content'];
 
 // DEBUGGING: voeg $_SESSION['DEBUG_message'] toe aan code om een debugbericht te tonen vanuit gelijk welke plaats in de code.
 if ( isset($_SESSION['DEBUG_message']) && !empty($_SESSION['DEBUG_message']) ) {
@@ -64,7 +67,7 @@ $pageLayout->setToken("site.subtitle", $siteSubtitle);
 $pageLayout->setToken("site.content", $siteContent);
 $pageLayout->setToken("activity.name", $activity);
 $pageLayout->setToken("activity.info", $activityState);
-$pageLayout->setToken("process.name", ($processInstance->checkPrerequisites()==true) ? "Prereqs are ok" : "Prereqs missing");
+$pageLayout->setToken("process.name", $processInstance);
 $pageLayout->setToken("process.activity", $activity." - ".$activityInfo);
 $pageLayout->setToken("content.header", $activity);
 $pageLayout->setToken("content.text", $activityInfo);
