@@ -39,6 +39,7 @@ class ProcessEngine
 				}
 			}
 		}
+		// Trigger the process instance
 		$this->processInstance->trigger();
 	}
 	private function executeElement(){

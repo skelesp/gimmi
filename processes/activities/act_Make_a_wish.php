@@ -52,7 +52,7 @@ switch ($activityState) {
 		$_SESSION['b_ownerKnown'] = $b_ownerKnown;
 		
 		// automatic activity --> refresh page immediately
-		//header("Refresh: ".$activityRefreshRate);
+		header("Refresh: ".$activityRefreshRate);
 		
 		break;		
 	
@@ -80,7 +80,7 @@ switch ($activityState) {
 		
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
 			// Store the form info in a Person object
-			$wishReceiver = new Person();
+			$wishReceiver = new Person('Receiver');
 			
 			$wishReceiver->setlastName($_POST['owner_last']);
 			$wishReceiver->setfirstName($_POST['owner_first']);
@@ -227,6 +227,7 @@ switch ($activityState) {
 	
 	case 'wish has been created':
 		$_SESSION['content'] = $_SESSION['content']." "."The wish is created.";
+		$activityState = "END";
 		session_destroy(); //**TEST
 		break;
 } // end of $activityState switch

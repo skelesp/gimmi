@@ -70,7 +70,7 @@ class ProcessInstance
 	
 	public function trigger () {
 		$this->status = "running";	
-		$this->currentElement = "Make_a_wish"; //TODO: verwijder deze lijn!
+		$this->currentElement = "Make_a_wish"; //TODO: verwijder deze lijn! Moet automatisch gedetecteerd worden.
 	}
 	
 	public function setNextElement () {

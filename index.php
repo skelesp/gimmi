@@ -19,13 +19,11 @@ session_start();
 $siteTitle = "GIMMI";
 $siteSubtitle = "Making wishes come true";
 $siteContent = "GIMMI v0.1 - POF V0.3 +++ Content under construction";
-$templateFile = "/ResponsiveDesignTXT/portal.html";
 
 //Process Info (uit POF database)
 $activity = "Add or Search a gift idea";
-$activityInfo = "";
 $activityState = "";
-$activityID = "";
+$activityID = 'p1_a1';
 $processID =  (isset($_GET['pid']) && is_numeric($_GET['pid'])) ? htmlspecialchars($_GET['pid']) : 0;
 $processInstance = new ProcessInstance ($processID);
 
@@ -33,13 +31,14 @@ $processInstance = new ProcessInstance ($processID);
 $_SESSION['content'] = "";
 
 // Generate content
+$templateFile = "/ResponsiveDesignTXT/portal.html";
+
 if ( isset($_SESSION[$activityID]) && !empty($_SESSION[$activityID]) ) {
 	
 	$activity = "Make_a_wish";
-	$activityInfo = "Maak een wens aan.";
 	include "./processes/activities/act_".$activity.".php";
 	$templateFile = "/ResponsiveDesignTXT/activity.html";
-	
+		
 } else if ( isset($processID) && !empty($processID) ) {
 	
 	$processEngine = new ProcessEngine ($processInstance);
@@ -68,9 +67,8 @@ $pageLayout->setToken("site.content", $siteContent);
 $pageLayout->setToken("activity.name", $activity);
 $pageLayout->setToken("activity.info", $activityState);
 $pageLayout->setToken("process.name", $processInstance);
-$pageLayout->setToken("process.activity", $activity." - ".$activityInfo);
+$pageLayout->setToken("process.activity", $activity." - ".$activityState);
 $pageLayout->setToken("content.header", $activity);
-$pageLayout->setToken("content.text", $activityInfo);
 
 //Parse template
 print $pageLayout->parse();

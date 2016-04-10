@@ -51,8 +51,8 @@ class Wish
 // MAGIC METHODS
 	function __construct($name = "NewWish"){
 		$this->name = $name;
-		$this->creator = new Person();
-		$this->owner = new Person();
+		$this->creator = new Person('Giver');
+		$this->owner = new Person('Receiver');
 	}
 
 	function __destruct(){

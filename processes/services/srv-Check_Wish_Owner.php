@@ -5,7 +5,7 @@
  * Check if the wish owner is known
  */	
 	$b_ownerKnown = false;
-	$o_Owner = new Person();
+	$o_Owner = new Person('Receiver');
 	
 	if ( isset($_SESSION['wishReceiver']) && !empty($_SESSION['wishReceiver']) ) {
 		$b_ownerKnown = true;
