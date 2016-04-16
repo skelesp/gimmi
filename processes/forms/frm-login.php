@@ -15,8 +15,8 @@ include_once "./lib/PFBC/form.php";
  */
 
  // Create a new form with name "Wish Owner?"
-	$frmName = "Input a person";
-	//$frmID = "input_person";
+	$frmName = "login";
+	//$frmID = "login";
 	$form = new Form($frmName);
 
 // Configure the form

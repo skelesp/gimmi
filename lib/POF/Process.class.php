@@ -19,7 +19,7 @@ class Process
 		$this->prerequisites = array();
 		$this->elements = array();
 		//TODO: Change switch to database query to link processID with a process name
-		switch ($processID) {
+		switch ($this->id) {
 			case 1:
 				$this->name = "Add a wish";
 				$this->prerequisites = [

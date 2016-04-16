@@ -12,38 +12,61 @@ require_once ('./lib/GIMMI/Person.class.php');
 class ProcessEngine
 {
 	protected $processInstance;
+	private $status;
 	
 	public function __construct ($object) {
 		$this->processInstance = $object;
+		$this->status = "running";
 	}
 	
 	public function determineNextAction (){
 		switch ($this->processInstance->getStatus()) {
-			case 'created' : $this->launchProcessInstance();
-			case 'running' : $this->executeElement();
-			case 'ended' : $this->closeProcessInstance();
+			case 'created' : 
+				$this->launchProcessInstance();
+				break;
+			case 'running' : 
+				$this->executeElement();
+				break;
+			case 'ended' : 
+				$this->closeProcessInstance();
+				break;
 		}
+	}
+	
+	public function getInstance() {
+		return $this->processInstance;
 	}
 	
 	private function launchProcessInstance(){
 		// Check if prerequisites are available
-		if (!$this->processInstance->checkPrerequisites()) {
+		$count = 0;
+		if (!$this->processInstance->checkPrerequisites()) { //not all prereqs available
+			
 			foreach ($this->processInstance->getMissingInfo() as $prereq => $type) {
-				switch ($type){
-					case 'Giver':
-					case 'Receiver':
-					
-						$Person = new Person ($type);
-						$_SESSION['content'] = $Person->register();						
-						break;
-				}
+				
+				$Person = new Person ($type);
+				$result = $Person->register();
+				if ($result == 1) { // een prereq werd voldaan
+					$_POST = array();
+					//reload om ook andere prereqs te vragen
+					header("Refresh: 0");
+					exit();
+				} else {
+					$_SESSION['content'] = $result;
+					break;
+				}				
 			}
+			
+		} else {
+			// Trigger the process instance
+			$this->processInstance->trigger();
+			$this->determineNextAction ();
 		}
-		// Trigger the process instance
-		$this->processInstance->trigger();
 	}
+	
 	private function executeElement(){
 		$_SESSION['content'] = "Execute ".$this->processInstance->getCurrentElement();
+		
 		include "./processes/activities/act_".$this->processInstance->getCurrentElement().".php";
 	}
 	

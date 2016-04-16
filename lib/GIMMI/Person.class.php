@@ -86,14 +86,20 @@ class Person
 
 // Methods
 	public function register () {
-		$frmID = "input_person";
+		/* In de echte register method moet onderstaande niet staan!
+		Register moet de opdracht zijn om de gegevens in de class te registreren.
+		Register controleer of de persoon al gekend is in de database.
+		Register maakt nieuwe record in database indien nodig.
+		*/
+		
+		$frmID = "login";
 		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
-						
+			
 			$this->setlastName($_POST['person_last']);
 			$this->setfirstName($_POST['person_first']);
 			$this->setemail($_POST['person_email']);
-			
+						
 			switch ($this->type) {//TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
 				case 'Giver': 
 					$_SESSION['user'] = $this;
@@ -103,21 +109,21 @@ class Person
 					break;
 			}
 			
-			return "Registered ".$this->type;
+			return 1;
 			
 		} else {
 			switch ($this->type) { //TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
 				case 'Giver': 
-					$legend = "Gelieve de uw gegevens op te geven.";
+					$legend = "Gelieve uw gegevens in te vullen. (login)";
 					break;				
 				case 'Receiver': 
-					$legend = "Voor wie is de wens bestemd?";
+					$legend = "Voor wie is het cadeau idee?";
 					break;
 				default : 
 					$legend = "Gelieve de persoonsgegevens op te geven.";
 					break;
 			}
-			include"./processes/forms/frm-input_person.php";
+			include"./processes/forms/frm-login.php";
 			return $formHTML;
 			
 		}

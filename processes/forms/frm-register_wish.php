@@ -33,7 +33,7 @@ include_once "./lib/PFBC/form.php";
 		
 // Create form elements
 	// Add form title
-	$form->addElement(new Element\HTML('<legend>Wat wil je wensen voor '.$wishReceiver->getfirstName()." ".$wishReceiver->getlastName().'?</legend>'));
+	$form->addElement(new Element\HTML('<legend>'.$giver->getfirstname().': Wat wil je wensen voor '.$wishReceiver->getfirstName()." ".$wishReceiver->getlastName().'?</legend>'));
 	// Hidden field with form name
 	$form->addElement(new Element\Hidden("frm", $frmID));
 	// Text field for Wish Title
@@ -43,7 +43,7 @@ include_once "./lib/PFBC/form.php";
 	// Number field for Wish Price Range
 	$form->addElement(new Element\Number("Prijsschatting (in euro)", "wish_price", array("style" => "height: 30px;")));
 	// Checkbox for Wish privacy
-	$form->addElement(new Element\Checkbox("", "Wish_private", array("ja" => "Deze wens niet publiek zichtbaar maken.")));
+	$form->addElement(new Element\Checkbox("", "Wish_private", array("ja" => "Deze wens niet zichtbaar maken voor ".$wishReceiver->getfirstName()."?")));
 	// Button to send the form
 	$form->addElement(new Element\Button("Registreer", "submit", array("name" => $frmID)));
 

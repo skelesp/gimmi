@@ -37,14 +37,14 @@ include_once "./lib/PFBC/form.php";
 	$form->addElement(new Element\HTML("<p><i>Vul een (of meerdere) van onderstaande gegevens in, aub.</p>"));
 	// Hidden field with form name
 	$form->addElement(new Element\Hidden("frm", $frmID));
+	// Checkbox "wish for myself"
+	$form->addElement(new Element\Checkbox("", "CreatorIsOwner", array("Yes" => "Ja, ik ben het.")));
 	// Textfield for Wish Owner firstname
 	$form->addElement(new Element\Textbox("Voornaam", "owner_first", array("required" => 0)));
 	// Textfield for Wish Owner lastname
 	$form->addElement(new Element\Textbox("Familienaam", "owner_last", array("required" => 0)));
 	// Textfield for Wish Owner email
 	$form->addElement(new Element\Email("Emailadres", "owner_email", array("required" => 0)));
-	// Textfield for Wish Owner nickname
-	$form->addElement(new Element\Textbox("Nickname", "owner_nick"));
 	// Button to send the form
 	$form->addElement(new Element\Button("Verder", "submit", array("name" => $frmID)));
 

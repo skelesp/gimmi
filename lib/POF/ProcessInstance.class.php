@@ -17,11 +17,17 @@ class ProcessInstance
 	protected $missingInfo; //@var Array of missing info (= not available in variables
 	
 	public function __construct ($processID) {
+		$this->id = "1234"; //TODO: haal de id van deze nieuwe instance uit DB (=nieuwe ID ophalen)
 		$this->process = new Process($processID);
 		$this->status = "created";
+		$this->currentElement = "Trigger";
 		$this->variables = array(); //at start of process: 	variables are filled with prerequisites 
 									//during a process: 	variables can be added
 		$this->missingInfo = array();
+	}
+	
+	public function getID (){
+		return $this->id;
 	}
 	
 	public function getProcess (){
@@ -36,7 +42,7 @@ class ProcessInstance
 		return $this->missingInfo;
 	}
 	public function __toString () {
-		return "This is an instance of ".$this->process->getName();
+		return "Running process = ".$this->process->getName();
 	}
 	
 	public function getStatus () {
@@ -56,7 +62,6 @@ class ProcessInstance
 				
 				$this->variables[$prereq] = null;
 				$this->missingInfo[$prereq] = $info["type"];
-				
 				$ok = false;
 				
 			} else {
@@ -69,7 +74,7 @@ class ProcessInstance
 	}
 	
 	public function trigger () {
-		$this->status = "running";	
+		$this->status = "running";
 		$this->currentElement = "Make_a_wish"; //TODO: verwijder deze lijn! Moet automatisch gedetecteerd worden.
 	}
 	

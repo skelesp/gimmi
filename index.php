@@ -20,33 +20,56 @@ $siteTitle = "GIMMI";
 $siteSubtitle = "Making wishes come true";
 $siteContent = "GIMMI v0.1 - POF V0.3 +++ Content under construction";
 
-//Process Info (uit POF database)
-$activity = "Add or Search a gift idea";
+//Process Info
+$activity = "";
 $activityState = "";
 $activityID = 'p1_a1';
-$processID =  (isset($_GET['pid']) && is_numeric($_GET['pid'])) ? htmlspecialchars($_GET['pid']) : 0;
-$processInstance = new ProcessInstance ($processID);
+$processID =  (isset($_GET['pid']) && is_numeric($_GET['pid'])) ? htmlspecialchars($_GET['pid']) : null;
+$processInstanceID = (isset($_GET['iid']) && is_numeric($_GET['iid'])) ? htmlspecialchars($_GET['iid']) : null;
 
 //Variables
 $_SESSION['content'] = "";
+$processName = "";
+$processStatus = "";
+$loginStatus = "Login";
 
-// Generate content
-$templateFile = "/ResponsiveDesignTXT/portal.html";
-
-if ( isset($_SESSION[$activityID]) && !empty($_SESSION[$activityID]) ) {
-	
-	$activity = "Make_a_wish";
-	include "./processes/activities/act_".$activity.".php";
-	$templateFile = "/ResponsiveDesignTXT/activity.html";
-		
-} else if ( isset($processID) && !empty($processID) ) {
-	
-	$processEngine = new ProcessEngine ($processInstance);
-	$processEngine->determineNextAction();
-	$templateFile = "/ResponsiveDesignTXT/activity.html";
-	
+// Check user login
+if (isset($_SESSION['user']) && !empty($_SESSION['user'])){
+	$user = $_SESSION['user'];
+	$loginStatus = "Logged in as ".$user->getFirstName();
 }
 
+// Generate content
+
+	if ( ! is_null($processInstanceID) ) { //er werd een iid doorgeven (= activiteit geopend in running processInstance)
+		// TODO: ProcessInstance opstarten hier!
+		$processEngine = new ProcessEngine ($processInstance); // TODO: ProcessInstance moet obv iid gecreëerd worden: dit kan momementeel niet in de huidige ProcessInstance class --> te onderzoeken
+		$processEngine->determineNextAction();
+		$processName = (string) $processEngine->processInstance;
+		$processStatus = $processEngine->getInstance()->getCurrentElement();
+		
+		//template info
+		$templateFile = "/ResponsiveDesignTXT/activity.html";
+				
+	} else if (! is_null($processID) ) { // procesID werd doorgegeven (=een proces werd opgestart)
+		
+		$processEngine = new ProcessEngine (new ProcessInstance($processID));
+		$processEngine->determineNextAction();
+		$processName = (string) $processEngine->getInstance();
+		$processStatus = $processEngine->getInstance()->getCurrentElement();
+		
+		//template info
+		$templateFile = "/ResponsiveDesignTXT/activity.html";
+
+	} else {
+		
+		$templateFile = "/ResponsiveDesignTXT/portal.html";
+		
+	}
+
+//Get template
+$pageLayout = new Template("./layout".$templateFile);
+	
 // Create site content
 $siteContent = $_SESSION['content'];
 
@@ -57,20 +80,16 @@ if ( isset($_SESSION['DEBUG_message']) && !empty($_SESSION['DEBUG_message']) ) {
 	unset( $_SESSION['DEBUG_message'] );
 }
 
-//Get template
-$pageLayout = new Template("./layout".$templateFile);
-
 //Create tokens
 $pageLayout->setToken("site.title",$siteTitle);
 $pageLayout->setToken("site.subtitle", $siteSubtitle);
 $pageLayout->setToken("site.content", $siteContent);
-$pageLayout->setToken("activity.name", $activity);
-$pageLayout->setToken("activity.info", $activityState);
-$pageLayout->setToken("process.name", $processInstance);
-$pageLayout->setToken("process.activity", $activity." - ".$activityState);
 $pageLayout->setToken("content.header", $activity);
+$pageLayout->setToken("content.text", "");
+$pageLayout->setToken("process.name", $processName);
+$pageLayout->setToken("process.activity", $processStatus);
+$pageLayout->setToken("login", $loginStatus);
 
 //Parse template
 print $pageLayout->parse();
-
 ?>

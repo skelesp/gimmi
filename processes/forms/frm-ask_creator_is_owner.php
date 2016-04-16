@@ -33,7 +33,7 @@ include_once "./lib/PFBC/form.php";
 	$form->addElement(new Element\HTML('<legend>Ben jij degene waarvoor de wens bestemd is?</legend>'));
 	// Hidden field with form name
 	$form->addElement(new Element\Hidden("frm", $frmID));
-	// Checkbox "Ja"
+	// Checkbox "wish for myself"
 	$form->addElement(new Element\Checkbox("", "CreatorIsOwner", array("ja" => "Ja, ik ben het.")));
 	// Button to send the form
 	$form->addElement(new Element\Button("Verder", "submit", array("name" => $frmID)));
