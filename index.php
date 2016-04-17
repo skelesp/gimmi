@@ -4,8 +4,8 @@
 //////////
 
 require_once "./lib/WebsiteBuilder/template.class.php";
-require_once "./lib/POF/processInstance.class.php";
-require_once "./lib/POF/processEngine.class.php";
+require_once "./lib/POF/ProcessInstance.class.php";
+require_once "./lib/POF/ProcessEngine.class.php";
 
 session_start();
 //Site / Page Info (uit WebsiteBuilder database in de toekomst)
