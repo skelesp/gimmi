@@ -14,7 +14,7 @@ include_once "./lib/PFBC/form.php";
  * @created 15-nov-2015 16:29:14
  */
 
- // Create a new form to register a person"
+ // Create a new form to ask for user credentials"
 	$form = new Form($frmID);
 	$legend = "Geef uw logingegevens";
 	$formHTML = "";

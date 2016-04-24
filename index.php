@@ -9,6 +9,7 @@ require_once "./lib/POF/ProcessEngine.class.php";
 require_once "./lib/GIMMI/Person.class.php";
 
 session_start();
+
 //Site / Page Info (uit WebsiteBuilder database in de toekomst)
 // Pagina's die nodig zijn:
 // LayoutTemplate 	= template die zorgt voor omkaderende layout (zodat elke pagina zelfde footer etc heeft)
@@ -16,12 +17,13 @@ session_start();
 // ContentTemplate 	= template die beschrijft welke info er op de pagina moet verschijnen
 // 					= hierin zitten alle content tokens
 
-//		Page     |  Layout Template    |  Content Template    |      Title      |       Content      |
-//      ---------|---------------------|----------------------|-----------------|--------------------|
-//      Portal   |	GimmiLayout.html   | portal.html    	  |   "Fix string"  |    "Fix content"   |
-//      Activity |	GimmiLayout.html   | activity.html  	  | "Variable name" | "Variable content" |
-//		Login	 |	GimmiLayout.html   | login.html			  | "Fix String"	| "Variable content" |
-//		Help	 |	GimmiLayout.html   | help.html      	  |   "Fix string"  |    "Fix content"   |
+//		Page     	|  Layout Template    |  Content Template    |      Title      |       Content      |
+//      ------------|---------------------|----------------------|-----------------|--------------------|
+//      Portal   	|	GimmiLayout.html  | portal.html    	  	 |   "Fix string"  |    "Fix content"   |
+//      Activity 	|	GimmiLayout.html  | activity.html  	  	 | "Variable name" | "Variable content" |
+//		Login	 	|	GimmiLayout.html  | login.html			 |   "Fix String"  | "Variable content" |
+//		Help	 	|	GimmiLayout.html  | help.html      	  	 |   "Fix string"  |    "Fix content"   |
+//		UserPortal	|	GimmiLayout.html  | user_portal.html  	 |   "Fix string"  |    "Fix content"   |
 
 
 $siteTitle = "GIMMI";

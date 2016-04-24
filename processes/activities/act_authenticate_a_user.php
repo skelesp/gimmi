@@ -20,7 +20,7 @@ if ( !isset($_SESSION[$activityID]) || empty($_SESSION[$activityID]) ) {
 } else {
 	$activityState = $_SESSION[$activityID];
 }
- 
+
 switch ($activityState) {
 	case 'start':
 		/**
@@ -91,6 +91,8 @@ switch ($activityState) {
 			//*** Voorlopig nog geen user gegevens in DB dus kan nog niet gecontroleerd worden.
 			$_SESSION['person_authenticated?']=true;
 			
+			unset( $_SESSION['pfbc'] );
+			
 			// Next activity + save process instance info
 			$_SESSION['authenticatingUser'] = $user;
 			$_SESSION[$activityID] = "user known?";
@@ -154,6 +156,9 @@ switch ($activityState) {
 		$activityState = "END";
 		header("Location: ./index.php"); // return to 'portal'
 		unset( $_SESSION[$activityID] );
+		unset( $_SESSION['authenticatingUser'] );
+		unset( $_SESSION['cookiesAvailable?'] );
+		unset( $_SESSION['person_authenticated?'] );
 		$_SESSION['content'] = $_SESSION['content']." "."You are logged in"; // TODO: onderstaande zou een 'message' moeten zijn (message functionaliteit nog te ontwikkelen)
 		
 		break;
@@ -161,9 +166,7 @@ switch ($activityState) {
 	default:
 		$_SESSION['content'] = "Service '".$activityState."' not found";
 		unset( $_SESSION[$activityID] );
-		unset( $_SESSION['authenticatingUser'] );
-		unset( $_SESSION['cookiesAvailable?'] );
-		unset( $_SESSION['person_authenticated?'] );
+		
 } // end of $activityState switch
 
 //DEBUG: $_SESSION['content'] = "activiteitsstatus : ".$activityState."<br/>".$_SESSION['content'];
