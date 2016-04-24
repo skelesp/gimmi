@@ -75,7 +75,19 @@ class ProcessInstance
 	
 	public function trigger () {
 		$this->status = "running";
-		$this->currentElement = "Make_a_wish"; //TODO: verwijder deze lijn! Moet automatisch gedetecteerd worden.
+		//TODO: verwijder deze switch! Moet automatisch gedetecteerd worden.
+		switch($this->process->getID()) {
+			case 1:
+				$this->currentElement = "Make_a_wish"; 
+				break;
+			case 2: 
+				$this->currentElement = "search_a_gift_idea";
+				break;
+			case 3: 
+				$this->currentElement = "authenticate_a_user";
+				break;
+		}
+		
 	}
 	
 	public function setNextElement () {

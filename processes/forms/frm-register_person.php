@@ -7,16 +7,16 @@ use PFBC\View;
 include_once "./lib/PFBC/form.php";
 
 /**
- * This form will ask for the name of the wish owner.
+ * This form will ask for info about a person.
  * 
  * @author Stijn Beeckmans
- * @version 0.1
+ * @version 0.2
  * @created 15-nov-2015 16:29:14
  */
 
- // Create a new form with name "Wish Owner?"
-	$frmName = "login";
-	//$frmID = "login";
+ // Create a new form to register a person"
+	$frmName = "register_person";
+	//$frmID = "register_person";
 	$form = new Form($frmName);
 
 // Configure the form

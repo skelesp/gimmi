@@ -43,12 +43,22 @@ class ProcessEngine
 		if (!$this->processInstance->checkPrerequisites()) { //not all prereqs available
 			
 			foreach ($this->processInstance->getMissingInfo() as $prereq => $type) {
-				
+				// Get a value for each prerequisite
+				// TODO: Dit moet dynamischer, nu kan enkel een persoonsregistratie opgestart worden.
+				// (Hieronder standaard registratie formulier voor een persoon)
+				// TODO: eerste test: maak onderscheid tussen 
+				//								Giver(=user (Person)) --> info via authenticate proces
+				//								Receiver (Person)	  --> Activiteit maken om Receiver te selecteren/registreren
+				// TODO: haal Receiver voorlopig uit de activity flow --> enkel wish toevoegen voor jezelf!!
+						
 				$Person = new Person ($type);
 				$result = $Person->register();
-				if ($result == 1) { // een prereq werd voldaan
+				
+				
+				// Finalize the loop
+				if ($result == 1) { // a prereq is filled
 					$_POST = array();
-					//reload om ook andere prereqs te vragen
+					//reload to get other prereqs
 					header("Refresh: 0");
 					exit();
 				} else {
@@ -65,8 +75,7 @@ class ProcessEngine
 	}
 	
 	private function executeElement(){
-		$_SESSION['content'] = "Execute ".$this->processInstance->getCurrentElement();
-		
+		//$_SESSION['content'] = "Execute ".$this->processInstance->getCurrentElement();
 		include "./processes/activities/act_".$this->processInstance->getCurrentElement().".php";
 	}
 	

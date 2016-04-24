@@ -46,6 +46,9 @@ class Process
 											)
 										];
 				break;
+			case 3:
+				$this->name = "Login";
+				$this->prerequisites = array();
 			default:
 				$this->name = "Unknown";
 				break;
@@ -54,6 +57,10 @@ class Process
 	
 	public function __toString () {
 		return "This is process '".$this->name."'";
+	}
+	
+	public function getID () {
+		return $this->id;
 	}
 	
 	public function getName () {

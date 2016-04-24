@@ -92,7 +92,7 @@ class Person
 		Register maakt nieuwe record in database indien nodig.
 		*/
 		
-		$frmID = "login";
+		$frmID = "register_person";
 		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
 			
@@ -123,10 +123,15 @@ class Person
 					$legend = "Gelieve de persoonsgegevens op te geven.";
 					break;
 			}
-			include"./processes/forms/frm-login.php";
+			include"./processes/forms/frm-register_person.php";
 			return $formHTML;
 			
 		}
+	}
+	
+	public function logout () {
+		unset( $_SESSION['user'] );
+		header("Refresh: 0");
 	}
 	
 	public function check_for_account () {

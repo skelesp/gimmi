@@ -6,15 +6,23 @@
 require_once "./lib/WebsiteBuilder/template.class.php";
 require_once "./lib/POF/ProcessInstance.class.php";
 require_once "./lib/POF/ProcessEngine.class.php";
+require_once "./lib/GIMMI/Person.class.php";
 
 session_start();
 //Site / Page Info (uit WebsiteBuilder database in de toekomst)
 // Pagina's die nodig zijn:
-//		Page     |    Template    |      Title      |       Content      |
-//      ---------|----------------|-----------------|--------------------|
-//      Portal   | portal.html    |   "Fix string"  |    "Fix content"   |
-//      Activity | activity.html  | "Variable name" | "Variable content" |
-//		Help	 | help.html      |   "Fix string"  |    "Fix content"   |
+// LayoutTemplate 	= template die zorgt voor omkaderende layout (zodat elke pagina zelfde footer etc heeft)
+//					= hierin zit een token naar vaste layout (bv. login/footer/navigation/...)
+// ContentTemplate 	= template die beschrijft welke info er op de pagina moet verschijnen
+// 					= hierin zitten alle content tokens
+
+//		Page     |  Layout Template    |  Content Template    |      Title      |       Content      |
+//      ---------|---------------------|----------------------|-----------------|--------------------|
+//      Portal   |	GimmiLayout.html   | portal.html    	  |   "Fix string"  |    "Fix content"   |
+//      Activity |	GimmiLayout.html   | activity.html  	  | "Variable name" | "Variable content" |
+//		Login	 |	GimmiLayout.html   | login.html			  | "Fix String"	| "Variable content" |
+//		Help	 |	GimmiLayout.html   | help.html      	  |   "Fix string"  |    "Fix content"   |
+
 
 $siteTitle = "GIMMI";
 $siteSubtitle = "Making wishes come true";
@@ -22,8 +30,6 @@ $siteContent = "GIMMI v0.1 - POF V0.3 +++ Content under construction";
 
 //Process Info
 $activity = "";
-$activityState = "";
-$activityID = 'p1_a1';
 $processID =  (isset($_GET['pid']) && is_numeric($_GET['pid'])) ? htmlspecialchars($_GET['pid']) : null;
 $processInstanceID = (isset($_GET['iid']) && is_numeric($_GET['iid'])) ? htmlspecialchars($_GET['iid']) : null;
 
@@ -35,8 +41,14 @@ $loginStatus = "Login";
 
 // Check user login
 if (isset($_SESSION['user']) && !empty($_SESSION['user'])){
+	
 	$user = $_SESSION['user'];
-	$loginStatus = "Logged in as ".$user->getFirstName();
+	$loginStatus = "Logged in as ".$user->getfirstName();
+	
+	if (isset($_GET['logout']) && $_GET['logout'] == 1) { // logout request
+		print $user->getfirstName();
+		$user->logout();
+	}
 }
 
 // Generate content
@@ -67,7 +79,18 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])){
 		
 	}
 
-//Get template
+//Get templates
+$loginBlockLayout = new Template("./layout/ResponsiveDesignTXT/login_block.html");
+$loginMenu = "";
+// TODO: op een andere manier controleren of user ingelogd is (via method van Person class)
+if ($loginStatus != "Login"){ // user is logged in
+	$loginMenuLayout = new Template("./layout/ResponsiveDesignTXT/user_menu.html");
+	$loginMenu = $loginMenuLayout->parse();
+} else {
+	// $frmID = "login";
+	// include ("./processes/forms/frm-login.php");
+	// $loginMenu = $formHTML;
+}
 $pageLayout = new Template("./layout".$templateFile);
 	
 // Create site content
@@ -81,6 +104,9 @@ if ( isset($_SESSION['DEBUG_message']) && !empty($_SESSION['DEBUG_message']) ) {
 }
 
 //Create tokens
+$loginBlockLayout->setToken("login.status", $loginStatus);
+$loginBlockLayout->setToken("login.menu",$loginMenu);
+
 $pageLayout->setToken("site.title",$siteTitle);
 $pageLayout->setToken("site.subtitle", $siteSubtitle);
 $pageLayout->setToken("site.content", $siteContent);
@@ -88,7 +114,7 @@ $pageLayout->setToken("content.header", $activity);
 $pageLayout->setToken("content.text", "");
 $pageLayout->setToken("process.name", $processName);
 $pageLayout->setToken("process.activity", $processStatus);
-$pageLayout->setToken("login", $loginStatus);
+$pageLayout->setToken("login_block", $loginBlockLayout->parse());
 
 //Parse template
 print $pageLayout->parse();

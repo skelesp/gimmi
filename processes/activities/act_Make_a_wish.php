@@ -11,7 +11,7 @@ require_once "./lib/GIMMI/Person.class.php";
  */
 
 // Process variables
-$activityID = 'p1_a1';
+$activityID = 'make_a_wish_1';
 $activityRefreshRate = 0;
 $_SESSION['content'] = "";
 
@@ -229,6 +229,7 @@ switch ($activityState) {
 		header("Location: ./index.php");
 		unset( $_SESSION[$activityID] );
 		unset( $_SESSION['wishReceiver'] );
+		unset( $_SESSION['b_ownerKnown'] );
 		$_SESSION['content'] = $_SESSION['content']." "."The wish is created.";
 		break;
 	default:
