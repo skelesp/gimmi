@@ -33,7 +33,12 @@ include_once "./lib/PFBC/form.php";
 		
 // Create form elements
 	// Add form title
-	$form->addElement(new Element\HTML('<legend>'.$giver->getfirstname().': Wat wil je wensen voor '.$wishReceiver->getfirstName()." ".$wishReceiver->getlastName().'?</legend>'));
+	if ($giver == $wishReceiver) {
+		$legend = '<legend>'.$giver->getfirstname().', wat wil je wensen voor jezelf?</legend>';
+	} else {
+		$legend = '<legend>'.$giver->getfirstname().', wat wil je wensen voor '.$wishReceiver->getfirstName()." ".$wishReceiver->getlastName().'?</legend>';
+	}
+	$form->addElement(new Element\HTML($legend));
 	// Hidden field with form name
 	$form->addElement(new Element\Hidden("frm", $frmID));
 	// Text field for Wish Title

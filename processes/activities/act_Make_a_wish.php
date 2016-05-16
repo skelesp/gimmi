@@ -219,19 +219,23 @@ switch ($activityState) {
 	
 	case 'wish registered':
 		header("Refresh: ".$activityRefreshRate);
+		$_SESSION['content'] = $activityState." is running...";
 		
 		// Next activity + save process instance info
 		$_SESSION[$activityID] = "wish has been created";
 		break;
 	
 	case 'wish has been created':
-		$activityState = "END";
-		header("Location: ./index.php");
+		// END the activity
+		$activityFinished = true;
+		$_SESSION['content'] = $activityState." is done...";
 		unset( $_SESSION[$activityID] );
 		unset( $_SESSION['wishReceiver'] );
 		unset( $_SESSION['b_ownerKnown'] );
 		$_SESSION['content'] = $_SESSION['content']." "."The wish is created.";
+		
 		break;
+		
 	default:
 		$_SESSION['content'] = "Service '".$activityState."' not found";
 		unset( $_SESSION[$activityID] );

@@ -50,21 +50,28 @@ class ProcessEngine
 				//								Giver(=user (Person)) --> info via authenticate proces
 				//								Receiver (Person)	  --> Activiteit maken om Receiver te selecteren/registreren
 				// TODO: haal Receiver voorlopig uit de activity flow --> enkel wish toevoegen voor jezelf!!
-						
-				$Person = new Person ($type);
-				$result = $Person->register();
-				
-				
-				// Finalize the loop
-				if ($result == 1) { // a prereq is filled
-					$_POST = array();
-					//reload to get other prereqs
+				if ($type == "Receiver") { //TODO: Verwijder deze if als er ook wensen voor anderen aangemaakt kunnen worden.
+					$_SESSION['wishReceiver'] = $_SESSION['user'];
 					header("Refresh: 0");
 					exit();
+					
 				} else {
-					$_SESSION['content'] = $result;
-					break;
-				}				
+					
+					$Person = new Person ($type);
+					$result = $Person->register();
+					
+					// Finalize the loop
+					if ($result == 1) { // a prereq is filled
+						$_POST = array();
+						//reload to get other prereqs
+						header("Refresh: 0");
+						exit();
+					} else {
+						$_SESSION['content'] = $result;
+						break;
+					}			
+				}
+				
 			}
 			
 		} else {
@@ -76,7 +83,16 @@ class ProcessEngine
 	
 	private function executeElement(){
 		//$_SESSION['content'] = "Execute ".$this->processInstance->getCurrentElement();
-		include "./processes/activities/act_".$this->processInstance->getCurrentElement().".php";
+		$type = "act";
+		include "./processes/activities/".$type."_".$this->processInstance->getCurrentElement().".php";
+		if ( $activityFinished ) {
+			$this->getNextElement();
+		}
+	}
+	
+	private function getNextElement(){
+		header("Location: ./index.php");
+		$_SESSION['DEBUG_message'] = "Next element is: XXXX";
 	}
 	
 	private function closeProcessInstance() {

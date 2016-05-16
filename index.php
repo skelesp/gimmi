@@ -101,8 +101,8 @@ $siteContent = $_SESSION['content'];
 // DEBUGGING: voeg $_SESSION['DEBUG_message'] toe aan code om een debugbericht te tonen vanuit gelijk welke plaats in de code.
 if ( isset($_SESSION['DEBUG_message']) && !empty($_SESSION['DEBUG_message']) ) {
 	$debugMessage = "<br /><br />DEBUGGING<br /><br />".$_SESSION['DEBUG_message'];
-	$siteContent = $siteContent.$debugMessage;
-	unset( $_SESSION['DEBUG_message'] );
+	$pageLayout->setToken("debugging",$debugMessage);
+	//unset( $_SESSION['DEBUG_message'] );
 }
 
 //Create tokens
