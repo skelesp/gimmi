@@ -1,5 +1,6 @@
 <?php
 require_once "./lib/GIMMI/Person.class.php";
+require_once "./lib/GIMMI/User.class.php";
 
 /**
  * This activity will make it possible to create a wish.
@@ -10,7 +11,7 @@ require_once "./lib/GIMMI/Person.class.php";
  */
 
  // Process variables
-$activityID = 'p3_a1';
+$activityID = 'authenticate_a_user_XX';
 $activityRefreshRate = 0;
 $_SESSION['content'] = "";
 
@@ -87,7 +88,7 @@ switch ($activityState) {
 			$user->setlastName($_POST['login_user']);		// TODO: nog geen User class --> dus Person class wordt gebruikt als test
 			$user->setfirstName($_POST['login_password']);	// TODO: nog geen User class --> dus Person class wordt gebruikt als test
 			
-			//*** TODO: toevoegen van controle of user + paswoord klopt
+			//TODO: toevoegen van controle of user + paswoord klopt
 			//*** Voorlopig nog geen user gegevens in DB dus kan nog niet gecontroleerd worden.
 			$_SESSION['person_authenticated?']=true;
 			

@@ -16,7 +16,6 @@ include_once "./lib/PFBC/form.php";
 
  // Create a new form to register a person"
 	$frmName = "register_person";
-	//$frmID = "register_person";
 	$form = new Form($frmName);
 
 // Configure the form

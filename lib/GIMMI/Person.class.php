@@ -91,8 +91,18 @@ class Person
 		Register controleer of de persoon al gekend is in de database.
 		Register maakt nieuwe record in database indien nodig.
 		*/
-		
-		$frmID = "register_person";
+		switch ($this->type) { //TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
+				case 'Giver':
+				case 'User':
+					$frmID = "user_credentials";
+					break;
+				case 'Receiver':
+					$frmID = "register_person";
+					break;
+				default:
+					$frmID = "register_person";
+					break;
+		}
 		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
 			
@@ -113,25 +123,25 @@ class Person
 			
 		} else {
 			switch ($this->type) { //TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
-				case 'Giver': 
+				case 'Giver':
+				case 'User':
 					$legend = "Gelieve uw gegevens in te vullen. (login)";
-					break;				
+					include"./processes/forms/frm-".$frmID.".php";
+					break;	
+					
 				case 'Receiver': 
 					$legend = "Voor wie is het cadeau idee?";
+					include"./processes/forms/frm-register_person.php";
 					break;
+					
 				default : 
 					$legend = "Gelieve de persoonsgegevens op te geven.";
+					include"./processes/forms/frm-register_person.php";
 					break;
 			}
-			include"./processes/forms/frm-register_person.php";
 			return $formHTML;
 			
 		}
-	}
-	
-	public function logout () {
-		unset( $_SESSION['user'] );
-		header("Refresh: 0");
 	}
 	
 	public function check_for_account () {

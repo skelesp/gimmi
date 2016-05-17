@@ -25,6 +25,15 @@ session_start();
 //		Help	 	|	GimmiLayout.html  | help.html      	  	 |   "Fix string"  |    "Fix content"   |
 //		UserPortal	|	GimmiLayout.html  | user_portal.html  	 |   "Fix string"  |    "Fix content"   |
 
+/* //DEBUGGING via var dump of session
+ob_start();
+var_dump($_SESSION);
+$data = ob_get_clean();
+$data = "************************ NEW PAGE ****************** \r\n\r\n".$data."<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\r\n\r\n\r\n";
+$fp = fopen("DEBUG_LOG_gimmi.txt", "a");
+fwrite($fp, $data);
+fclose($fp); 
+// END OF DEBUGGING */
 
 $siteTitle = "GIMMI";
 $siteSubtitle = "Making wishes come true";
@@ -48,7 +57,6 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])){
 	$loginStatus = "Logged in as ".$user->getfirstName();
 	
 	if (isset($_GET['logout']) && $_GET['logout'] == 1) { // logout request
-		print $user->getfirstName();
 		$user->logout();
 	}
 }
@@ -99,16 +107,16 @@ $pageLayout = new Template("./layout".$templateFile);
 $siteContent = $_SESSION['content'];
 
 // DEBUGGING: voeg $_SESSION['DEBUG_message'] toe aan code om een debugbericht te tonen vanuit gelijk welke plaats in de code.
+$debugMessage = "..";
 if ( isset($_SESSION['DEBUG_message']) && !empty($_SESSION['DEBUG_message']) ) {
 	$debugMessage = "<br /><br />DEBUGGING<br /><br />".$_SESSION['DEBUG_message'];
-	$pageLayout->setToken("debugging",$debugMessage);
-	//unset( $_SESSION['DEBUG_message'] );
 }
 
 //Create tokens
 $loginBlockLayout->setToken("login.status", $loginStatus);
 $loginBlockLayout->setToken("login.menu",$loginMenu);
 
+$pageLayout->setToken("debugging",$debugMessage);
 $pageLayout->setToken("site.title",$siteTitle);
 $pageLayout->setToken("site.subtitle", $siteSubtitle);
 $pageLayout->setToken("site.content", $siteContent);
@@ -120,4 +128,9 @@ $pageLayout->setToken("login_block", $loginBlockLayout->parse());
 
 //Parse template
 print $pageLayout->parse();
+
+unset( $_SESSION['DEBUG_message'] );
+unset( $_SESSION['content'] );
+unset( $_SESSION['pfbc'] );
+unset( $_SESSION['o_Wish'] );
 ?>

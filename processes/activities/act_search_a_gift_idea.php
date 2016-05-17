@@ -13,6 +13,6 @@ require_once "./lib/GIMMI/Person.class.php";
 // Process variables
 //var_dump($_SESSION);
 $_SESSION['content'] = $_SESSION['content']."<br/>TestActivity";
-$activityFinished = true;
+// $activityFinished = true;
 
 ?>

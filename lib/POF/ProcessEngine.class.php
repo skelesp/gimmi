@@ -19,6 +19,10 @@ class ProcessEngine
 		$this->status = "running";
 	}
 	
+	public function getInstance() {
+		return $this->processInstance;
+	}
+	
 	public function determineNextAction (){
 		switch ($this->processInstance->getStatus()) {
 			case 'created' : 
@@ -33,10 +37,6 @@ class ProcessEngine
 		}
 	}
 	
-	public function getInstance() {
-		return $this->processInstance;
-	}
-	
 	private function launchProcessInstance(){
 		// Check if prerequisites are available
 		$count = 0;
@@ -47,10 +47,11 @@ class ProcessEngine
 				// TODO: Dit moet dynamischer, nu kan enkel een persoonsregistratie opgestart worden.
 				// (Hieronder standaard registratie formulier voor een persoon)
 				// TODO: eerste test: maak onderscheid tussen 
-				//								Giver(=user (Person)) --> info via authenticate proces
-				//								Receiver (Person)	  --> Activiteit maken om Receiver te selecteren/registreren
-				// TODO: haal Receiver voorlopig uit de activity flow --> enkel wish toevoegen voor jezelf!!
+				//								Giver(=user (Person)) --> info via authenticate proces "authenticate a user"
+				//								Receiver (Person)	  --> Activiteit maken om Receiver te selecteren/registreren "register a wish receiver"
+				
 				if ($type == "Receiver") { //TODO: Verwijder deze if als er ook wensen voor anderen aangemaakt kunnen worden.
+					
 					$_SESSION['wishReceiver'] = $_SESSION['user'];
 					header("Refresh: 0");
 					exit();
@@ -59,6 +60,7 @@ class ProcessEngine
 					
 					$Person = new Person ($type);
 					$result = $Person->register();
+					
 					
 					// Finalize the loop
 					if ($result == 1) { // a prereq is filled
@@ -84,6 +86,7 @@ class ProcessEngine
 	private function executeElement(){
 		//$_SESSION['content'] = "Execute ".$this->processInstance->getCurrentElement();
 		$type = "act";
+		$activityFinished = false;
 		include "./processes/activities/".$type."_".$this->processInstance->getCurrentElement().".php";
 		if ( $activityFinished ) {
 			$this->getNextElement();

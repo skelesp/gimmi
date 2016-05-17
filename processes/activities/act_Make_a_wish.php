@@ -11,7 +11,7 @@ require_once "./lib/GIMMI/Person.class.php";
  */
 
 // Process variables
-$activityID = 'make_a_wish_1';
+$activityID = 'make_a_wish_X';
 $activityRefreshRate = 0;
 $_SESSION['content'] = "";
 
@@ -21,6 +21,8 @@ if ( !isset($_SESSION[$activityID]) || empty($_SESSION[$activityID]) ) {
 } else {
 	$activityState = $_SESSION[$activityID];
 }
+
+unset($_SESSION[$activityID]);
 
 switch ($activityState) {
 	case 'start':
@@ -32,174 +34,14 @@ switch ($activityState) {
 		
 		// Next activity + save process instance info
 		$_SESSION['o_Wish'] = $o_Wish;
-		$_SESSION[$activityID] = "register a wish";
+		$_SESSION[$activityID] = "ask for wish details";
 		
 		// automatic activity --> refresh page immediately
-		$_SESSION['content'] = $activityState." is starting...";
 		header("Refresh: ".$activityRefreshRate);
+		$_SESSION['content'] = $activityState." is starting...";
 		break;
-		
-	// case 'check owner':
-		// /**
-		 // * ACT
-		 // * Check if the wish owner is known
-		 // */
-		// $o_Wish = $_SESSION['o_Wish'];
-		// include "./processes/services/srv-Check_Wish_Owner.php";
-		
-		// // Next activity + save process instance info
-		// $_SESSION[$activityID] = "ask for owner";	
-		// $_SESSION['o_Wish'] = $o_Wish;
-		// $_SESSION['b_ownerKnown'] = $b_ownerKnown;
-		
-		// // automatic activity --> refresh page immediately
-		// $_SESSION['content'] = $activityState." is loading...";
-		// header("Refresh: ".$activityRefreshRate);
-		
-		// break;		
-	
-	// case 'ask for owner':
-		// /**
-		 // * DN
-		 // * Is the wish owner known?
-		 // */	
-		// if (!$_SESSION['b_ownerKnown']){ /* Owner is not known */	
-			// /**
-			 // * ACT
-			 // * Ask for wish owner
-			 // */
-			// $frmID = "ask_for_owner";
-			// include "./processes/forms/frm-".$frmID.".php";
-			// $_SESSION['content'] = $_SESSION['content']." ".$formHTML;
-			
-			// // Next activity + save process instance info
-			// $_SESSION[$activityID] = "handle owner info";
-			
-		// } else {
-			
-			// $_SESSION[$activityID] = "check owner account";
-			// // automatic activity --> refresh page immediately
-			// $_SESSION['content'] = $activityState." is loading... (".!$_SESSION['b_ownerKnown'].")";
-			// header("Refresh: ".$activityRefreshRate);
-			
-		// }
-		
-		// break;
-		
-	// case 'handle owner info':
-		// $frmID = "wishOwner"; // get info from this form
-		
-		// if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
-			// // Store the form info in a Person object
-			// $wishReceiver = new Person('Receiver');
-			
-			// $wishReceiver->setlastName($_POST['owner_last']);
-			// $wishReceiver->setfirstName($_POST['owner_first']);
-			// $wishReceiver->setemail($_POST['owner_email']);
-			
-			// $_SESSION['content'] = $_SESSION['content']." ".$wishReceiver;
-			
-			// // Next activity + save process instance info
-			// $_SESSION['wishReceiver'] = $wishReceiver;
-			// $_SESSION[$activityID] = "check owner account";
-			
-		// } else { //Geen ownergegevens beschikbaar in form var
-			
-			// // Next activity + save process instance info
-			// $_SESSION[$activityID] = "ask for owner";
-			
-		// }
-		// // automatic activity --> refresh page immediately
-		// $_SESSION['content'] = $activityState." is loading...";
-		// header("Refresh: ".$activityRefreshRate);
-		// break;
-		
-	// case 'check owner account':
-		// /**
-		 // * ACT
-		 // * Check if there is an account which corresponds to the given data
-		 // */
-		// $wishReceiver = $_SESSION['wishReceiver'];
-		
-		// // Next activity + save process instance info
-		// $_SESSION[$activityID] = "create new account";
-		// $wishReceiver->check_for_account();
-		
-		// $_SESSION['wishReceiver'] = $wishReceiver;
-	
-		// // automatic activity --> refresh page immediately
-		// $_SESSION['content'] = $activityState." is loading...";
-		// header("Refresh: ".$activityRefreshRate);
-		// break;
-		
-	// case 'create new account':
-		 // /**
-		 // * DN
-		 // * Wish owner has an account?
-		 // */	
-		// $wishReceiver = $_SESSION['wishReceiver'];
-		
-		// if (!$wishReceiver->isSubscribed()) { /* owner doesn't have an account */
-		// /**
-		 // * ACT
-		 // * Create a new person account
-		 // */ 
-			
-			// // Voer "$wishReceiver->register();" uit (method nog te maken in Person class)
-			// $_SESSION['content'] = $_SESSION['content']." ".(string)$wishReceiver."<br />Deze persoon heeft GEEN account.";
-			
-		// } else {
-			
-			// $_SESSION['content'] = $_SESSION['content']." ".(string)$wishReceiver."<br />Deze persoon heeft EEN account.";
-			
-		// }
-		
-		// // Next activity + save process instance info
-		// $_SESSION[$activityID] = "check creator is owner";
-		
-		// // automatic activity --> refresh page immediately
-		// $_SESSION['content'] = $activityState." is loading...";
-		// header("Refresh: ".$activityRefreshRate);
-		// break;
-		
-	// case 'check creator is owner':
-		 // /**
-		 // * ACT
-		 // * Check if the wish creator is also the wish owner?
-		 // */ 
-		// $frmID = "ask_creator_is_owner";
-		// include "./processes/forms/frm-".$frmID.".php";
-		
-		// $_SESSION['content'] = $_SESSION['content']." ".$formHTML;
-		
-		// // Next activity + save process instance info
-		// $_SESSION[$activityID] = "handle creator is owner respons";
-		
-		
-		// break;
-		
-	// case 'handle creator is owner respons':	
-		
-		// $frmID = "wishRegistration";
-		
-		// $b_creatorIsOwner = false;
-		// if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
-			// if(isset($_POST['CreatorIsOwner'])) 
-			// {
-				// $b_creatorIsOwner = true;
-			// }
-			// $b_creatorIsOwner = true;
-		// }
-		// $_SESSION['content'] = $activityState." is loading...";
-		// // Next activity + save process instance info
-		// $_SESSION[$activityID] = "register a wish";
-		
-		// // automatic activity --> refresh page immediately
-		// $_SESSION['content'] = $activityState." is loading...";
-		// header("Refresh: ".$activityRefreshRate);
-		// break;
-		
-	case 'register a wish':
+				
+	case 'ask for wish details':
 		 /**
 		 * ACT
 		 * Register a new wish
@@ -211,28 +53,39 @@ switch ($activityState) {
 		 include "./processes/forms/frm-".$frmID.".php";
 		
 		// Next activity + save process instance info
-		 $_SESSION[$activityID] = "wish registered";
+		 $_SESSION[$activityID] = "handle wish registration";
 		 $_SESSION['content'] = $_SESSION['content']." ".$formHTML;
 		
 		 break;
 	// case 'handle registered wish : 
 	
-	case 'wish registered':
-		header("Refresh: ".$activityRefreshRate);
-		$_SESSION['content'] = $activityState." is running...";
+	case 'handle wish registration':
+		$frmID = "wishRegistration"; // get info from this form
 		
-		// Next activity + save process instance info
-		$_SESSION[$activityID] = "wish has been created";
+		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
+			// Store the form info in a Wish object
+			
+			// Next activity + save process instance info
+			$_SESSION[$activityID] = "wish registered";
+			
+		} else { //Geen formgegevens beschikbaar in form var
+			
+			// Next activity + save process instance info
+			$_SESSION[$activityID] = "ask for wish details";
+			
+		}
+		// automatic activity --> refresh page immediately
+		$_SESSION['content'] = $activityState." is loading...";
+		header("Refresh: ".$activityRefreshRate);
 		break;
 	
-	case 'wish has been created':
+	case 'wish registered':
 		// END the activity
 		$activityFinished = true;
 		$_SESSION['content'] = $activityState." is done...";
 		unset( $_SESSION[$activityID] );
 		unset( $_SESSION['wishReceiver'] );
 		unset( $_SESSION['b_ownerKnown'] );
-		$_SESSION['content'] = $_SESSION['content']." "."The wish is created.";
 		
 		break;
 		
@@ -241,5 +94,4 @@ switch ($activityState) {
 		unset( $_SESSION[$activityID] );
 } // end of $activityState switch
 
-//DEBUG: $_SESSION['content'] = "activiteitsstatus : ".$activityState."<br/>".$_SESSION['content'];
 ?>

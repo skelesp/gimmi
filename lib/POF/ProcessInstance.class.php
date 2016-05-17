@@ -15,6 +15,7 @@ class ProcessInstance
 	protected $currentElement; // @var Current element in which the process instance is active now
 	protected $variables; // @var Array of variables for this process instance
 	protected $missingInfo; //@var Array of missing info (= not available in variables
+	protected $callingProcess; //@var holds the reference to the calling process
 	
 	public function __construct ($processID) {
 		$this->id = "1234"; //TODO: haal de id van deze nieuwe instance uit DB (=nieuwe ID ophalen)
