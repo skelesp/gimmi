@@ -7,6 +7,7 @@ require_once "./lib/WebsiteBuilder/template.class.php";
 require_once "./lib/POF/ProcessInstance.class.php";
 require_once "./lib/POF/ProcessEngine.class.php";
 require_once "./lib/GIMMI/Person.class.php";
+require_once "./lib/GIMMI/User.class.php";
 
 session_start();
 
@@ -25,7 +26,7 @@ session_start();
 //		Help	 	|	GimmiLayout.html  | help.html      	  	 |   "Fix string"  |    "Fix content"   |
 //		UserPortal	|	GimmiLayout.html  | user_portal.html  	 |   "Fix string"  |    "Fix content"   |
 
-/* //DEBUGGING via var dump of session
+/*//DEBUGGING via var dump of session
 ob_start();
 var_dump($_SESSION);
 $data = ob_get_clean();
@@ -51,7 +52,11 @@ $processStatus = "";
 $loginStatus = "Login";
 
 // Check user login
-if (isset($_SESSION['user']) && !empty($_SESSION['user'])){
+// TEST MODE 
+// echo var_dump($_SESSION['user']); 
+// END TEST MODE
+
+if (isset($_SESSION['user']) && !empty($_SESSION['user']) ){
 	
 	$user = $_SESSION['user'];
 	$loginStatus = "Logged in as ".$user->getfirstName();
@@ -92,18 +97,15 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user'])){
 //Get templates
 $loginBlockLayout = new Template("./layout/ResponsiveDesignTXT/login_block.html");
 $loginMenu = "";
-// TODO: op een andere manier controleren of user ingelogd is (via method van Person class)
+// TODO: op een andere manier controleren of user ingelogd is (via method van User class)
 if ($loginStatus != "Login"){ // user is logged in
 	$loginMenuLayout = new Template("./layout/ResponsiveDesignTXT/user_menu.html");
 	$loginMenu = $loginMenuLayout->parse();
-} else {
-	// $frmID = "login";
-	// include ("./processes/forms/frm-login.php");
-	// $loginMenu = $formHTML;
 }
 $pageLayout = new Template("./layout".$templateFile);
 	
 // Create site content
+// TODO: siteContent moet niet in een sessievariabele gestoken worden. Dit kan in PHP gewoon in een globale variabele (Bij ASP was dit nodig omdat in runtime opgeroepen pagina's geen variabelen kunnen doorgeven)
 $siteContent = $_SESSION['content'];
 
 // DEBUGGING: voeg $_SESSION['DEBUG_message'] toe aan code om een debugbericht te tonen vanuit gelijk welke plaats in de code.

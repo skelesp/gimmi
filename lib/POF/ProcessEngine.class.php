@@ -50,30 +50,19 @@ class ProcessEngine
 				//								Giver(=user (Person)) --> info via authenticate proces "authenticate a user"
 				//								Receiver (Person)	  --> Activiteit maken om Receiver te selecteren/registreren "register a wish receiver"
 				
-				if ($type == "Receiver") { //TODO: Verwijder deze if als er ook wensen voor anderen aangemaakt kunnen worden.
-					
-					$_SESSION['wishReceiver'] = $_SESSION['user'];
-					header("Refresh: 0");
-					exit();
-					
-				} else {
-					
-					$Person = new Person ($type);
-					$result = $Person->register();
-					
-					
-					// Finalize the loop
-					if ($result == 1) { // a prereq is filled
-						$_POST = array();
-						//reload to get other prereqs
+				switch($type) { //TODO: Verwijder deze switch als er ook wensen voor anderen aangemaakt kunnen worden.
+					case 'Receiver':
+						$_SESSION['wishReceiver'] = $_SESSION['user'];
 						header("Refresh: 0");
 						exit();
-					} else {
-						$_SESSION['content'] = $result;
 						break;
-					}			
+					case 'Giver':
+					case 'User':
+						// Go to other proces to login
+						//TODO: opslaan in db dat er een andere instance wacht op het eindigen van dit proces
+						header("location: ?pid=3");
+						break;
 				}
-				
 			}
 			
 		} else {

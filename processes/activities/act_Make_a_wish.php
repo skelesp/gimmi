@@ -30,10 +30,10 @@ switch ($activityState) {
 		 * START
 		 * Instantiate new Wish object with default name
 		 */
-		$o_Wish = new Wish();
+			// no object to instantiate at this point
+			//TODO: moet prereq check hier niet gebeuren?
 		
 		// Next activity + save process instance info
-		$_SESSION['o_Wish'] = $o_Wish;
 		$_SESSION[$activityID] = "ask for wish details";
 		
 		// automatic activity --> refresh page immediately
@@ -62,8 +62,22 @@ switch ($activityState) {
 	case 'handle wish registration':
 		$frmID = "wishRegistration"; // get info from this form
 		
+		$_SESSION['content'] = $activityState." is loading...";
+		
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
 			// Store the form info in a Wish object
+			$wish = new Wish();
+			
+			$wish->setName($_POST['wish_title']);
+			$wish->setDescription($_POST['wish_description']);
+			$wish->setPrice($_POST['wish_price']);
+			if ( is_array($_POST['wish_private'])) {
+				$wish->setPrivate(true);
+			} else {
+				$wish->setPrivate(false);
+			}
+			
+			$wish->register();
 			
 			// Next activity + save process instance info
 			$_SESSION[$activityID] = "wish registered";
@@ -75,7 +89,7 @@ switch ($activityState) {
 			
 		}
 		// automatic activity --> refresh page immediately
-		$_SESSION['content'] = $activityState." is loading...";
+		
 		header("Refresh: ".$activityRefreshRate);
 		break;
 	

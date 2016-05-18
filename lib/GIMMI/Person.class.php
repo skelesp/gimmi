@@ -20,9 +20,64 @@ class Person
 
 // Magic Methods
 
-	function __construct($type)
+	function __construct($email = null, $login = null, $type = "User")
 	{
+		$key = null;
+		
+		// If email was given in constructor: construct with email
+		if ( !empty($email) ) {
+			$key = "email";
+		}
+		
+		if ( !empty($login) ) {
+			$key = "login";
+		}
+		// TODO: verwijder $type uit Person class
 		$this->type = $type;
+		
+		//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
+		
+		require_once './db_config.php';
+		
+		try 
+		{ 
+			$sQuery = " 
+				SELECT 
+					*
+				FROM 
+					persons
+				WHERE
+					".$key." LIKE '".$$key."'"; 
+			
+			$oStmt = $db->prepare($sQuery); 
+			$oStmt->execute(); 
+					
+			$results = $oStmt->fetch(PDO::FETCH_ASSOC);
+			
+			if (!empty($results)) {
+			
+				$this->firstName = $results["firstName"];
+				$this->lastName = $results["lastName"];
+				$this->email = $results["email"];
+				$this->nickname = $results["nickname"];
+			
+			} else {
+				//TODO: throw an error
+			}
+			
+		} 
+		catch(PDOException $e) 
+		{ 
+			$sMsg = '<p> 
+					Regelnummer: '.$e->getLine().'<br /> 
+					Bestand: '.$e->getFile().'<br /> 
+					Foutmelding: '.$e->getMessage().'<br />
+					Query: '.$sQuery.'
+				</p>'; 
+			 
+			trigger_error($sMsg); 
+		} 
+		
 	}
 
 	function __destruct()
@@ -32,7 +87,7 @@ class Person
 	function __toString(){
 		$text = $this->firstName." ".$this->lastName." can be reached on ".$this->email;
 		if (!empty($this->nickname)){
-			$text = $text."and you can call him/her '".$this->nickname."'";
+			$text = $text." and you can call him/her '".$this->nickname."'";
 		}
 		$text = $text.".";
 		return $text;
@@ -86,62 +141,7 @@ class Person
 
 // Methods
 	public function register () {
-		/* In de echte register method moet onderstaande niet staan!
-		Register moet de opdracht zijn om de gegevens in de class te registreren.
-		Register controleer of de persoon al gekend is in de database.
-		Register maakt nieuwe record in database indien nodig.
-		*/
-		switch ($this->type) { //TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
-				case 'Giver':
-				case 'User':
-					$frmID = "user_credentials";
-					break;
-				case 'Receiver':
-					$frmID = "register_person";
-					break;
-				default:
-					$frmID = "register_person";
-					break;
-		}
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
-			
-			$this->setlastName($_POST['person_last']);
-			$this->setfirstName($_POST['person_first']);
-			$this->setemail($_POST['person_email']);
-						
-			switch ($this->type) {//TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
-				case 'Giver': 
-					$_SESSION['user'] = $this;
-					break;
-				case 'Receiver':
-					$_SESSION['wishReceiver'] = $this;
-					break;
-			}
-			
-			return 1;
-			
-		} else {
-			switch ($this->type) { //TODO: verwijder deze switch als class Receiver en Giver aangemaakt zijn
-				case 'Giver':
-				case 'User':
-					$legend = "Gelieve uw gegevens in te vullen. (login)";
-					include"./processes/forms/frm-".$frmID.".php";
-					break;	
-					
-				case 'Receiver': 
-					$legend = "Voor wie is het cadeau idee?";
-					include"./processes/forms/frm-register_person.php";
-					break;
-					
-				default : 
-					$legend = "Gelieve de persoonsgegevens op te geven.";
-					include"./processes/forms/frm-register_person.php";
-					break;
-			}
-			return $formHTML;
-			
-		}
 	}
 	
 	public function check_for_account () {
@@ -187,5 +187,6 @@ class Person
 			trigger_error($sMsg); 
 		} 
 	}
+	
 }
 ?>

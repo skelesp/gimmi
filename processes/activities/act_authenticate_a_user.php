@@ -28,10 +28,11 @@ switch ($activityState) {
 		 * START
 		 * Instantiate new Wish object with default name
 		 */
-		$user = new Person("user");
+		
+			// no object to instantiate at this point
+			//TODO: moet prereq check hier niet gebeuren?
 		
 		// Next activity + save process instance info
-		$_SESSION['authenticatingUser'] = $user;
 		$_SESSION[$activityID] = "check cookies";
 		
 		// automatic activity --> refresh page immediately
@@ -45,10 +46,12 @@ switch ($activityState) {
 		 * ACT
 		 * Check cookies
 		*/
-		$user = $_SESSION['authenticatingUser'];
-		
+				
 		// Check if user is stored in cookies
-		$_SESSION['cookiesAvailable?'] = false; // TEST mode : cookies functionaliteit nog niet beschikbaar
+		$_SESSION['cookiesAvailable?'] = false; 
+			/* TODO: cookies functionaliteit nog niet beschikbaar
+			 * Toevoegen decision "cookies found" als dit wordt geïmplementeerd
+			 */
 		
 		// automatic activity --> refresh page immediately
 		$_SESSION[$activityID] = "ask user credentials";
@@ -79,18 +82,13 @@ switch ($activityState) {
 		 * Verify user credentials
 		 */
 		
-		$user = $_SESSION['authenticatingUser'];
-		
 		$frmID = "user_credentials"; // get info from this form
 		
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
-			// Store the form info in a Person object
-			$user->setlastName($_POST['login_user']);		// TODO: nog geen User class --> dus Person class wordt gebruikt als test
-			$user->setfirstName($_POST['login_password']);	// TODO: nog geen User class --> dus Person class wordt gebruikt als test
-			
-			//TODO: toevoegen van controle of user + paswoord klopt
-			//*** Voorlopig nog geen user gegevens in DB dus kan nog niet gecontroleerd worden.
-			$_SESSION['person_authenticated?']=true;
+			// Create a User object with the form info
+			$user = new User($_POST['login_user'], $_POST['login_password'] );
+			echo var_export ($user);
+			$user->authenticate();
 			
 			unset( $_SESSION['pfbc'] );
 			
@@ -98,7 +96,7 @@ switch ($activityState) {
 			$_SESSION['authenticatingUser'] = $user;
 			$_SESSION[$activityID] = "user known?";
 			
-		} else { //Geen ownergegevens beschikbaar in form var
+		} else { //Geen ownergegevens beschikbaar in form var --> Is deze loop nodig? In principe gaan we hier altijd input krijgen!!
 			
 			// Next activity + save process instance info
 			$_SESSION[$activityID] = "ask user credentials";
@@ -116,17 +114,21 @@ switch ($activityState) {
 		 * DN
 		 * User known?
 		 */	
-			
-		if ($_SESSION['person_authenticated?']) { /* YES : user is authenticated*/
+		$user = $_SESSION['authenticatingUser'];
+		
+		if ( $user->isAuthenticated() ) { /* YES : user is authenticated*/
 			// Next activity
 			$_SESSION[$activityID] = "load user in session";
+			
 		} else { /*NO*/
 			// Next activity
-			$_SESSION[$activityID] = "ask user credentials'";
+			$_SESSION[$activityID] = "ask user credentials";
+			
 		}
 		
 		// automatic activity --> refresh page immediately
 		$_SESSION['content'] = $activityState." is loading...";
+		
 		header("Refresh: ".$activityRefreshRate);
 		
 		break;
@@ -136,13 +138,16 @@ switch ($activityState) {
 		 * ACT
 		 * Load user in session
 		 */
-		// TODO: toevoegen $user->load(); method in User class om de nodige info op te halen ivm een user (enkel als hij 'authenticated' is)
-		
-		$_SESSION['user']=$_SESSION['authenticatingUser'];
+		 
+		$user = $_SESSION['authenticatingUser'];
+		// TODO: toevoegen $user->loadPerson(); method in User class om de nodige info op te halen ivm een user (enkel als hij 'authenticated' is)
+		$_SESSION['user'] = $user;
+		unset ( $_SESSION['authenticatingUser'] );
 		
 		// automatic activity --> refresh page immediately
 		$_SESSION['content'] = $activityState." is loading...";
 		$_SESSION[$activityID] = "user is authenticated";
+		
 		header("Refresh: ".$activityRefreshRate);
 		
 		break;

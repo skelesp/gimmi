@@ -48,7 +48,7 @@ include_once "./lib/PFBC/form.php";
 	// Number field for Wish Price Range
 	$form->addElement(new Element\Number("Prijsschatting (in euro)", "wish_price", array("style" => "height: 30px;")));
 	// Checkbox for Wish privacy
-	$form->addElement(new Element\Checkbox("", "Wish_private", array("ja" => "Deze wens niet zichtbaar maken voor ".$wishReceiver->getfirstName()."?")));
+	$form->addElement(new Element\Checkbox("", "wish_private", array("ja" => "Deze wens niet zichtbaar maken voor ".$wishReceiver->getfirstName()."?")));
 	// Button to send the form
 	$form->addElement(new Element\Button("Registreer", "submit", array("name" => $frmID)));
 

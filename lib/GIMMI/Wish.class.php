@@ -47,14 +47,20 @@ class Wish
 	 * The person who wants to receive the wish.
 	 */
 	private $owner;
+	private $private;
 	
 // MAGIC METHODS
-	function __construct($name = "NewWish"){
-		$this->name = $name;
-		$this->creator = new Person('Giver');
-		$this->owner = new Person('Receiver');
+	function __construct(){
+		$this->name = "";
+		//$this->creator = new Person('Giver');
+		//$this->owner = new Person('Receiver');
+		$this->status = "open";
 	}
-
+	
+	function __toString(){
+		return $this->name." wordt geschat op ".$this->price." euro (private = ".(($this->private) ? "private" : "public").")<br /> <br />Korte beschrijving: ".$this->description;
+	}
+	
 	function __destruct(){
 	}
 	
@@ -183,13 +189,21 @@ class Wish
 	public function getOwner(){
 		return $this->owner;
 	}
+	
+	public function setPrivate($newVal){
+		$this->private = $newVal;
+	}
+	
+	public function isPrivate($newVal){
+		return $this->private;
+	}
 
 // METHODS
 
 	/**
 	 * Save a wish.
 	 */
-	public function save(){
+	public function register(){
 		/* 	Save the wish object.
 			This can be a create or an update.
 		*/

@@ -16,36 +16,57 @@ class User extends Person
 	private $pass;
 	private $authenticated;
 	
-	//Constructor
+	//Magic methods
 	
 	public function __construct($l = null, $p = null){
+		parent::__construct(null,$l);
+		
 		$this->login = $l;
 		$this->pass = md5($p);		
-		$authenticated = false;
+		$this->authenticated = false;
+	}
+	
+	public function __toString () {
+		$text = parent::__toString();
+		$status = "niet ingelogd";
+		
+		if ($this->authenticated) {
+			$status = "ingelogd";
+		}
+		
+		return "User '".$this->login."' is ".$status."<br />".$text;
 	}
 	
 	//Accessors
 	public function getLogin () {
 		return $this->login;
 	}
+	
 	public function isAuthenticated () {
 		return $this->authenticated;
 	}
 	
-	public function setPassword(){
+	public function setPassword($p){
+		$this->pass = md5($p);
+		//DB update van pasword via register?
 	}
 	
 	//Methods
 	
 	public function register(){
+		// Registreer de huidige info in de database
+		// Controleer of het een update of een insert moet zijn
+		// Controleer wat er gewijzigd is voor een update
 	}
 	
 	public function activate(){
 	}
 	
 	public function authenticate() {
-		require './db_config.php';
 		//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
+		
+		require './db_config.php';
+		
 		try 
 		{ 
 			$sQuery = " 
