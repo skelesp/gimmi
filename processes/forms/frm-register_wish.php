@@ -33,10 +33,10 @@ include_once "./lib/PFBC/form.php";
 		
 // Create form elements
 	// Add form title
-	if ($giver == $wishReceiver) {
-		$legend = '<legend>'.$giver->getfirstname().', wat wil je wensen voor jezelf?</legend>';
+	if ($user == $wishReceiver) {
+		$legend = '<legend>'.$user->getfirstname().', wat wil je wensen voor jezelf?</legend>';
 	} else {
-		$legend = '<legend>'.$giver->getfirstname().', wat wil je wensen voor '.$wishReceiver->getfirstName()." ".$wishReceiver->getlastName().'?</legend>';
+		$legend = '<legend>'.$user->getfirstname().', wat wil je wensen voor '.$wishReceiver->getfirstName()." ".$wishReceiver->getlastName().'?</legend>';
 	}
 	$form->addElement(new Element\HTML($legend));
 	// Hidden field with form name
@@ -47,8 +47,10 @@ include_once "./lib/PFBC/form.php";
 	$form->addElement(new Element\Textarea("Beschrijving", "wish_description"));
 	// Number field for Wish Price Range
 	$form->addElement(new Element\Number("Prijsschatting (in euro)", "wish_price", array("style" => "height: 30px;")));
+	//De personID van de owner
+	$form->addElement(new Element\Hidden("creatorLogin", $user->getLogin()));
 	// Checkbox for Wish privacy
-	$form->addElement(new Element\Checkbox("", "wish_private", array("ja" => "Deze wens niet zichtbaar maken voor ".$wishReceiver->getfirstName()."?")));
+	//$form->addElement(new Element\Checkbox("", "wish_private", array("ja" => "Deze wens niet zichtbaar maken voor ".$wishReceiver->getfirstName()."?")));
 	// Button to send the form
 	$form->addElement(new Element\Button("Registreer", "submit", array("name" => $frmID)));
 

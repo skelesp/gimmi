@@ -11,6 +11,7 @@ class Person
 
 // Properties
 
+	private $id;
 	private $firstName;
 	private $lastName;
 	private $email;
@@ -37,7 +38,7 @@ class Person
 		
 		//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
 		
-		require_once './db_config.php';
+		require './db_config.php';
 		
 		try 
 		{ 
@@ -55,7 +56,8 @@ class Person
 			$results = $oStmt->fetch(PDO::FETCH_ASSOC);
 			
 			if (!empty($results)) {
-			
+				
+				$this->id = $results["personID"];
 				$this->firstName = $results["firstName"];
 				$this->lastName = $results["lastName"];
 				$this->email = $results["email"];
@@ -94,6 +96,10 @@ class Person
 	}
 	
 // Accessors
+
+	public function getID(){
+		return $this->id;
+	}
 	
 	public function getlastName()
 	{

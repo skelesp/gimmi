@@ -46,7 +46,7 @@ switch ($activityState) {
 		 * ACT
 		 * Register a new wish
 		 */
-		 $giver = $_SESSION['user'];
+		 $user = $_SESSION['user'];
 		 $wishReceiver = $_SESSION['wishReceiver'];
 		 
 		 $frmID = "register_wish";
@@ -71,11 +71,13 @@ switch ($activityState) {
 			$wish->setName($_POST['wish_title']);
 			$wish->setDescription($_POST['wish_description']);
 			$wish->setPrice($_POST['wish_price']);
-			if ( is_array($_POST['wish_private'])) {
+			/* if ( is_array($_POST['wish_private'])) {
 				$wish->setPrivate(true);
 			} else {
 				$wish->setPrivate(false);
-			}
+			} */
+			$wish->setCreator(new Person(null, $_POST['creatorLogin'], null));
+			$wish->setOwner(new Person(null,$_POST['creatorLogin'],null)); //TODO: als owner ook iemand anders kan zijn, moet dit nog aangepast worden.
 			
 			$wish->register();
 			

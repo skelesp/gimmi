@@ -204,9 +204,37 @@ class Wish
 	 * Save a wish.
 	 */
 	public function register(){
+		
 		/* 	Save the wish object.
 			This can be a create or an update.
 		*/
+		
+		//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
+		
+		require './db_config.php';
+		
+		try 
+		{ 
+			// TODO: voeg personID toe van de creator / owner toe (via objecten in dit object)
+			$sQuery = " 
+				INSERT INTO wishes (name,description,price,ownerID, creatorID) 
+				VALUES ('".$this->name."','".$this->description."',".$this->price.",".$this->owner->getID().",".$this->creator->getID().")";
+			// echo $sQuery;
+			$oStmt = $db->prepare($sQuery); 
+			$oStmt->execute(); 
+			 		
+		} 
+		catch(PDOException $e) 
+		{ 
+			$sMsg = '<p> 
+					Regelnummer: '.$e->getLine().'<br /> 
+					Bestand: '.$e->getFile().'<br /> 
+					Foutmelding: '.$e->getMessage().'<br />
+					Query: '.$sQuery.'
+				</p>'; 
+			 
+			trigger_error($sMsg); 
+		} 
 	}
 
 	/**
