@@ -36,14 +36,11 @@ class Process
 			case 2:
 				$this->name = "Search a wish";
 				$this->prerequisites = [
-										"giver" => array(
-											"value" => (isset($_SESSION['user'])) ? $_SESSION['user'] : null,
-											"type" =>	"Giver"
-											),
-										"receiver" => array(
+										//TODO: voorlopig geen prereq, want registratieprocedures staan nog niet op punt. (eerst zorgen dat een "wish receiver" makkelijk geselecteerd kan worden)
+										/* "receiver" => array(
 											"value" => (isset($_SESSION['wishReceiver'])) ? $_SESSION['wishReceiver'] : null,
 											"type" =>	"Receiver"
-											)
+											) */
 										];
 				break;
 			case 3:

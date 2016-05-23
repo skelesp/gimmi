@@ -15,11 +15,13 @@ include_once "./lib/PFBC/form.php";
  */
 
  // Create a new form to register a person"
-	$frmName = "register_person";
-	$form = new Form($frmName);
+	$form = new Form($frmID);
+	if (empty($legend)){
+		$legend = "Geef aub de onderstaande gegevens in.";
+	}
 
 // Configure the form
-// No action required, method POST, vertical view
+	// No action required, method POST, vertical view
 	$form->configure(array(
 		"action" => "",
 		"method" => "POST",

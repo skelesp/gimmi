@@ -2,11 +2,13 @@
 //
 require_once "./lib/GIMMI/Wishlist.class.php";
 require_once "./lib/GIMMI/Person.class.php";
+require_once "./lib/GIMMI/PersonRepository.class.php";
 
-$person = new Person (null, "stijn");
-$wishlist = new Wishlist($person);
+$repo = new PersonRepository ();
+$persons = $repo->findPerson(null,"Stijn", "Beeckmans");
 
-foreach ($wishlist->getWishes() as $wish){
-}
+$person = new Person ($persons[0]['email']);
+
+echo $person;
 
 ?>

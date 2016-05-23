@@ -1,6 +1,7 @@
-<<?php
+<?php
 require_once "./lib/GIMMI/Wishlist.class.php";
 require_once "./lib/GIMMI/Person.class.php";
+require_once "./lib/GIMMI/PersonRepository.class.php";
 
 
 /**
@@ -34,7 +35,9 @@ switch ($activityState) {
 		 */
 			// no object to instantiate at this point
 			//TODO: moet prereq check hier niet gebeuren?
-		
+			//TODO: verwijder na testen
+			unset( $_SESSION['wishReceiver']);
+			
 		// Next activity + save process instance info
 		$_SESSION[$activityID] = "wish owner known?";
 		
@@ -65,20 +68,78 @@ switch ($activityState) {
 			break;
 		}
 		
-	
 	case 'ask for wish owner':
-		$_SESSION['content'] = "Vraag naar de wish owner";
+		 
+		 $frmID = "register_person";
+		 $legend = "Voor wie wilt u een cadeau zoeken?";
+		 include "./processes/forms/frm-".$frmID.".php";
+		
+		// Next activity + save process instance info
+		 $_SESSION[$activityID] = "select wish owner";
+		 $_SESSION['content'] = $_SESSION['content']." ".$formHTML;
+		
 		$_SESSION['DEBUG_message'] = $activityState." is running...";
 		break;
-	
+		
+	case 'select wish owner':
+				
+		$frmID = "register_person";
+		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
+			
+			$_SESSION['content'] = $_POST['person_first']."<br/>".$_POST['person_last']."<br/>".$_POST['person_email'];
+			$repo = new PersonRepository ();
+			$persons = $repo->findPerson($_POST['person_email'],$_POST['person_first'], $_POST['person_last']);
+			
+			if(count($persons) == 0 ){ // geen persoon gevonden
+				
+				//TODO: Foutboodschap meegeven
+				
+				// Next activity + save process instance info
+				 $_SESSION[$activityID] = "trigger person registration";
+				
+				// automatic activity --> refresh page immediately
+				header("Refresh: ".$activityRefreshRate);
+				
+			} elseif (count($persons) == 1 ){ // exact 1 persoon gevonden
+				
+				$person = new Person ($persons[0]['email']);
+				$_SESSION['wishReceiver'] = $person;
+				
+				// Next activity + save process instance info
+				 $_SESSION[$activityID] = "generate wishlist";
+				
+				// automatic activity --> refresh page immediately
+				header("Refresh: ".$activityRefreshRate);
+				
+			} else { // meer dan 1 persoon gevonden die voldeed aan de gegevens
+				
+				//TODO: toon een lijst van alle gevonden personen en laat de gebruiker selecteren wie het is
+			
+			}
+		}
+		
+		$_SESSION['DEBUG_message'] = $activityState." is running...";
+		break;
+		
+	case 'trigger person registration':
+		// Next activity + save process instance info
+		$_SESSION['DEBUG_message'] = $activityState." is running...";
+		$_SESSION[$activityID] = "ask for wish selection";
+		
+		// automatic activity --> refresh page immediately
+		header("Refresh: ".$activityRefreshRate);
+		
+		break;
+		
 	case 'generate wishlist':
 		 /**
 		  * ACT
 		  * Generate an array filled with wishes of a person
 		  */
+		
 		$receiver = $_SESSION['wishReceiver'];
 		$_SESSION['wishlist'] = new Wishlist ($receiver);
-				
+
 		// Next activity + save process instance info
 		$_SESSION['DEBUG_message'] = $activityState." is running...";
 		$_SESSION[$activityID] = "ask for wish selection";
@@ -116,14 +177,13 @@ switch ($activityState) {
 		break;
 	
 	case 'gift idea(s) selected?':
-		//TODO: ontvang het resultaat van de form uit 'ask for wish selection'
-		//TODO: controleer of er wishes geselecteerd zijn --> Ja : ga naar reservation / Nee : ga naar end (error)
+		
 		$frmID = "wish_selection";
 		$ideaFound = false;
 		
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
-			$selectedWishes = $_POST['wish_selection'];
-			if ( !empty($selectedWishes) ){
+			if ( !empty($_POST['wish_selection']) ){
+				$selectedWishes = $_POST['wish_selection'];
 				$ideaFound = true;
 				$_SESSION['selectedIdeas'] = $selectedWishes;
 			}
@@ -154,7 +214,7 @@ switch ($activityState) {
 				
 		break;
 	
-	case 'no gift found':
+	case 'no gift idea found':
 		// END the activity
 		$activityFinished = true;
 		$_SESSION['DEBUG_message'] = $activityState;
