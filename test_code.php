@@ -1,19 +1,12 @@
 <?php 
 //
-require_once "./lib/GIMMI/User.class.php";
+require_once "./lib/GIMMI/Wishlist.class.php";
 require_once "./lib/GIMMI/Person.class.php";
 
- 
-$user = new User("stijn", "stijn");
+$person = new Person (null, "stijn");
+$wishlist = new Wishlist($person);
 
-if ($user->isAuthenticated()) {
-	echo "user '".$user->getLogin()."' is logged in";
-} else {
-	if ($user->authenticate() ) {
-		echo $user;
-		
-	} else {
-		echo "authentication error!";
-	}
-};
+foreach ($wishlist->getWishes() as $wish){
+}
+
 ?>

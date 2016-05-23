@@ -21,7 +21,7 @@ class Person
 
 // Magic Methods
 
-	function __construct($email = null, $login = null, $type = "User")
+	public function __construct($email = null, $login = null, $type = "User")
 	{
 		$key = null;
 		
@@ -110,6 +110,10 @@ class Person
 	 * 
 	 * @param newVal
 	 */
+	public function getName(){
+		return $this->firstName." ".$this->lastName;
+	}
+	
 	public function setlastName($newVal)
 	{
 		$this->lastName = $newVal;

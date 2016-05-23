@@ -26,16 +26,6 @@ session_start();
 //		Help	 	|	GimmiLayout.html  | help.html      	  	 |   "Fix string"  |    "Fix content"   |
 //		UserPortal	|	GimmiLayout.html  | user_portal.html  	 |   "Fix string"  |    "Fix content"   |
 
-/*//DEBUGGING via var dump of session
-ob_start();
-var_dump($_SESSION);
-$data = ob_get_clean();
-$data = "************************ NEW PAGE ****************** \r\n\r\n".$data."<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\r\n\r\n\r\n";
-$fp = fopen("DEBUG_LOG_gimmi.txt", "a");
-fwrite($fp, $data);
-fclose($fp); 
-// END OF DEBUGGING */
-
 $siteTitle = "GIMMI";
 $siteSubtitle = "Making wishes come true";
 $siteContent = "GIMMI v0.1 - POF V0.3 +++ Content under construction";
@@ -89,7 +79,9 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user']) ){
 		$templateFile = "/ResponsiveDesignTXT/activity.html";
 
 	} else {
-		
+		//TODO: maak wishReceiver object leeg op portal... Portal is de algemene pagina als de wishReceiver niet bestaat!
+		//TODO: aparte pagina maken als wishReceiver wel gekend is?
+		//unset($_SESSION['wishReceiver']);
 		$templateFile = "/ResponsiveDesignTXT/portal.html";
 		
 	}
@@ -109,10 +101,21 @@ $pageLayout = new Template("./layout".$templateFile);
 $siteContent = $_SESSION['content'];
 
 // DEBUGGING: voeg $_SESSION['DEBUG_message'] toe aan code om een debugbericht te tonen vanuit gelijk welke plaats in de code.
+/*ob_start();
+var_dump($_SESSION);
+$data = ob_get_clean();
+$data = "************************ NEW PAGE ****************** \r\n\r\n".$data."<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\r\n\r\n\r\n";
+$fp = fopen("DEBUG_LOG_gimmi.txt", "a");
+fwrite($fp, $data);
+fclose($fp); 
+// END OF DEBUGGING */
+
 $debugMessage = "..";
 if ( isset($_SESSION['DEBUG_message']) && !empty($_SESSION['DEBUG_message']) ) {
 	$debugMessage = "<br /><br />DEBUGGING<br /><br />".$_SESSION['DEBUG_message'];
+	unset( $_SESSION['DEBUG_message'] );
 }
+
 
 //Create tokens
 $loginBlockLayout->setToken("login.status", $loginStatus);
@@ -131,7 +134,6 @@ $pageLayout->setToken("login_block", $loginBlockLayout->parse());
 //Parse template
 print $pageLayout->parse();
 
-unset( $_SESSION['DEBUG_message'] );
 unset( $_SESSION['content'] );
 unset( $_SESSION['pfbc'] );
 unset( $_SESSION['o_Wish'] );

@@ -1,0 +1,26 @@
+.wishlist{
+	display: block;
+	width: 100%;
+	float: left;
+}
+
+.wish{
+	float: left;
+	width: 100%;
+	padding: 10px;
+}
+
+.wish .price, .wish .name, .wish .select{
+	float: left;
+	width: 100px;
+	vertical-align: center;
+}
+.wish .price:before{
+	content: "€";
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+.wish .id {
+	display: none;
+}

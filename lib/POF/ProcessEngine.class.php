@@ -76,7 +76,9 @@ class ProcessEngine
 		//$_SESSION['content'] = "Execute ".$this->processInstance->getCurrentElement();
 		$type = "act";
 		$activityFinished = false;
+		
 		include "./processes/activities/".$type."_".$this->processInstance->getCurrentElement().".php";
+		
 		if ( $activityFinished ) {
 			$this->getNextElement();
 		}
@@ -84,7 +86,7 @@ class ProcessEngine
 	
 	private function getNextElement(){
 		header("Location: ./index.php");
-		$_SESSION['DEBUG_message'] = "Next element is: XXXX";
+		//$_SESSION['DEBUG_message'] = "Next element is: XXXX";
 	}
 	
 	private function closeProcessInstance() {
