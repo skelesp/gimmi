@@ -26,7 +26,6 @@ if ( !isset($_SESSION[$activityID]) || empty($_SESSION[$activityID]) ) {
 
 unset($_SESSION[$activityID]);
 
-auto: 
 switch ($activityState) {
 	case 'start':
 		/**
@@ -35,9 +34,7 @@ switch ($activityState) {
 		 */
 			// no object to instantiate at this point
 			//TODO: moet prereq check hier niet gebeuren?
-			//TODO: verwijder na testen
-			unset( $_SESSION['wishReceiver']);
-			
+			unset($_SESSION['wishReceiver']);
 		// Next activity + save process instance info
 		$_SESSION[$activityID] = "wish owner known?";
 		
@@ -75,59 +72,70 @@ switch ($activityState) {
 		 include "./processes/forms/frm-".$frmID.".php";
 		
 		// Next activity + save process instance info
-		 $_SESSION[$activityID] = "select wish owner";
+		 $_SESSION[$activityID] = "search a wish owner";
 		 $_SESSION['content'] = $_SESSION['content']." ".$formHTML;
 		
 		$_SESSION['DEBUG_message'] = $activityState." is running...";
 		break;
 		
-	case 'select wish owner':
-				
+	case 'search a wish owner':
+		$_SESSION['DEBUG_message'] = $activityState." is running...";
+		
 		$frmID = "register_person";
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
 			
 			$_SESSION['content'] = $_POST['person_first']."<br/>".$_POST['person_last']."<br/>".$_POST['person_email'];
 			$repo = new PersonRepository ();
 			$persons = $repo->findPerson($_POST['person_email'],$_POST['person_first'], $_POST['person_last']);
-			
-			if(count($persons) == 0 ){ // geen persoon gevonden
-				
-				//TODO: Foutboodschap meegeven
-				
-				// Next activity + save process instance info
-				 $_SESSION[$activityID] = "trigger person registration";
-				
-				// automatic activity --> refresh page immediately
-				header("Refresh: ".$activityRefreshRate);
-				
-			} elseif (count($persons) == 1 ){ // exact 1 persoon gevonden
-				
-				$person = new Person ($persons[0]['email']);
-				$_SESSION['wishReceiver'] = $person;
-				
-				// Next activity + save process instance info
-				 $_SESSION[$activityID] = "generate wishlist";
-				
-				// automatic activity --> refresh page immediately
-				header("Refresh: ".$activityRefreshRate);
-				
-			} else { // meer dan 1 persoon gevonden die voldeed aan de gegevens
-				
-				//TODO: toon een lijst van alle gevonden personen en laat de gebruiker selecteren wie het is
-			
-			}
 		}
 		
-		$_SESSION['DEBUG_message'] = $activityState." is running...";
+		// Next activity + save process instance info
+		$_SESSION[$activityID] = "wishlist owner found?";
+		$_SESSION['foundWishlistOwners'] = $persons;
+		
+		// automatic activity --> refresh page immediately
+		header("Refresh: ".$activityRefreshRate);
 		break;
 		
+	case 'wishlist owner found?':
+		$persons = $_SESSION['foundWishlistOwners'];
+		
+		if(count($persons) == 0 ){ // geen persoon gevonden
+			
+			//TODO: Foutboodschap meegeven
+			
+			// Next activity + save process instance info
+			$_SESSION[$activityID] = "trigger person registration";
+			
+			// automatic activity --> refresh page immediately
+			header("Refresh: ".$activityRefreshRate);
+			
+		} elseif (count($persons) == 1 ){ // exact 1 persoon gevonden
+			
+			$person = new Person ($persons[0]['email']);
+			$_SESSION['wishReceiver'] = $person;
+			
+			// Next activity + save process instance info
+			 $_SESSION[$activityID] = "generate wishlist";
+			
+			// automatic activity --> refresh page immediately
+			header("Refresh: ".$activityRefreshRate);
+			
+		} else { // meer dan 1 persoon gevonden die voldeed aan de gegevens
+			
+			//TODO: toon een lijst van alle gevonden personen en laat de gebruiker selecteren wie het is
+		
+		}
+		$_SESSION['DEBUG_message'] = $activityState." is running...";
+		break;
+	
 	case 'trigger person registration':
 		// Next activity + save process instance info
 		$_SESSION['DEBUG_message'] = $activityState." is running...";
 		$_SESSION[$activityID] = "ask for wish selection";
 		
 		// automatic activity --> refresh page immediately
-		header("Refresh: ".$activityRefreshRate);
+		//header("Refresh: ".$activityRefreshRate);
 		
 		break;
 		
@@ -185,7 +193,7 @@ switch ($activityState) {
 			if ( !empty($_POST['wish_selection']) ){
 				$selectedWishes = $_POST['wish_selection'];
 				$ideaFound = true;
-				$_SESSION['selectedIdeas'] = $selectedWishes;
+				$_SESSION['selectedWishes'] = $selectedWishes;
 			}
 		}
 		
