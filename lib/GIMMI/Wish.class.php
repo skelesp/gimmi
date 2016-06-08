@@ -10,6 +10,7 @@ require_once ('./lib/GIMMI/Person.class.php');
 class Wish
 {
 
+	private $id;
 	/**
 	 * The name of a wish.
 	 */
@@ -50,21 +51,73 @@ class Wish
 	private $private;
 	
 // MAGIC METHODS
-	function __construct(){
-		$this->name = "";
-		//$this->creator = new Person('Giver');
-		//$this->owner = new Person('Receiver');
-		$this->status = "open";
+	function __construct($id = null){
+		if (isset($id)) {
+			//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
+		
+			require './db_config.php';
+			
+			try 
+			{ 
+				$sQuery = " 
+					SELECT 
+						*
+					FROM 
+						wishes
+					WHERE
+						wishID = '".$id."'"; 
+				
+				$oStmt = $db->prepare($sQuery); 
+				$oStmt->execute(); 
+						
+				$results = $oStmt->fetch(PDO::FETCH_ASSOC);
+				
+				if (!empty($results)) {
+					
+					$this->id = $results["wishID"];
+					$this->name = $results["name"];
+					$this->description = $results["description"];
+					$this->price = $results["price"];
+					$this->amount = $results["amount"];
+					
+					return true;
+				} else {
+					//TODO: throw an error
+					return false;
+				}
+				
+			} 
+			catch(PDOException $e) 
+			{ 
+				$sMsg = '<p> 
+						Regelnummer: '.$e->getLine().'<br /> 
+						Bestand: '.$e->getFile().'<br /> 
+						Foutmelding: '.$e->getMessage().'<br />
+						Query: '.$sQuery.'
+					</p>'; 
+				 
+				trigger_error($sMsg); 
+			} 
+		} else {
+			$this->name = "";
+			//$this->creator = new Person('Giver');
+			//$this->owner = new Person('Receiver');
+			$this->status = "open";
+		}
 	}
 	
 	function __toString(){
-		return $this->name." wordt geschat op ".$this->price." euro (private = ".(($this->private) ? "private" : "public").")<br /> <br />Korte beschrijving: ".$this->description;
+		return $this->name." wordt geschat op ".$this->price." euro (private = ".(($this->private) ? "private" : "public").")<br />Korte beschrijving: ".$this->description;
 	}
 	
 	function __destruct(){
 	}
 	
 // ACCESSORS
+	
+	public function getID(){
+		return $this->id;
+	}
 	
 	/**
 	 * The amount of times the wish can be fulfilled.

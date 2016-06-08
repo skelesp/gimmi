@@ -62,9 +62,11 @@ class Person
 				$this->lastName = $results["lastName"];
 				$this->email = $results["email"];
 				$this->nickname = $results["nickname"];
-			
+				
+				return true;
 			} else {
 				//TODO: throw an error
+				return false;
 			}
 			
 		} 
@@ -152,6 +154,14 @@ class Person
 // Methods
 	public function register () {
 		
+	}
+	
+	public function isSamePersonAs($person) {
+		if ($this->email == $person->getEmail() && $this->id == $person->getID()) {
+			return true;
+		} else {
+			return true;
+		}
 	}
 	
 	public function check_for_account () {

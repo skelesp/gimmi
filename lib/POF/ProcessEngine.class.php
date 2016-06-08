@@ -85,10 +85,21 @@ class ProcessEngine
 	}
 	
 	private function getNextElement(){
-		header("Location: ./index.php");
-		//$_SESSION['DEBUG_message'] = "Next element is: XXXX";
+		$this->processInstance->setNextElement();
+		
+		if ($this->processInstance->getCurrentElement() != "end") {
+			$this->executeElement();
+		} else {
+			$this->closeProcessInstance();
+		}
+		
+		//header("Location: ./index.php");
+		
 	}
 	
 	private function closeProcessInstance() {
+		$_SESSION['DEBUG_message'] = "Process ended";
+		header("Refresh: 5");
+		
 	}
 }

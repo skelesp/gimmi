@@ -8,6 +8,7 @@ require_once "./lib/POF/ProcessInstance.class.php";
 require_once "./lib/POF/ProcessEngine.class.php";
 require_once "./lib/GIMMI/Person.class.php";
 require_once "./lib/GIMMI/User.class.php";
+require_once "./lib/GIMMI/Wish.class.php";
 
 session_start();
 

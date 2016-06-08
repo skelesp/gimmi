@@ -43,6 +43,8 @@ class Wishlist
 			if (! empty($results)){
 				$this->wishes = $results;
 				return true;
+			} else {
+				return false;
 			}
 		} 
 		catch(PDOException $e) 

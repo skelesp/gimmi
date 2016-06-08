@@ -82,11 +82,13 @@ switch ($activityState) {
 		$_SESSION['DEBUG_message'] = $activityState." is running...";
 		
 		$frmID = "register_person";
+		
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['frm'] == $frmID) {
 			
 			$_SESSION['content'] = $_POST['person_first']."<br/>".$_POST['person_last']."<br/>".$_POST['person_email'];
 			$repo = new PersonRepository ();
 			$persons = $repo->findPerson($_POST['person_email'],$_POST['person_first'], $_POST['person_last']);
+			
 		}
 		
 		// Next activity + save process instance info
@@ -100,7 +102,7 @@ switch ($activityState) {
 	case 'wishlist owner found?':
 		$persons = $_SESSION['foundWishlistOwners'];
 		
-		if(count($persons) == 0 ){ // geen persoon gevonden
+		if(!$persons ){ // geen persoon gevonden
 			
 			//TODO: Foutboodschap meegeven
 			
@@ -130,12 +132,15 @@ switch ($activityState) {
 		break;
 	
 	case 'trigger person registration':
+		//TODO: tijdelijk gewoon activiteit beëindigen
+		$_SESSION['content'] = "Person not found, register some data about the person.";
+		
 		// Next activity + save process instance info
 		$_SESSION['DEBUG_message'] = $activityState." is running...";
-		$_SESSION[$activityID] = "ask for wish selection";
+		$_SESSION[$activityID] = "no gift idea found";
 		
 		// automatic activity --> refresh page immediately
-		//header("Refresh: ".$activityRefreshRate);
+		header("Refresh: ".$activityRefreshRate);
 		
 		break;
 		

@@ -33,7 +33,8 @@ include_once "./lib/PFBC/form.php";
 		
 // Create form elements
 	// Add form title
-	if ($user == $wishReceiver) {
+
+	if ($user->isSamePersonAs($wishReceiver)) {
 		$legend = '<legend>'.$user->getfirstname().', wat wil je wensen voor jezelf?</legend>';
 	} else {
 		$legend = '<legend>'.$user->getfirstname().', wat wil je wensen voor '.$wishReceiver->getfirstName()." ".$wishReceiver->getlastName().'?</legend>';
