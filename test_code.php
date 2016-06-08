@@ -1,14 +1,16 @@
 <?php 
 //
-require_once "./lib/GIMMI/Wishlist.class.php";
-require_once "./lib/GIMMI/Person.class.php";
-require_once "./lib/GIMMI/PersonRepository.class.php";
+require_once "./lib/POF/ProcessEngine.class.php";
+require_once "./lib/POF/Process.class.php";
 
-$repo = new PersonRepository ();
-$persons = $repo->findPerson(null,"Stijn", "Beeckmans");
+$process = new Process(2);
+$trigger = null;
+echo $process;
+echo "<br/>with elements:<br />";
 
-$person = new Person ($persons[0]['email']);
+$process->getTrigger();
 
-echo $person;
+echo "<br/>";
+print_r($process->getElements());
 
 ?>

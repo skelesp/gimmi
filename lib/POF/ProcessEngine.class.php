@@ -93,8 +93,6 @@ class ProcessEngine
 			$this->closeProcessInstance();
 		}
 		
-		//header("Location: ./index.php");
-		
 	}
 	
 	private function closeProcessInstance() {

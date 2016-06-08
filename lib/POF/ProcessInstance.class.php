@@ -39,6 +39,25 @@ class ProcessInstance
 		return $this->currentElement;
 	}
 	
+	public function setNextElement () {
+		//Dit hoort in de Process class: "deze instance heeft activiteit X afgerond"..."wat is de volgende stap in het proces?" ...
+		switch($this->process->getID()) {
+			case 1:
+				$this->currentElement = "end";
+				break;
+			case 2: 
+				switch ($this->currentElement){
+					case "search_a_gift_idea":
+						$this->currentElement = "reserve_a_wish";
+						break;
+				}
+				break;
+			case 3: 
+				$this->currentElement = "authenticate_a_user";
+				break;
+		}
+	}
+	
 	public function getMissingInfo(){
 		return $this->missingInfo;
 	}
@@ -89,25 +108,6 @@ class ProcessInstance
 				break;
 		}
 		
-	}
-	
-	public function setNextElement () {
-		//Dit hoort in de Process class: "deze instance heeft activiteit X afgerond"..."wat is de volgende stap in het proces?" ...
-		switch($this->process->getID()) {
-			case 1:
-				$this->currentElement = "end";
-				break;
-			case 2: 
-				switch ($this->currentElement){
-					case "search_a_gift_idea":
-						$this->currentElement = "reserve_a_wish";
-						break;
-				}
-				break;
-			case 3: 
-				$this->currentElement = "authenticate_a_user";
-				break;
-		}
 	}
 	
 	public function end () {
