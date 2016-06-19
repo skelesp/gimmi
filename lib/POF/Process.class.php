@@ -1,5 +1,7 @@
 <?php
 
+require_once "./lib/POF/Element.class.php";
+
 /**
  * The process class describes a process.
  
@@ -16,7 +18,7 @@ class Process
 	protected $elements;
 	private $status;
 	protected $owner;
-	protected $trigger;
+	protected $trigger; //TODO : class uitbreiden, zodat meerdere triggers mogelijk zijn.
 		
 	public function __construct ($processID) {
 		
@@ -74,19 +76,25 @@ class Process
 		{ 
 			$sQuery = " 
 				SELECT 
-					*
+					elementID, nextElementID
 				FROM 
-					process_structure AS s INNER JOIN process_elements AS e ON s.elementID = e.elementID
+					process_structure
 				WHERE
 					processID = ".$processID; 
 			$oStmt = $db->prepare($sQuery); 
 			$oStmt->execute(); 
-					
 			$results = $oStmt->fetchAll(PDO::FETCH_ASSOC);
-			
+						
 			if (!empty($results)) {
-				
-				$this->elements = $results;
+				$i = 0;
+				foreach ($results as $record){
+					 $this->elements[$i] = [
+														"element" => new Element($record["elementID"]),
+														"next" => $record["nextElementID"]
+						];
+						
+						$i++;
+				}
 				
 				return true;
 			} else {
@@ -164,16 +172,45 @@ class Process
 	}
 	
 	public function getTrigger() {
-		foreach ($this->elements as $sequence){
-			if ($sequence['type'] == "trigger") {
-				$this->trigger = $sequence['elementID'];
+		
+		if (!empty($this->elements)){
+			foreach ($this->elements as $element){
+				if ($element["element"]->getType()=="trigger"){
+					$this->trigger = $element["element"];
+				}	
 			}
+		} else {
+			$this->trigger = null;
 		}
+		
 		return $this->trigger;
+		
 	}
 	
-	public function determineNextElement(){
+	public function determineNextElement($currElement){
 		
+		$nextElement = null;
+		
+		if (!empty($this->elements)){
+			foreach ($this->elements as $element){
+				if ($element["element"]==$currElement && $element["next"] != null){
+					$nextElement = new Element($element["next"]);
+					break;
+				}
+			}
+		}
+		
+		return $nextElement;
+	}
+	
+	public function show(){
+				$next = $this->trigger;
+				do {
+					echo $next;
+					echo "<br/>";
+					$next = $this->determineNextElement($next);
+				} while (!empty($next)) ;
+					
 	}
 }
 

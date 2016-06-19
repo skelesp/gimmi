@@ -2,7 +2,7 @@
 $db = array ( 
     'host' => 'localhost', 
     'user' => 'root', 
-    'pass' => 'SidewindeR', 
+    'pass' => 'SidewindeR',
     'dbname' => 'gimmi'
 ); 
 
