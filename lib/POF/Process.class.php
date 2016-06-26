@@ -1,6 +1,6 @@
 <?php
 
-require_once "./lib/POF/Element.class.php";
+require_once "./lib/POF/ElementDefinition.class.php";
 
 /**
  * The process class describes a process.
@@ -89,17 +89,17 @@ class Process
 				$i = 0;
 				foreach ($results as $record){
 					 $this->elements[$i] = [
-														"element" => new Element($record["elementID"]),
+														"element" => new ElementDefinition($record["elementID"]),
 														"next" => $record["nextElementID"]
 						];
 						
 						$i++;
 				}
 				
-				return true;
+				$found = true;
 			} else {
 				//TODO: throw an error
-				return false;
+				$found = false;
 			}
 			
 		} 
@@ -173,15 +173,17 @@ class Process
 	
 	public function getTrigger() {
 		
-		if (!empty($this->elements)){
-			foreach ($this->elements as $element){
-				if ($element["element"]->getType()=="trigger"){
-					$this->trigger = $element["element"];
-				}	
+		if (empty($this->trigger)){
+			if (!empty($this->elements)){
+				foreach ($this->elements as $element){
+					if ($element["element"]->getType()=="trigger"){
+						$this->trigger = $element["element"];
+					}	
+				}
+			} else {
+				$this->trigger = null;
 			}
-		} else {
-			$this->trigger = null;
-		}
+		}			
 		
 		return $this->trigger;
 		
@@ -194,7 +196,7 @@ class Process
 		if (!empty($this->elements)){
 			foreach ($this->elements as $element){
 				if ($element["element"]==$currElement && $element["next"] != null){
-					$nextElement = new Element($element["next"]);
+					$nextElement = new ElementDefinition($element["next"]);
 					break;
 				}
 			}

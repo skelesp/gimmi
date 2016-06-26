@@ -61,8 +61,9 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user']) ){
 
 	if ( ! is_null($processInstanceID) ) { //er werd een iid doorgeven (= activiteit geopend in running processInstance)
 		// TODO: ProcessInstance opstarten hier!
-		$processEngine = new ProcessEngine ($processInstance); // TODO: ProcessInstance moet obv iid gecreëerd worden: dit kan momementeel niet in de huidige ProcessInstance class --> te onderzoeken
+		$processEngine = new ProcessEngine (new ProcessInstance(new Process($processID),$processInstanceID )); // TODO: ProcessInstance moet obv iid gecreëerd worden: dit kan momementeel niet in de huidige ProcessInstance class --> te onderzoeken
 		$processEngine->determineNextAction();
+		
 		$processName = (string) $processEngine->processInstance;
 		$processStatus = $processEngine->getInstance()->getCurrentElement();
 		
@@ -71,7 +72,7 @@ if (isset($_SESSION['user']) && !empty($_SESSION['user']) ){
 				
 	} else if (! is_null($processID) ) { // procesID werd doorgegeven (=een proces werd opgestart)
 		
-		$processEngine = new ProcessEngine (new ProcessInstance($processID));
+		$processEngine = new ProcessEngine (new ProcessInstance(new Process($processID)));
 		$processEngine->determineNextAction();
 		$processName = (string) $processEngine->getInstance();
 		$processStatus = $processEngine->getInstance()->getCurrentElement();

@@ -48,15 +48,18 @@ switch ($activityState) {
 		 * DN
 		 * Check whether the 'wish owner' is already known
 		 */
+		
 		$_SESSION['DEBUG_message'] = $activityState." is running...";
 		
 		if ( !isset($_SESSION['wishReceiver']) || empty($_SESSION['wishReceiver']) ) {
+
 			$_SESSION[$activityID] = "ask for wish owner";
 			// automatic activity --> refresh page immediately
 			header("Refresh: ".$activityRefreshRate);
 			break;
 			
 		} else {
+
 			// Next activity + save process instance info
 			$_SESSION[$activityID] = "generate wishlist";
 			
@@ -234,6 +237,7 @@ switch ($activityState) {
 		unset( $_SESSION[$activityID] );
 				
 		break;
+		
 	default:
 		$_SESSION['DEBUG_message'] = $activityState." is no known activity";
 		break;

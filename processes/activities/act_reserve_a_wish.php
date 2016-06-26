@@ -64,7 +64,7 @@ switch ($activityState) {
 		// Form variables
 		$frmID = "gift_reservation";
 		
-		//TODO: kan onderstaande ook in een pfbc form gecreëerd worden?
+		//TODO: kan onderstaande ook in een pfbc form gecreï¿½erd worden?
 		$text = "";
 		$text .= "<div class=\"wishlist\">";
 		$text .= "<form method=\"POST\" action=\"\">";
@@ -80,7 +80,7 @@ switch ($activityState) {
 		$text .= "</form>";
 		$text .= "</div>";
 		
-		$_SESSION['content'] .= "FORM TEST".$text;
+		$_SESSION['content'] .= $text;
 		
 		// Next activity + save process instance info
 		$_SESSION['DEBUG_message'] = $activityState." is running...";

@@ -67,37 +67,45 @@ class ProcessEngine
 			
 		} else {
 			// Trigger the process instance
+			//TODO: Verwijder deze lijnen : niet nodig. Gewoon het proces triggeren??
 			$this->processInstance->trigger();
 			$this->determineNextAction ();
 		}
 	}
 	
-	private function executeElement(){
-		//$_SESSION['content'] = "Execute ".$this->processInstance->getCurrentElement();
-		$type = "act";
+	public function executeElement(){
+		
 		$activityFinished = false;
+		$script = $this->processInstance->getCurrentElement()->getService();
+		if (! empty($script)) {
 		
-		include "./processes/activities/".$type."_".$this->processInstance->getCurrentElement().".php";
-		
+			include "./processes/activities/".$this->processInstance->getCurrentElement()->getService();
+
+		} else {
+			$activityFinished = true;
+		}
 		if ( $activityFinished ) {
 			$this->getNextElement();
 		}
 	}
 	
-	private function getNextElement(){
+	public function getNextElement(){
 		$this->processInstance->setNextElement();
 		
-		if ($this->processInstance->getCurrentElement() != "end") {
+		if ($this->processInstance->getCurrentElement()->getType() != "end state") {
 			$this->executeElement();
 		} else {
 			$this->closeProcessInstance();
+			echo "END!!!";
 		}
 		
 	}
 	
 	private function closeProcessInstance() {
+		$this->processInstance->end();
 		$_SESSION['DEBUG_message'] = "Process ended";
-		header("Refresh: 5");
+		println ($_URL);
+		header("location: http://127.0.0.1:8080/gimmi/test_code.php");
 		
 	}
 }

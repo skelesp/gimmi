@@ -1,5 +1,6 @@
 <?php
 require_once ('./lib/POF/Process.class.php');
+require_once ('./lib/POF/ElementDefinition.class.php');
 /**
  * The processInstance class describes a process instance.
  
@@ -17,14 +18,102 @@ class ProcessInstance
 	protected $missingInfo; //@var Array of missing info (= not available in variables
 	protected $callingProcess; //@var holds the reference to the calling process
 	
-	public function __construct ($processID) {
-		$this->id = "1234"; //TODO: haal de id van deze nieuwe instance uit DB (=nieuwe ID ophalen)
-		$this->process = new Process($processID);
-		$this->status = "created";
-		$this->currentElement = "Trigger";
-		$this->variables = array(); //at start of process: 	variables are filled with prerequisites 
-									//during a process: 	variables can be added
-		$this->missingInfo = array();
+	public function __construct ($process, $instanceID = null) {
+		$this->process = $process;
+		
+		if (empty($instanceID)) {
+			println("nieuwe instance");
+			
+			$this->status = "created";
+			$this->currentElement = $process->getTrigger();
+
+				//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
+					
+				require './db_config.php';
+				
+				try 
+				{ 
+					// TODO: voeg personID toe van de creator / owner toe (via objecten in dit object)
+					$sQuery = " 
+						INSERT INTO process_instances (processID, currentElementID,currentActorID) 
+						VALUES (".$this->process->getID().",".$this->currentElement->getID().", 1)";
+					echo $sQuery;
+					$oStmt = $db->prepare($sQuery); 
+					$oStmt->execute(); 
+					 		
+				} 
+				catch(PDOException $e) 
+				{ 
+					$sMsg = '<p> 
+							Regelnummer: '.$e->getLine().'<br /> 
+							Bestand: '.$e->getFile().'<br /> 
+							Foutmelding: '.$e->getMessage().'<br />
+							Query: '.$sQuery.'
+						</p>'; 
+					 
+					trigger_error($sMsg); 
+				}
+			$this->id = $db->lastInsertId();
+			$this->variables = array(); //at start of process: 	variables are filled with prerequisites 
+										//during a process: 	variables can be added
+			$this->missingInfo = array();
+
+		} else {
+			println("bestaande instance");
+			//SELECT * FROM process_instances WHERE instanceID = $instanceID
+			
+					//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
+		
+					require './db_config.php';
+					
+					try 
+					{ 
+						$sQuery = " 
+							SELECT 
+								*
+							FROM 
+								process_instances
+							WHERE
+								instanceID =".$instanceID; 
+						$oStmt = $db->prepare($sQuery); 
+						$oStmt->execute(); 
+								
+						$results = $oStmt->fetch(PDO::FETCH_ASSOC);
+						
+						if (!empty($results)) {
+							
+							$this->id 			= $instanceID;
+							$this->process 		= new Process($results["processID"]);
+							println("curr el: ".$results["currentElementID"]);
+							$this->currentElement 	= new ElementDefinition($results["currentElementID"]);
+							//$this->owner 		= $results["currentActorID"];
+							$this->status = "running";
+							$this->variables = array(); //at start of process: 	variables are filled with prerequisites 
+										//during a process: 	variables can be added
+							
+							$found = true;
+						} else {
+							//TODO: throw an error
+							$found = false;
+						}
+						
+					} 
+					catch(PDOException $e) 
+					{ 
+						$sMsg = '<p> 
+								Regelnummer: '.$e->getLine().'<br /> 
+								Bestand: '.$e->getFile().'<br /> 
+								Foutmelding: '.$e->getMessage().'<br />
+								Query: '.$sQuery.'
+							</p>'; 
+						 
+						trigger_error($sMsg); 
+					}
+		}
+	}
+
+	public function __toString () {
+		return "Running process = ".$this->process->getName()."(".$this->id."-".$this->status.")";
 	}
 	
 	public function getID (){
@@ -40,16 +129,41 @@ class ProcessInstance
 	}
 	
 	public function setNextElement () {
-		//Dit hoort in de Process class: "deze instance heeft activiteit X afgerond"..."wat is de volgende stap in het proces?" ...
+		//TODO: Dit hoort in de Process class: "deze instance heeft activiteit X afgerond"..."wat is de volgende stap in het proces?" ...
+		
+		//TODO: switch verwijderen en code uit case 2 gebruiken (voorwaarde: alle processen zitten in de DB!)
 		switch($this->process->getID()) {
 			case 1:
 				$this->currentElement = "end";
 				break;
 			case 2: 
-				switch ($this->currentElement){
-					case "search_a_gift_idea":
-						$this->currentElement = "reserve_a_wish";
-						break;
+				$this->currentElement = $this->process->determineNextElement($this->currentElement);
+				//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
+					
+				require './db_config.php';
+				
+				try 
+				{ 
+					// TODO: voeg personID toe van de creator / owner toe (via objecten in dit object)
+					$sQuery = " 
+						UPDATE process_instances 
+						SET currentElementID = ".$this->currentElement->getID()."
+						WHERE instanceID = ".$this->id;
+					echo $sQuery;
+					$oStmt = $db->prepare($sQuery); 
+					$oStmt->execute(); 
+					 		
+				} 
+				catch(PDOException $e) 
+				{ 
+					$sMsg = '<p> 
+							Regelnummer: '.$e->getLine().'<br /> 
+							Bestand: '.$e->getFile().'<br /> 
+							Foutmelding: '.$e->getMessage().'<br />
+							Query: '.$sQuery.'
+						</p>'; 
+					 
+					trigger_error($sMsg); 
 				}
 				break;
 			case 3: 
@@ -61,10 +175,6 @@ class ProcessInstance
 	public function getMissingInfo(){
 		return $this->missingInfo;
 	}
-	public function __toString () {
-		return "Running process = ".$this->process->getName();
-	}
-	
 	public function getStatus () {
 		return $this->status;
 	}
@@ -101,7 +211,7 @@ class ProcessInstance
 				$this->currentElement = "Make_a_wish"; 
 				break;
 			case 2: 
-				$this->currentElement = "search_a_gift_idea";
+				$this->currentElement = $this->process->getTrigger();
 				break;
 			case 3: 
 				$this->currentElement = "authenticate_a_user";
