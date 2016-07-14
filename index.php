@@ -9,6 +9,7 @@ require_once "./lib/POF/ProcessEngine.class.php";
 require_once "./lib/GIMMI/Person.class.php";
 require_once "./lib/GIMMI/User.class.php";
 require_once "./lib/GIMMI/Wish.class.php";
+require_once "./lib/global_functions.php";
 
 session_start();
 
@@ -28,7 +29,7 @@ session_start();
 //		UserPortal	|	GimmiLayout.html  | user_portal.html  	 |   "Fix string"  |    "Fix content"   |
 
 $siteTitle = "GIMMI";
-$siteSubtitle = "Making wishes come true";
+$siteSubtitle = "Give me the perfect gift";
 $siteContent = "GIMMI v0.1 - POF V0.3 +++ Content under construction";
 
 //Process Info

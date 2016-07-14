@@ -21,7 +21,61 @@ class ProcessInstance
 	public function __construct ($process, $instanceID = null) {
 		$this->process = $process;
 		
-		if (empty($instanceID)) {
+		$found = false;
+		if (!empty($instanceID)) {
+			println("bestaande instance");
+			//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
+		
+			require './db_config.php';
+			
+			try 
+			{ 
+				$sQuery = " 
+					SELECT 
+						*
+					FROM 
+						process_instances
+					WHERE
+						instanceID =".$instanceID; 
+				$oStmt = $db->prepare($sQuery); 
+				$oStmt->execute(); 
+						
+				$results = $oStmt->fetch(PDO::FETCH_ASSOC);
+				
+				if (!empty($results)) {
+					
+					$this->id 			= $instanceID;
+					$this->process 		= new Process($results["processID"]);
+					$this->currentElement 	= new ElementDefinition($results["currentElementID"]);
+					//$this->owner 		= $results["currentActorID"];
+					$this->status = $results["status"];
+					$this->variables = array(); //at start of process: 	variables are filled with prerequisites 
+								//during a process: 	variables can be added
+					
+					$found = true;
+					
+				} else {
+					
+					//Errorboodschap
+					println("Error: Instance niet gevonden in DB");
+					
+				}
+				
+			} 
+			catch(PDOException $e) 
+			{ 
+				$sMsg = '<p> 
+						Regelnummer: '.$e->getLine().'<br /> 
+						Bestand: '.$e->getFile().'<br /> 
+						Foutmelding: '.$e->getMessage().'<br />
+						Query: '.$sQuery.'
+					</p>'; 
+				 
+				trigger_error($sMsg); 
+			}
+		}
+		
+		if (!$found) {
 			println("nieuwe instance");
 			
 			$this->status = "created";
@@ -37,7 +91,6 @@ class ProcessInstance
 					$sQuery = " 
 						INSERT INTO process_instances (processID, currentElementID,currentActorID) 
 						VALUES (".$this->process->getID().",".$this->currentElement->getID().", 1)";
-					echo $sQuery;
 					$oStmt = $db->prepare($sQuery); 
 					$oStmt->execute(); 
 					 		
@@ -53,63 +106,12 @@ class ProcessInstance
 					 
 					trigger_error($sMsg); 
 				}
-			$this->id = $db->lastInsertId();
-			$this->variables = array(); //at start of process: 	variables are filled with prerequisites 
-										//during a process: 	variables can be added
-			$this->missingInfo = array();
+				$this->id = $db->lastInsertId();
+				$this->variables = array(); //at start of process: 	variables are filled with prerequisites 
+											//during a process: 	variables can be added
+				$this->missingInfo = array();
 
-		} else {
-			println("bestaande instance");
-			//SELECT * FROM process_instances WHERE instanceID = $instanceID
-			
-					//TODO: Verwijder database code en plaats het in een DAO object --> Geen DB code in een class
-		
-					require './db_config.php';
-					
-					try 
-					{ 
-						$sQuery = " 
-							SELECT 
-								*
-							FROM 
-								process_instances
-							WHERE
-								instanceID =".$instanceID; 
-						$oStmt = $db->prepare($sQuery); 
-						$oStmt->execute(); 
-								
-						$results = $oStmt->fetch(PDO::FETCH_ASSOC);
-						
-						if (!empty($results)) {
-							
-							$this->id 			= $instanceID;
-							$this->process 		= new Process($results["processID"]);
-							println("curr el: ".$results["currentElementID"]);
-							$this->currentElement 	= new ElementDefinition($results["currentElementID"]);
-							//$this->owner 		= $results["currentActorID"];
-							$this->status = "running";
-							$this->variables = array(); //at start of process: 	variables are filled with prerequisites 
-										//during a process: 	variables can be added
-							
-							$found = true;
-						} else {
-							//TODO: throw an error
-							$found = false;
-						}
-						
-					} 
-					catch(PDOException $e) 
-					{ 
-						$sMsg = '<p> 
-								Regelnummer: '.$e->getLine().'<br /> 
-								Bestand: '.$e->getFile().'<br /> 
-								Foutmelding: '.$e->getMessage().'<br />
-								Query: '.$sQuery.'
-							</p>'; 
-						 
-						trigger_error($sMsg); 
-					}
-		}
+		} 
 	}
 
 	public function __toString () {
@@ -149,7 +151,7 @@ class ProcessInstance
 						UPDATE process_instances 
 						SET currentElementID = ".$this->currentElement->getID()."
 						WHERE instanceID = ".$this->id;
-					echo $sQuery;
+					
 					$oStmt = $db->prepare($sQuery); 
 					$oStmt->execute(); 
 					 		
@@ -221,7 +223,31 @@ class ProcessInstance
 	}
 	
 	public function end () {
-		
+		require './db_config.php';
+				
+		try 
+		{ 
+			// TODO: voeg personID toe van de creator / owner toe (via objecten in dit object)
+			$sQuery = " 
+				UPDATE process_instances 
+				SET status = 'ended'
+				WHERE instanceID = ".$this->id;
+			
+			$oStmt = $db->prepare($sQuery); 
+			$oStmt->execute(); 
+					
+		} 
+		catch(PDOException $e) 
+		{ 
+			$sMsg = '<p> 
+					Regelnummer: '.$e->getLine().'<br /> 
+					Bestand: '.$e->getFile().'<br /> 
+					Foutmelding: '.$e->getMessage().'<br />
+					Query: '.$sQuery.'
+				</p>'; 
+			 
+			trigger_error($sMsg); 
+		}
 	}	
 	
 }

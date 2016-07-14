@@ -69,24 +69,53 @@ class ProcessEngine
 			// Trigger the process instance
 			//TODO: Verwijder deze lijnen : niet nodig. Gewoon het proces triggeren??
 			$this->processInstance->trigger();
-			$this->determineNextAction ();
+			$this->processInstance->setNextElement();
+			$this->executeElement ();
 		}
 	}
 	
 	public function executeElement(){
-		
-		$activityFinished = false;
-		$script = $this->processInstance->getCurrentElement()->getService();
-		if (! empty($script)) {
-		
-			include "./processes/activities/".$this->processInstance->getCurrentElement()->getService();
+		if ($this->processInstance->getStatus() != "ended"){
+			println("1");			
+			$element = $this->processInstance->getCurrentElement();
+			println($element->getType());
+			switch($element->getType()){
+				case 'trigger':
+					println("2a");
+					$this->launchProcessInstance();
+					break;
+					
+				case 'activity':
+					println("2b");
+					$activityFinished = false;
+					$script = $element->getService();
+					if (! empty($script)) {
+					
+						include "./processes/activities/".$this->processInstance->getCurrentElement()->getService();
 
+					} else {
+						$activityFinished = true;
+					}
+					if ( $activityFinished ) {
+						$this->getNextElement();
+					}
+					
+					break;
+				
+				case 'end state':
+					$this->closeProcessInstance();
+					
+					break;
+					
+				default:
+					println("ERROR: unknown element type");
+					
+					break;
+			}
 		} else {
-			$activityFinished = true;
+			println("processInstance has ended");
 		}
-		if ( $activityFinished ) {
-			$this->getNextElement();
-		}
+				
 	}
 	
 	public function getNextElement(){
@@ -104,8 +133,7 @@ class ProcessEngine
 	private function closeProcessInstance() {
 		$this->processInstance->end();
 		$_SESSION['DEBUG_message'] = "Process ended";
-		println ($_URL);
-		header("location: http://127.0.0.1:8080/gimmi/test_code.php");
+		//header("location: localhost/gimmi/");
 		
 	}
 }
