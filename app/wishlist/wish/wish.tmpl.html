@@ -1,0 +1,25 @@
+﻿<h1>Lijst van {{wishCtrl.getCurrentReceiverName()}}</h1>
+<div class="row">
+	<div class="col-md-4" ui-view ng-if="wishCtrl.getCurrentReceiver()">
+		<div class="thumbnail">
+			<button type="button" class="btn btn-blue"
+							ui-sref="gimmi.wishlist.wish.create">
+				<span class="glyphicon glyphicon-plus"></span>
+				<p>Creëer een cadeau idee</p>
+			</button>
+		</div> <!-- /Thumbnail -->
+	</div> <!-- /col-md-4 -->
+	<div ng-repeat="wish in wishCtrl.wishes | filter: {receiverID: wishCtrl.getCurrentReceiverId()}"
+			 class="col-md-4">
+		<div class="thumbnail" ng-class="{'reserved': wish.status === 'reserved'}">
+			<button type="button" ng-click="wishCtrl.deleteWish(wish)" class="close">&times;</button>
+			<p class="title">{{wish.title}}</p>
+			<p class="price">{{wish.price | currency : "€" : 2}}</p>
+			<p class="status">{{wish.status}}</p>
+			<button type="button" class="btn btn-link btn-edit"
+							ui-sref="gimmi.wishlist.wish.edit({wishID:wish.id})">
+				<span class="glyphicon glyphicon-pencil"></span>
+			</button>
+		</div> <!-- /Thumbnail div -->
+	</div> <!-- /col-md-4 -->
+</div> <!-- /row -->

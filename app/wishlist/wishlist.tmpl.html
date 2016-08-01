@@ -1,0 +1,7 @@
+Uw favoriete cadeaulijsten
+
+<ul class="nav nav-sidebar">
+	<li ng-repeat="receiver in wishlistCtrl.receivers" ng-class="{'active': isCurrentReceiver(receiver)}">
+		<a ui-sref="gimmi.wishlist.wish({receiverName: receiver.name})" >{{receiver.name}}</a>
+	</li>
+</ul>

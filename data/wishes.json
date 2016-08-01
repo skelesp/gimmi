@@ -1,0 +1,10 @@
+﻿[
+	{"id": 1, "title": "Smartphone", "price": 250, "status": "reserved", "receiverID": 1},
+	{"id": 2, "title": "Lamzac", "price": 75, "status": "free", "receiverID": 1},
+	{"id": 3, "title": "Fatboy", "price": 140, "status": "free", "receiverID": 1},
+	{"id": 4, "title": "Pioneer DJM 800", "price": 800, "status": "reserved", "receiverID": 1},
+	{"id": 5, "title": "Snowboard", "price": 500, "status": "free", "receiverID": 2},
+	{"id": 6, "title": "Scheermachine", "price": 50, "status": "free", "receiverID": 1},
+	{"id": 7, "title": "Keuken", "price": 6500, "status": "free", "receiverID": 2},
+	{"id": 8, "title": "Parket", "price": 3500, "status": "free", "receiverID": 2}
+]

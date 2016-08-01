@@ -1,0 +1,14 @@
+<h4>Editing {{editWishCtrl.wish.title}}</h4>
+
+<form class="edit-form" role="form" ng-submit="editWishCtrl.updateWish(editWishCtrl.editedWish)" novalidate>
+	<div class="form-group">
+		<label>Titel</label>
+		<input type="text" class="form-control" ng-model="editWishCtrl.editedWish.title" placeholder="Geef de titel van het cadeauidee in" />
+	</div>
+	<div class="form-group">
+		<label>Prijs</label>
+		<input type="text" class="form-control" ng-model="editWishCtrl.editedWish.price" placeholder="Geef een schatting van de prijs" />
+	</div>
+	<button type="submit" class="btn btn-info btn-lg">Opslaan</button>
+	<button type="button" class="btn btn-default btn-lg pull-right" ng-click="editWishCtrl.cancelEditing();">Annuleer</button>
+</form>

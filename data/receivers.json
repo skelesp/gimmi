@@ -1,0 +1,7 @@
+﻿[
+	{"id": 1, "name": "Stijn", "age": 31, "gender": "m"},
+	{"id": 2, "name": "Chloé", "age": 28, "gender": "v"},
+	{"id": 3, "name": "Katrien", "age": 59, "gender": "v"},
+	{"id": 4, "name": "Herman", "age": 36, "gender": "m"},
+	{"id": 5, "name": "Jurgen", "age": 33, "gender": "m"}
+]
