@@ -73,5 +73,15 @@
 			});
 		}
 
+		model.reserve = function(wish) {
+			wish.status = "reserved";
+			updateWish(wish);
+		}
+
+		model.setFree = function(wish) {
+			wish.status = "free";
+			updateWish(wish);
+		}
+
 	})
 ;

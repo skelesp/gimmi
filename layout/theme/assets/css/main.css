@@ -205,8 +205,8 @@ i {
 }
 
 /* Thumbnail */
-.reserved {
-  background-color: #08c4a2;
+.thumbnail.reserved {
+  background-color: #D4FAEC;
 }
 .btn-blue {
   background-color: #0895c4 ;
@@ -217,9 +217,10 @@ i {
 }
 
 .status {
-  color: #7171a1;
   font-style: italic;
+  color: #000;
 }
+
 .price {
  background-color: #0895c4 ;
  color: #fff;

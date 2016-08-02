@@ -34,6 +34,8 @@
 			wishCtrl.getCurrentReceiverName = receiverModel.getCurrentReceiverName;
 			wishCtrl.getCurrentReceiverId = receiverModel.getCurrentReceiverId;
 			wishCtrl.deleteWish = wishModel.deleteWish;
+			wishCtrl.reserve = wishModel.reserve;
+			wishCtrl.setFree = wishModel.setFree;
 	})
 
 ;
