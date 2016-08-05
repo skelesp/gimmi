@@ -39,7 +39,7 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Wil je een lijst aanmaken?</a></li>
+            <li><a href="#">Wil je eigen lijst aanmaken?</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -48,18 +48,8 @@
 	<div id="headerwrap">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-9">
-					<h1>Voor wie zoek je een cadeau?</h1>
-					<div id="custom-search-input">
-              <div class="input-group">
-                  <input type="text" class="search-query form-control" placeholder="Search" />
-                  <span class="input-group-btn">
-                      <button class="btn btn-danger" type="button">
-                          <span class=" glyphicon glyphicon-search"></span>
-                      </button>
-                  </span>
-              </div>
-          </div> <!-- /custom-search-input -->
+				<div class="col-lg-9" ui-view="receiverSearch">
+
 				</div><!-- /col-lg-9 -->
 				<div class="col-lg-3" ui-view="wishlists"></div>
 			</div><!-- /row -->
@@ -77,7 +67,7 @@
 		<script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="lib/vendor/angular-1.5.7/angular-ui-router.min.js"></script>
-
+		<script src="lib/vendor/angular-1.5.7/ui-bootstrap-tpls-2.0.1.min.js"></script>
 
 		<script src="app/gimmi-app.js"></script>
 		<script src="app/common/models/receiver-model.js"></script>
@@ -90,8 +80,6 @@
 		<script src="app/wishlist/wish/wish.js"></script>
 		<script src="app/wishlist/wish/create/wish-create.js"></script>
 		<script src="app/wishlist/wish/edit/wish-edit.js"></script>
-
-
 
 	</body>
 

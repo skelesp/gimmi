@@ -21,8 +21,8 @@ body {
 /* Titles */
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    color: #333;
+    font-weight: 500;
+    color: #FFF;
 }
 
 h1 {
@@ -153,45 +153,65 @@ i {
 }
 
 /* Search bar */
-#custom-search-input {
-			margin:0;
-			margin-top: 10px;
-			padding: 0;
-      width: 60%;
-	}
+#custom-search-input{
+    padding: 3px;
+    border: solid 1px #E4E4E4;
+    border-radius: 6px;
+    background-color: #fff;
+}
 
-	#custom-search-input .search-query {
-			padding-right: 3px;
-			padding-right: 4px \9;
-			padding-left: 3px;
-			padding-left: 4px \9;
-			/* IE7-8 doesn't have border-radius, so don't indent the padding */
+#custom-search-input input{
+    border: 0;
+    box-shadow: none;
+}
 
-			margin-bottom: 0;
-			-webkit-border-radius: 3px;
-			-moz-border-radius: 3px;
-			border-radius: 3px;
-	}
+#custom-search-input button{
+    margin: 2px 0 0 0;
+    background: none;
+    box-shadow: none;
+    border: 0;
+    color: #666666;
+    padding: 0 8px 0 10px;
+    border-left: solid 1px #ccc;
+}
 
-	#custom-search-input button {
-			border: 0;
-			background: none;
-			/** belows styles are working good */
-			padding: 2px 5px;
-			margin-top: 2px;
-			position: relative;
-			left: -28px;
-			/* IE7-8 doesn't have border-radius, so don't indent the padding */
-			margin-bottom: 0;
-			-webkit-border-radius: 3px;
-			-moz-border-radius: 3px;
-			border-radius: 3px;
-			color:#3498db;
-	}
+#custom-search-input button:hover{
+    border: 0;
+    box-shadow: none;
+    border-left: solid 1px #ccc;
+}
 
-	.search-query:focus + button {
-			z-index: 3;
-	}
+#custom-search-input .glyphicon-search{
+    font-size: 23px;
+}
+
+/* typeahead-demo */
+
+.typeahead-demo .custom-popup-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    background-color: #f9f9f9;
+  }
+
+  .typeahead-demo .custom-popup-wrapper > .message {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    color: #868686;
+  }
+
+  .typeahead-demo .custom-popup-wrapper > .dropdown-menu {
+    position: static;
+    float: none;
+    display: block;
+    min-width: 160px;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
 
 /* Favorites*/
 #favorites {

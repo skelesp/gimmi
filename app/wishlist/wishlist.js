@@ -12,8 +12,12 @@
 						templateUrl: 'app/wishlist/wishlist.tmpl.html'
 					}
 					,'wishes@': {
-						controller: 'wishCtrl',
+						controller: 'wishCtrl as wishCtrl',
 						templateUrl: 'app/wishlist/intro.tmpl.html'
+					}
+					,'receiverSearch@': {
+						controller: 'receiverCtrl as receiverCtrl',
+						templateUrl: 'app/wishlist/receiver/receiverSearch.tmpl.html'
 					}
 				}
 			})
@@ -22,6 +26,7 @@
 
 	.controller('wishlistCtrl', function wishlistCtrl(receiverModel){
 		var wishlistCtrl = this;
+
 		receiverModel.getReceivers()
 			.then(function(receivers) {
 				wishlistCtrl.receivers = receivers;
