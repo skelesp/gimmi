@@ -29,7 +29,7 @@
 		<!-- Fixed navbar -->
     <div class="navbar navbar-default navbar-fixed-top">
       <div class="container">
-        <div class="navbar-header">
+				<div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -37,35 +37,39 @@
           </button>
           <a class="navbar-brand" ui-sref="gimmi.wishlist"><b>GIMMI</b></a>
         </div>
-        <div class="navbar-collapse collapse">
+				<div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Wil je eigen lijst aanmaken?</a></li>
           </ul>
         </div><!--/.nav-collapse -->
-      </div>
-    </div>
+      </div><!-- /container -->
+    </div><!-- /navbar -->
 
 	<div id="headerwrap">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-9" ui-view="receiverSearch">
-
-				</div><!-- /col-lg-9 -->
-				<div class="col-lg-3" ui-view="wishlists"></div>
-			</div><!-- /row -->
-			<div class="row">
-				<div class="col-lg-8" ui-view="wishes">
-					<!--<img class="img-responsive" src="#" alt="Een tekening om de pagina levendig te maken">-->
+				<div class="col-lg-6" ui-view="receiverSearch"></div><!-- /col-lg-9 -->
+				<div class="col-lg-3">
+					<img class="img-responsive" src="layout/theme/assets/img/gift-box-in-hand-flat-icon-01-f.png" alt="">
 				</div><!-- /col-lg-6 -->
-			</div>
+				<!--<div class="col-lg-3" ui-view="wishlists"></div>-->
+			</div><!-- /row -->
 		</div><!-- /container -->
 	</div><!-- /headerwrap -->
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9" ui-view="wishes"></div><!-- /col-lg-9 -->
+		</div><!-- /row -->
+	</div><!-- /container -->
 
 		<!-- scripts -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
 		<script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	  <script src="lib/vendor/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 		<script src="lib/vendor/angular-1.5.7/angular-ui-router.min.js"></script>
 		<script src="lib/vendor/angular-1.5.7/ui-bootstrap-tpls-2.0.1.min.js"></script>
 
@@ -82,5 +86,4 @@
 		<script src="app/wishlist/wish/edit/wish-edit.js"></script>
 
 	</body>
-
 </html>
