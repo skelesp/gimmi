@@ -19,13 +19,14 @@
 
 			<div class="thumbnail" ng-class="{'reserved': wish.status === 'reserved'}">
 
-				<button type="button" class="btn btn-link btn-edit"
-								ui-sref="gimmi.wishlist.wish.edit({wishID:wish.id})">
-					<span class="glyphicon glyphicon-pencil"></span>
-				</button>
-				<button type="button"	class="close"
+					<button type="button"	class="close"
 								ng-click="wishCtrl.deleteWish(wish)" >
-					<span class="glyphicon glyphicon-trash"></span></button>
+								<span class="glyphicon glyphicon-trash"></span>
+					</button>
+					<button type="button" class="btn btn-link btn-edit"
+									ui-sref="gimmi.wishlist.wish.edit({wishID:wish.id})">
+									<span class="glyphicon glyphicon-pencil"></span>
+					</button>
 
 				<p class="title">{{wish.title}}</p>
 				<p class="price">{{wish.price | currency : "€" : 2}}</p>

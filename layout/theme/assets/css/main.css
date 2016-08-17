@@ -228,6 +228,7 @@ i {
 
 .btn-edit {
   color: #009999;
+  float: right;
 }
 .btn-create:focus, .btn-create:hover {
   color: #F0F0F0;
