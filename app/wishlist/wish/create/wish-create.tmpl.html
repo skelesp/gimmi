@@ -1,11 +1,9 @@
 ﻿<form class="create-form" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.getCurrentReceiverId())" novalidate>
 	<div class="form-group">
-		<label for="newWishTitle">Titel</label>
-		<input type="text" class="form-control" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Geef de titel van het nieuwe cadeauidee in" />
+		<input type="text" class="form-control" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Titel" />
 	</div>
 	<div class="form-group">
-		<label for="newWishTitle">Prijs</label>
-		<input type="text" class="form-control" id="newWishPrice" ng-model="createWishCtrl.newWish.price" placeholder="Geef een schatting van de prijs"/>
+		<input type="text" class="form-control" id="newWishPrice" ng-model="createWishCtrl.newWish.price" placeholder="Prijs"/>
 	</div>
 	<button type="submit" class="btn btn-info btn-lg">Toevoegen</button>
 	<button type="button" class="btn btn-default btn-lg pull-right" ng-click="createWishCtrl.cancelCreating();">Annuleer</button>
