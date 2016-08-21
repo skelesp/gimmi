@@ -11,10 +11,6 @@
 						controller: 'wishlistCtrl as wishlistCtrl',
 						templateUrl: 'app/wishlist/wishlist.tmpl.html'
 					}
-					,'wishes@': {
-						controller: 'wishCtrl as wishCtrl',
-						templateUrl: 'app/wishlist/intro.tmpl.html'
-					}
 					,'receiverSearch@': {
 						controller: 'receiverCtrl as receiverCtrl',
 						templateUrl: 'app/wishlist/receiver/receiverSearch.tmpl.html'

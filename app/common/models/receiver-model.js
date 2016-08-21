@@ -23,8 +23,8 @@
 			return (receivers) ? $q.when(receivers) : $http.get(URLS.FETCH).then(cacheReceivers);
 		};
 
-		model.setCurrentReceiver = function (receiverName){
-				return model.getReceiverByName(receiverName)
+		model.setCurrentReceiver = function (receiverID){
+				return model.getReceiverByID(receiverID)
 					.then(function(receiver){
 						currentReceiver = receiver;
 					});
@@ -48,6 +48,27 @@
 			function findReceiver() {
 				return _.find(receivers, function(r){
 					return r.name === receiverName;
+				})
+			}
+
+			if (receivers) {
+				deferred.resolve(findReceiver());
+			} else {
+				model.getReceivers()
+					.then(function(result){
+						deferred.resolve(findReceiver());
+					})
+			}
+
+			return deferred.promise;
+		};
+
+		model.getReceiverByID = function (receiverID) {
+			var deferred = $q.defer();
+
+			function findReceiver() {
+				return _.find(receivers, function(r){
+					return r.id === parseInt(receiverID);
 				})
 			}
 

@@ -1,7 +1,8 @@
 ﻿<div class="row">
 	<div ng-if="wishCtrl.getCurrentReceiver()">
 
-		<h1>Lijst van {{wishCtrl.getCurrentReceiverName()}}</h1>
+		<h3>Lijst van {{wishCtrl.getCurrentReceiverName()}}</h3>
+		<hr/>
 
 		<div class="col-md-3" ui-view >
 			<div class="thumbnail create">
@@ -47,7 +48,7 @@
 	</div> <!-- /receiver found -->
 
 	<div class="col-md-12" ui-view ng-if="! wishCtrl.getCurrentReceiver()">
-		<h2>Sorry, geen lijst gevonden voor {{wishCtrl.getCurrentReceiverName()}}</h2>
+		<h4>Sorry, geen lijst gevonden voor {{wishCtrl.getCurrentReceiverName()}}</h4>
 		<p>Under construction: Binnenkort kan u hier meteen een lijst aanmaken voor deze persoon.</p>
 
 	</div> <!-- /col-md-12 -->

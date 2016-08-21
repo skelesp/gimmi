@@ -7,7 +7,7 @@
                   typeahead-show-hint="true"
                   typeahead-min-length="1"
                   typeahead-no-results="noResults"
-                  typeahead-focus-first="false"
+                  typeahead-focus-first="true"
                   class="form-control"
                   placeholder="The lucky one"
                   ng-keyup="receiverCtrl.showWishlist($event, selected)">
@@ -19,5 +19,5 @@
       </div>
   </div> <!-- /custom-search-input -->
   <div ng-if="noResults">
-    Geen resultaten gevonden
+    Geen resultaten gevonden!
   </div>

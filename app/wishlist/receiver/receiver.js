@@ -12,12 +12,14 @@
 				receiverCtrl.receivers = receivers;
 			});
 
-		receiverCtrl.showWishlist = function(keyEvent, name) {
+		receiverCtrl.showWishlist = function(keyEvent, selected) {
 		  if (keyEvent.which === 13){
-				var text = name;
+				console.log(selected);
 
-				text = text.charAt(0).toUpperCase() + text.slice(1);
-				$state.go('gimmi.wishlist.wish',{receiverName: text});
+				receiverModel.getReceiverByName(selected.name)
+					.then(function(receiver){
+						$state.go('gimmi.wishlist.wish',{receiverID: receiver.id});
+					});
 				$scope.selected = null;
 			}
 		};

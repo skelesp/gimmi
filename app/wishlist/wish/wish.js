@@ -8,7 +8,7 @@
 
 		$stateProvider
 			.state('gimmi.wishlist.wish', {
-				url: 'wishlist/:receiverName',
+				url: 'wishlist/:receiverID',
 				views: {
 					'wishes@': {
 						templateUrl: 'app/wishlist/wish/wish.tmpl.html',
@@ -22,12 +22,11 @@
 	.controller('wishCtrl', function($stateParams, wishModel, receiverModel) {
 		var wishCtrl = this;
 
-		receiverModel.setCurrentReceiver($stateParams.receiverName);
+		receiverModel.setCurrentReceiver($stateParams.receiverID);
 
 		wishModel.getWishes()
 			.then(function(wishes) {
 				wishCtrl.wishes = wishes;
-				//console.log(wishes);
 			});
 
 			wishCtrl.getCurrentReceiver = receiverModel.getCurrentReceiver;
