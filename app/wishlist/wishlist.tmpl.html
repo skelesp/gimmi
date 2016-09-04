@@ -1,7 +1,29 @@
-<h2>Uw favoriete cadeaulijsten</h2>
+<div class="row">
+	<div ng-if="wishlistCtrl.getCurrentReceiver()">
 
-<ul class="nav nav-sidebar">
-	<li ng-repeat="receiver in wishlistCtrl.receivers" ng-class="{'active': isCurrentReceiver(receiver)}">
-		<a ui-sref="gimmi.wishlist.wish({receiverName: receiver.name})" >{{receiver.name}}</a>
-	</li>
-</ul>
+		<h3>Lijst van {{wishlistCtrl.getCurrentReceiverName()}}</h3>
+		<hr/>
+
+		<div class="col-md-3" ui-view >
+			<div class="thumbnail create">
+				<button type="button" class="btn btn-create"
+								ui-sref="gimmi.wishlist.wish.create">
+					<span class="glyphicon glyphicon-plus"></span>
+					<p>Creëer een cadeau idee</p>
+				</button>
+			</div> <!-- /Thumbnail -->
+
+		</div> <!-- /col-md-4 -->
+
+		<div ng-if="wishlistCtrl.getCurrentReceiver()" ng-repeat="wish in wishlistCtrl.wishes | filter: {receiverID: wishlistCtrl.getCurrentReceiverId()}"
+				 class="col-md-3">
+			<div ui-view="wishlist_item"></div>
+		</div> <!-- /col-md-4 /repeat-->
+	</div> <!-- /receiver found -->
+
+	<div class="col-md-12" ui-view ng-if="! wishlistCtrl.getCurrentReceiver()">
+		<h4>Sorry, geen lijst gevonden voor {{wishlistCtrl.getCurrentReceiverName()}}</h4>
+		<p>Under construction: Binnenkort kan u hier meteen een lijst aanmaken voor deze persoon.</p>
+
+	</div> <!-- /col-md-12 -->
+</div> <!-- /row -->

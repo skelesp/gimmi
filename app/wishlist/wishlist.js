@@ -5,27 +5,36 @@
 	.config(function($stateProvider){
 		$stateProvider
 			.state('gimmi.wishlist', {
-				url: '/',
+				url: 'wishlist/:receiverID',
 				views: {
-					'wishlists@': {
-						controller: 'wishlistCtrl as wishlistCtrl',
-						templateUrl: 'app/wishlist/wishlist.tmpl.html'
-					}
-					,'receiverSearch@': {
-						controller: 'receiverCtrl as receiverCtrl',
-						templateUrl: 'app/wishlist/receiver/receiverSearch.tmpl.html'
+					'content@': {
+						templateUrl: 'app/wishlist/wishlist.tmpl.html',
+						controller:'wishlistCtrl as wishlistCtrl'
+					},
+					'wishlist_item@gimmi.wishlist': {
+						templateUrl: 'app/wishlist/wishlist_item.tmpl.html',
+						controller: 'wishCtrl as wishCtrl'
 					}
 				}
 			})
 		;
 	})
 
-	.controller('wishlistCtrl', function wishlistCtrl(receiverModel){
+	.controller('wishlistCtrl', function wishlistCtrl($stateParams, wishModel, receiverModel){
 		var wishlistCtrl = this;
 
-		receiverModel.getReceivers()
-			.then(function(receivers) {
-				wishlistCtrl.receivers = receivers;
+		receiverModel.setCurrentReceiver($stateParams.receiverID);
+
+		wishModel.getWishes()
+			.then(function(wishes) {
+				wishlistCtrl.wishes = wishes;
 			});
+
+			wishlistCtrl.getCurrentReceiver = receiverModel.getCurrentReceiver;
+			wishlistCtrl.getCurrentReceiverName = receiverModel.getCurrentReceiverName;
+			wishlistCtrl.getCurrentReceiverId = receiverModel.getCurrentReceiverId;
+			wishlistCtrl.deleteWish = wishModel.deleteWish;
+			wishlistCtrl.reserve = wishModel.reserve;
+			wishlistCtrl.setFree = wishModel.setFree;
 	})
 ;

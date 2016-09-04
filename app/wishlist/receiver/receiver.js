@@ -18,10 +18,11 @@
 
 				receiverModel.getReceiverByName(selected.name)
 					.then(function(receiver){
-						$state.go('gimmi.wishlist.wish',{receiverID: receiver.id});
+						$state.go('gimmi.wishlist',{receiverID: receiver.id});
 					});
 				$scope.selected = null;
 			}
 		};
+
 	})
 ;

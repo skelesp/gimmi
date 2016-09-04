@@ -1,0 +1,25 @@
+<div class="thumbnail" ng-class="{'reserved': wish.status === 'reserved'}">
+
+    <button type="button"	class="close"
+          ng-click="wishCtrl.deleteWish(wish)" >
+          <span class="glyphicon glyphicon-trash"></span>
+    </button>
+    <button type="button" class="btn btn-link btn-edit"
+            ui-sref="gimmi.wishlist.wish.edit({wishID:wish.id})">
+            <span class="glyphicon glyphicon-pencil"></span>
+    </button>
+
+  <p class="title">{{wish.title}}</p>
+  <p class="price">{{wish.price | currency : "€" : 2}}</p>
+  <p><button type="button"  ng-if="wish.status === 'reserved'"
+                            ng-click="wishCtrl.setFree(wish)"
+                            class="text-capitalize btn btn-reserved">
+      {{wish.status}}
+  </button>
+  <button type="button"  ng-if="wish.status !== 'reserved'"
+                            ng-click="wishCtrl.reserve(wish)"
+                            class="btn btn-default">
+      Reserveer
+  </button></p>
+
+</div> <!-- /Thumbnail div -->
