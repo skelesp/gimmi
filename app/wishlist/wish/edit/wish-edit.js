@@ -4,7 +4,7 @@
   .config(function($stateProvider){
     $stateProvider
       .state('gimmi.wishlist.wish.edit', {
-        url: '/wish/:wishID/edit',
+        url: '/edit',
         templateUrl: 'app/wishlist/wish/edit/wish-edit.tmpl.html',
         controller: 'editWishCtrl as editWishCtrl'
       })
@@ -16,8 +16,8 @@
     var editWishCtrl = this;
 
     function returnToWishes(){
-      $state.go('gimmi.wishlist.wish', {
-        receiverName: $stateParams.receiverName
+      $state.go('gimmi.wishlist', {
+        receiverID: $stateParams.receiverID
       })
     }
 

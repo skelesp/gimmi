@@ -3,8 +3,8 @@
 ])
   .config(function($stateProvider){
       $stateProvider
-        .state('gimmi.wishlist.wish.create', {
-          url: '/wish/create',
+        .state('gimmi.wishlist.newWish', {
+          url: '/newWish',
           templateUrl: 'app/wishlist/wish/create/wish-create.tmpl.html',
           controller: 'createWishCtrl as createWishCtrl'
         })
@@ -15,8 +15,8 @@
     var createWishCtrl = this;
 
     function returnToWishes(){
-      $state.go('gimmi.wishlist.wish', {
-        receiverName: $stateParams.receiverName
+      $state.go('gimmi.wishlist', {
+        receiverID: $stateParams.receiverID
       })
     }
 

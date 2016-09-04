@@ -8,7 +8,7 @@
 
 		$stateProvider
 			.state('gimmi.wishlist.wish', {
-				url: 'wishlist/wish/:wishID',
+				url: '/wish/:wishID',
 				views: {
 					'wish@': {
 						templateUrl: 'app/wishlist/wish/wish_info.tmpl.html',
