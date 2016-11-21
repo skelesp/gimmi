@@ -15,7 +15,7 @@
 
 		</div> <!-- /col-md-4 -->
 
-		<div ng-if="wishlistCtrl.getCurrentReceiver()" ng-repeat="wish in wishlistCtrl.wishes | filter: {receiverID: wishlistCtrl.getCurrentReceiverId()}"
+		<div ng-if="wishlistCtrl.getCurrentReceiver()" ng-repeat="wish in wishlistCtrl.wishes | filter: {receiver: wishlistCtrl.getCurrentReceiverId()}"
 				 class="col-md-3">
 			<div ui-view="wishlist_item"></div>
 		</div> <!-- /col-md-4 /repeat-->

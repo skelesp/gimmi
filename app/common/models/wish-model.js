@@ -4,7 +4,8 @@
 	.service('wishModel', function($http, $q){
 		var model = this,
 			URLS = {
-				FETCH: 'data/wishes.json'
+				FETCH: 'http://localhost:3000/api/wishes',
+				WISH: 'http://localhost:3000/api/wish'
 			},
 			wishes;
 
@@ -43,8 +44,8 @@
 			if(wishes) {
 				deferred.resolve(wishes);
 			} else {
-				$http.get(URLS.FETCH).then(function(wishes){
-						deferred.resolve(cacheWishes(wishes));
+				$http.get(URLS.FETCH).then(function(result){
+						deferred.resolve(cacheWishes(result));
 				});
 			}
 
@@ -52,19 +53,23 @@
 		};
 
 		model.createWish = function (wish, receiverID){
-			wish.id = wishes.length+1;
-			wish.receiverID = receiverID;
+			wish.receiver = receiverID;
 			wish.status = "free";
 
-			wishes.push(wish);
+			$http.post(URLS.WISH, wish).success(function(wish){
+				wishes.push(wish);
+			});
+
 		};
 
 		model.updateWish = function(wish) {
-			var index = _.findIndex(wishes, function(w){
-				return w.id === wish.id;
-			});
+			$http.post(URLS.WISH+"/"+wish._id, wish).success(function(wish){
+				var index = _.findIndex(wishes, function(w){
+					return w._id === wish._id;
+				});
 
-			wishes[index] = wish;
+				wishes[index] = wish;
+			});
 		}
 
 		model.deleteWish = function(wish) {
