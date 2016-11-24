@@ -4,8 +4,8 @@
 	.service('wishModel', function($http, $q){
 		var model = this,
 			URLS = {
-				FETCH: 'http://localhost:3000/api/wishes',
-				WISH: 'http://localhost:3000/api/wish'
+				FETCH: 'http://localhost:5000/api/wishes',
+				WISH: 'http://localhost:5000/api/wish'
 			},
 			wishes;
 
@@ -73,9 +73,12 @@
 		}
 
 		model.deleteWish = function(wish) {
-			_.remove(wishes, function(w){
-				return w.id === wish.id;
+			$http.delete(URLS.WISH+"/"+wish._id).success(function(){
+				_.remove(wishes, function(w){
+					return w._id === wish._id;
+				});
 			});
+
 		}
 
 		model.reserve = function(wish) {
