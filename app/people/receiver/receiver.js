@@ -29,7 +29,7 @@
 			})
 		;
 	})
-	.controller('loginCtrl', function($localStorage, AuthService){
+	.controller('loginCtrl', function($localStorage, $state, AuthService){
 		var self = this;
 
 		self.login = function() {
@@ -45,6 +45,8 @@
 					self.test = "Succesvol ingelogd met " + AuthService.getCurrentPerson.email;
 					self.email = "";
 					self.password = "";
+					//TODO: wijzig "receiverID" variabele
+					$state.go('gimmi.wishlist',{receiverID: "1"});
 				})
 				.catch(function(){
 					self.error = true;
