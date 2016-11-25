@@ -11,7 +11,7 @@ angular.module('gimmi.authentication', [
       function changeUser(user) {
         angular.extend(currentUser, user);
       }
- 
+
       function urlBase64Decode(str) {
           var output = str.replace('-', '+').replace('_', '/');
           switch (output.length % 4) {
@@ -66,33 +66,6 @@ angular.module('gimmi.authentication', [
         return deferred.promise;
       }
 
-      // - Register a person to the server -
-      function register(person) {
-      // create a new instance of deferred
-        var deferred = $q.defer();
-      // send a post request to the server
-        $http.post('http://localhost:5000/api/people',
-          { email: person.email,
-            password: person.password,
-            firstname: person.firstname,
-            lastname: person.lastname
-          })
-          // handle success
-          .success(function (data, status) {
-            if(status === 201 && data.token){
-              deferred.resolve(data.token);
-            } else {
-              deferred.reject("Succes, but no token available");
-            }
-          })
-          // handle error
-          .error(function (data) {
-            deferred.reject(data.data);
-          });
-      // return promise object
-        return deferred.promise;
-      } // - End of register -
-
       // - Logout a person -
       function logout(){
         delete $localStorage.token;
@@ -102,7 +75,6 @@ angular.module('gimmi.authentication', [
       return ({
         getCurrentPerson: currentPerson,
         authenticate: authenticate,
-        register: register,
         logout: logout
       });
   }]);

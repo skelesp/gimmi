@@ -1,0 +1,26 @@
+<div class="col-md-4">
+  <h1>Login</h1>
+  <div ng-show="personRegistrationCtrl.error" class="alert alert-danger">{{personRegistrationCtrl.errorMessage}}</div>
+  <div ng-show="personRegistrationCtrl.infoMessage" class="alert alert-info">{{personRegistrationCtrl.infoMessage}}</div>
+  <form class="form" ng-submit="personRegistrationCtrl.register(personRegistrationCtrl.newPerson)">
+    <div class="form-group">
+      <label>Voornaam</label>
+      <input type="text" class="form-control" name="firstname" ng-model="personRegistrationCtrl.newPerson.firstname" required>
+    </div>
+    <div class="form-group">
+      <label>Familienaam</label>
+      <input type="text" class="form-control" name="lastname" ng-model="personRegistrationCtrl.newPerson.lastname" required>
+    </div>
+    <div class="form-group">
+      <label>Emailadres</label>
+      <input type="text" class="form-control" name="email" ng-model="personRegistrationCtrl.newPerson.email" required>
+    </div>
+    <div class="form-group">
+      <label>Paswoord</label>
+        <input type="password" class="form-control" name="password" ng-model="personRegistrationCtrl.newPerson.password" required>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-default" ng-disabled="personRegistrationCtrl.disabled">Registreer</button>
+      </div>
+  </form>
+</div>
