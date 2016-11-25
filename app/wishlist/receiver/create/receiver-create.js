@@ -1,1 +1,0 @@
-﻿angular.module('wishlist.receiver.create', []);

@@ -1,6 +1,7 @@
 ﻿angular.module('Gimmi', [
 	'ui.bootstrap',
 	'ngAnimate',
+	'ngStorage',
 	'ui.router',
 	'wishlist',
 	'wishlist.wish',
@@ -13,7 +14,7 @@
 				views: {
 					'receiverSearch@': {
 						controller: 'receiverCtrl as receiverCtrl',
-						templateUrl: 'app/wishlist/receiver/receiverSearch.tmpl.html'
+						templateUrl: 'app/people/receiver/receiverSearch.tmpl.html'
 					},
 					'content@': {
 						controller: 'wishlistCtrl as wishlistCtrl',

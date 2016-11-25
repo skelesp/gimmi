@@ -1,4 +1,4 @@
-﻿angular.module('gimmi.models.receiver', [
+﻿angular.module('gimmi.models.person', [
 
 ])
 	.service('receiverModel', function($http, $q) {
