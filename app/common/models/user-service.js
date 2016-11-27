@@ -1,12 +1,13 @@
 angular.module('gimmi.authentication', [
-
+  'gimmi.person'
 ])
-  .factory('AuthService',
-    ['$q', '$localStorage', '$http',
-    function ($q, $localStorage, $http) {
+  .factory('UserService',
+    ['$q', '$localStorage', '$http', 'PersonService',
+    function ($q, $localStorage, $http, PersonService) {
       // create user variable
       var user = null;
       var baseUrl = "http://localhost:5000/api";
+      var currentUser = getUserFromStorage();
 
       function changeUser(user) {
         angular.extend(currentUser, user);
@@ -28,8 +29,8 @@ angular.module('gimmi.authentication', [
           }
           return window.atob(output);
       }
- 
-      function getPersonFromToken() {
+      //TODO: change to "getUserFromStorage"
+      function getUserFromStorage() {
           var token = $localStorage.token;
           var person = {};
           if (typeof token !== 'undefined') {
@@ -38,8 +39,6 @@ angular.module('gimmi.authentication', [
           }
           return person;
       }
- 
-      var currentPerson = getPersonFromToken();
 
       // - Authenticate a person on the server -
       function authenticate (email, password) {
@@ -51,7 +50,9 @@ angular.module('gimmi.authentication', [
         .success(function(data, status){
           if (status === 200 && data.token) {
             user = true;
-            deferred.resolve(data.token);
+            $localStorage.token = data.token;
+            currentUser = PersonService.getPersonFromToken(data.token);
+            deferred.resolve(currentUser);
           } else {
             user = false;
             deferred.reject();
@@ -71,9 +72,14 @@ angular.module('gimmi.authentication', [
         delete $localStorage.token;
       }
 
+      // - Get current user
+      function getCurrentUser () {
+        return currentUser;
+      }
+
       // return available functions for use in the controllers
       return ({
-        getCurrentPerson: currentPerson,
+        getCurrentUser: getCurrentUser,
         authenticate: authenticate,
         logout: logout
       });

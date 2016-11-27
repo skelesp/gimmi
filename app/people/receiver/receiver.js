@@ -33,7 +33,7 @@
 			})
 		;
 	})
-	.controller('loginCtrl', function($localStorage, $state, AuthService){
+	.controller('loginCtrl', function($localStorage, $state, UserService){
 		var self = this;
 
 		self.login = function() {
@@ -43,12 +43,10 @@
 			self.infoMessage = "";
 
 			// Call login from service
-			AuthService.authenticate(self.email, self.password)
-				.then(function(token){
-					$localStorage.token = token;
-					self.infoMessage = "Succesvol ingelogd met " + AuthService.getCurrentPerson.email + "("+AuthService.getCurrentPerson._id+")";
-					//TODO: wijzig "receiverID" variabele naar _id veld
-					$state.go('gimmi.wishlist',{receiverID: "1"});
+			UserService.authenticate(self.email, self.password)
+				.then(function(user){
+					console.log("Succesvol ingelogd met " + user.email + "("+user._id+")");
+					$state.go('gimmi.wishlist',{receiverID: user._id});
 				})
 				.catch(function(){
 					self.error = true;
