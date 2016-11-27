@@ -55,7 +55,6 @@
 		model.createWish = function (wish, receiverID){
 			wish.receiver = receiverID;
 			wish.status = "free";
-			console.log("new Wish:", wish);
 			$http.post(URLS.WISH, wish).success(function(wish){
 				wishes.push(wish);
 			});
