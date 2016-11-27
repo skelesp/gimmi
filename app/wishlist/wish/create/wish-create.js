@@ -39,7 +39,7 @@
     createWishCtrl.cancelCreating = cancelCreating;
     createWishCtrl.createWish = createWish;
 
-    createWishCtrl.getCurrentReceiverId = receiverModel.getCurrentReceiverId;
+    createWishCtrl.currentReceiverID = receiverModel.getCurrentReceiver()._id;
 
     resetForm();
 

@@ -2,7 +2,7 @@
   <div id="custom-search-input">
       <div class="input-group col-md-12">
           <input  type="text" ng-click="selected=null;" ng-model="selected"
-                  typeahead-template-url="app/wishlist/receiver/receiverSearch.popup.tmpl.html"
+                  typeahead-template-url="app/people/receiver/receiverSearch.popup.tmpl.html"
                   uib-typeahead="receiver as receiver.name for receiver in receiverCtrl.receivers | filter:{name: $viewValue} | limitTo:8"
                   typeahead-show-hint="true"
                   typeahead-min-length="1"

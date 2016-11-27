@@ -1,6 +1,6 @@
 ﻿angular.module('wishlist', [
 	'gimmi.models.wishlist',
-	'gimmi.models.person'
+	'gimmi.models.person',
 ])
 	.config(function($stateProvider){
 		$stateProvider
@@ -9,7 +9,12 @@
 				views: {
 					'content@': {
 						templateUrl: 'app/wishlist/wishlist.tmpl.html',
-						controller:'wishlistCtrl as wishlistCtrl'
+						controller:'wishlistCtrl as wishlistCtrl',
+						resolve: {
+								currentReceiver: ['$stateParams', 'receiverModel', function($stateParams, receiverModel){
+									return receiverModel.setCurrentReceiver($stateParams.receiverID);
+								}]
+						}
 					},
 					'wishlist_item@gimmi.wishlist': {
 						templateUrl: 'app/wishlist/wishlist_item.tmpl.html',
@@ -23,15 +28,13 @@
 	.controller('wishlistCtrl', function wishlistCtrl($stateParams, wishModel, receiverModel){
 		var wishlistCtrl = this;
 
-		receiverModel.setCurrentReceiver($stateParams.receiverID);
-
+		//TODO: get wishes for this receiver
 		wishModel.getWishes()
 			.then(function(wishes) {
 				wishlistCtrl.wishes = wishes;
 			});
-
-			wishlistCtrl.getCurrentReceiver = receiverModel.getCurrentReceiver;
-			wishlistCtrl.getCurrentReceiverName = receiverModel.getCurrentReceiverName;
-			wishlistCtrl.getCurrentReceiverId = receiverModel.getCurrentReceiverId;
+			var currentReceiver = receiverModel.getCurrentReceiver();
+			currentReceiver.fullName = currentReceiver.firstName + " " + currentReceiver.lastName
+			wishlistCtrl.currentReceiver = currentReceiver;
 	})
 ;

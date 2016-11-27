@@ -1,11 +1,11 @@
 ﻿angular.module('gimmi.models.person', [
-
+	'gimmi.person'
 ])
-	.service('receiverModel', function($http, $q) {
+	.service('receiverModel', ["$http", "$q", "PersonService", function($http, $q, PersonService) {
 
 		var model = this,
 			URLS = {
-				FETCH: 'data/receivers.json'
+				FETCH: 'http://localhost:5000/api/people'
 			},
 			receivers,
 			currentReceiver;
@@ -24,18 +24,20 @@
 		};
 
 		model.setCurrentReceiver = function (receiverID){
-				return model.getReceiverByID(receiverID)
+				console.log("set currentReceiver");
+				return PersonService.getPersonFromID(receiverID)
 					.then(function(receiver){
 						currentReceiver = receiver;
 					});
 		};
 
 		model.getCurrentReceiver = function(){
+			console.log("get currentReceiver");
 			return currentReceiver;
 		};
 
 		model.getCurrentReceiverName = function() {
-			return currentReceiver ? currentReceiver.name : '';
+			return currentReceiver ? currentReceiver.firstName + " " + currentReceiver.lastName : '';
 		};
 
 		model.getCurrentReceiverId = function() {
@@ -68,7 +70,7 @@
 
 			function findReceiver() {
 				return _.find(receivers, function(r){
-					return r.id === parseInt(receiverID);
+					return r._id === receiverID;
 				})
 			}
 
@@ -83,5 +85,5 @@
 
 			return deferred.promise;
 		};
-	})
+	}])
 ;

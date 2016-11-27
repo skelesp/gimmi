@@ -1,7 +1,7 @@
 <div class="row">
-	<div ng-if="wishlistCtrl.getCurrentReceiver()">
+	<div ng-if="wishlistCtrl.currentReceiver">
 
-		<h3>Lijst van {{wishlistCtrl.getCurrentReceiverName()}}</h3>
+		<h3>Lijst van {{wishlistCtrl.currentReceiver.fullName}}</h3>
 		<hr/>
 
 		<div class="col-md-3" ui-view >
@@ -15,15 +15,14 @@
 
 		</div> <!-- /col-md-4 -->
 
-		<div ng-if="wishlistCtrl.getCurrentReceiver()" ng-repeat="wish in wishlistCtrl.wishes | filter: {receiver: wishlistCtrl.getCurrentReceiverId()}"
+		<div ng-if="wishlistCtrl.currentReceiver" ng-repeat="wish in wishlistCtrl.wishes | filter: {receiver: wishlistCtrl.currentReceiver._id}"
 				 class="col-md-3">
 			<div ui-view="wishlist_item"></div>
 		</div> <!-- /col-md-4 /repeat-->
 	</div> <!-- /receiver found -->
 
-	<div class="col-md-12" ui-view ng-if="! wishlistCtrl.getCurrentReceiver()">
-		<h4>Sorry, geen lijst gevonden voor {{wishlistCtrl.getCurrentReceiverName()}}</h4>
-		<p>Under construction: Binnenkort kan u hier meteen een lijst aanmaken voor deze persoon.</p>
+	<div class="col-md-12" ui-view ng-if="! wishlistCtrl.currentReceiver">
+		<h4>Sorry, geen lijst gevonden.</h4>
 
 	</div> <!-- /col-md-12 -->
 </div> <!-- /row -->

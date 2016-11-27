@@ -51,9 +51,30 @@ angular.module('gimmi.person', [
         return deferred.promise;
       } // - End of register -
 
+      // - Get person from ID
+      function getPersonFromID (id) {
+  			var deferred = $q.defer();
+
+        $http.get('http://localhost:5000/api/people/'+id)
+          .success(function(person){
+            if (person) {
+              deferred.resolve(person);
+            } else {
+              var error = "Person not found."
+              deferred.resolve(error);
+            }
+          })
+          .error(function(data){
+            deferred.reject(data.error);
+          });
+          
+  			return deferred.promise;
+  		}
+
       // - return available functions for use in the controllers -
       return ({
         register: register,
-        getPersonFromToken: getPersonFromToken
+        getPersonFromToken: getPersonFromToken,
+        getPersonFromID: getPersonFromID
       });
     }]);

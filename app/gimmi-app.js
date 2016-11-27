@@ -17,7 +17,6 @@
 						templateUrl: 'app/people/receiver/receiverSearch.tmpl.html'
 					},
 					'content@': {
-						controller: 'wishlistCtrl as wishlistCtrl',
 						templateUrl: 'app/intro.tmpl.html'
 					}
 				}
