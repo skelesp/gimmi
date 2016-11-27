@@ -13,7 +13,7 @@
 				url: '/',
 				views: {
 					'receiverSearch@': {
-						controller: 'receiverCtrl as receiverCtrl',
+						controller: 'receiverSearchCtrl as receiverSearchCtrl',
 						templateUrl: 'app/people/receiver/receiverSearch.tmpl.html'
 					},
 					'content@': {

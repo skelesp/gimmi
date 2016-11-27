@@ -3,14 +3,14 @@
       <div class="input-group col-md-12">
           <input  type="text" ng-click="selected=null;" ng-model="selected"
                   typeahead-template-url="app/people/receiver/receiverSearch.popup.tmpl.html"
-                  uib-typeahead="receiver as receiver.name for receiver in receiverCtrl.receivers | filter:{name: $viewValue} | limitTo:8"
+                  uib-typeahead="receiver as receiver.fullName for receiver in receiverSearchCtrl.receivers | filter:{fullName: $viewValue} | limitTo:8"
                   typeahead-show-hint="true"
                   typeahead-min-length="1"
                   typeahead-no-results="noResults"
                   typeahead-focus-first="true"
                   class="form-control"
                   placeholder="The lucky one"
-                  ng-keyup="receiverCtrl.showWishlist($event, selected)">
+                  ng-keyup="receiverSearchCtrl.showWishlist($event, selected)">
           <span class="input-group-btn" >
               <button class="btn btn-info btn-lg" type="button">
                   <i class="glyphicon glyphicon-search"></i>

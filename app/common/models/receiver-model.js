@@ -24,7 +24,6 @@
 		};
 
 		model.setCurrentReceiver = function (receiverID){
-				console.log("set currentReceiver");
 				return PersonService.getPersonFromID(receiverID)
 					.then(function(receiver){
 						currentReceiver = receiver;
@@ -32,7 +31,6 @@
 		};
 
 		model.getCurrentReceiver = function(){
-			console.log("get currentReceiver");
 			return currentReceiver;
 		};
 

@@ -86,15 +86,15 @@
 		}
 
 	}])
-	.controller('receiverCtrl', function($scope, $state, receiverModel) {
-		var receiverCtrl = this;
+	.controller('receiverSearchCtrl', function($scope, $state, receiverModel) {
+		var receiverSearchCtrl = this;
 
 		receiverModel.getReceivers()
 			.then(function(receivers) {
-				receiverCtrl.receivers = receivers;
+				receiverSearchCtrl.receivers = receivers;
 			});
 
-		receiverCtrl.showWishlist = function(keyEvent, selected) {
+		receiverSearchCtrl.showWishlist = function(keyEvent, selected) {
 		  if (keyEvent.which === 13){
 				console.log(selected);
 
