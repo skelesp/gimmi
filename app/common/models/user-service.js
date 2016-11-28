@@ -1,9 +1,10 @@
 angular.module('gimmi.authentication', [
-  'gimmi.person'
+  'gimmi.person',
+  'gimmi.config'
 ])
   .factory('UserService',
-    ['$q', '$localStorage', '$http', 'PersonService',
-    function ($q, $localStorage, $http, PersonService) {
+    ['$q', '$localStorage', '$http', 'PersonService', 'CONFIG',
+    function ($q, $localStorage, $http, PersonService, CONFIG) {
       // create user variable
       var baseUrl = CONFIG.apiUrl + '/api';
       var currentUser = getUserFromStorage();

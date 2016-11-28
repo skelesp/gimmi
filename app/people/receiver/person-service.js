@@ -1,5 +1,5 @@
 angular.module('gimmi.person', [
-
+  'gimmi.config'
 ])
   .factory('PersonService',
     ['$q', '$http',

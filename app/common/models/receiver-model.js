@@ -1,7 +1,8 @@
 ﻿angular.module('gimmi.models.person', [
-	'gimmi.person'
+	'gimmi.person',
+	'gimmi.config'
 ])
-	.service('receiverModel', ["$http", "$q", "PersonService", function($http, $q, PersonService) {
+	.service('receiverModel', ["$http", "$q", "PersonService", "CONFIG", function($http, $q, PersonService, CONFIG) {
 
 		var model = this,
 			URLS = {

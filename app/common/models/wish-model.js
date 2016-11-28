@@ -1,7 +1,7 @@
 ﻿angular.module('gimmi.models.wish', [
-
+	'gimmi.config'
 ])
-	.service('wishModel', function($http, $q){
+	.service('wishModel', function($http, $q, CONFIG){
 		var model = this,
 			URLS = {
 				FETCH: CONFIG.apiUrl + '/api/wishes',
