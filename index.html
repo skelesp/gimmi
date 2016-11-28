@@ -25,32 +25,8 @@
 
 	</head>
 
-	<body>
-		<!-- Fixed navbar -->
-	  <div class="navbar navbar-default navbar-fixed-top">
-	    <div class="container">
-				<div class="navbar-header">
-	        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-	        </button>
-					<a class="navbar-left" ui-sref="gimmi">
-						<img class="navbar-logo" src="layout/theme/assets/img/logoGIMMI v2.0.png" alt="">
-					</a>
-	        <a class="navbar-brand" ui-sref="gimmi">
-						<b>GIMMI</b>
-					</a>
-	      </div>
-				<div class="navbar-collapse collapse">
-	        <ul class="nav navbar-nav navbar-right">
-	          <li><a ui-sref="gimmi.login">Login</a></li>
-						<li><a ui-sref="gimmi.register_person">Registreer</a></li>
-	        </ul>
-	      </div><!--/.nav-collapse -->
-	    </div><!-- /container -->
-	  </div><!-- /navbar -->
-
+	<body ng-controller="ApplicationCtrl as ApplicationCtrl">
+	  <div ui-view="navbar"></div>
 		<div id="headerwrap">
 			<div class="container">
 				<div class="row">
@@ -62,7 +38,6 @@
 				</div><!-- /row -->
 			</div><!-- /container -->
 		</div><!-- /headerwrap -->
-
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12" ui-view="content"></div><!-- /col-lg-9 -->

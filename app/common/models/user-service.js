@@ -5,7 +5,6 @@ angular.module('gimmi.authentication', [
     ['$q', '$localStorage', '$http', 'PersonService',
     function ($q, $localStorage, $http, PersonService) {
       // create user variable
-      var user = null;
       var baseUrl = "http://localhost:5000/api";
       var currentUser = getUserFromStorage();
 
@@ -29,7 +28,7 @@ angular.module('gimmi.authentication', [
           }
           return window.atob(output);
       }
-      //TODO: change to "getUserFromStorage"
+ 
       function getUserFromStorage() {
           var token = $localStorage.token;
           var person = {};
@@ -40,6 +39,9 @@ angular.module('gimmi.authentication', [
           return person;
       }
 
+      function isLoggedIn(){
+        return !angular.isUndefined(currentUser);
+      }
       // - Authenticate a person on the server -
       function authenticate (email, password) {
         // Create a new instance of deferred
@@ -49,18 +51,15 @@ angular.module('gimmi.authentication', [
         // Handle success
         .success(function(data, status){
           if (status === 200 && data.token) {
-            user = true;
             $localStorage.token = data.token;
             currentUser = PersonService.getPersonFromToken(data.token);
             deferred.resolve(currentUser);
           } else {
-            user = false;
             deferred.reject();
           }
         })
         // Handle error
         .error(function(data){
-          user = false;
           deferred.reject();
         });
         // Return promise object
@@ -70,6 +69,7 @@ angular.module('gimmi.authentication', [
       // - Logout a person -
       function logout(){
         delete $localStorage.token;
+        currentUser = {};
       }
 
       // - Get current user
@@ -80,7 +80,9 @@ angular.module('gimmi.authentication', [
       // return available functions for use in the controllers
       return ({
         getCurrentUser: getCurrentUser,
+        currentUser: currentUser,
         authenticate: authenticate,
-        logout: logout
+        logout: logout,
+        isLoggedIn: isLoggedIn
       });
   }]);

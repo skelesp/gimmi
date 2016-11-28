@@ -7,6 +7,12 @@
 	'wishlist.wish',
 	'wishlist.receiver'
 ])
+	.run( ['$rootScope', '$state', '$stateParams',
+		function ($rootScope,   $state,   $stateParams) {
+			$rootScope.$state = $state;
+			$rootScope.$stateParams = $stateParams;
+		}
+	])
 	.config(function($stateProvider, $urlRouterProvider, $httpProvider){
 		$stateProvider
 			.state('gimmi', {
@@ -18,6 +24,9 @@
 					},
 					'content@': {
 						templateUrl: 'app/intro.tmpl.html'
+					},
+					'navbar@': {
+						templateUrl: 'app/navigation/navbar.tmpl.html'
 					}
 				}
 			})
@@ -44,4 +53,20 @@
             };
         }]);
 	})
+	.controller('ApplicationCtrl', ['$scope', '$state', 'UserService', function($scope, $state, UserService){
+		var self = this;
+
+		self.currentUser = UserService.getCurrentUser();
+
+		$scope.$on('login', function(_, user){
+			self.currentUser = user;
+		})
+
+		self.logout = function(){
+      UserService.logout();
+      self.currentUser = null;
+			$scope.$broadcast('logout');
+      $state.go('gimmi.login');
+    };
+	}])
 ;

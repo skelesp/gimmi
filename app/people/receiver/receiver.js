@@ -9,15 +9,11 @@
 			.state('gimmi.login', {
 				url: 'login',
 				views: {
-					'content@': {
+					'receiverSearch@': {
 						templateUrl: 'app/people/receiver/login.tmpl.html',
 						controller:'loginCtrl as loginCtrl'
 					}
 				}
-			})
-			.state('gimmi.logout', {
-				url: 'logout',
-				controller: 'logoutCtrl as logoutCtrl'
 			})
 			.state('gimmi.person',{
 				url: 'person/:personID',
@@ -25,7 +21,7 @@
 			.state('gimmi.register_person', {
 				url: 'registration',
 				views: {
-					'content@' : {
+					'receiverSearch@' : {
 						templateUrl: 'app/people/receiver/person_registration.tmpl.html',
 						controller: 'personRegistrationCtrl as personRegistrationCtrl'
 					}
@@ -33,8 +29,12 @@
 			})
 		;
 	})
-	.controller('loginCtrl', function($localStorage, $state, UserService){
+	.controller('loginCtrl', function($localStorage, $state, $scope, UserService){
 		var self = this;
+
+		self.isLoggedIn = function(){
+			return UserService.isLoggedIn();
+		}
 
 		self.login = function() {
 			// Set variables to detect errors
@@ -45,7 +45,9 @@
 			// Call login from service
 			UserService.authenticate(self.email, self.password)
 				.then(function(user){
-					console.log("Succesvol ingelogd met " + user.email + "("+user._id+")");
+					console.log("Succesvol ingelogd met ", UserService.getCurrentUser());
+					$scope.$emit('login', user);
+					$scope.$broadcast('login', user);
 					$state.go('gimmi.wishlist',{receiverID: user._id});
 				})
 				.catch(function(){
@@ -53,13 +55,14 @@
 					self.errorMessage = "Invalid username / password";
 					self.disabled = false;
 				});
-
 		}
+
+
 	})
 	.controller('logoutCtrl', function(){
 
 	})
-	.controller('personRegistrationCtrl', ["$state", "$localStorage", "PersonService", function($state, $localStorage, PersonService){
+	.controller('personRegistrationCtrl', ["$state", "$localStorage", "$scope", "PersonService", function($state, $localStorage, $scope, PersonService){
 		var self = this;
 
 		// Set variables to detect errors
@@ -73,7 +76,10 @@
 					function(token){
 						$localStorage.token = token;
 						self.infoMessage = "Registratie voltooid!";
-						$state.go('gimmi.wishlist',{receiverID: PersonService.getPersonFromToken(token)._id});
+						var user = PersonService.getPersonFromToken(token);
+						$scope.$emit('login', user);
+						$scope.$broadcast('login', user);
+						$state.go('gimmi.wishlist',{receiverID: user._id});
 					},
 					function(err){
 						self.error = true;
@@ -84,13 +90,26 @@
 		}
 
 	}])
-	.controller('receiverSearchCtrl', function($scope, $state, receiverModel) {
+	.controller('receiverSearchCtrl', ['$scope', '$state', 'receiverModel', function($scope, $state, receiverModel) {
 		var receiverSearchCtrl = this;
 
 		receiverModel.getReceivers()
 			.then(function(receivers) {
 				receiverSearchCtrl.receivers = receivers;
 			});
+
+		$scope.$on('login', function(_, user){
+			console.log("login");
+			receiverModel.getReceivers()
+				.then(function(receivers) {
+					receiverSearchCtrl.receivers = receivers;
+				});
+		});
+
+		$scope.$on('logout', function(){
+				console.log("logout");
+				receiverSearchCtrl.receivers = null;
+		});
 
 		receiverSearchCtrl.showWishlist = function(keyEvent, selected) {
 		  if (keyEvent.which === 13){
@@ -104,5 +123,5 @@
 			}
 		};
 
-	})
+	}])
 ;
