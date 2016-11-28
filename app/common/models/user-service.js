@@ -5,7 +5,7 @@ angular.module('gimmi.authentication', [
     ['$q', '$localStorage', '$http', 'PersonService',
     function ($q, $localStorage, $http, PersonService) {
       // create user variable
-      var baseUrl = "http://localhost:5000/api";
+      var baseUrl = CONFIG.apiUrl + '/api';
       var currentUser = getUserFromStorage();
 
       function changeUser(user) {

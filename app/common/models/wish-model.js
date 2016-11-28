@@ -4,8 +4,8 @@
 	.service('wishModel', function($http, $q){
 		var model = this,
 			URLS = {
-				FETCH: 'http://localhost:5000/api/wishes',
-				WISH: 'http://localhost:5000/api/wish'
+				FETCH: CONFIG.apiUrl + '/api/wishes',
+				WISH: CONFIG.apiUrl + '/api/wish'
 			},
 			wishes;
 

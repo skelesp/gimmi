@@ -32,11 +32,11 @@ angular.module('gimmi.person', [
       }
 
       // - Register a person to the server -
-      function register(person) {
+      function register(person, config) {
         // create a new instance of deferred
         var deferred = $q.defer();
         // send a post request to the server
-        $http.post('http://localhost:5000/api/people', person)
+        $http.post(CONFIG.apiUrl + '/api/people', person)
           .success(function (data, status) {
             if(status === 201 && data.token){
               deferred.resolve(data.token);
@@ -55,7 +55,7 @@ angular.module('gimmi.person', [
       function getPersonFromID (id) {
   			var deferred = $q.defer();
 
-        $http.get('http://localhost:5000/api/people/'+id)
+        $http.get(CONFIG.apiUrl + '/api/people/'+id)
           .success(function(person){
             if (person) {
               deferred.resolve(person);
@@ -67,7 +67,7 @@ angular.module('gimmi.person', [
           .error(function(data){
             deferred.reject(data.error);
           });
-          
+
   			return deferred.promise;
   		}
 

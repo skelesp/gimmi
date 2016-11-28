@@ -5,7 +5,7 @@
 
 		var model = this,
 			URLS = {
-				FETCH: 'http://localhost:5000/api/people'
+				FETCH: CONFIG.apiUrl + '/api/people'
 			},
 			receivers,
 			currentReceiver;
