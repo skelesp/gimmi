@@ -2,8 +2,8 @@ angular.module('gimmi.person', [
   'gimmi.config'
 ])
   .factory('PersonService',
-    ['$q', '$http',
-    function ($q, $http) {
+    ['$q', '$http', 'CONFIG',
+    function ($q, $http, CONFIG) {
 
       function urlBase64Decode(str) {
           var output = str.replace('-', '+').replace('_', '/');

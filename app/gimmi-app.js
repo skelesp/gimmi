@@ -7,12 +7,6 @@
 	'wishlist.wish',
 	'wishlist.receiver'
 ])
-	.run( ['$rootScope', '$state', '$stateParams',
-		function ($rootScope,   $state,   $stateParams) {
-			$rootScope.$state = $state;
-			$rootScope.$stateParams = $stateParams;
-		}
-	])
 	.config(function($stateProvider, $urlRouterProvider, $httpProvider){
 		$stateProvider
 			.state('gimmi', {

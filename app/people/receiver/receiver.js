@@ -45,7 +45,7 @@
 			// Call login from service
 			UserService.authenticate(self.email, self.password)
 				.then(function(user){
-					console.log("Succesvol ingelogd met ", UserService.getCurrentUser());
+					console.log("Succesvol ingelogd met ", user);
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
 					$state.go('gimmi.wishlist',{receiverID: user._id});
