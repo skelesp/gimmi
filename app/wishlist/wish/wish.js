@@ -30,6 +30,14 @@
 			}
 		};
 
+		wishCtrl.userIsCreator = function(wish){
+			if (UserService.getCurrentUser()._id === wish.createdBy) {
+				return true;
+			} else {
+				return false;
+			}
+		};
+
 		wishCtrl.deleteWish = wishModel.deleteWish;
 		wishCtrl.reserve = wishModel.reserve;
 		wishCtrl.setFree = wishModel.setFree;
