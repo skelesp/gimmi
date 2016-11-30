@@ -23,8 +23,6 @@
 		var wishCtrl = this;
 
 		wishCtrl.userIsReceiver = function(){
-			console.log("Receiver:",receiverModel.getCurrentReceiver());
-			console.log("User:", UserService.getCurrentUser());
 			if (receiverModel.getCurrentReceiver()._id === UserService.getCurrentUser()._id) {
 				return true;
 			} else {
