@@ -1,10 +1,15 @@
-﻿<form class="create-form" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID)" novalidate>
+﻿<form name="wishCreateForm" class="create-form" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID)" novalidate>
 	<div class="form-group">
-		<input type="text" class="form-control" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Titel" />
+		<input type="text" class="form-control" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Titel" required/>
 	</div>
 	<div class="form-group">
-		<input type="text" class="form-control" id="newWishPrice" ng-model="createWishCtrl.newWish.price" placeholder="Prijs"/>
+		<input type="number" class="form-control" name="inputPrice" id="newWishPrice" placeholder="Prijs in € (enkel getal ingeven)" ng-model="createWishCtrl.newWish.price" required/>
+		<span class="help-block" ng-show="!wishCreateForm.inputPrice.$error">
+      Foute input!
+    </span>
 	</div>
-	<button type="submit" class="btn btn-info btn-lg">Toevoegen</button>
-	<button type="button" class="btn btn-default btn-lg pull-right" ng-click="createWishCtrl.cancelCreating();">Annuleer</button>
+	<button type="submit" class="btn btn-info btn-lg"
+					ng-disabled="wishCreateForm.inputPrice.$invalid">Toevoegen</button>
+	<button type="button" class="btn btn-default btn-lg pull-right"
+					ng-click="createWishCtrl.cancelCreating();">Annuleer</button>
 </form>
