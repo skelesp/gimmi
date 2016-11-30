@@ -52,9 +52,11 @@
 			return deferred.promise;
 		};
 
-		model.createWish = function (wish, receiverID){
+		model.createWish = function (wish, receiverID, userID){
 			wish.receiver = receiverID;
+			wish.createdBy = userID;
 			wish.status = "free";
+			console.log(wish);
 			$http.post(URLS.WISH, wish).success(function(wish){
 				wishes.push(wish);
 			});

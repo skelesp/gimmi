@@ -11,7 +11,7 @@
       ;
   })
 
-  .controller('createWishCtrl', function($state, $stateParams, wishModel, receiverModel){
+  .controller('createWishCtrl', function($state, $stateParams, wishModel, receiverModel, UserService){
     var createWishCtrl = this;
 
     function returnToWishes(){
@@ -24,8 +24,8 @@
       returnToWishes();
     }
 
-    function createWish(wish, receiverID) {
-      wishModel.createWish(wish, receiverID);
+    function createWish(wish, receiverID, userID) {
+      wishModel.createWish(wish, receiverID, userID);
       returnToWishes();
     }
 
@@ -40,6 +40,7 @@
     createWishCtrl.createWish = createWish;
 
     createWishCtrl.currentReceiverID = receiverModel.getCurrentReceiver()._id;
+    createWishCtrl.currentUserID = UserService.getCurrentUser()._id;
 
     resetForm();
 
