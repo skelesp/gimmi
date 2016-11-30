@@ -45,7 +45,6 @@
 			// Call login from service
 			UserService.authenticate(self.email, self.password)
 				.then(function(user){
-					console.log("Succesvol ingelogd met ", user);
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
 					$state.go('gimmi.wishlist',{receiverID: user._id});
@@ -99,7 +98,6 @@
 			});
 
 		$scope.$on('login', function(_, user){
-			console.log("login");
 			receiverModel.getReceivers()
 				.then(function(receivers) {
 					receiverSearchCtrl.receivers = receivers;
@@ -107,14 +105,11 @@
 		});
 
 		$scope.$on('logout', function(){
-				console.log("logout");
 				receiverSearchCtrl.receivers = null;
 		});
 
 		receiverSearchCtrl.showWishlist = function(keyEvent, selected) {
 		  if (keyEvent.which === 13){
-				console.log(selected);
-
 				receiverModel.getReceiverByName(selected.name)
 					.then(function(receiver){
 						$state.go('gimmi.wishlist',{receiverID: receiver.id});
