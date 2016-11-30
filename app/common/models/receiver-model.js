@@ -1,4 +1,4 @@
-﻿angular.module('gimmi.models.person', [
+﻿angular.module('gimmi.models.receiver', [
 	'gimmi.person',
 	'gimmi.config'
 ])

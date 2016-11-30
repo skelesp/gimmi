@@ -1,6 +1,6 @@
 ﻿angular.module('wishlist', [
 	'gimmi.models.wishlist',
-	'gimmi.models.person',
+	'gimmi.models.receiver',
 	'wishlist.receiver'
 ])
 	.config(function($stateProvider){

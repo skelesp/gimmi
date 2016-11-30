@@ -1,6 +1,6 @@
 ﻿angular.module('wishlist.receiver', [
 	'gimmi.models.wishlist',
-	'gimmi.models.person',
+	'gimmi.models.receiver',
 	'gimmi.authentication',
 	'gimmi.person'
 ])
