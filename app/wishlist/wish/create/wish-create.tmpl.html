@@ -1,15 +1,47 @@
-﻿<form name="wishCreateForm" class="create-form" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, createWishCtrl.currentUserID)" novalidate>
+﻿<form name="wishCreateForm"
+			class="create-form"
+			role="form"
+			ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, createWishCtrl.currentUserID)"
+			novalidate>
+
 	<div class="form-group">
-		<input type="text" class="form-control" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Titel" required/>
+		<input 	type="text"
+						class="form-control"
+						id="newWishTitle"
+						ng-model="createWishCtrl.newWish.title"
+						placeholder="Titel"
+						required/>
 	</div>
 	<div class="form-group">
-		<input type="number" class="form-control" name="inputPrice" id="newWishPrice" placeholder="Prijs in € (enkel getal ingeven)" ng-model="createWishCtrl.newWish.price" required/>
+		<input 	type="number"
+						class="form-control"
+						name="inputPrice"
+						id="newWishPrice"
+						placeholder="Prijs in € (enkel getal ingeven)"
+						ng-model="createWishCtrl.newWish.price"
+						required/>
 		<span class="help-block" ng-show="!wishCreateForm.inputPrice.$error">
-      Foute input!
+      Enkel getallen toegelaten!
     </span>
 	</div>
-	<button type="submit" class="btn btn-info btn-lg"
-					ng-disabled="wishCreateForm.inputPrice.$invalid">Toevoegen</button>
-	<button type="button" class="btn btn-default btn-lg pull-right"
-					ng-click="createWishCtrl.cancelCreating();">Annuleer</button>
+	<input 	type="url"
+					class="form-control"
+					name="inputUrl"
+					id="newWishUrl"
+					ng-model="createWishCtrl.newWish.url"
+					placeholder="Link naar het cadeau"/>
+	<span class="help-block" ng-show="!wishCreateForm.inputUrl.$error">
+		Dit is geen geldige link (vergeet "http://" niet)!
+	</span>
+</div>
+	<button type="submit"
+					class="btn btn-info btn-lg"
+					ng-disabled="wishCreateForm.inputPrice.$invalid">
+						Toevoegen
+	</button>
+	<button type="button"
+					class="btn btn-default btn-lg"
+					ng-click="createWishCtrl.reset();">
+						Reset
+	</button>
 </form>

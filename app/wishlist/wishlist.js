@@ -20,6 +20,10 @@
 					'wishlist_item@gimmi.wishlist': {
 						templateUrl: 'app/wishlist/wishlist_item.tmpl.html',
 						controller: 'wishCtrl as wishCtrl'
+					},
+					'wish_create@gimmi.wishlist': {
+						templateUrl: 'app/wishlist/wish/create/wish-create.tmpl.html',
+						controller: 'createWishCtrl as createWishCtrl'
 					}
 				}
 			})
@@ -38,4 +42,36 @@
 			currentReceiver.fullName = currentReceiver.firstName + " " + currentReceiver.lastName
 			wishlistCtrl.currentReceiver = currentReceiver;
 	})
+
+	.controller('createWishCtrl', function($state, $stateParams, wishModel, receiverModel, UserService){
+    var createWishCtrl = this;
+
+    function returnToWishes(){
+      $state.go('gimmi.wishlist', {
+        receiverID: $stateParams.receiverID
+      })
+    }
+
+    function createWish(wish, receiverID, userID) {
+			console.log(wish);
+      wishModel.createWish(wish, receiverID, userID);
+      returnToWishes();
+    }
+
+    function resetForm() {
+      createWishCtrl.newWish = {
+        title: '',
+        price: ''
+      }
+    }
+
+    createWishCtrl.reset = resetForm;
+    createWishCtrl.createWish = createWish;
+
+    createWishCtrl.currentReceiverID = receiverModel.getCurrentReceiver()._id;
+    createWishCtrl.currentUserID = UserService.getCurrentUser()._id;
+
+    resetForm();
+
+  })
 ;
