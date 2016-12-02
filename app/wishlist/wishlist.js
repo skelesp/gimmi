@@ -1,7 +1,9 @@
 ﻿angular.module('wishlist', [
 	'gimmi.models.wishlist',
 	'gimmi.models.receiver',
-	'wishlist.receiver'
+	'wishlist.receiver',
+	'gimmi.config',
+	'gimmi.authentication'
 ])
 	.config(function($stateProvider){
 		$stateProvider
@@ -27,23 +29,34 @@
 					}
 				}
 			})
+			.state('gimmi.wishlist.send',{
+				url: '/send',
+				views:{
+					'content@': {
+						templateUrl: 'app/wishlist/sendWishlist.tmpl.html',
+						controller: 'sendWishlistController as sendWishlistCtrl'
+					}
+				}
+			})
 		;
 	})
 
-	.controller('wishlistCtrl', function wishlistCtrl($stateParams, wishModel, receiverModel){
+	.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService',
+					function wishlistCtrl($stateParams, wishModel, receiverModel, UserService){
 		var wishlistCtrl = this;
 
+		var currentReceiver = receiverModel.getCurrentReceiver();
+		wishlistCtrl.currentReceiver = currentReceiver;
+		wishlistCtrl.userIsReceiver = UserService.userIsReceiver();
+		
 		//TODO: get wishes for this receiver
-		wishModel.getWishes()
-			.then(function(wishes) {
-				wishlistCtrl.wishes = wishes;
-			});
-			var currentReceiver = receiverModel.getCurrentReceiver();
-			currentReceiver.fullName = currentReceiver.firstName + " " + currentReceiver.lastName
-			wishlistCtrl.currentReceiver = currentReceiver;
-	})
+		wishModel.getWishes().then(function(wishes) {
+			wishlistCtrl.wishes = wishes;
+		});
+	}])
 
-	.controller('createWishCtrl', function($state, $stateParams, wishModel, receiverModel, UserService){
+	.controller('createWishCtrl', ['$state', '$stateParams', 'wishModel', 'receiverModel', 'UserService',
+												function($state, $stateParams, wishModel, receiverModel, UserService){
     var createWishCtrl = this;
 
     function returnToWishes(){
@@ -73,5 +86,10 @@
 
     resetForm();
 
-  })
+  }])
+	.controller('sendWishlistController', ['$stateParams', 'CONFIG', function($stateParams, CONFIG){
+		var self = this;
+
+		self.url = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
+	}])
 ;

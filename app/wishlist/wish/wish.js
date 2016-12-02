@@ -22,13 +22,7 @@
 	.controller('wishCtrl', function($stateParams, wishModel, receiverModel, UserService) {
 		var wishCtrl = this;
 
-		wishCtrl.userIsReceiver = function(){
-			if (receiverModel.getCurrentReceiver()._id === UserService.getCurrentUser()._id) {
-				return true;
-			} else {
-				return false;
-			}
-		};
+		wishCtrl.userIsReceiver = UserService.userIsReceiver();
 
 		wishCtrl.userIsCreator = function(wish){
 			if (UserService.getCurrentUser()._id === wish.createdBy) {

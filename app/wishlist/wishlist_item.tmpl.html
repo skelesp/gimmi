@@ -1,6 +1,6 @@
 <div class="thumbnail" ng-class="{'reserved': wish.status === 'reserved'}">
 
-    <button ng-show="wishCtrl.userIsReceiver() || wishCtrl.userIsCreator(wish)" type="button"	class="close"
+    <button ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish)" type="button"	class="close"
           ng-click="wishCtrl.deleteWish(wish)" >
           <span class="glyphicon glyphicon-trash"></span>
     </button>

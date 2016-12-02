@@ -1,24 +1,17 @@
 <div class="row">
 	<div ng-if="wishlistCtrl.currentReceiver">
 
-		<h3>Lijst van {{wishlistCtrl.currentReceiver.fullName}}</h3>
+		<h3>
+			Cadeau-ideeën voor {{wishlistCtrl.currentReceiver.fullName}}
+			<span class="label label-success pull-right"
+						ng-show="wishlistCtrl.userIsReceiver" >
+						<a ui-sref="gimmi.wishlist.send">Verstuur mijn lijst</a>
+			</span>
+		</h3>
 		<hr/>
 
 		<div class="col-md-3" ui-view="wish_create">
 		</div> <!-- /Thumbnail -->
-
-		<!-- Button to create a wish
-			<div class="col-md-3" ui-view >
-			<div class="thumbnail create">
-				<button type="button" class="btn btn-create"
-								ui-sref="gimmi.wishlist.newWish">
-					<span class="glyphicon glyphicon-plus"></span>
-					<p>Creëer een cadeau idee</p>
-				</button>
-			</div>
-		-->
-
-		</div> <!-- /col-md-4 -->
 
 		<div ng-if="wishlistCtrl.currentReceiver" ng-repeat="wish in wishlistCtrl.wishes | filter: {receiver: wishlistCtrl.currentReceiver._id}"
 				 class="col-md-3">
@@ -31,3 +24,15 @@
 
 	</div> <!-- /col-md-12 -->
 </div> <!-- /row -->
+
+<!-- Button to create a wish
+	<div class="col-md-3" ui-view >
+		<div class="thumbnail create">
+			<button type="button" class="btn btn-create"
+							ui-sref="gimmi.wishlist.newWish">
+				<span class="glyphicon glyphicon-plus"></span>
+				<p>Creëer een cadeau idee</p>
+			</button>
+		</div>
+	</div>
+-->

@@ -1,10 +1,11 @@
 angular.module('gimmi.authentication', [
   'gimmi.person',
-  'gimmi.config'
+  'gimmi.config',
+  'gimmi.models.receiver'
 ])
   .factory('UserService',
-    ['$q', '$localStorage', '$http', 'PersonService', 'CONFIG',
-    function ($q, $localStorage, $http, PersonService, CONFIG) {
+    ['$q', '$localStorage', '$http', 'PersonService', 'receiverModel', 'CONFIG',
+    function ($q, $localStorage, $http, PersonService, receiverModel, CONFIG) {
       // create user variable
       var baseUrl = CONFIG.apiUrl + '/api';
       var currentUser = getUserFromStorage();
@@ -78,12 +79,22 @@ angular.module('gimmi.authentication', [
         return currentUser;
       }
 
+      // - Is the user also the receiver?
+      function userIsReceiver(){
+  			if (receiverModel.getCurrentReceiver()._id === getCurrentUser()._id) {
+  				return true;
+  			} else {
+  				return false;
+  			}
+  		};
+
       // return available functions for use in the controllers
       return ({
         getCurrentUser: getCurrentUser,
         currentUser: currentUser,
         authenticate: authenticate,
         logout: logout,
-        isLoggedIn: isLoggedIn
+        isLoggedIn: isLoggedIn,
+        userIsReceiver: userIsReceiver
       });
   }]);
