@@ -10,6 +10,7 @@
     </button>-->
 
   <p class="title">{{wish.title}}</p>
+  <p><a class="url" ng-show="wish.url" href="{{wish.url}}">{{wish.url}}</a></p>
   <p class="price">{{wish.price | currency : "€" : 2}}</p>
   <p><button type="button"  ng-if="wish.status === 'reserved'"
                             ng-click="wishCtrl.setFree(wish)"

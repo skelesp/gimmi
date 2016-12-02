@@ -247,7 +247,7 @@ i {
 /* Thumbnail */
 .thumbnail {
   border-color: #00CC00;
-  min-height: 175px;
+  min-height: 200px;
 }
 .thumbnail.create {
   border: 0px;
@@ -267,6 +267,10 @@ i {
   color: #000;
 }
 
+.url {
+  color: #000;
+}
+
 .price {
  background-color: #009999;
  color: #fff;
@@ -279,6 +283,6 @@ i {
    text-align: center;
    width: 90px;
  position: absolute;
- top: 50px;
+ bottom: 10px;
  right: 30px;
 }
