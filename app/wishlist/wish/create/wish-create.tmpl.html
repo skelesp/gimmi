@@ -20,23 +20,24 @@
 						placeholder="Prijs in € (enkel getal ingeven)"
 						ng-model="createWishCtrl.newWish.price"
 						required/>
-		<span class="help-block" ng-show="!wishCreateForm.inputPrice.$error">
-      Enkel getallen toegelaten!
+			<span ng-show="wishCreateForm.inputPrice.$error.number">
+				Enkel getallen toegelaten!
     </span>
 	</div>
-	<input 	type="url"
-					class="form-control"
-					name="inputUrl"
-					id="newWishUrl"
-					ng-model="createWishCtrl.newWish.url"
-					placeholder="Link naar het cadeau"/>
-	<span class="help-block" ng-show="!wishCreateForm.inputUrl.$error">
-		Dit is geen geldige link (vergeet "http://" niet)!
-	</span>
-</div>
+	<div class="form-group">
+		<input 	type="url"
+						class="form-control"
+						name="inputUrl"
+						id="newWishUrl"
+						ng-model="createWishCtrl.newWish.url"
+						placeholder="Link naar het cadeau"/>
+			<span ng-show="wishCreateForm.inputUrl.$error.url">
+				Dit is geen geldige link (vergeet "http://" niet)!
+			</span>
+	</div>
 	<button type="submit"
 					class="btn btn-info btn-lg"
-					ng-disabled="wishCreateForm.inputPrice.$invalid">
+					ng-disabled="wishCreateForm.$invalid">
 						Toevoegen
 	</button>
 	<button type="button"

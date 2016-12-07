@@ -48,7 +48,7 @@
 		var currentReceiver = receiverModel.getCurrentReceiver();
 		wishlistCtrl.currentReceiver = currentReceiver;
 		wishlistCtrl.userIsReceiver = UserService.userIsReceiver();
-		
+
 		//TODO: get wishes for this receiver
 		wishModel.getWishes().then(function(wishes) {
 			wishlistCtrl.wishes = wishes;
@@ -66,7 +66,6 @@
     }
 
     function createWish(wish, receiverID, userID) {
-			console.log(wish);
       wishModel.createWish(wish, receiverID, userID);
       returnToWishes();
     }
