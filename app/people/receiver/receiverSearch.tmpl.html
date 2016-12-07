@@ -1,3 +1,8 @@
+<form name="receiverSearchForm"
+      class="searchForm"
+      role="form"
+      ng-submit=""
+      novalidate>
 <label for="receiverSearch"><h2>Wie wil je gelukkig maken?</h2></label>
   <div id="custom-search-input">
       <div class="input-group col-md-12">
@@ -18,6 +23,56 @@
           </span>
       </div>
   </div> <!-- /custom-search-input -->
-  <div ng-if="noResults">
-    Geen resultaten gevonden!
+  <div ng-if="noResults && selected">
+    Geen personen gevonden!
   </div>
+</form>
+<!--
+  <form name="wishCreateForm"
+  			class="create-form"
+  			role="form"
+  			ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, createWishCtrl.currentUserID)"
+  			novalidate>
+
+  	<div class="form-group">
+  		<input 	type="text"
+  						class="form-control"
+  						id="newWishTitle"
+  						ng-model="createWishCtrl.newWish.title"
+  						placeholder="Titel"
+  						required/>
+  	</div>
+  	<div class="form-group">
+  		<input 	type="number"
+  						class="form-control"
+  						name="inputPrice"
+  						id="newWishPrice"
+  						placeholder="Prijs in € (enkel getal ingeven)"
+  						ng-model="createWishCtrl.newWish.price"
+  						required/>
+  		<span class="help-block" ng-show="!wishCreateForm.inputPrice.$error">
+        Enkel getallen toegelaten!
+      </span>
+  	</div>
+  	<input 	type="url"
+  					class="form-control"
+  					name="inputUrl"
+  					id="newWishUrl"
+  					ng-model="createWishCtrl.newWish.url"
+  					placeholder="Link naar het cadeau"/>
+  	<span class="help-block" ng-show="!wishCreateForm.inputUrl.$error">
+  		Dit is geen geldige link (vergeet "http://" niet)!
+  	</span>
+  </div>
+  	<button type="submit"
+  					class="btn btn-info btn-lg"
+  					ng-disabled="wishCreateForm.inputPrice.$invalid">
+  						Toevoegen
+  	</button>
+  	<button type="button"
+  					class="btn btn-default btn-lg"
+  					ng-click="createWishCtrl.reset();">
+  						Reset
+  	</button>
+  </form>
+-->

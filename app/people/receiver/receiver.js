@@ -110,7 +110,7 @@
 
 		receiverSearchCtrl.showWishlist = function(keyEvent, selected) {
 		  if (keyEvent.which === 13){
-				receiverModel.getReceiverByName(selected.name)
+				receiverModel.getReceiverByName(selected.fullName)
 					.then(function(receiver){
 						$state.go('gimmi.wishlist',{receiverID: receiver.id});
 					});

@@ -48,7 +48,7 @@
 
 			function findReceiver() {
 				return _.find(receivers, function(r){
-					return r.name === receiverName;
+					return r.fullName === receiverName;
 				})
 			}
 
