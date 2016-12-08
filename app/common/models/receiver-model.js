@@ -24,6 +24,11 @@
 			return (receivers) ? $q.when(receivers) : $http.get(URLS.FETCH).then(cacheReceivers);
 		};
 
+		model.refreshReceivers = function(){
+			receivers = null;
+			return model.getReceivers();
+		}
+
 		model.setCurrentReceiver = function (receiverID){
 				return PersonService.getPersonFromID(receiverID)
 					.then(function(receiver){

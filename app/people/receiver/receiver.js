@@ -61,7 +61,7 @@
 	.controller('logoutCtrl', function(){
 
 	})
-	.controller('personRegistrationCtrl', ["$state", "$localStorage", "$scope", "PersonService", function($state, $localStorage, $scope, PersonService){
+	.controller('personRegistrationCtrl', ["$state", "$localStorage", "$scope", "PersonService", "receiverModel", function($state, $localStorage, $scope, PersonService, receiverModel){
 		var self = this;
 
 		// Set variables to detect errors
@@ -78,6 +78,10 @@
 						var user = PersonService.getPersonFromToken(token);
 						$scope.$emit('login', user);
 						$scope.$broadcast('login', user);
+						receiverModel.refreshReceivers()
+							.then(function(receivers) {
+								console.log("receivers updated", receivers);
+							});
 						$state.go('gimmi.wishlist',{receiverID: user._id});
 					},
 					function(err){
