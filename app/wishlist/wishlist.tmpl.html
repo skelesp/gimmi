@@ -7,6 +7,10 @@
 						ng-show="wishlistCtrl.userIsReceiver" >
 						<a ui-sref="gimmi.wishlist.send">Verstuur mijn lijst</a>
 			</span>
+			<span class="label label-default pull-right"
+						ng-show="!wishlistCtrl.userIsReceiver" >
+						<a ui-sref="gimmi.wishlist({receiverID: wishlistCtrl.currentUserID})">Ga naar mijn lijst</a>
+			</span>
 		</h3>
 		<hr/>
 

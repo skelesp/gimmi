@@ -48,6 +48,7 @@
 		var currentReceiver = receiverModel.getCurrentReceiver();
 		wishlistCtrl.currentReceiver = currentReceiver;
 		wishlistCtrl.userIsReceiver = UserService.userIsReceiver();
+		wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
 
 		//TODO: get wishes for this receiver
 		wishModel.getWishes().then(function(wishes) {
