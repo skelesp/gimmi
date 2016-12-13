@@ -33,13 +33,40 @@ angular.module('gimmi.authentication', [
  
       function getUserFromStorage() {
           var token = $localStorage.token;
-          var person = {};
-          if (typeof token !== 'undefined') {
+          var user = {};
+          if (typeof token !== 'undefined' ) {
               var encoded = token.split('.')[1];
-              person = JSON.parse(urlBase64Decode(encoded));
+              var decoded = JSON.parse(urlBase64Decode(encoded));
+              if (! isExpired(decoded.exp)) {
+                user = decoded;
+              } else {
+                delete $localStorage.token;
+                currentUser = {};
+              }
           }
-          return person;
+          return user;
       }
+
+      function isExpired (expDate) {
+        if (expDate){
+          return expDate <= Date.now()/1000;
+        } else {
+          return true; //True if the token has not the expiration time field
+        }
+      }
+
+      function timeConverter(UNIX_timestamp){
+        var a = new Date(UNIX_timestamp * 1000);
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var year = a.getFullYear();
+        var month = months[a.getMonth()];
+        var date = a.getDate();
+        var hour = a.getHours();
+        var min = a.getMinutes();
+        var sec = a.getSeconds();
+        var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+        return time;
+      }
 
       function isLoggedIn(){
         return !angular.isUndefined(currentUser);
