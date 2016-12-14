@@ -24,7 +24,11 @@
 	</div> <!-- /receiver found -->
 
 	<div class="col-md-12" ui-view ng-if="! wishlistCtrl.currentReceiver">
-		<h4>Sorry, geen lijst gevonden.</h4>
+		<h4>Sorry, geen lijst gevonden. Vermoedelijk hebt u een foute link gebruikt.</h4>
+		<span class="label label-default pull-left"
+					ng-show="!wishlistCtrl.userIsReceiver" >
+					<a ui-sref="gimmi.wishlist({receiverID: wishlistCtrl.currentUserID})">Ga naar uw eigen lijst</a>
+		</span>
 
 	</div> <!-- /col-md-12 -->
 </div> <!-- /row -->

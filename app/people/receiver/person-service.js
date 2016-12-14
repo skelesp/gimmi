@@ -61,7 +61,7 @@ angular.module('gimmi.person', [
               deferred.resolve(person);
             } else {
               var error = "Person not found."
-              deferred.resolve(error);
+              deferred.reject(error);
             }
           })
           .error(function(data){

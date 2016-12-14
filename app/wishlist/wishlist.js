@@ -46,14 +46,20 @@
 		var wishlistCtrl = this;
 
 		var currentReceiver = receiverModel.getCurrentReceiver();
-		wishlistCtrl.currentReceiver = currentReceiver;
-		wishlistCtrl.userIsReceiver = UserService.userIsReceiver();
 		wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
+		wishlistCtrl.currentReceiver = currentReceiver;
+		if (currentReceiver) {
+				wishlistCtrl.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
+		} else {
+			wishlistCtrl.userIsReceiver = false;
+		}
 
 		//TODO: get wishes for this receiver
-		wishModel.getWishes().then(function(wishes) {
-			wishlistCtrl.wishes = wishes;
-		});
+		if (currentReceiver) {
+			wishModel.getWishes().then(function(wishes) {
+				wishlistCtrl.wishes = wishes;
+			});
+		}
 	}])
 
 	.controller('createWishCtrl', ['$state', '$stateParams', 'wishModel', 'receiverModel', 'UserService',

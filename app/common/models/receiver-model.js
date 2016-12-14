@@ -33,6 +33,8 @@
 				return PersonService.getPersonFromID(receiverID)
 					.then(function(receiver){
 						currentReceiver = receiver;
+					}, function(error){
+						console.error("current receiver not found by id!");
 					});
 		};
 
