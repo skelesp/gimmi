@@ -49,16 +49,13 @@
 		wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
 		wishlistCtrl.currentReceiver = currentReceiver;
 		if (currentReceiver) {
+				//TODO: get ONLY the wishes for this receiver
+				wishModel.getWishes().then(function(wishes) {
+					wishlistCtrl.wishes = wishes;
+				});
 				wishlistCtrl.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
 		} else {
 			wishlistCtrl.userIsReceiver = false;
-		}
-
-		//TODO: get wishes for this receiver
-		if (currentReceiver) {
-			wishModel.getWishes().then(function(wishes) {
-				wishlistCtrl.wishes = wishes;
-			});
 		}
 	}])
 

@@ -54,19 +54,21 @@ angular.module('gimmi.person', [
       // - Get person from ID
       function getPersonFromID (id) {
   			var deferred = $q.defer();
-
-        $http.get(CONFIG.apiUrl + '/api/people/'+id)
-          .success(function(person){
-            if (person) {
-              deferred.resolve(person);
-            } else {
-              var error = "Person not found."
-              deferred.reject(error);
-            }
-          })
-          .error(function(data){
-            deferred.reject(data.error);
-          });
+        if (id) {
+          $http.get(CONFIG.apiUrl + '/api/people/'+id)
+            .success(function(person){
+              if (person) {
+                deferred.resolve(person);
+              } else {
+                deferred.reject("Person not found.");
+              }
+            })
+            .error(function(data){
+              deferred.reject(data.error);
+            });
+        } else {
+          deferred.reject("No id provided");
+        }
 
   			return deferred.promise;
   		}

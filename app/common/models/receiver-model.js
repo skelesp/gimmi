@@ -34,7 +34,11 @@
 					.then(function(receiver){
 						currentReceiver = receiver;
 					}, function(error){
-						console.error("current receiver not found by id!");
+						if (error) {
+							console.error(error);
+						} else {
+							console.error("current receiver not found by id!");
+						}
 					});
 		};
 
