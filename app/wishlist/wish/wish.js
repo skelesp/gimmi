@@ -20,21 +20,29 @@
 	})
 
 	.controller('wishCtrl', function($stateParams, wishModel, receiverModel, UserService) {
-		var wishCtrl = this;
+		var self = this;
 
-		wishCtrl.userIsReceiver = UserService.userIsReceiver();
+		self.userIsReceiver = UserService.userIsReceiver();
 
-		wishCtrl.userIsCreator = function(wish){
-			if (UserService.getCurrentUser()._id === wish.createdBy) {
+		self.userIsCreator = function(creatorID){
+			if (UserService.getCurrentUser()._id === creatorID) {
 				return true;
 			} else {
 				return false;
 			}
 		};
 
-		wishCtrl.deleteWish = wishModel.deleteWish;
-		wishCtrl.reserve = wishModel.reserve;
-		wishCtrl.setFree = wishModel.setFree;
+		self.reservedByUser = function(reservatorID){
+			if (UserService.getCurrentUser()._id === reservatorID) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		self.deleteWish = wishModel.deleteWish;
+		self.reserve = wishModel.reserve;
+		self.setFree = wishModel.setFree;
 	})
 
 ;

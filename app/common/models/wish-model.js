@@ -56,7 +56,7 @@
 			wish.receiver = receiverID;
 			wish.createdBy = userID;
 			wish.status = "free";
-			console.log(wish);
+
 			$http.post(URLS.WISH, wish).success(function(wish){
 				wishes.push(wish);
 			});
@@ -82,13 +82,15 @@
 
 		}
 
-		model.reserve = function(wish) {
+		model.reserve = function(wish, reservator) {
 			wish.status = "reserved";
+			wish.reservedBy = reservator._id;
 			model.updateWish(wish);
 		}
 
 		model.setFree = function(wish) {
 			wish.status = "free";
+			wish.reservedBy = null;
 			model.updateWish(wish);
 		}
 

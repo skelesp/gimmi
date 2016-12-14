@@ -1,6 +1,6 @@
 <div class="thumbnail" ng-class="{'reserved': wish.status === 'reserved'}">
 
-    <button ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish)" type="button"	class="close"
+    <button ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)" type="button"	class="close"
           ng-click="wishCtrl.deleteWish(wish)" >
           <span class="glyphicon glyphicon-trash"></span>
     </button>
@@ -12,15 +12,21 @@
   <p class="title">{{wish.title}}</p>
   <p><a class="url" ng-show="wish.url" href="{{wish.url}}" target="_blank">{{wish.url}}</a></p>
   <p class="price">{{wish.price | currency : "€" : 2}}</p>
-  <p><button type="button"  ng-if="wish.status === 'reserved'"
-                            ng-click="wishCtrl.setFree(wish)"
-                            class="text-capitalize btn btn-reserved">
-      {{wish.status}}
+  <button type="button"
+          ng-show="wish.status === 'reserved' && wishCtrl.reservedByUser(wish.reservedBy._id)"
+          ng-click="wishCtrl.setFree(wish)"
+          class="btn btn-reserved">
+  Annuleer uw reservatie
   </button>
-  <button type="button"  ng-if="wish.status !== 'reserved'"
-                            ng-click="wishCtrl.reserve(wish)"
-                            class="btn btn-default">
+  <span ng-show="wish.status === 'reserved' && !wishCtrl.reservedByUser(wish.reservedBy._id)"
+        class="label label-danger">
+  Gereserveerd door {{wish.reservedBy.firstName}}
+  </span>
+  <button type="button"
+          ng-if="wish.status !== 'reserved'"
+          ng-click="wishCtrl.reserve(wish, ApplicationCtrl.currentUser)"
+          class="btn btn-default">
       Reserveer
-  </button></p>
+  </button>
 
 </div> <!-- /Thumbnail div -->

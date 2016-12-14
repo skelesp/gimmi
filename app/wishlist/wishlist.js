@@ -64,9 +64,7 @@
     var createWishCtrl = this;
 
     function returnToWishes(){
-      $state.go('gimmi.wishlist', {
-        receiverID: $stateParams.receiverID
-      })
+      $state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
     }
 
     function createWish(wish, receiverID, userID) {
@@ -77,7 +75,8 @@
     function resetForm() {
       createWishCtrl.newWish = {
         title: '',
-        price: ''
+        price: '',
+				url: ''
       }
     }
 
