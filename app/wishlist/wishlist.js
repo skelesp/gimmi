@@ -69,6 +69,7 @@
 
     function createWish(wish, receiverID, userID) {
       wishModel.createWish(wish, receiverID, userID);
+			resetForm();
       returnToWishes();
     }
 
