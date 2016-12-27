@@ -1,26 +1,61 @@
-<!-- Fixed navbar -->
-<div class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-left" ui-sref="gimmi">
-        <img class="navbar-logo" src="layout/theme/assets/img/logoGIMMI.png" alt="">
-      </a>
-      <a class="navbar-brand" ui-sref="gimmi">
-        <b>GIMMI v0.3</b>
-      </a>
+<!-- main menu -->
+
+<header class='sticky-header header-on-bg'>
+  <nav class="main-nav red">
+    <div class="full-wrapper">
+
+      <!-- menu logo -->
+      <div class="nav-logo-wrap">
+        <a href="index.html" class="logo">
+          <img alt src="layout/avonmore_shop_test/images/logoGIMMI.png">
+        </a>
+        GIMMI v0.4
+      </div>
+      <!-- /menu logo -->
+
+      <!-- menu mobile button -->
+
+      <div class="mobile-nav">
+        <div class="menu-button"><span></span><span></span><span></span></div>
+      </div>
+
+      <!-- /menu mobile button -->
+
+      <div class="inner-nav hidden-nav desktop-nav font-alt">
+        <ul class="clearlist">
+          <li>
+            <a href="index.html" class="nav-submenu active"><div class='slide-container'><span>Home</span></div></a>
+
+            <!-- submenu -->
+
+            <ul class="submenu submenu-right">
+              <li>
+                <a href="index-main.html"><div class='slide-container'><span>Homepage Main</span></div></a>
+              </li>
+              <li>
+                <a href="index-portfolio.html"><div class='slide-container'><span>Homepage Portfolio</span></div></a>
+              </li>
+              <li>
+                <a href="index-blog.html"><div class='slide-container'><span>Homepage Blog</span></div></a>
+              </li>
+              <li>
+                <a href="index-shop.html"><div class='slide-container'><span>Homepage Shop</span></div></a>
+              </li>
+            </ul>
+
+            <!-- /submenu -->
+          </li>
+        </ul>
+
+        <!-- menu button -->
+
+        <div class="menu-button"><span></span><span></span><span></span></div>
+
+        <!-- /menu button -->
+
+      </div>
     </div>
-    <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li ng-hide="ApplicationCtrl.currentUser._id"><a ui-sref="gimmi.login">Login</a></li>
-        <li ng-hide="ApplicationCtrl.currentUser._id"><a ui-sref="gimmi.register_person">Registreer</a></li>
-        <li ng-show="ApplicationCtrl.currentUser._id"><a href="#">Gebruiker: {{ApplicationCtrl.currentUser.firstName}}</a></li>
-        <li ng-show="ApplicationCtrl.currentUser._id"><a ng-click="ApplicationCtrl.logout()">Logout</a></li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!-- /container -->
-</div><!-- /navbar -->
+  </nav>
+</header>
+
+<!-- /main menu -->
