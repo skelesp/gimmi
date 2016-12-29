@@ -805,7 +805,7 @@ header .inner-nav .logo > a > img{
 }
 .button-small {
     height: auto;
-    padding: 11px 27px;
+    padding: 11px 15px;
     font-size: 12px;
 }
 .button-border {
@@ -2401,6 +2401,9 @@ ins.ins-4{
 .form .form-group {
     margin-bottom: 10px;
 }
+.form-group label {
+  color: black;
+}
 .form-tip {
     font-size: 11px;
     color: #aaa;
@@ -3333,7 +3336,7 @@ aside.widget-post.blog article p.text{
 .wish .wish-img .pic .wish-image{
     position: relative;
     width: 100%;
-    padding-bottom: 110%;
+    padding-bottom: 100%;
     background-repeat: no-repeat;
     background-position: center center;
     -webkit-background-size: cover;
@@ -3415,7 +3418,7 @@ aside.widget-post.blog article p.text{
 .wish-button-cont .view-cart{
     display: none;
 }
-.wish .wish-img .wish-button-cont .add-to-cart{
+.wish .wish-img .wish-button-cont .wish-action{
     -webkit-transition: all 0.27s cubic-bezier(0.300, 0.100, 0.580, 1.000);
     -moz-transition: all 0.27s cubic-bezier(0.300, 0.100, 0.580, 1.000);
     -o-transition: all 0.27s cubic-bezier(0.300, 0.100, 0.580, 1.000);
@@ -3423,7 +3426,7 @@ aside.widget-post.blog article p.text{
     transition: all 0.27s cubic-bezier(0.300, 0.100, 0.580, 1.000);
     opacity: 0;
 }
-.wish:hover .wish-img .wish-button-cont .add-to-cart{
+.wish:hover .wish-img .wish-button-cont .wish-action{
     opacity: 1;
 }
 .wish-title {

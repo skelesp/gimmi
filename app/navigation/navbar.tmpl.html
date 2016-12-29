@@ -1,5 +1,4 @@
 <!-- main menu -->
-
 <header class='sticky-header header-on-bg'>
   <nav class="main-nav red">
     <div class="full-wrapper">
@@ -13,46 +12,21 @@
       </div>
       <!-- /menu logo -->
 
-      <!-- menu mobile button -->
-
-      <div class="mobile-nav">
-        <div class="menu-button"><span></span><span></span><span></span></div>
-      </div>
-
-      <!-- /menu mobile button -->
-
-      <div class="inner-nav hidden-nav desktop-nav font-alt">
-        <ul class="clearlist">
+      <div class="inner-nav hidden-nav desktop-nav font-alt js-opened menu-opened">
+      	<ul class="clearlist">
           <li>
-            <a href="index.html" class="nav-submenu active"><div class='slide-container'><span>Home</span></div></a>
-
-            <!-- submenu -->
-
-            <ul class="submenu submenu-right">
-              <li>
-                <a href="index-main.html"><div class='slide-container'><span>Homepage Main</span></div></a>
-              </li>
-              <li>
-                <a href="index-portfolio.html"><div class='slide-container'><span>Homepage Portfolio</span></div></a>
-              </li>
-              <li>
-                <a href="index-blog.html"><div class='slide-container'><span>Homepage Blog</span></div></a>
-              </li>
-              <li>
-                <a href="index-shop.html"><div class='slide-container'><span>Homepage Shop</span></div></a>
-              </li>
-            </ul>
-
-            <!-- /submenu -->
+            <a ng-hide="ApplicationCtrl.currentUser._id" ui-sref="gimmi.login" class="nav-submenu active"><div class="slide-container"><span>Login</span></div></a>
           </li>
-        </ul>
-
-        <!-- menu button -->
-
-        <div class="menu-button"><span></span><span></span><span></span></div>
-
-        <!-- /menu button -->
-
+          <li>
+            <a ng-hide="ApplicationCtrl.currentUser._id" ui-sref="gimmi.register_person" class="nav-submenu active"><div class="slide-container"><span>Registreer</span></div></a>
+          </li>
+          <li>
+            <a ng-show="ApplicationCtrl.currentUser._id" href="#" class="nav-submenu active"><div class="slide-container"><span>Gebruiker: {{ApplicationCtrl.currentUser.firstName}}</span></div></a>
+          </li>
+          <li>
+            <a ng-show="ApplicationCtrl.currentUser._id" ng-click="ApplicationCtrl.logout()" class="nav-submenu active"><div class="slide-container"><span>Logout</span></div></a>
+          </li>
+      	</ul>
       </div>
     </div>
   </nav>

@@ -52,7 +52,6 @@ jQuery(window).scroll(function(){
 // Background image function
 function backgroundImg_init(){
     var pageSection = jQuery(".home-section, .page-section, .small-section, .blog-section, .small-section-2, .wish-image");
-    console.log(pageSection);
     pageSection.each(function(indx){
         if (jQuery(this).attr("data-background")){
             jQuery(this).css("background-image", "url(" + jQuery(this).data("background") + ")");

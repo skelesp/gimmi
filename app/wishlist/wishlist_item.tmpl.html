@@ -1,32 +1,48 @@
-<div class="thumbnail" ng-class="{'reserved': wish.status === 'reserved'}">
-
-    <button ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)" type="button"	class="close"
-          ng-click="wishCtrl.deleteWish(wish)" >
-          <span class="glyphicon glyphicon-trash"></span>
-    </button>
-    <!--<button type="button" class="btn btn-link btn-edit"
-            ui-sref="gimmi.wishlist.wish.edit({wishID:wish.id})">
-            <span class="glyphicon glyphicon-pencil"></span>
-    </button>-->
-
-  <p class="title">{{wish.title}}</p>
-  <p><a class="url" ng-show="wish.url" href="{{wish.url}}" target="_blank">{{wish.url}}</a></p>
-  <p class="price">{{wish.price | currency : "€" : 2}}</p>
-  <button type="button"
-          ng-show="wish.status === 'reserved' && wishCtrl.reservedByUser(wish.reservedBy._id)"
-          ng-click="wishCtrl.setFree(wish)"
-          class="btn btn-reserved">
-  Annuleer uw reservatie
-  </button>
-  <span ng-show="wish.status === 'reserved' && !wishCtrl.reservedByUser(wish.reservedBy._id)"
-        class="label label-danger">
-  Gereserveerd door {{wish.reservedBy.firstName}}
-  </span>
-  <button type="button"
-          ng-if="wish.status !== 'reserved'"
-          ng-click="wishCtrl.reserve(wish, ApplicationCtrl.currentUser)"
-          class="btn btn-default">
-      Reserveer
-  </button>
-
-</div> <!-- /Thumbnail div -->
+<!-- Wish item container -->
+<div class="col-sm-3 col-lg-3 mb-50 mb-xss-30 wish">
+  <!-- wish image -->
+  <div class="wish-img">
+    <div class='wish-special font-alt' ng-if="wish.status === 'reserved'">
+        <span ng-show="!wishCtrl.reservedByUser(wish.reservedBy._id)">Gereserveerd</span>
+        <span ng-show="wishCtrl.reservedByUser(wish.reservedBy._id)">Gereserveerd door u</span>
+    </div>
+    <div class='pic'>
+      <div ng-hide="wish.image" class="wish-image" style='background-image: url("layout/avonmore_shop_test/images/wish_item_bg.png");'></div>
+      <div ng-show="wish.image" class="wish-image" style='background-image: url("{{wish.image}}");'></div>
+    </div>
+    <div class='wish-hover'>
+      <!-- wish button container -->
+      <div class='wish-button-cont'>
+        <div class='wish-action' ng-show="wish.url">
+          <a class="button button-small button-shadow" href="{{wish.url}}" target="_blank">Toon meer info</a>
+        </div>
+        <div class='wish-action' ng-show="wish.status !== 'reserved'">
+          <a class="button button-small button-shadow" ng-click="wishCtrl.reserve(wish, ApplicationCtrl.currentUser)">Ik reserveer dit ...</a>
+        </div>
+        <div class='wish-action' ng-show="wish.status === 'reserved' && wishCtrl.reservedByUser(wish.reservedBy._id)">
+          <a class="button button-small button-shadow" ng-click="wishCtrl.setFree(wish)">Annuleer uw reservatie</a>
+        </div>
+        <!-- <div class='wish-action'><a href="#" class="button button-small button-shadow">Dit wil ik op mijn lijst!</a></div> -->
+        <div class='wish-action' ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)">
+          <a class="button button-small button-shadow" ng-click="wishCtrl.deleteWish(wish)" >Verwijder dit cadeau</a>
+        </div>
+        <!-- TODO: EDIT knop -->
+        <!--<button type="button" class="btn btn-link btn-edit"
+                ui-sref="gimmi.wishlist.wish.edit({wishID:wish.id})">
+                <span class="glyphicon glyphicon-pencil"></span>
+        </button>-->
+      </div>
+      <!-- End wish button container -->
+    </div>
+  </div>
+  <!-- End wish image -->
+  <div class="wish-descr">
+    <div class="wish-title font-alt">
+      <a href="#">{{wish.title}}</a>
+    </div>
+    <div class="wish-price ">
+      {{wish.price | currency : "€" : 2}}
+    </div>
+  </div>
+</div>
+<!-- End wish item container -->
