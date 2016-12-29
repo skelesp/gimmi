@@ -21,7 +21,7 @@
             <a ng-hide="ApplicationCtrl.currentUser._id" ui-sref="gimmi.register_person" class="nav-submenu active"><div class="slide-container"><span>Registreer</span></div></a>
           </li>
           <li>
-            <a ng-show="ApplicationCtrl.currentUser._id" href="#" class="nav-submenu active"><div class="slide-container"><span>Gebruiker: {{ApplicationCtrl.currentUser.firstName}}</span></div></a>
+            <a ng-show="ApplicationCtrl.currentUser._id" class="nav-submenu active"><div class="slide-container"><span>Gebruiker: {{ApplicationCtrl.currentUser.firstName}}</span></div></a>
           </li>
           <li>
             <a ng-show="ApplicationCtrl.currentUser._id" ng-click="ApplicationCtrl.logout()" class="nav-submenu active"><div class="slide-container"><span>Logout</span></div></a>
