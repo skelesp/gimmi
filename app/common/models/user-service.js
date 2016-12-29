@@ -28,7 +28,7 @@ angular.module('gimmi.authentication', [
               default:
                   throw 'Illegal base64url string!';
           }
-          return window.atob(output);
+          return decodeURIComponent(escape(window.atob(output)));
       }
  
       function getUserFromStorage() {
