@@ -77,7 +77,8 @@
       createWishCtrl.newWish = {
         title: '',
         price: '',
-				url: ''
+				url: '',
+				image: ''
       }
     }
 

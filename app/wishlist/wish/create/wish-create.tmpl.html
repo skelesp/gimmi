@@ -37,6 +37,14 @@
 					Dit is geen geldige link (vergeet "http://" niet)!
 				</span>
 		</div>
+		<div class="form-group">
+			<input 	type="text"
+							class="form-control"
+							id="newWishImage"
+							ng-model="createWishCtrl.newWish.image"
+							placeholder="Link naar een afbeelding"
+							required/>
+		</div>
 		<button type="submit"
 						class="btn btn-danger btn-lg"
 						ng-disabled="wishCreateForm.$invalid">
