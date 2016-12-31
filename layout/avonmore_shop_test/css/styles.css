@@ -5633,3 +5633,7 @@ bg-section-red:before{
   background-color: #009999;
   color: #fff;
 }
+
+.gsc-input {
+  color: #000;
+}

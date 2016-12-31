@@ -42,8 +42,11 @@
 							class="form-control"
 							id="newWishImage"
 							ng-model="createWishCtrl.newWish.image"
-							placeholder="Link naar een afbeelding"
+							placeholder="Zoek een afbeelding"
 							required/>
+		</div>
+		<div ng-controller="SearchController as SearchCtrl">
+			{{SearchCtrl.searchTerm}}
 		</div>
 		<button type="submit"
 						class="btn btn-danger btn-lg"

@@ -3,7 +3,8 @@
 	'gimmi.models.receiver',
 	'wishlist.receiver',
 	'gimmi.config',
-	'gimmi.authentication'
+	'gimmi.authentication',
+	'search'
 ])
 	.config(function($stateProvider){
 		$stateProvider

@@ -1,1 +1,1 @@
-angular.module('gimmi.models.wishlist', []);
+angular.module('gimmi.models.wishlist',[]);
