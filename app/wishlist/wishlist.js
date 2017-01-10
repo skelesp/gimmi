@@ -60,9 +60,15 @@
 		}
 	}])
 
-	.controller('createWishCtrl', ['$state', '$stateParams', 'wishModel', 'receiverModel', 'UserService',
-												function($state, $stateParams, wishModel, receiverModel, UserService){
-    var createWishCtrl = this;
+	.controller('createWishCtrl', ['$state', '$stateParams', 'wishModel', 'receiverModel', 'UserService', 'SearchService',
+												function($state, $stateParams, wishModel, receiverModel, UserService, SearchService){
+    var _self = this;
+		_self.newWish = {
+			title: '',
+			price: '',
+			url: '',
+			image: ''
+		};
 
     function returnToWishes(){
       $state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
@@ -75,19 +81,46 @@
     }
 
     function resetForm() {
-      createWishCtrl.newWish = {
+      _self.newWish = {
         title: '',
         price: '',
 				url: '',
 				image: ''
       }
+			_self.googleImages = [];
     }
 
-    createWishCtrl.reset = resetForm;
-    createWishCtrl.createWish = createWish;
+		function searchImagesOnGoogle(searchTerm) {
+			_self.googleImages = [];
+			searchTerm = searchTerm.trim();
 
-    createWishCtrl.currentReceiverID = receiverModel.getCurrentReceiver()._id;
-    createWishCtrl.currentUserID = UserService.getCurrentUser()._id;
+			if (searchTerm){
+				SearchService.getSearchResults(searchTerm)
+					.then(function (results) {
+						var searchResults = results.data;
+						console.log(searchResults);
+						searchResults.forEach(function(item){
+							if (item.link) {
+								_self.googleImages.push(item.link);
+							}
+						});
+					});
+			}
+		}
+
+    /* TODOlist
+    TODO: Toon de afbeeldingen in een popup window
+    */
+
+		_self.googleImages = [];
+		_self.resultCount = "10";
+
+    _self.reset = resetForm;
+    _self.createWish = createWish;
+		_self.searchImages = searchImagesOnGoogle;
+
+    _self.currentReceiverID = receiverModel.getCurrentReceiver()._id;
+    _self.currentUserID = UserService.getCurrentUser()._id;
 
     resetForm();
 

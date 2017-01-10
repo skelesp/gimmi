@@ -20,8 +20,7 @@
 							name="inputPrice"
 							id="newWishPrice"
 							placeholder="Prijs in € (enkel getal ingeven)"
-							ng-model="createWishCtrl.newWish.price"
-							required/>
+							ng-model="createWishCtrl.newWish.price"/>
 				<span ng-show="wishCreateForm.inputPrice.$error.number">
 					Enkel getallen toegelaten!
 			</span>
@@ -41,13 +40,25 @@
 			<input 	type="text"
 							class="form-control"
 							id="newWishImage"
+							ng-hide="!createWishCtrl.newWish.image"
 							ng-model="createWishCtrl.newWish.image"
-							placeholder="Zoek een afbeelding"
-							required/>
+							placeholder="Zoek een afbeelding"/>
 		</div>
-		<div ng-controller="SearchController as SearchCtrl">
-			{{SearchCtrl.searchTerm}}
+		<div class="form-group">
+			<button type="button"
+							class="btn btn-danger btn-lg"
+							ng-hide="createWishCtrl.newWish.image"
+							ng-disabled="!createWishCtrl.newWish.title"
+							ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
+								Zoek een afbeelding
+			</button>
+			<div id="dialog-pick-image" title="Zoek een afbeelding">
+				<div ng-if="createWishCtrl.googleImages" ng-repeat="image in createWishCtrl.googleImages track by $index">
+					<img ng-if="image" ng-src="{{image}}" ng-click="createWishCtrl.newWish.image = image; createWishCtrl.googleImages = [];" />
+				</div>
+			</div>
 		</div>
+
 		<button type="submit"
 						class="btn btn-danger btn-lg"
 						ng-disabled="wishCreateForm.$invalid">
