@@ -43,8 +43,7 @@
 							ng-hide="!createWishCtrl.newWish.image"
 							ng-model="createWishCtrl.newWish.image"
 							placeholder="Zoek een afbeelding"/>
-		</div>
-		<div class="form-group">
+
 			<button type="button"
 							class="btn btn-danger btn-lg"
 							ng-hide="createWishCtrl.newWish.image"
@@ -52,11 +51,27 @@
 							ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
 								Zoek een afbeelding
 			</button>
-			<div id="dialog-pick-image" title="Zoek een afbeelding">
-				<div ng-if="createWishCtrl.googleImages" ng-repeat="image in createWishCtrl.googleImages track by $index">
-					<img ng-if="image" ng-src="{{image}}" ng-click="createWishCtrl.newWish.image = image; createWishCtrl.googleImages = [];" />
-				</div>
-			</div>
+			<script type="text/ng-template" id="googleImageSearchResults.html">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">
+                  Klik op de gewenste afbeelding
+                  <button class="btn btn-warning" type="button" ng-click="InstanceCtrl.cancel()">Cancel</button>
+                </h3>
+
+            </div>
+            <div class="row modal-body" id="modal-body">
+							<div ng-if="InstanceCtrl.items" ng-repeat="image in InstanceCtrl.items track by $index" class="col-md-3">
+								<img class="img-thumbnail" ng-if="image" ng-src="{{image}}" ng-click="InstanceCtrl.selected.item = image;InstanceCtrl.ok()" />
+							</div>
+							<div ng-if="!InstanceCtrl.items">
+								<p> Loading... </p>
+							</div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" type="button" ng-click="InstanceCtrl.cancel()">Cancel</button>
+            </div>
+        </script>
 		</div>
 
 		<button type="submit"

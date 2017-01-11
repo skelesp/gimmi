@@ -60,8 +60,8 @@
 		}
 	}])
 
-	.controller('createWishCtrl', ['$state', '$stateParams', 'wishModel', 'receiverModel', 'UserService', 'SearchService',
-												function($state, $stateParams, wishModel, receiverModel, UserService, SearchService){
+	.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', 'SearchService',
+												function($state, $stateParams, $uibModal, wishModel, receiverModel, UserService, SearchService){
     var _self = this;
 		_self.newWish = {
 			title: '',
@@ -104,16 +104,34 @@
 								_self.googleImages.push(item.link);
 							}
 						});
+
+						var modalInstance = $uibModal.open({
+				      ariaLabelledBy: 'modal-title',
+				      ariaDescribedBy: 'modal-body',
+				      templateUrl: 'googleImageSearchResults.html',
+							size: 'lg',
+				      controller: 'ModalInstanceCtrl',
+				      controllerAs: 'InstanceCtrl',
+				      resolve: {
+				        items: function () {
+				          return _self.googleImages;
+				        }
+				      }
+				    });
+
+						modalInstance.result.then(function (selectedItem) {
+				      _self.newWish.image = selectedItem;
+				    });
+
+
 					});
 			}
+
 		}
 
     /* TODOlist
     TODO: Toon de afbeeldingen in een popup window
     */
-
-		_self.googleImages = [];
-		_self.resultCount = "10";
 
     _self.reset = resetForm;
     _self.createWish = createWish;
@@ -130,4 +148,19 @@
 
 		self.url = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
 	}])
+	.controller('ModalInstanceCtrl', function ($uibModalInstance, items) {
+	  var _self = this;
+	  _self.items = items;
+	  _self.selected = {
+	    item: _self.items[0]
+	  };
+
+	  _self.ok = function () {
+	    $uibModalInstance.close(_self.selected.item);
+	  };
+
+	  _self.cancel = function () {
+	    $uibModalInstance.dismiss('cancel');
+	  };
+	});
 ;
