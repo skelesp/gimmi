@@ -22,7 +22,9 @@
 	.controller('wishCtrl', function($stateParams, wishModel, receiverModel, UserService) {
 		var self = this;
 
-		self.userIsReceiver = UserService.userIsReceiver();
+		self.userIsReceiver = function(receiverID) {
+			return UserService.userIsReceiver(receiverID);
+		};
 
 		self.userIsCreator = function(creatorID){
 			if (UserService.getCurrentUser()._id === creatorID) {
@@ -38,7 +40,7 @@
 			} else {
 				return false;
 			}
-		}
+		};
 
 		self.deleteWish = wishModel.deleteWish;
 		self.reserve = wishModel.reserve;

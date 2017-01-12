@@ -23,7 +23,7 @@
           <a class="button button-small button-shadow" ng-click="wishCtrl.setFree(wish)">Annuleer uw reservatie</a>
         </div>
         <!-- <div class='wish-action'><a href="#" class="button button-small button-shadow">Dit wil ik op mijn lijst!</a></div> -->
-        <div class='wish-action' ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)">
+        <div class='wish-action' ng-show="wishCtrl.userIsReceiver(wish.receiver) || wishCtrl.userIsCreator(wish.createdBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.deleteWish(wish)" >Verwijder dit cadeau</a>
         </div>
         <!-- TODO: EDIT knop -->
