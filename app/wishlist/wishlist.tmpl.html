@@ -9,8 +9,19 @@
 	<div class="container relative" ng-if="wishlistCtrl.currentReceiver">
 		<!-- Wishlist header -->
 		<div class='align-left'>
+			<h4>
+				<span class="label label-default pull-right"
+							ng-show="wishlistCtrl.userIsReceiver" >
+							<a ui-sref="gimmi.wishlist.send">Verstuur mijn lijst</a>
+				</span>
+				<span class="label label-default pull-right"
+							ng-show="!wishlistCtrl.userIsReceiver" >
+							<a ui-sref="gimmi.wishlist({receiverID: wishlistCtrl.currentUserID})">Ga naar mijn lijst</a>
+				</span>
+			</h4>
 			<h3 class="section-title-top mt-0">Cadeau-ideeën voor</h3>
 			<h2 class="section-title font-alt mt-0">{{wishlistCtrl.currentReceiver.fullName}}<span class='featured_separated'><span></span></span></h2>
+
 			<!--<div class="row">
 				<div class="col-md-6 col-md-offset-3">
 					<p class="section-title-small">
