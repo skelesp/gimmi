@@ -55,22 +55,22 @@
             <div class="modal-header">
                 <h3 class="modal-title" id="modal-title">
                   Klik op de gewenste afbeelding
-                  <button class="btn btn-warning" type="button" ng-click="InstanceCtrl.cancel()">Cancel</button>
+                  <button class="btn btn-warning" type="button" ng-click="imagePopupCtrl.cancel()">Cancel</button>
                 </h3>
 
             </div>
             <div class="row modal-body" id="modal-body">
-							<p ng-show="InstanceCtrl.noImages" style="color:#000000">Er zijn geen afbeeldingen gevonden voor "{{InstanceCtrl.searchTerm}}". Kies één van de onderstaande standaardafbeeldingen.</p>
-							<div ng-if="InstanceCtrl.items" ng-repeat="image in InstanceCtrl.items track by $index" class="col-md-3">
-								<img class="img-thumbnail" ng-if="image" ng-src="{{image}}" ng-click="InstanceCtrl.selected.item = image;InstanceCtrl.ok()" />
+							<p ng-show="imagePopupCtrl.noImages" style="color:#000000">Er zijn geen afbeeldingen gevonden voor "{{imagePopupCtrl.searchTerm}}". Kies één van de onderstaande standaardafbeeldingen.</p>
+							<div ng-if="imagePopupCtrl.items" ng-repeat="image in imagePopupCtrl.items track by $index" class="col-md-3">
+								<img class="img-thumbnail" ng-if="image" ng-src="{{image}}" ng-click="imagePopupCtrl.selected.item = image;imagePopupCtrl.ok()" />
 							</div>
-							<div ng-if="!InstanceCtrl.items">
+							<div ng-if="!imagePopupCtrl.items">
 								<p> Loading... </p>
 							</div>
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-warning" type="button" ng-click="InstanceCtrl.cancel()">Cancel</button>
+                <button class="btn btn-warning" type="button" ng-click="imagePopupCtrl.cancel()">Cancel</button>
             </div>
         </script>
 		</div>
