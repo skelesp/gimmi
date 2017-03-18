@@ -97,13 +97,20 @@
 			if (searchTerm){
 				SearchService.getSearchResults(searchTerm)
 					.then(function (results) {
-						var searchResults = results.data;
-						console.log(searchResults);
-						searchResults.forEach(function(item){
-							if (item.link) {
-								_self.googleImages.push(item.link);
-							}
-						});
+						if (results.data) {
+							console.info("Images gevonden.")
+							var searchResults = results.data;
+							searchResults.forEach(function(item){
+								if (item.link) {
+									_self.googleImages.push(item.link);
+								}
+							});
+						}
+						else {
+							console.error("Geen images gevonden.")
+							_self.googleImages.push("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTaO2OnPKQ3_p3RdI1KZkj6XP-8il5iRO9iGj9Xj8TT0KuKTE_Ynw")
+						}
+
 
 						var modalInstance = $uibModal.open({
 				      ariaLabelledBy: 'modal-title',
@@ -128,10 +135,6 @@
 			}
 
 		}
-
-    /* TODOlist
-    TODO: Toon de afbeeldingen in een popup window
-    */
 
     _self.reset = resetForm;
     _self.createWish = createWish;

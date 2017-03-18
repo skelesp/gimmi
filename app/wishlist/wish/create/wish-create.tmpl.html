@@ -60,6 +60,7 @@
 
             </div>
             <div class="row modal-body" id="modal-body">
+							<p style="color:#000000">Er zijn geen afbeeldingen gevonden voor "{{createWishCtrl.newWish.title}}. Kies één van de standaardafbeeldingen."</p>
 							<div ng-if="InstanceCtrl.items" ng-repeat="image in InstanceCtrl.items track by $index" class="col-md-3">
 								<img class="img-thumbnail" ng-if="image" ng-src="{{image}}" ng-click="InstanceCtrl.selected.item = image;InstanceCtrl.ok()" />
 							</div>
