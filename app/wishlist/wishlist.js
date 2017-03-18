@@ -69,6 +69,7 @@
 			url: '',
 			image: ''
 		};
+		_self.noImages = true;
 
     function returnToWishes(){
       $state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
@@ -99,6 +100,7 @@
 					.then(function (results) {
 						if (results.data) {
 							console.info("Images gevonden.")
+							_self.noImages = false;
 							var searchResults = results.data;
 							searchResults.forEach(function(item){
 								if (item.link) {
@@ -108,11 +110,11 @@
 						}
 						else {
 							console.error("Geen images gevonden.")
+							_self.noImages = true;
 							_self.googleImages.push("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTaO2OnPKQ3_p3RdI1KZkj6XP-8il5iRO9iGj9Xj8TT0KuKTE_Ynw")
 						}
 
-
-						var modalInstance = $uibModal.open({
+						var imagePopup = $uibModal.open({
 				      ariaLabelledBy: 'modal-title',
 				      ariaDescribedBy: 'modal-body',
 				      templateUrl: 'googleImageSearchResults.html',
@@ -122,11 +124,17 @@
 				      resolve: {
 				        items: function () {
 				          return _self.googleImages;
-				        }
+				        },
+								noImages: function(){
+									return _self.noImages;
+								},
+								searchTerm: function(){
+									return searchTerm;
+								}
 				      }
 				    });
 
-						modalInstance.result.then(function (selectedItem) {
+						imagePopup.result.then(function (selectedItem) {
 				      _self.newWish.image = selectedItem;
 				    });
 
@@ -151,14 +159,16 @@
 
 		self.url = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
 	}])
-	.controller('ModalInstanceCtrl', function ($uibModalInstance, items) {
+	.controller('ModalInstanceCtrl', function ($uibModalInstance, items, noImages, searchTerm) {
 	  var _self = this;
 	  _self.items = items;
 	  _self.selected = {
 	    item: _self.items[0]
 	  };
+		_self.noImages = noImages;
+		_self.searchTerm = searchTerm;
 
-	  _self.ok = function () {
+		_self.ok = function () {
 	    $uibModalInstance.close(_self.selected.item);
 	  };
 
