@@ -19,14 +19,14 @@
 		;
 	})
 
-	.controller('wishCtrl', function($stateParams, wishModel, receiverModel, UserService) {
-		var self = this;
+	.controller('wishCtrl', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
+		var _self = this;
 
-		self.userIsReceiver = function(receiverID) {
+		_self.userIsReceiver = function(receiverID) {
 			return UserService.userIsReceiver(receiverID);
 		};
 
-		self.userIsCreator = function(creatorID){
+		_self.userIsCreator = function(creatorID){
 			if (UserService.getCurrentUser()._id === creatorID) {
 				return true;
 			} else {
@@ -34,7 +34,7 @@
 			}
 		};
 
-		self.reservedByUser = function(reservatorID){
+		_self.reservedByUser = function(reservatorID){
 			if (UserService.getCurrentUser()._id === reservatorID) {
 				return true;
 			} else {
@@ -42,9 +42,45 @@
 			}
 		};
 
-		self.deleteWish = wishModel.deleteWish;
-		self.reserve = wishModel.reserve;
-		self.setFree = wishModel.setFree;
-	})
+		function deleteWishVerification (wish) {
+			console.info("deleteWish started");
+			//Create a popup instance for delete verification
+			var deletePopup = $uibModal.open({
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'deleteVerification.html',
+				size: 'sm',
+				controller: 'deletePopupCtrl',
+				controllerAs: 'deletePopupCtrl',
+				resolve: {
+					wish: function () {
+						return wish;
+					}
+				}
+			});
 
+			//TODO: wishModel.deleteWish toevoegen
+			deletePopup.result.then(function (wish) {
+				wishModel.deleteWish(wish);
+				console.info(wish.title + " is verwijderd.")
+			});
+		}
+
+		_self.deleteWish = deleteWishVerification;
+		_self.reserve = wishModel.reserve;
+		_self.setFree = wishModel.setFree;
+	}
+)
+.controller('deletePopupCtrl', function ($uibModalInstance, wish){
+	var _self = this;
+	_self.wishTitle = wish.title;
+	console.log (wish);
+	_self.ok = function () {
+		$uibModalInstance.close(wish);
+	};
+
+	_self.cancel = function () {
+		$uibModalInstance.dismiss('cancel');
+	};
+})
 ;

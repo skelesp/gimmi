@@ -41,7 +41,6 @@
 			})
 		;
 	})
-
 	.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService',
 					function wishlistCtrl($stateParams, wishModel, receiverModel, UserService){
 		var wishlistCtrl = this;
@@ -59,7 +58,6 @@
 			wishlistCtrl.userIsReceiver = false;
 		}
 	}])
-
 	.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', 'SearchService',
 												function($state, $stateParams, $uibModal, wishModel, receiverModel, UserService, SearchService){
     var _self = this;
@@ -139,7 +137,6 @@
 						imagePopup.result.then(function (selectedItem) {
 				      _self.newWish.image = selectedItem;
 				    });
-
 
 					});
 			}

@@ -25,6 +25,24 @@
         <!-- <div class='wish-action'><a href="#" class="button button-small button-shadow">Dit wil ik op mijn lijst!</a></div> -->
         <div class='wish-action' ng-show="wishCtrl.userIsReceiver(wish.receiver) || wishCtrl.userIsCreator(wish.createdBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.deleteWish(wish)" >Verwijder dit cadeau</a>
+          <script type="text/ng-template" id="deleteVerification.html">
+
+            <div class="modal-header" style="color:#000000">
+                <h3 class="modal-title" id="modal-title">
+                  Wilt u verwijderen?
+                </h3>
+            </div>
+
+            <div class="row modal-body" id="modal-body" style="color:#000000">
+              Bent u zeker dat u <b>"{{deletePopupCtrl.wishTitle}}"</b> wilt verwijderen?
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-warning" type="button" ng-click="deletePopupCtrl.ok()">Ja</button>
+                <button class="btn btn-warning" type="button" ng-click="deletePopupCtrl.cancel()">Nee</button>
+            </div>
+
+          </script>
         </div>
         <!-- TODO: EDIT knop -->
         <!--<button type="button" class="btn btn-link btn-edit"
