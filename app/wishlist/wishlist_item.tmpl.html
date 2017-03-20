@@ -14,13 +14,16 @@
       <!-- wish button container -->
       <div class='wish-button-cont'>
         <div class='wish-action' ng-show="wish.url">
-          <a class="button button-small button-shadow" href="{{wish.url}}" target="_blank">Website</a>
+          <a class="button button-small button-shadow" href="{{wish.url}}" target="_blank">Ga naar website</a>
         </div>
         <div class='wish-action' ng-show="wish.status !== 'reserved'">
           <a class="button button-small button-shadow" ng-click="wishCtrl.reserve(wish, ApplicationCtrl.currentUser)">Ik reserveer dit ...</a>
         </div>
         <div class='wish-action' ng-show="wish.status === 'reserved' && wishCtrl.reservedByUser(wish.reservedBy._id)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.setFree(wish)">Annuleer uw reservatie</a>
+        </div>
+        <div class='wish-action' ng-hide="wishCtrl.userIsReceiver(wish.receiver)">
+          <a class="button button-small button-shadow" ng-click="wishCtrl.copy(wish)">Dit wil ik ook!</a>
         </div>
         <div class='wish-action' ng-show="wishCtrl.userIsReceiver(wish.receiver) || wishCtrl.userIsCreator(wish.createdBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.edit(wish)">Wijzig de wens</a>

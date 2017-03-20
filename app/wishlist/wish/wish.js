@@ -41,6 +41,17 @@
 			}
 		};
 
+		function copy(wish){
+			var userID = UserService.getCurrentUser()._id;
+			var newWish = {};
+			newWish.title = wish.title;
+			newWish.image = wish.image;
+			newWish.url = wish.url;
+			newWish.price =  wish.price;
+			console.info("%s copied a wish from wishlist %s", userID, wish.receiver);
+			wishModel.createWish(newWish, userID, userID);
+		}
+
 		function edit(wish){
 			console.info("Wish in edit mode");
 			var editPopup = $uibModal.open({
@@ -64,7 +75,6 @@
 		}
 
 		function deleteWishVerification (wish) {
-			console.info("deleteWish started");
 			//Create a popup instance for delete verification
 			var deletePopup = $uibModal.open({
 				ariaLabelledBy: 'modal-title',
@@ -82,9 +92,10 @@
 
 			deletePopup.result.then(function (wish) {
 				wishModel.deleteWish(wish);
-				console.info(wish.title + " is verwijderd.")
+				console.info(wish._id + " is verwijderd.")
 			});
 		}
+		_self.copy = copy;
 		_self.edit = edit;
 		_self.deleteWish = deleteWishVerification;
 		_self.reserve = wishModel.reserve;
