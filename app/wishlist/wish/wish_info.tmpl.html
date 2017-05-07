@@ -1,1 +1,21 @@
-<p>Hier komt een detail van de wens</p>
+<!-- page section -->
+<section class="page-section" style="color:#000" >
+  <div class="container">
+    <div class="well">
+      <h1>{{wishInfoCtrl.title}}
+      <span class="label label-warning pull-right" style="font-size: 36px">{{wishInfoCtrl.price | currency : "€" : 2}}</span><br />
+      <small>voor {{wishInfoCtrl.receiver}}
+      <span class="label label-default"><a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})">Terug naar lijst</a></span></small>
+      </h1>
+    </div>
+    <div class="row">
+      <div class="col-md-8"><img src="{{wishInfoCtrl.image}}" alt="wish image" /></div>
+      <div class="col-md-4">
+          <ul class="list-group">
+            <li class="list-group-item">Externe website: <a style="color:#000" href="{{wishInfoCtrl.url}}">Link</a></li>
+            <li class="list-group-item">Status: {{wishInfoCtrl.status}}</li>
+          </ul>
+      </div>
+    </div>
+  </div>
+</section>

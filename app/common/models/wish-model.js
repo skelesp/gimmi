@@ -20,7 +20,7 @@
 
 		function findWish(wishID) {
 			return _.find(wishes, function(w) {
-				return w.id === parseInt(wishID, 10);
+				return w._id == wishID;
 			})
 		}
 
