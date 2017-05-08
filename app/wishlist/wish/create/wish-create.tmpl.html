@@ -26,7 +26,7 @@
 			</span>
 		</div>
 		<div class="form-group">
-			<input 	type="url"
+			<input 	type="hidden"
 							class="form-control"
 							name="inputUrl"
 							id="newWishUrl"
@@ -37,10 +37,10 @@
 				</span>
 		</div>
 		<div class="form-group">
-			<input 	type="text"
+			<img ng-show="createWishCtrl.newWish.image" src="{{createWishCtrl.newWish.image}}" alt="Gekozen afbeelding" ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
+    	<input 	type="hidden"
 							class="form-control"
 							id="newWishImage"
-							ng-hide="!createWishCtrl.newWish.image"
 							ng-model="createWishCtrl.newWish.image"
 							placeholder="Zoek een afbeelding"/>
 
@@ -48,8 +48,7 @@
 							class="btn btn-danger btn-lg"
 							ng-hide="createWishCtrl.newWish.image"
 							ng-disabled="!createWishCtrl.newWish.title"
-							ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
-								Zoek een afbeelding
+							ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);"><span class="glyphicon glyphicon-picture"></span> Afbeelding zoeken
 			</button>
 			<script type="text/ng-template" id="googleImageSearchResults.html">
             <div class="modal-header" style="color:#000000">
