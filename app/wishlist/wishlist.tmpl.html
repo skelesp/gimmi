@@ -1,5 +1,5 @@
 <!-- page section -->
-<section class="page-section">
+<section class="page-section" style="color: black">
 	<!-- No current receiver found -->
 	<div class="container relative" ui-view ng-if="! wishlistCtrl.currentReceiver">
 		<h4>Sorry, geen lijst gevonden.</h4>
@@ -37,7 +37,7 @@
 			<!-- /Create wish form -->
 
 			<!-- Show all wishes for the current receiver -->
-			<div ng-if="wishlistCtrl.currentReceiver" ng-repeat="wish in wishlistCtrl.wishes | filter: {receiver: wishlistCtrl.currentReceiver._id}">
+			<div ng-if="wishlistCtrl.currentReceiver" ng-repeat="wish in wishlistCtrl.wishes">
 				<div ui-view="wishlist_item"></div>
 			</div> <!-- /ng-repeat -->
 			<!-- /Show all wishes for the current receiver -->

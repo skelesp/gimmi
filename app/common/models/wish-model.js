@@ -4,7 +4,7 @@
 	.service('wishModel', function($http, $q, CONFIG){
 		var model = this,
 			URLS = {
-				FETCH: CONFIG.apiUrl + '/api/wishes',
+				WISHLIST: CONFIG.apiUrl + '/api/wishlist',
 				WISH: CONFIG.apiUrl + '/api/wish'
 			},
 			wishes;
@@ -38,13 +38,13 @@
 			return deferred.promise;
 		};
 
-		model.getWishes = function() {
+		model.getWishes = function(receiverID) {
 			var deferred = $q.defer();
 
-			if(wishes) {
+			if (wishes) {
 				deferred.resolve(wishes);
 			} else {
-				$http.get(URLS.FETCH).then(function(result){
+				$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
 						deferred.resolve(cacheWishes(result));
 				});
 			}

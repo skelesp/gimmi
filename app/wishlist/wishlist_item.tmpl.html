@@ -3,8 +3,8 @@
   <!-- wish image -->
   <div class="wish-img">
     <div class='wish-special font-alt' ng-if="wish.status === 'reserved'">
-        <span ng-show="!wishCtrl.reservedByUser(wish.reservedBy._id)">Gereserveerd</span>
-        <span ng-show="wishCtrl.reservedByUser(wish.reservedBy._id)">Gereserveerd door u</span>
+        <span ng-show="!wishCtrl.reservedByUser(wish.reservedBy)">Gereserveerd</span>
+        <span ng-show="wishCtrl.reservedByUser(wish.reservedBy)">Gereserveerd door u</span>
     </div>
     <div class='pic'>
       <div ng-hide="wish.image" class="wish-image" style='background-image: url("layout/avonmore_shop_test/images/wish_item_bg.png");'></div>
@@ -19,13 +19,13 @@
         <div class='wish-action' ng-show="wish.status !== 'reserved'">
           <a class="button button-small button-shadow" ng-click="wishCtrl.reserve(wish, ApplicationCtrl.currentUser)">Ik reserveer dit ...</a>
         </div>
-        <div class='wish-action' ng-show="wish.status === 'reserved' && wishCtrl.reservedByUser(wish.reservedBy._id)">
+        <div class='wish-action' ng-show="wish.status === 'reserved' && wishCtrl.reservedByUser(wish.reservedBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.setFree(wish)">Annuleer uw reservatie</a>
         </div>
-        <div class='wish-action' ng-hide="wishCtrl.userIsReceiver(wish.receiver)">
-          <a class="button button-small button-shadow" ng-click="wishCtrl.copy(wish)">Dit wil ik ook!</a>
+        <div class='wish-action' ng-hide="wishCtrl.userIsReceiver">
+          <a class="button button-small button-shadow" ng-click="wishCtrl.copy(wish)">Dit wil ik ook! {{wish.receiver}}</a>
         </div>
-        <div class='wish-action' ng-show="wishCtrl.userIsReceiver(wish.receiver) || wishCtrl.userIsCreator(wish.createdBy)">
+        <div class='wish-action' ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.edit(wish)">Wijzig de wens</a>
           <script type="text/ng-template" id="editWish.html">
 
@@ -72,7 +72,7 @@
 
           </script>
         </div>
-        <div class='wish-action' ng-show="wishCtrl.userIsReceiver(wish.receiver) || wishCtrl.userIsCreator(wish.createdBy)">
+        <div class='wish-action' ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.deleteWish(wish)" >Verwijder dit cadeau</a>
           <script type="text/ng-template" id="deleteVerification.html">
 
