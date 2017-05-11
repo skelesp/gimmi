@@ -13,11 +13,6 @@
 			return result.data;
 		};
 
-		function cacheWishes(result) {
-			wishes = extract(result);
-			return wishes;
-		}
-
 		function findWish(wishID) {
 			return _.find(wishes, function(w) {
 				return w._id == wishID;
@@ -27,22 +22,18 @@
 		model.getWishById = function (wishID) {
 			var deferred = $q.defer();
 
-			if(wishes) {
-				deferred.resolve(findWish(wishID));
-			} else {
-				model.getWishes().then(function(){
-					deferred.resolve(findWish(wishID));
-				});
-			}
+			$http.get(URLS.WISH+"/"+wishID).then(function(result){
+					deferred.resolve(result.data[0]);
+			});
 
 			return deferred.promise;
 		};
 
-		model.getWishes = function(receiverID) {
+		model.getWishlist = function(receiverID) {
 			var deferred = $q.defer();
 
 			$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
-					deferred.resolve(extract(result));
+					deferred.resolve(result.data[0]);
 			});
 
 			return deferred.promise;

@@ -20,6 +20,7 @@
 	})
 	.controller('wishInfoCtrl', ['$stateParams', 'wishModel', 'receiverModel', function ($stateParams, wishModel, receiverModel){
 			var _self = this;
+			
 			wishModel.getWishById($stateParams.wishID).then( function(wish){
 				_self.title = wish.title;
 				_self.price = wish.price;

@@ -50,8 +50,8 @@
 		wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
 		wishlistCtrl.currentReceiver = currentReceiver;
 		if (currentReceiver) {
-				wishModel.getWishes(wishlistCtrl.currentReceiver._id).then(function(wishlist) {
-					wishlistCtrl.wishes = wishlist[0].wishes;
+				wishModel.getWishlist(wishlistCtrl.currentReceiver._id).then(function(wishlist) {
+					wishlistCtrl.wishes = wishlist.wishes;
 				});
 				wishlistCtrl.userIsReceiver = UserService.userIsReceiver(wishlistCtrl.currentReceiver._id);
 		} else {
