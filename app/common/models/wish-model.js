@@ -41,13 +41,9 @@
 		model.getWishes = function(receiverID) {
 			var deferred = $q.defer();
 
-			if (wishes) {
-				deferred.resolve(wishes);
-			} else {
-				$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
-						deferred.resolve(cacheWishes(result));
-				});
-			}
+			$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
+					deferred.resolve(extract(result));
+			});
 
 			return deferred.promise;
 		};
