@@ -45,7 +45,7 @@
 			wish.status = "free";
 
 			$http.post(URLS.WISH, wish).success(function(wish){
-				wishes.push(wish);
+				console.info("Wish created: " + wish.title);
 			});
 
 		};
