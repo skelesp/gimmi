@@ -33,7 +33,8 @@
 			var deferred = $q.defer();
 
 			$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
-					deferred.resolve(result.data[0]);
+				wishes = result.data[0].wishes;
+				deferred.resolve(result.data[0]);
 			});
 
 			return deferred.promise;
