@@ -178,6 +178,7 @@
 		_self.noImages = true;
 
     function returnToWishes(){
+			console.log("returnToWishes");
       $state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
     }
 
