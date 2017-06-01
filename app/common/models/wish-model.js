@@ -39,7 +39,6 @@ angular.module('gimmi.models.wish', [
 				$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
 					wishlist = result.data[0];
 					deferred.resolve(result.data[0]);
-					console.log(wishlist);
 				});
 			}
 
@@ -80,16 +79,24 @@ angular.module('gimmi.models.wish', [
 
 		}
 
-		model.reserve = function(wish, reservator) {
-			wish.status = "reserved";
-			wish.reservedBy = reservator._id;
-			model.updateWish(wish);
+		model.addReservation = function(wishID, reservation) {
+			$http.post(URLS.WISH+"/"+wishID+"/reservation", reservation).success(function(wish){
+				var index = _.findIndex(wishlist.wishes, function(w){
+					return w._id === wishID;
+				});
+					wishlist.wishes[index] = wish;
+				console.info("Reservation added to", wish);
+			});
 		}
 
-		model.setFree = function(wish) {
-			wish.status = "free";
-			wish.reservedBy = null;
-			model.updateWish(wish);
+		model.deleteReservation = function(wishID) {
+			$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
+				var index = _.findIndex(wishlist.wishes, function(w){
+					return w._id === wishID;
+				});
+				wishlist.wishes[index] = wish;
+				console.info("Reservation deleted for ", wish);
+			});
 		}
 
 	})

@@ -135,11 +135,35 @@
 				console.info(wish._id + " is verwijderd.")
 			});
 		}
+
+		function addReservation (wish, user, reason) {
+			var reservation = {
+				reservator: user,
+				reason: reason
+			};
+			console.log(reservation);
+			wishModel.addReservation(wish._id, reservation);
+		}
+
+		function deleteReservation (wish) {
+				wishModel.deleteReservation(wish._id);
+				console.log("Reservation deleted");
+		}
+		//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
+		function getReservationStatus (wish) {
+			var reservationStatus = "unreserved";
+			if (wish.reservation) {
+				reservationStatus = "reserved";
+			}
+			console.log(wish.title + " " + reservationStatus);
+			return reservationStatus;
+		}
+		_self.reservationStatus = getReservationStatus;
 		_self.copy = copy;
 		_self.edit = edit;
 		_self.deleteWish = deleteWishVerification;
-		_self.reserve = wishModel.reserve;
-		_self.setFree = wishModel.setFree;
+		_self.addReservation = addReservation;
+		_self.deleteReservation = deleteReservation;
 	}
 )
 .controller('editPopupCtrl', function($uibModalInstance, wish) {
