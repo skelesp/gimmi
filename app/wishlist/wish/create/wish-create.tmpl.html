@@ -3,7 +3,7 @@
 	<form name="wishCreateForm"
 				class="create-form"
 				role="form"
-				ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, createWishCtrl.currentUserID)"
+				ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)"
 				novalidate>
 
 		<div class="form-group">

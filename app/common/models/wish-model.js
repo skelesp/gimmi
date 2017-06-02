@@ -34,7 +34,6 @@ angular.module('gimmi.models.wish', [
 
 			if (wishlist && wishlist._id.receiverID === receiverID) {
 				deferred.resolve(wishlist);
-				console.log(wishlist);
 			} else {
 				$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
 					wishlist = result.data[0];
@@ -48,7 +47,6 @@ angular.module('gimmi.models.wish', [
 		model.createWish = function (wish, receiverID, userID){
 			wish.receiver = receiverID;
 			wish.createdBy = userID;
-			wish.status = "free";
 
 			$http.post(URLS.WISH, wish).success(function(wish){
 				console.info("Wish created: " + wish.title);

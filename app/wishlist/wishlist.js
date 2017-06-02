@@ -141,13 +141,11 @@
 				reservator: user,
 				reason: reason
 			};
-			console.log(reservation);
 			wishModel.addReservation(wish._id, reservation);
 		}
 
 		function deleteReservation (wish) {
 				wishModel.deleteReservation(wish._id);
-				console.log("Reservation deleted");
 		}
 		//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
 		function getReservationStatus (wish) {
@@ -155,7 +153,6 @@
 			if (wish.reservation) {
 				reservationStatus = "reserved";
 			}
-			console.log(wish.title + " " + reservationStatus);
 			return reservationStatus;
 		}
 		_self.reservationStatus = getReservationStatus;
@@ -202,7 +199,6 @@
 		_self.noImages = true;
 
     function returnToWishes(){
-			console.log("returnToWishes");
       $state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
     }
 
