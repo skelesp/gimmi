@@ -66,8 +66,8 @@
         <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'reserved' && wishCtrl.reservedByUser(wish.reservation.reservedBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.deleteReservation(wish)">Annuleer uw reservatie</a>
         </div>
-        <div class='wish-action' ng-hide="wishCtrl.userIsReceiver">
-          <a class="button button-small button-shadow" ng-click="wishCtrl.copy(wish)">Dit wil ik ook! {{wish.receiver}}</a>
+        <div class='wish-action' ng-hide="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id)">
+          <a class="button button-small button-shadow" ng-click="wishCtrl.copy(wish)">Dit wil ik ook!</a>
         </div>
         <div class='wish-action' ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.edit(wish)">Wijzig de wens</a>

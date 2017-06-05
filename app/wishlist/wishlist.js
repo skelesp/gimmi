@@ -88,7 +88,6 @@
 			newWish.image = wish.image;
 			newWish.url = wish.url;
 			newWish.price =  wish.price;
-			console.info("%s copied a wish from wishlist %s", userID, wish.receiver);
 			wishModel.createWish(newWish, userID, userID);
 		}
 

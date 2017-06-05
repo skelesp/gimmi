@@ -49,9 +49,13 @@ angular.module('gimmi.models.wish', [
 			wish.createdBy = userID;
 
 			$http.post(URLS.WISH, wish).success(function(wish){
-				console.info("Wish created: " + wish.title);
-				wishlist.wishes.push(wish);
-				wishlist.count++;
+				if (wishlist._id.receiverID === receiverID) {
+					console.info("Wish created: " + wish.title);
+					wishlist.wishes.push(wish);
+					wishlist.count++;
+				} else {
+					console.info("%s copied a wish from wishlist %s", userID, receiverID);
+				}
 			});
 
 		};
