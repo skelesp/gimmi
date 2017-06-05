@@ -26,7 +26,9 @@
 				_self.price = wish.price;
 				_self.url = wish.url;
 				_self.image = wish.image;
-				_self.reservedBy = wish.reservation.reservedBy.fullName;
+				if (wish.reservation) {
+					_self.reservedBy = wish.reservation.reservedBy.fullName;
+				}
 				_self.createdBy = wish.createdBy.fullName;
 				_self.createdAt = wish.createdAt;
 				_self.receiver = receiverModel.getCurrentReceiverName();
