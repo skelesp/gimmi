@@ -3,7 +3,6 @@
   <!-- wish image -->
   <div class="wish-img">
     <div class='wish-special font-alt' ng-if="wishCtrl.reservationStatus(wish) === 'reserved'">
-      <span >RESERVATIE TEST</span>
         <span ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd</span>
         <span ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd door u</span>
     </div>
@@ -19,6 +18,50 @@
         </div>
         <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'">
           <a class="button button-small button-shadow" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')">Ik reserveer dit ...</a>
+          <script type="text/ng-template" id="wishReservation.html">
+            <div class="modal-header" style="color:#000000">
+                <h3 class="modal-title" id="modal-title">
+                  Reserveer {{wishReservationPopupCtrl.wishTitle}}
+                </h3>
+            </div>
+
+            <div class="row modal-body" id="modal-body" style="color:#000000">
+              <form name="wishReservationForm"
+                    class="create-form"
+                    role="form"
+                    novalidate>
+                <div class="form-group">
+                  <select class="form-control"
+                          id="reservationReason"
+                          ng-model="wishReservationPopupCtrl.reservation.reason"
+                          required>
+                    <option selected disabled hidden>"Voor welke gelegenheid wilt u deze cadeau geven?"</option>
+                    <option value="Verjaardag">Verjaardag</option>
+                    <option value="Housewarming">Housewarming</option>
+                    <option value="Geboorte">Geboorte</option>
+                    <option value="Huwelijk">Huwelijk</option>
+                    <option value="Afscheid collega">Afscheid collega</option>
+                    <option value="Afscheid">Afscheid</option>
+                    <option value="Vrijgezellenfeest">Vrijgezellenfeest</option>
+                    <option value="Vakantie">Vakantie</option>
+                    <option value="Communie / Lentefeest">Communie / Lentefeest</option>
+                    <option value="Vaderdag">Vaderdag</option>
+                    <option value="Moederdag">Moederdag</option>
+                    <option value="Sinterklaas">Sinterklaas</option>
+                    <option value="Kerstmis">Kerstmis</option>
+                    <option value="Nieuwjaar">Nieuwjaar</option>
+                    <option value="Andere reden">Andere reden</option>
+                </select>
+                </div>
+              </div>
+            </form>
+
+            <div class="modal-footer">
+                <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.ok()">Reserveer</button>
+                <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.cancel()">Annuleer</button>
+            </div>
+
+          </script>
         </div>
         <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'reserved' && wishCtrl.reservedByUser(wish.reservation.reservedBy)">
           <a class="button button-small button-shadow" ng-click="wishCtrl.deleteReservation(wish)">Annuleer uw reservatie</a>

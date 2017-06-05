@@ -136,12 +136,31 @@
 			});
 		}
 
-		function addReservation (wish, user, reason) {
-			var reservation = {
-				reservator: user,
+		function addReservation (wish, userID, reason) {
+			/*var reservation = {
+				reservator: userID,
 				reason: reason
-			};
-			wishModel.addReservation(wish._id, reservation);
+			};*/
+			var wishReservationPopup = $uibModal.open({
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'wishReservation.html',
+				size: 'md',
+				controller: 'wishReservationPopupCtrl',
+				controllerAs: 'wishReservationPopupCtrl',
+				resolve: {
+					wish: function () {
+						return wish;
+					}
+				}
+			});
+
+			wishReservationPopup.result.then(function(reservation) {
+				reservation.reservationDate = new Date();
+				reservation.reservedBy = userID;
+
+				wishModel.addReservation(wish._id, reservation);
+			});
 		}
 
 		function deleteReservation (wish) {
@@ -171,6 +190,19 @@
 	_self.wish = wish;
 	_self.ok = function () {
 		$uibModalInstance.close(wish);
+	};
+	_self.cancel = function () {
+		$uibModalInstance.dismiss('cancel');
+	};
+})
+.controller('wishReservationPopupCtrl', function($uibModalInstance, wish) {
+	var _self = this;
+	var reservation = {amount: 1, reason: ''};
+	_self.reservation = reservation;
+	_self.wishTitle = wish.title;
+	_self.ok = function () {
+
+		$uibModalInstance.close(reservation);
 	};
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');

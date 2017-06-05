@@ -74,7 +74,6 @@ angular.module('gimmi.models.wish', [
 				});
 				console.info("wish deleted: " + wish._id);
 			});
-
 		}
 
 		model.addReservation = function(wishID, reservation) {
@@ -83,7 +82,7 @@ angular.module('gimmi.models.wish', [
 					return w._id === wishID;
 				});
 					wishlist.wishes[index] = wish;
-				console.info("Reservation added to", wish);
+				console.info("Reservation added to", wish._id);
 			});
 		}
 
@@ -93,7 +92,7 @@ angular.module('gimmi.models.wish', [
 					return w._id === wishID;
 				});
 				wishlist.wishes[index] = wish;
-				console.info("Reservation deleted for ", wish);
+				console.info("Reservation deleted for ", wish._id);
 			});
 		}
 
