@@ -15,13 +15,31 @@
       </h1>
     </div>
     <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-7"><img src="{{wishInfoCtrl.image}}" alt="wish image" /></div>
-      <div class="col-md-3">
+
+      <div class="col-md-5"><img src="{{wishInfoCtrl.image}}" alt="wish image" /></div>
+      <div class="col-md-4">
           <ul class="list-group">
-            <li class="list-group-item" ng-show="wish.url"><a style="color:#000" href="{{wishInfoCtrl.url}}" target="_blank"><span class="glyphicon glyphicon-globe" style="font-size:2em;" aria-hidden="true"></span>   Externe website</a></li>
-            <li class="list-group-item"><span class="glyphicon glyphicon-gift" style="font-size:2em;" aria-hidden="true"></span>   Status: {{wishInfoCtrl.status}}</li>
+            <li class="list-group-item">
+              <span class="glyphicon glyphicon-calendar" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>
+              Toegevoegd op: {{wishInfoCtrl.createdAt | date: 'dd / MM / \'yy' }}</li>
+            <li class="list-group-item">
+              <span class="glyphicon glyphicon-user" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>
+              Toegevoegd door: {{wishInfoCtrl.createdBy}}</li>
+            <li class="list-group-item" ng-show="wishInfoCtrl.url">
+              <a style="color:#000" href="{{wishInfoCtrl.url}}" target="_blank">
+                <span class="glyphicon glyphicon-globe" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>
+                Externe website</a></li>
+            <li class="list-group-item" ng-show="wishInfoCtrl.reservedBy">
+              <span class="glyphicon glyphicon-gift" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>Gereserveerd door: {{wishInfoCtrl.reservedBy}}</li>
+            <li class="list-group-item" ng-hide="wishInfoCtrl.reservedBy">
+              <span class="glyphicon glyphicon-gift" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>Nog niet gereserveerd</li>
           </ul>
+      </div>
+      <div class="col-md-2 pull-right">
+        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Wijzig de details</button>
+        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Reserveer</button>
+        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Zet ook op mijn lijst!</button>
+        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Verwijder deze wens</button>
       </div>
     </div>
   </div>
