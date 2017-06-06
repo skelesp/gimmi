@@ -18,10 +18,11 @@
 			})
 		;
 	})
-	.controller('wishInfoCtrl', ['$stateParams', 'wishModel', 'receiverModel', function ($stateParams, wishModel, receiverModel){
+	.controller('wishInfoCtrl', ['$stateParams', '$uibModal', 'wishModel', 'receiverModel', function ($stateParams, $uibModal, wishModel, receiverModel){
 			var _self = this;
 
 			wishModel.getWishById($stateParams.wishID).then( function(wish){
+				_self.wish = wish;
 				_self.title = wish.title;
 				_self.price = wish.price;
 				_self.url = wish.url;
@@ -34,5 +35,39 @@
 				_self.receiver = receiverModel.getCurrentReceiverName();
 				_self.receiverID = wish.receiver;
 			});
+
+			_self.editWishDetails = function(wish){
+				console.log("wish = ", wish);
+				//Create a popup instance for wish details edit
+				var editDetailsPopup = $uibModal.open({
+					ariaLabelledBy: 'modal-title',
+					ariaDescribedBy: 'modal-body',
+					templateUrl: 'app/wishlist/wish/wish_detail_edit-modal.html',
+					size: 'lg',
+					controller: 'wishDetailsEditCtrl',
+					controllerAs: 'wishDetailsEditCtrl',
+					resolve: {
+						wish: function () {
+							return wish;
+						}
+					}
+				});
+
+				editDetailsPopup.result.then(function (wish) {
+					console.log("wish is updated");
+				});
+			}
+	}])
+	.controller('wishDetailsEditCtrl', ['$uibModalInstance', 'wish', function($uibModalInstance, wish){
+		var _self = this;
+
+		_self.wish = wish;
+
+		_self.ok = function () {
+			$uibModalInstance.close(wish);
+		};
+		_self.cancel = function () {
+			$uibModalInstance.dismiss('cancel');
+		};
 	}])
 ;
