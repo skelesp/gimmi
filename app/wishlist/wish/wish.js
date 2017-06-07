@@ -23,10 +23,6 @@
 
 			wishModel.getWishById($stateParams.wishID).then( function(wish){
 				_self.wish = wish;
-				_self.title = wish.title;
-				_self.price = wish.price;
-				_self.url = wish.url;
-				_self.image = wish.image;
 				if (wish.reservation) {
 					_self.reservedBy = wish.reservation.reservedBy.fullName;
 				}
