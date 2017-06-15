@@ -37,7 +37,7 @@
 			<!-- /Create wish form -->
 
 			<!-- Show all wishes for the current receiver -->
-			<div ng-if="wishlistCtrl.currentReceiver" ng-repeat="wish in wishlistCtrl.wishes">
+			<div ng-if="wishlistCtrl.currentReceiver" ng-repeat="wish in wishlistCtrl.wishes | orderBy: '-createdAt'">
 				<div ui-view="wishlist_item"></div>
 			</div> <!-- /ng-repeat -->
 			<!-- /Show all wishes for the current receiver -->
