@@ -61,6 +61,7 @@ angular.module('gimmi.models.wish', [
 		};
 
 		model.updateWish = function(wish) {
+			console.log(wish);
 			$http.post(URLS.WISH+"/"+wish._id, wish).success(function(wish){
 				if (wishlist) {
 					console.log("wishlist:", wishlist);

@@ -33,7 +33,6 @@
 			});
 
 			_self.editWishDetails = function(wish){
-				console.log("wish = ", wish);
 				//Create a popup instance for wish details edit
 				var editDetailsPopup = $uibModal.open({
 					ariaLabelledBy: 'modal-title',
@@ -50,17 +49,16 @@
 				});
 
 				editDetailsPopup.result.then(function (wish) {
-					//TODO: set emptied fields to undefined to delete in MongoDb (#289)
 					wishModel.updateWish(wish);
 					console.log("wish is updated");
 				});
 			}
 	}])
 	.controller('wishDetailsEditCtrl', ['$uibModalInstance', 'wish', function($uibModalInstance, wish){
-		var _self = this;
+		var _self = this,
+		originalKeys = Object.keys(wish);
 
 		_self.wish = wish;
-
 		_self.ok = function () {
 			$uibModalInstance.close(wish);
 		};
