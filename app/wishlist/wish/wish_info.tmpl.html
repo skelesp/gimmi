@@ -6,17 +6,16 @@
         <a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})" style="color:#000;"><span class="glyphicon glyphicon-arrow-left"></span> Terug naar lijst</a>
       </div>
     </div>
-
     <div class="well">
-      <h1>{{wishInfoCtrl.title}}
-      <span class="label label-warning pull-right" style="font-size: 36px">{{wishInfoCtrl.price | currency : "€" : 2}}</span><br />
+      <h1>{{wishInfoCtrl.wish.title}}
+      <span class="label label-warning pull-right" style="font-size: 36px">{{wishInfoCtrl.wish.price | currency : "€" : 2}}</span><br />
       <small>voor {{wishInfoCtrl.receiver}}
       <a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})"><span class="glyphicon glyphicon-list-alt" style="color:#000"></span></a></small>
       </h1>
     </div>
     <div class="row">
 
-      <div class="col-md-5"><img src="{{wishInfoCtrl.image}}" alt="wish image" /></div>
+      <div class="col-md-5"><img src="{{wishInfoCtrl.wish.image}}" alt="wish image" /></div>
       <div class="col-md-4">
           <ul class="list-group">
             <li class="list-group-item">
@@ -33,10 +32,19 @@
               <span class="glyphicon glyphicon-gift" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>Gereserveerd door: {{wishInfoCtrl.reservedBy}}</li>
             <li class="list-group-item" ng-hide="wishInfoCtrl.reservedBy">
               <span class="glyphicon glyphicon-gift" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>Nog niet gereserveerd</li>
+            <li class="list-group-item" ng-show="wishInfoCtrl.wish.color">
+              <span class="glyphicon glyphicon-filter" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>{{wishInfoCtrl.wish.color}}</li>
+            <li class="list-group-item" ng-show="wishInfoCtrl.wish.size">
+              <span class="glyphicon glyphicon-resize-full" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>{{wishInfoCtrl.wish.size}}</li>
+            <li class="list-group-item" ng-show="wishInfoCtrl.wish.description">
+              <span class="glyphicon glyphicon-paragraph" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>{{wishInfoCtrl.wish.description}}</li>
           </ul>
       </div>
       <div class="col-md-2 pull-right">
-        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Wijzig de details</button>
+        <button type="button" name="editWish"
+                class="btn btn-block btn-default" style="color: #000"
+                ng-click="wishInfoCtrl.editWishDetails(wishInfoCtrl.wish)"
+                >Wijzig de details</button>
         <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Reserveer</button>
         <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Zet ook op mijn lijst!</button>
         <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Verwijder deze wens</button>
