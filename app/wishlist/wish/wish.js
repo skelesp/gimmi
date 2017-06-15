@@ -50,6 +50,8 @@
 				});
 
 				editDetailsPopup.result.then(function (wish) {
+					//TODO: set emptied fields to undefined to delete in MongoDb (#289)
+					wishModel.updateWish(wish);
 					console.log("wish is updated");
 				});
 			}

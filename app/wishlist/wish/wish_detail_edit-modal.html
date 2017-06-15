@@ -1,5 +1,4 @@
 <div class="modal-header" style="color:#000000">
-  <pre>{{wishDetailsEditCtrl.wish | json}}</pre>
     <h3 class="modal-title" id="modal-title">
       Wijzig de gegevens van {{wishDetailsEditCtrl.wish.title}}
     </h3>
@@ -41,6 +40,17 @@
           <span ng-show="wishEditForm.inputPrice.$error.number">
             Enkel getallen toegelaten!
           </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="wishUrl" class="col-md-2 control-label">Cadeaulink</label>
+        <div class="col-md-8">
+          <input 	type="text"
+                  class="form-control"
+                  id="WishUrl"
+                  ng-model="wishDetailsEditCtrl.wish.url"
+                  placeholder="Link naar externe website"
+                  required/>
         </div>
       </div>
       <div class="form-group">
