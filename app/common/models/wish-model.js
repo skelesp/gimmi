@@ -48,6 +48,10 @@ angular.module('gimmi.models.wish', [
 			wish.receiver = receiverID;
 			wish.createdBy = userID;
 
+			if (!wish.image){
+				wish.image="layout/avonmore_shop_test/images/wish_item_bg.png";
+			}
+			
 			$http.post(URLS.WISH, wish).success(function(wish){
 				if (wishlist._id.receiverID === receiverID) {
 					console.info("Wish created: " + wish.title);
@@ -62,6 +66,9 @@ angular.module('gimmi.models.wish', [
 
 		model.updateWish = function(wish) {
 			var convertedWish = convertUndefinedToNovalue(wish);
+			if (!wish.image){
+				wish.image="layout/avonmore_shop_test/images/wish_item_bg.png";
+			}
 			$http.put(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
 				if (wishlist) {
 					var index = _.findIndex(wishlist.wishes, function(w){

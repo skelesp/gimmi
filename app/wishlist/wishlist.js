@@ -183,9 +183,7 @@
 )
 .controller('editPopupCtrl', function($uibModalInstance, wish) {
 	var _self = this;
-	if (!wish.image){
-		wish.image="layout/avonmore_shop_test/images/wish_item_bg.png";
-	}
+
 	_self.wish = wish;
 	_self.ok = function () {
 		$uibModalInstance.close(wish);
@@ -234,6 +232,9 @@
     }
 
     function createWish(wish, receiverID, userID) {
+			if (!wish.image) {
+				wish.image = '';
+			}
       wishModel.createWish(wish, receiverID, userID);
 			resetForm();
       returnToWishes();
