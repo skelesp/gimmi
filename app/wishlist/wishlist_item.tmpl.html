@@ -7,8 +7,7 @@
         <span ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd door u</span>
     </div>
     <div class='pic'>
-      <div ng-hide="wish.image" class="wish-image" style='background-image: url("layout/avonmore_shop_test/images/wish_item_bg.png");'></div>
-      <div ng-show="wish.image" class="wish-image" style='background-image: url("{{wish.image}}");'></div>
+      <div class="wish-image" style='background-image: url("{{wish.image}}");'></div>
     </div>
     <div class='wish-hover'>
       <!-- wish button container -->
