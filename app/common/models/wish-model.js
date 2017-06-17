@@ -61,9 +61,9 @@ angular.module('gimmi.models.wish', [
 		};
 
 		model.updateWish = function(wish) {
-			$http.post(URLS.WISH+"/"+wish._id, wish).success(function(wish){
+			var convertedWish = convertUndefinedToNovalue(wish);
+			$http.post(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
 				if (wishlist) {
-					console.log("wishlist:", wishlist);
 					var index = _.findIndex(wishlist.wishes, function(w){
 						return w._id === wish._id;
 					});
@@ -73,6 +73,15 @@ angular.module('gimmi.models.wish', [
 			});
 		}
 
+		function convertUndefinedToNovalue (object) {
+			return _.mapValues(object, function(value){
+				if (typeof value === 'undefined' || value === "") {
+					return "#*/NO_VALUE/*#";
+				} else {
+					return value;
+				}
+			});
+		}
 		model.deleteWish = function(wish) {
 			$http.delete(URLS.WISH+"/"+wish._id).success(function(){
 				if (wishlist) {
