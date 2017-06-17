@@ -62,7 +62,7 @@ angular.module('gimmi.models.wish', [
 
 		model.updateWish = function(wish) {
 			var convertedWish = convertUndefinedToNovalue(wish);
-			$http.post(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
+			$http.put(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
 				if (wishlist) {
 					var index = _.findIndex(wishlist.wishes, function(w){
 						return w._id === wish._id;
