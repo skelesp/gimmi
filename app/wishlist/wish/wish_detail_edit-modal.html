@@ -13,7 +13,8 @@
         <label for="wishImage" class="col-md-2 control-label">Afbeelding</label>
         <div class="col-md-8">
           <div class='pic'>
-            <img class="img-thumbnail" ng-src="{{wishDetailsEditCtrl.wish.image}}" />
+            <img class="img-thumbnail" ng-src="{{wishDetailsEditCtrl.wish.image}}"
+            google-image-search="{{wishDetailsEditCtrl.wish.title}}" data-image-result="wishDetailsEditCtrl.wish.image" />
           </div>
         </div>
       </div>

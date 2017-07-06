@@ -1,0 +1,20 @@
+<div class="modal-header" style="color:#000000">
+    <h3 class="modal-title" id="modal-title">
+      Klik op de gewenste afbeelding
+      <button class="btn btn-warning" type="button" ng-click="popupCtrl.cancel()">Cancel</button>
+    </h3>
+</div>
+
+<div class="row modal-body" id="modal-body" style="color:#000000">
+	<p ng-show="popupCtrl.noImages" >Er zijn geen afbeeldingen gevonden voor "{{popupCtrl.searchTerm}}". Kies één van de onderstaande standaardafbeeldingen.</p>
+	<div ng-if="popupCtrl.images" ng-repeat="image in popupCtrl.images track by $index" class="col-md-3">
+		<img class="img-thumbnail" ng-if="image" ng-src="{{image}}" ng-click="popupCtrl.clickOnImage(image)" />
+	</div>
+	<div ng-if="!popupCtrl.images">
+		<p> Searching... </p>
+	</div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="popupCtrl.cancel()">Cancel</button>
+</div>
