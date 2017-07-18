@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Gimmi new layout</title>
+  </head>
+
+  <body>
+    <!-- Search collapsed ook, pure bootstrap zonder extra CSS -->
+    <nav class="navbar navbar-light navbar-toggleable-sm bg-faded justify-content-between">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-brand">
+        <img src="img/LogoGIMMI.png" class="d-inline-block align-top rounded logo" alt="Gimmi logo">
+      </div>
+      <div class="navbar-collapse collapse justify-content-between" id="collapsingNavbar">
+          <div><!--placeholder to evenly space flexbox items and center links--></div>
+          <form class="form-inline">
+            <div class="input-group">
+                <label class="h3 mr-3">Ik wil </label>
+                <!-- <span class="input-group-addon">fa-gift </span> -->
+                <input class="form-control form-control-lg" type="text" placeholder="iemand">
+                <label class="h3 ml-3">gelukkig maken</label>
+            </div>
+          </form>
+          <ul class="nav navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="">User</a></li>
+            <li class="nav-item"><a class="nav-link" href="">Logout</a></li>
+          </ul>
+      </div>
+  </nav>
+  <!-- Search blijft staan bij small, width wel nog fiksen. Extra css nodig voor abs-center-x  -->
+  <!-- <nav class="navbar navbar-toggleable-md navbar-light bg-faded sticky-top justify-content-between">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target=".dual-nav">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-brand">
+        <img src="img/LogoGIMMI.png" class="d-inline-block align-top rounded logo" alt="Gimmi logo">
+      </div>
+      <div class="navbar-nav abs-center-x">
+        <form class="form-inline">
+          <div class="input-group">
+              <span class="input-group-addon">fa-gift</span>
+              <input class="form-control form-control-lg" type="text" placeholder="Search">
+          </div>
+        </form>
+      </div>
+      <div class="navbar-collapse collapse dual-nav">
+          <ul class="nav navbar-nav ml-auto">
+              <li class="nav-item"><a class="nav-link" href="">User</a></li>
+              <li class="nav-item"><a class="nav-link" href="">Logout</a></li>
+          </ul>
+      </div>
+  </nav> -->
+
+  <div class="jumbotron">
+    <h3>Cadeau-ideeën voor</h3>
+    <h1 class="display-4">Stijn Beeckmans</h1>
+  </div>
+  <div class="card-columns">
+    <div class="card">
+      <img class="card-img-top img-fluid mb-3" ng-show="createWishCtrl.newWish.image" src="https://www.decozine.be/wp-content/uploads/2016/07/lamzac.jpg" alt="Gekozen afbeelding" ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
+      <form name="wishCreateForm" class="" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" novalidate="">
+    		<div class="form-group">
+    			<input type="text" class="form-control ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Titel" required="">
+    		</div>
+    		<div class="form-group">
+    			<input type="number" class="form-control ng-pristine ng-untouched ng-valid ng-empty" name="inputPrice" id="newWishPrice" placeholder="Prijs in € (enkel getal ingeven)" ng-model="createWishCtrl.newWish.price">
+    		</div>
+    		<div class="form-group">
+    			<input type="hidden" class="form-control ng-pristine ng-untouched ng-valid ng-empty" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url" placeholder="Link naar het cadeau">
+    		</div>
+    		<div class="form-group">
+        	<input type="hidden" class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="newWishImage" ng-model="createWishCtrl.newWish.image" placeholder="Zoek een afbeelding">
+    			<button type="button" class="btn btn-danger btn-lg ng-isolate-scope" ng-hide="createWishCtrl.newWish.image" ng-disabled="!createWishCtrl.newWish.title" google-image-search="" data-image-result="createWishCtrl.newWish.image" disabled="disabled">
+    							<span class="glyphicon glyphicon-picture"></span>
+    							Afbeelding zoeken
+    			</button>
+
+    		</div>
+
+    		<button type="submit" class="btn btn-danger btn-lg" ng-disabled="wishCreateForm.$invalid" disabled="disabled">
+    							Toevoegen
+    		</button>
+    		<button type="button" class="btn btn-default btn-lg" ng-click="createWishCtrl.reset();">
+    							Reset
+    		</button>
+    	</form>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="https://cdn.shopify.com/s/files/1/1804/1949/files/sequence-mobile.jpg?v=1496487413" alt="Trono">
+      <div class="card-block">
+        <h2 class="card-title">Trono</h2>
+        <h3 class="card-text"><span class="badge badge-pill badge-danger float-right">€ 105</span></h3>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="http://wp.patheos.com.s3.amazonaws.com/blogs/faithwalkers/files/2013/03/bigstock-Test-word-on-white-keyboard-27134336.jpg" alt="Test on keyboard">
+      <div class="card-block">
+        <h2 class="card-title">Keyboard Test <span class="badge badge-pill badge-danger float-right">€ 10</span></h2>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="img/LogoGIMMI.png" alt="Gimmi Logo">
+      <div class="card-block">
+        <h2 class="card-title">Gimmi Logo <span class="badge badge-pill badge-danger">€ 10</span></h2>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="http://xiostorage.com/wp-content/uploads/2015/10/test.png" alt="Test image">
+      <div class="card-block">
+        <h2 class="card-title">Gimmi Logo</h2>
+        <h3 class="card-text"><span class="badge badge-pill badge-danger">€ 250</span></h3>
+      </div>
+    </div>
+  </div>
+
+</body>
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+</html>  <!-- <img class="card-img-top img-fluid" src="https://cdn.shopify.com/s/files/1/1804/1949/files/sequence-mobile.jpg?v=1496487413" alt="Trono">
+  <img class="card-img-top img-fluid" src="http://wp.patheos.com.s3.amazonaws.com/blogs/faithwalkers/files/2013/03/bigstock-Test-word-on-white-keyboard-27134336.jpg" alt="Test on keyboard">
+  <img class="card-img-top img-fluid" src="img/LogoGIMMI.png" alt="Gimmi Logo">
+  <img class="card-img img-fluid" src="http://xiostorage.com/wp-content/uploads/2015/10/test.png" alt="Test image"> -->
