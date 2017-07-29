@@ -3,6 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="img\favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img\favicon.ico" type="image/x-icon">
+    <!-- Stylesheets and fonts -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -22,10 +26,10 @@
           <div><!--placeholder to evenly space flexbox items and center links--></div>
           <form class="form-inline">
             <div class="input-group">
-                <label class="h3 mr-3">Ik wil </label>
+                <label class="h4 mr-3">Ik wil </label>
                 <!-- <span class="input-group-addon">fa-gift </span> -->
                 <input class="form-control form-control-lg" type="text" placeholder="...">
-                <label class="h3 ml-3">gelukkig maken</label>
+                <label class="h4 ml-3">gelukkig maken</label>
             </div>
           </form>
           <ul class="nav navbar-nav">
@@ -59,10 +63,10 @@
   </nav> -->
 
   <div class="jumbotron">
-    <h3>Cadeau-ideeën voor</h3>
+    <h4>Cadeau-ideeën voor</h4>
     <h1 class="display-4">Stijn Beeckmans</h1>
   </div>
-  <div class="card-columns">
+  <div class="card-columns ml-3 mr-3">
     <div class="card">
       <img class="card-img-top img-fluid mb-3" ng-show="createWishCtrl.newWish.image" src="https://www.decozine.be/wp-content/uploads/2016/07/lamzac.jpg" alt="Gekozen afbeelding" ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
       <form name="wishCreateForm" class="" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" novalidate="">
@@ -95,50 +99,145 @@
     <div class="card">
       <img class="card-img-top img-fluid" src="https://cdn.shopify.com/s/files/1/1804/1949/files/sequence-mobile.jpg?v=1496487413" alt="Trono">
       <div class="card-block">
-        <h2 class="card-title">Trono</h2>
-        <h3 class="card-text"><span class="badge badge-pill badge-danger float-right">€ 105</span></h3>
+        <h4 class="card-title">Trono</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger float-right">€ 105</span></h4>
       </div>
     </div>
     <div class="card">
       <img class="card-img-top img-fluid" src="http://wp.patheos.com.s3.amazonaws.com/blogs/faithwalkers/files/2013/03/bigstock-Test-word-on-white-keyboard-27134336.jpg" alt="Test on keyboard">
       <div class="card-block">
-        <h2 class="card-title">Keyboard Test <span class="badge badge-pill badge-danger float-right">€ 10</span></h2>
+        <h4 class="card-title">Keyboard Test <span class="badge badge-pill badge-danger float-right">€ 10</span></h4>
       </div>
     </div>
     <div class="card">
       <img class="card-img-top img-fluid" src="https://s-media-cache-ak0.pinimg.com/236x/73/1e/88/731e881bd4afbaf12807dfbfb8759540--le-monde-jean.jpg" alt="Gimmi Logo">
       <div class="card-block">
-        <h2 class="card-title">XIII strip<span class="badge badge-pill badge-danger">€ 10</span></h2>
+        <h4 class="card-title">XIII strip<span class="badge badge-pill badge-danger">€ 10</span></h4>
       </div>
     </div>
     <div class="card">
         <img class="card-img img-fluid" src="https://pdj-ecom-cdn.azureedge.net/-/media/pioneerdj/images/products/mixer/djm-850/black/djm-850-main.png?h=600&w=800&hash=273FFBFAC8A7E17843842101B9933F01F1EAA887" alt="Test image">
       <div class="card-block">
-        <h2 class="card-title">Pioneer DJM 850</h2>
-        <h3 class="card-text"><span class="badge badge-pill badge-danger">€ 800</span></h3>
+        <h4 class="card-title">Pioneer DJM 850</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 800</span></h4>
       </div>
     </div>
     <div class="card">
         <img class="card-img img-fluid" src="http://static.keymusic.com/products/225447/XL/gibson-les-paul-traditional-2015-heritage-cherry-sunburst-2.jpg" alt="Test image">
       <div class="card-block">
-        <h2 class="card-title">Gitaar</h2>
-        <h3 class="card-text"><span class="badge badge-pill badge-danger">€ 2500</span></h3>
+        <h4 class="card-title">Gitaar</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 2500</span></h4>
       </div>
     </div>
     <div class="card">
         <img class="card-img img-fluid" src="https://fimgs.net/images/secundar/o.36710.jpg" alt="Test image">
       <div class="card-block">
-        <h2 class="card-title">Parfum Hugo Boss</h2>
-        <h3 class="card-text"><span class="badge badge-pill badge-danger">€ 100</span></h3>
+        <h4 class="card-title">Parfum Hugo Boss</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 100</span></h4>
       </div>
     </div>
     <div class="card">
         <img class="card-img img-fluid" src="https://www.tuinplantendepauw.be/files/2016-11/meerstam4.jpg" alt="Test image">
       <div class="card-block">
-        <h2 class="card-title">Boom</h2>
-        <h3 class="card-text"><span class="badge badge-pill badge-danger">€ 250</span></h3>
+        <h4 class="card-title">Boom</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 250</span></h4>
       </div>
     </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="https://cdn.shopify.com/s/files/1/1804/1949/files/sequence-mobile.jpg?v=1496487413" alt="Trono">
+      <div class="card-block">
+        <h4 class="card-title">Trono</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger float-right">€ 105</span></h4>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="http://wp.patheos.com.s3.amazonaws.com/blogs/faithwalkers/files/2013/03/bigstock-Test-word-on-white-keyboard-27134336.jpg" alt="Test on keyboard">
+      <div class="card-block">
+        <h4 class="card-title">Keyboard Test <span class="badge badge-pill badge-danger float-right">€ 10</span></h4>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="https://s-media-cache-ak0.pinimg.com/236x/73/1e/88/731e881bd4afbaf12807dfbfb8759540--le-monde-jean.jpg" alt="Gimmi Logo">
+      <div class="card-block">
+        <h4 class="card-title">XIII strip<span class="badge badge-pill badge-danger">€ 10</span></h4>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="https://pdj-ecom-cdn.azureedge.net/-/media/pioneerdj/images/products/mixer/djm-850/black/djm-850-main.png?h=600&w=800&hash=273FFBFAC8A7E17843842101B9933F01F1EAA887" alt="Test image">
+      <div class="card-block">
+        <h4 class="card-title">Pioneer DJM 850</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 800</span></h4>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="http://static.keymusic.com/products/225447/XL/gibson-les-paul-traditional-2015-heritage-cherry-sunburst-2.jpg" alt="Test image">
+      <div class="card-block">
+        <h4 class="card-title">Gitaar</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 2500</span></h4>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="https://fimgs.net/images/secundar/o.36710.jpg" alt="Test image">
+      <div class="card-block">
+        <h4 class="card-title">Parfum Hugo Boss</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 100</span></h4>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="https://www.tuinplantendepauw.be/files/2016-11/meerstam4.jpg" alt="Test image">
+      <div class="card-block">
+        <h4 class="card-title">Boom</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 250</span></h4>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="https://cdn.shopify.com/s/files/1/1804/1949/files/sequence-mobile.jpg?v=1496487413" alt="Trono">
+      <div class="card-block">
+        <h4 class="card-title">Trono</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger float-right">€ 105</span></h4>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="http://wp.patheos.com.s3.amazonaws.com/blogs/faithwalkers/files/2013/03/bigstock-Test-word-on-white-keyboard-27134336.jpg" alt="Test on keyboard">
+      <div class="card-block">
+        <h4 class="card-title">Keyboard Test <span class="badge badge-pill badge-danger float-right">€ 10</span></h4>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid" src="https://s-media-cache-ak0.pinimg.com/236x/73/1e/88/731e881bd4afbaf12807dfbfb8759540--le-monde-jean.jpg" alt="Gimmi Logo">
+      <div class="card-block">
+        <h4 class="card-title">XIII strip<span class="badge badge-pill badge-danger">€ 10</span></h4>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="https://pdj-ecom-cdn.azureedge.net/-/media/pioneerdj/images/products/mixer/djm-850/black/djm-850-main.png?h=600&w=800&hash=273FFBFAC8A7E17843842101B9933F01F1EAA887" alt="Test image">
+      <div class="card-block">
+        <h4 class="card-title">Pioneer DJM 850</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 800</span></h4>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="http://static.keymusic.com/products/225447/XL/gibson-les-paul-traditional-2015-heritage-cherry-sunburst-2.jpg" alt="Test image">
+      <div class="card-block">
+        <h4 class="card-title">Gitaar</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 2500</span></h4>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="https://fimgs.net/images/secundar/o.36710.jpg" alt="Test image">
+      <div class="card-block">
+        <h4 class="card-title">Parfum Hugo Boss</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 100</span></h4>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img img-fluid" src="https://www.tuinplantendepauw.be/files/2016-11/meerstam4.jpg" alt="Test image">
+      <div class="card-block">
+        <h4 class="card-title">Boom</h4>
+        <h4 class="card-text"><span class="badge badge-pill badge-danger">€ 250</span></h4>
+      </div>
+    </div>
+
   </div>
 
 </body>
