@@ -82,16 +82,15 @@
     		</div>
     		<div class="form-group">
         	<input type="hidden" class="form-control form-control-sm" id="newWishImage" ng-model="createWishCtrl.newWish.image" placeholder="Zoek een afbeelding">
-    			<button type="button" class="btn btn-danger btn-sm" ng-hide="createWishCtrl.newWish.image" ng-disabled="!createWishCtrl.newWish.title" google-image-search="" data-image-result="createWishCtrl.newWish.image" disabled="disabled">
-    							<span class="glyphicon glyphicon-picture"></span>Afbeelding zoeken
-    			</button>
-
     		</div>
+        <button type="button" class="btn btn-danger btn-sm ml-3" ng-hide="createWishCtrl.newWish.image" ng-disabled="!createWishCtrl.newWish.title" google-image-search="" data-image-result="createWishCtrl.newWish.image" disabled="disabled">
+                <span class="glyphicon glyphicon-picture"></span>Afbeelding zoeken
+        </button>
 
-    		<button type="submit" class="btn btn-danger btn-sm" ng-disabled="wishCreateForm.$invalid" disabled="disabled">
+    		<button type="submit" class="btn btn-danger btn-sm float-right" ng-disabled="wishCreateForm.$invalid" disabled="disabled">
     							Toevoegen
     		</button>
-    		<button type="button" class="btn btn-default btn-sm" ng-click="createWishCtrl.reset();">
+    		<button type="button" class="btn btn-default btn-sm float-left" ng-click="createWishCtrl.reset();">
     							Reset
     		</button>
     	</form>
