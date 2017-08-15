@@ -14,60 +14,39 @@
     <title>Gimmi new layout</title>
   </head>
 
-  <body>
-    <!-- Search collapsed ook, pure bootstrap zonder extra CSS -->
-    <nav class="navbar navbar-light navbar-toggleable-sm bg-faded justify-content-between sticky-top">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-brand">
-        <img src="img/LogoGIMMI.png" class="d-inline-block align-top rounded logo" alt="Gimmi logo">
-      </div>
-      <div class="navbar-collapse collapse justify-content-between" id="collapsingNavbar">
-          <div><!--placeholder to evenly space flexbox items and center links--></div>
-          <form class="form-inline">
-            <div class="input-group">
-                <label class="h6 mr-3">Ik zoek een cadeau voor </label>
-                <!-- <span class="input-group-addon">fa-gift </span> -->
-                <input class="form-control form-control-sm" type="text" placeholder="...">
-                <!--<label class="h6 ml-3">gelukkig maken</label>-->
-            </div>
-          </form>
-          <ul class="nav navbar-nav">
-            <li class="nav-item"><a class="nav-link" href=""><span class="fa fa-user-o mr-1" aria-hidden="true"></span>Stijn</a></li>
-            <li class="nav-item"><a class="nav-link" href=""><span class="fa fa-sign-out mr-1" aria-hidden="true"></span>Logout</a></li>
-          </ul>
-      </div>
-  </nav>
-  <!-- Search blijft staan bij small, width wel nog fiksen. Extra css nodig voor abs-center-x  -->
-  <!-- <nav class="navbar navbar-toggleable-md navbar-light bg-faded sticky-top justify-content-between">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target=".dual-nav">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-brand">
-        <img src="img/LogoGIMMI.png" class="d-inline-block align-top rounded logo" alt="Gimmi logo">
-      </div>
-      <div class="navbar-nav abs-center-x">
+<body>
+  <!-- Navigatiebar  -->
+  <nav class="navbar navbar-light navbar-toggleable-sm bg-faded justify-content-between sticky-top">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-brand">
+      <img src="img/LogoGIMMI.png" class="d-inline-block align-top rounded logo" alt="Gimmi logo">
+    </div>
+    <div class="navbar-collapse collapse justify-content-between" id="collapsingNavbar">
+        <div><!--placeholder to evenly space flexbox items and center links--></div>
         <form class="form-inline">
           <div class="input-group">
-              <span class="input-group-addon">fa-gift</span>
-              <input class="form-control form-control-lg" type="text" placeholder="Search">
+              <label class="h6 mr-3">Ik zoek een cadeau voor </label>
+              <!-- <span class="input-group-addon">fa-gift </span> -->
+              <input class="form-control form-control-sm" type="text" placeholder="...">
+              <!--<label class="h6 ml-3">gelukkig maken</label>-->
           </div>
         </form>
-      </div>
-      <div class="navbar-collapse collapse dual-nav">
-          <ul class="nav navbar-nav ml-auto">
-              <li class="nav-item"><a class="nav-link" href="">User</a></li>
-              <li class="nav-item"><a class="nav-link" href="">Logout</a></li>
-          </ul>
-      </div>
-  </nav> -->
-
-  <div class="jumbotron">
-    <h4>Cadeau-ideeën voor</h4>
-    <h1 class="display-4">Stijn Beeckmans</h1>
-  </div>
+        <ul class="nav navbar-nav">
+          <li class="nav-item"><a class="nav-link" href=""><span class="fa fa-user-o mr-1" aria-hidden="true"></span>Stijn</a></li>
+          <li class="nav-item"><a class="nav-link" href=""><span class="fa fa-sign-out mr-1" aria-hidden="true"></span>Logout</a></li>
+        </ul>
+    </div>
+  </nav>
+  <!-- Titel van de lijst -->
+  <blockquote class="blockquote">
+      <h4>Cadeau-ideeën voor</h4>
+      <h1>Stijn Beeckmans</h1>
+  </blockquote>
+  <!-- Lijst van wensen -->
   <div class="card-columns ml-3 mr-3">
+    <!-- Create wish card -->
     <div class="card">
       <img class="card-img-top rounded img-fluid mb-3" ng-show="createWishCtrl.newWish.image" src="https://www.decozine.be/wp-content/uploads/2016/07/lamzac.jpg" alt="Gekozen afbeelding" ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
       <form name="wishCreateForm" class="m-2" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" novalidate="">
@@ -95,51 +74,99 @@
     		</button>
     	</form>
     </div>
+    <!-- Wish cards -->
     <div class="card">
       <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://cdn.shopify.com/s/files/1/1804/1949/files/sequence-mobile.jpg?v=1496487413" alt="Trono">
-      <div class="card-block">
-        <p class="card-title">Trono <span class="badge badge-pill badge-danger float-right">€ 105</span></p>
+      <div class="card-block p-1">
+        <p class="card-title">Trono</p>
+        <p class="card-subtitle text-muted">Idee van Stijn B.</p>
+        <h6 class="card-text mx-auto my-1 text-right">€ 95</h6>
+      </div>
+      <div class="card-footer text-muted p-1">
+        <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
       </div>
     </div>
     <div class="card">
       <img class="card-img-top img-fluid rounded w-100 mb-2" src="http://wp.patheos.com.s3.amazonaws.com/blogs/faithwalkers/files/2013/03/bigstock-Test-word-on-white-keyboard-27134336.jpg" alt="Test on keyboard">
-      <div class="card-block">
-        <p class="card-title">Keyboard Test <span class="badge badge-pill badge-danger float-right">€ 10</span></p>
+      <div class="card-block p-1">
+        <p class="card-title">Keyboard Test</p>
+        <p class="card-subtitle text-muted">Idee van Stijn B.</p>
+        <h6 class="card-text mx-auto my-1 text-right">€ 1.000.000,00</h6>
+      </div>
+      <div class="card-footer text-muted p-1">
+        <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
       </div>
     </div>
     <div class="card">
       <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://s-media-cache-ak0.pinimg.com/236x/73/1e/88/731e881bd4afbaf12807dfbfb8759540--le-monde-jean.jpg" alt="Gimmi Logo">
-      <div class="card-block">
-        <p class="card-title">XIII strip center <span class="badge badge-pill badge-danger float-right">€ 10</span></p>
+      <div class="card-block p-1">
+        <p class="card-title">XIII strip center</p>
+        <p class="card-subtitle text-muted">Idee van Stijn B.</p>
+        <h6 class="card-text mx-auto my-1 text-right">€ 10</h6>
+      </div>
+      <div class="card-footer text-muted p-1">
+        <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
       </div>
     </div>
     <div class="card">
         <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://pdj-ecom-cdn.azureedge.net/-/media/pioneerdj/images/products/mixer/djm-850/black/djm-850-main.png?h=600&w=800&hash=273FFBFAC8A7E17843842101B9933F01F1EAA887" alt="Test image">
-      <div class="card-block">
-        <p class="card-title">Pioneer DJM 850  <span class="badge badge-pill badge-danger float-right">€ 800</span></p>
-      </div>
+        <div class="card-block p-1">
+          <p class="card-title">Pioneer DJM 850</p>
+          <p class="card-subtitle text-muted text-truncate">Idee van Chloé Van Der Meulen</p>
+          <h6 class="card-text mx-auto my-1 text-right">€ 800</h6>
+        </div>
+        <div class="card-footer text-muted p-1">
+          <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+        </div>
     </div>
     <div class="card">
         <img class="card-img-top img-fluid rounded w-100 mb-2" src="http://static.keymusic.com/products/225447/XL/gibson-les-paul-traditional-2015-heritage-cherry-sunburst-2.jpg" alt="Test image">
-      <div class="card-block">
-        <p class="card-title">Gitaar <span class="badge badge-pill badge-danger float-right">€ 2500</span></p>
-      </div>
+        <div class="card-block p-1">
+          <p class="card-title">Gibson Gitaar</p>
+          <p class="card-subtitle text-muted">Idee van Stijn B.</p>
+          <h6 class="card-text mx-auto my-1 text-right">€ 2500</h6>
+        </div>
+        <div class="card-footer text-muted p-1">
+          <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+        </div>
     </div>
     <div class="card">
         <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://fimgs.net/images/secundar/o.36710.jpg" alt="Test image">
-      <div class="card-block">
-        <p class="card-title">Parfum Hugo Boss <span class="badge badge-pill badge-danger float-right">€ 100</span></p>
-      </div>
+        <div class="card-block p-1">
+          <p class="card-title">Parfum Hugo Boss</p>
+          <p class="card-subtitle text-muted">Idee van Stijn B.</p>
+          <h6 class="card-text mx-auto my-1 text-right">€ 100</h6>
+        </div>
+        <div class="card-footer text-muted p-1">
+          <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+        </div>
     </div>
     <div class="card">
         <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://www.tuinplantendepauw.be/files/2016-11/meerstam4.jpg" alt="Test image">
-      <div class="card-block">
-        <p class="card-title">Meerstammige Boom <span class="badge badge-pill badge-danger float-right">€ 250</span></p>
-      </div>
+        <div class="card-block p-1">
+          <p class="card-title">Meerstammige boom</p>
+          <p class="card-subtitle text-muted">Idee van Stijn B.</p>
+          <h6 class="card-text mx-auto my-1 text-right">€ 250</h6>
+        </div>
+        <div class="card-footer text-muted p-1">
+          <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+        </div>
     </div>
-
-
-  </div> <!-- end card-columns -->
+  </div> <!-- Einde van de lijst -->
 
 </body>
   <!-- Scripts -->
