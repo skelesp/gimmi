@@ -1,50 +1,39 @@
-<!-- page section -->
-<section class="page-section" style="color: black">
-	<!-- No current receiver found -->
-	<div class="container relative" ui-view ng-if="! wishlistCtrl.currentReceiver">
-		<h4>Sorry, geen lijst gevonden.</h4>
-	</div>
+<!-- No current receiver found -->
+<div class="container relative" ui-view ng-if="! wishlistCtrl.currentReceiver">
+	<h4>Sorry, geen lijst gevonden.</h4>
+</div>
 
-	<!-- Show list for current receiver -->
-	<div class="container relative" ng-if="wishlistCtrl.currentReceiver">
-		<!-- Wishlist header -->
-		<div class='align-left'>
-			<h4>
-				<span class="label label-default pull-right"
-							ng-show="wishlistCtrl.userIsReceiver" >
-							<a ui-sref="gimmi.wishlist.send">Verstuur mijn lijst</a>
-				</span>
-				<span class="label label-default pull-right"
-							ng-show="!wishlistCtrl.userIsReceiver" >
-							<a ui-sref="gimmi.wishlist({receiverID: wishlistCtrl.currentUserID})">Ga naar mijn lijst</a>
-				</span>
-			</h4>
-			<h3 class="section-title-top mt-0">Cadeau-ideeën voor</h3>
-			<h2 class="section-title font-alt mt-0">{{wishlistCtrl.currentReceiver.fullName}}<span class='featured_separated'><span></span></span></h2>
+<div ng-if="wishlistCtrl.currentReceiver">
+	<!-- Wishlist header -->
+	<blockquote class="blockquote p-3">
+		<div class="row">
+			<div class="col-sm-6">
+				<h4>Cadeau-ideeën voor</h4>
+				<h1>{{wishlistCtrl.currentReceiver.fullName}}</h1>
+			</div>
+			<div class="col-sm-4 float-right">
+				<a class="badge badge-pill badge-secondary float-right" ng-show="wishlistCtrl.userIsReceiver" ui-sref="gimmi.wishlist.send">
+					Verstuur mijn lijst
+				</a>
+				<a class="badge badge-pill badge-secondary float-right" ng-show="!wishlistCtrl.userIsReceiver" ui-sref="gimmi.wishlist({receiverID: wishlistCtrl.currentUserID})">
+					Ga naar mijn lijst
+				</a>
+			</div>
+		</div>
+	</blockquote>
 
-			<!--<div class="row">
-				<div class="col-md-6 col-md-offset-3">
-					<p class="section-title-small">
-						Extra info over Stijn</p>
-				</div>
-			</div>-->
-		</div> <!-- Wishlist header -->
+	<!-- Lijst van wensen -->
+	<div class="card-columns ml-3 mr-3">
+		<!-- Create wish form -->
+		<div ui-view="wish_create"></div>
+		<!-- /Create wish form -->
 
-		<!-- Wishlist -->
-		<div class="row multi-columns-row shop-columns shop wishlist mt-50">
-			<!-- Create wish form -->
-			<div ui-view="wish_create"></div>
-			<!-- /Create wish form -->
+		<!-- Show all wishes for the current receiver -->
+		<div ng-if="wishlistCtrl.currentReceiver" ng-repeat="wish in wishlistCtrl.wishes | orderBy: '-createdAt'">
+			<div ui-view="wishlist_item"></div>
+		</div> <!-- /ng-repeat -->
+		<!-- /Show all wishes for the current receiver -->
 
-			<!-- Show all wishes for the current receiver -->
-			<div ng-if="wishlistCtrl.currentReceiver" ng-repeat="wish in wishlistCtrl.wishes | orderBy: '-createdAt'">
-				<div ui-view="wishlist_item"></div>
-			</div> <!-- /ng-repeat -->
-			<!-- /Show all wishes for the current receiver -->
+	</div> <!-- End of wishlist -->
 
-		</div> <!-- End of wishlist -->
-
-	</div>
-</section>
-
-<!-- /page section -->
+</div>

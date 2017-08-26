@@ -1,154 +1,134 @@
 <!-- Wish item container -->
-<div class="col-sm-3 col-lg-3 mb-50 mb-xss-30 wish">
-  <!-- wish image -->
+<div class="card">
+  <img class="card-img-top img-fluid rounded w-100 mb-2" ng-src="{{wish.image}}"
+    alt="Afbeelding van de wens">
+  <div class="card-block p-1">
+    <h6 class="card-title mb-1 font-weight-bold">{{wish.title}}</h6>
+    <p class="card-subtitle text-muted text-truncate">Idee van Stijn B.</p>
+    <p class="card-text mx-auto my-1 text-right font-weight-bold">{{wish.price | currency : "€" : 2}}</p>
+  </div>
+  <div class="card-footer text-muted p-1">
+    <a><i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i></a>
+    <a ng-hide="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id)" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i></a>
+    <a ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit fa-2x mr-3" aria-hidden="true"></i></a>
+    <a ui-sref="gimmi.wishlist.wish({wishID: wish._id})"><i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i></a>
+  </div>
+</div>
+
+<script type="text/ng-template" id="editWish.html">
+  <div class="modal-header" style="color:#000000">
+    <h3 class="modal-title" id="modal-title">
+      Wijzig {{editPopupCtrl.wish.title}}
+    </h3>
+  </div>
+  <div class="row modal-body" id="modal-body" style="color:#000000">
+    <form name="wishEditForm" class="create-form" role="form" novalidate>
+      <div class='pic'>
+        <img class="img-thumbnail" ng-src="{{editPopupCtrl.wish.image}}" google-image-search="{{editPopupCtrl.wish.title}}" data-image-result="editPopupCtrl.wish.image"
+        />
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id="WishTitle" ng-model="editPopupCtrl.wish.title" placeholder="Titel" required/>
+      </div>
+      <div class="form-group">
+        <input type="number" class="form-control" name="inputPrice" id="WishPrice" placeholder="Prijs in € (enkel getal ingeven)"
+          ng-model="editPopupCtrl.wish.price" />
+        <span ng-show="wishEditForm.inputPrice.$error.number">
+                  Enkel getallen toegelaten!
+              </span>
+      </div>
+  </div>
+  </form>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="editPopupCtrl.ok()">Opslaan</button>
+    <button class="btn btn-warning" type="button" ng-click="editPopupCtrl.cancel()">Annuleer</button>
+  </div>
+</script>
+
+<!-- //////////////////////////////////////////////////////////////// -->
+
+
+  <!-- wish image
   <div class="wish-img">
     <div class='wish-special font-alt' ng-if="wishCtrl.reservationStatus(wish) === 'reserved'">
         <span ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd</span>
         <span ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd door u</span>
+    </div> 
+  </div>-->
+
+  <!-- wish button container
+  <div class='wish-button-cont'>
+    <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'">
+      <a class="button button-small button-shadow" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')">Ik reserveer dit ...</a>
+      <script type="text/ng-template" id="wishReservation.html">
+        <div class="modal-header" style="color:#000000">
+            <h3 class="modal-title" id="modal-title">
+              Reserveer {{wishReservationPopupCtrl.wishTitle}}
+            </h3>
+        </div>
+
+        <div class="row modal-body" id="modal-body" style="color:#000000">
+          <form name="wishReservationForm"
+                class="create-form"
+                role="form"
+                novalidate>
+            <div class="form-group">
+              <select class="form-control"
+                      id="reservationReason"
+                      ng-model="wishReservationPopupCtrl.reservation.reason"
+                      required>
+                <option selected disabled hidden>"Voor welke gelegenheid wilt u deze cadeau geven?"</option>
+                <option value="Verjaardag">Verjaardag</option>
+                <option value="Housewarming">Housewarming</option>
+                <option value="Geboorte">Geboorte</option>
+                <option value="Huwelijk">Huwelijk</option>
+                <option value="Afscheid collega">Afscheid collega</option>
+                <option value="Afscheid">Afscheid</option>
+                <option value="Vrijgezellenfeest">Vrijgezellenfeest</option>
+                <option value="Vakantie">Vakantie</option>
+                <option value="Communie / Lentefeest">Communie / Lentefeest</option>
+                <option value="Vaderdag">Vaderdag</option>
+                <option value="Moederdag">Moederdag</option>
+                <option value="Sinterklaas">Sinterklaas</option>
+                <option value="Kerstmis">Kerstmis</option>
+                <option value="Nieuwjaar">Nieuwjaar</option>
+                <option value="Andere reden">Andere reden</option>
+            </select>
+            </div>
+          </div>
+        </form>
+
+        <div class="modal-footer">
+            <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.ok()">Reserveer</button>
+            <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.cancel()">Annuleer</button>
+        </div>
+
+      </script>
+    </div>-->
+  <!--  
+    <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'reserved' && wishCtrl.reservedByUser(wish.reservation.reservedBy)">
+      <a class="button button-small button-shadow" ng-click="wishCtrl.deleteReservation(wish)">Annuleer uw reservatie</a>
     </div>
-    <div class='pic'>
-      <div class="wish-image" style='background-image: url("{{wish.image}}");'></div>
+    
+    <div class='wish-action' ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)">
+      <a class="button button-small button-shadow" ng-click="wishCtrl.deleteWish(wish)" >Verwijder dit cadeau</a>
+      <script type="text/ng-template" id="deleteVerification.html">
+
+        <div class="modal-header" style="color:#000000">
+            <h3 class="modal-title" id="modal-title">
+              Wilt u verwijderen?
+            </h3>
+        </div>
+
+        <div class="row modal-body" id="modal-body" style="color:#000000">
+          Bent u zeker dat u <b>"{{deletePopupCtrl.wishTitle}}"</b> wilt verwijderen?
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-warning" type="button" ng-click="deletePopupCtrl.ok()">Ja</button>
+            <button class="btn btn-warning" type="button" ng-click="deletePopupCtrl.cancel()">Nee</button>
+        </div>
+
+      </script>
     </div>
-    <div class='wish-hover'>
-      <!-- wish button container -->
-      <div class='wish-button-cont'>
-        <div class='wish-action'>
-          <a class="button button-small button-shadow" ui-sref="gimmi.wishlist.wish({wishID: wish._id})">Toon meer details</a>
-        </div>
-        <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'">
-          <a class="button button-small button-shadow" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')">Ik reserveer dit ...</a>
-          <script type="text/ng-template" id="wishReservation.html">
-            <div class="modal-header" style="color:#000000">
-                <h3 class="modal-title" id="modal-title">
-                  Reserveer {{wishReservationPopupCtrl.wishTitle}}
-                </h3>
-            </div>
-
-            <div class="row modal-body" id="modal-body" style="color:#000000">
-              <form name="wishReservationForm"
-                    class="create-form"
-                    role="form"
-                    novalidate>
-                <div class="form-group">
-                  <select class="form-control"
-                          id="reservationReason"
-                          ng-model="wishReservationPopupCtrl.reservation.reason"
-                          required>
-                    <option selected disabled hidden>"Voor welke gelegenheid wilt u deze cadeau geven?"</option>
-                    <option value="Verjaardag">Verjaardag</option>
-                    <option value="Housewarming">Housewarming</option>
-                    <option value="Geboorte">Geboorte</option>
-                    <option value="Huwelijk">Huwelijk</option>
-                    <option value="Afscheid collega">Afscheid collega</option>
-                    <option value="Afscheid">Afscheid</option>
-                    <option value="Vrijgezellenfeest">Vrijgezellenfeest</option>
-                    <option value="Vakantie">Vakantie</option>
-                    <option value="Communie / Lentefeest">Communie / Lentefeest</option>
-                    <option value="Vaderdag">Vaderdag</option>
-                    <option value="Moederdag">Moederdag</option>
-                    <option value="Sinterklaas">Sinterklaas</option>
-                    <option value="Kerstmis">Kerstmis</option>
-                    <option value="Nieuwjaar">Nieuwjaar</option>
-                    <option value="Andere reden">Andere reden</option>
-                </select>
-                </div>
-              </div>
-            </form>
-
-            <div class="modal-footer">
-                <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.ok()">Reserveer</button>
-                <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.cancel()">Annuleer</button>
-            </div>
-
-          </script>
-        </div>
-        <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'reserved' && wishCtrl.reservedByUser(wish.reservation.reservedBy)">
-          <a class="button button-small button-shadow" ng-click="wishCtrl.deleteReservation(wish)">Annuleer uw reservatie</a>
-        </div>
-        <div class='wish-action' ng-hide="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id)">
-          <a class="button button-small button-shadow" ng-click="wishCtrl.copy(wish)">Dit wil ik ook!</a>
-        </div>
-        <div class='wish-action' ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)">
-          <a class="button button-small button-shadow" ng-click="wishCtrl.edit(wish)">Wijzig de wens</a>
-          <script type="text/ng-template" id="editWish.html">
-
-            <div class="modal-header" style="color:#000000">
-                <h3 class="modal-title" id="modal-title">
-                  Wijzig {{editPopupCtrl.wish.title}}
-                </h3>
-            </div>
-
-            <div class="row modal-body" id="modal-body" style="color:#000000">
-              <form name="wishEditForm"
-            				class="create-form"
-            				role="form"
-            				novalidate>
-                <div class='pic'>
-                  <img class="img-thumbnail" ng-src="{{editPopupCtrl.wish.image}}"
-                  google-image-search="{{editPopupCtrl.wish.title}}" data-image-result="editPopupCtrl.wish.image" />
-                </div>
-                <div class="form-group">
-            			<input 	type="text"
-            							class="form-control"
-            							id="WishTitle"
-            							ng-model="editPopupCtrl.wish.title"
-            							placeholder="Titel"
-            							required/>
-            		</div>
-            		<div class="form-group">
-            			<input 	type="number"
-            							class="form-control"
-            							name="inputPrice"
-            							id="WishPrice"
-            							placeholder="Prijs in € (enkel getal ingeven)"
-            							ng-model="editPopupCtrl.wish.price"/>
-            				<span ng-show="wishEditForm.inputPrice.$error.number">
-            					Enkel getallen toegelaten!
-            			</span>
-            		</div>
-              </div>
-            </form>
-
-            <div class="modal-footer">
-                <button class="btn btn-warning" type="button" ng-click="editPopupCtrl.ok()">Opslaan</button>
-                <button class="btn btn-warning" type="button" ng-click="editPopupCtrl.cancel()">Annuleer</button>
-            </div>
-
-          </script>
-        </div>
-        <div class='wish-action' ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)">
-          <a class="button button-small button-shadow" ng-click="wishCtrl.deleteWish(wish)" >Verwijder dit cadeau</a>
-          <script type="text/ng-template" id="deleteVerification.html">
-
-            <div class="modal-header" style="color:#000000">
-                <h3 class="modal-title" id="modal-title">
-                  Wilt u verwijderen?
-                </h3>
-            </div>
-
-            <div class="row modal-body" id="modal-body" style="color:#000000">
-              Bent u zeker dat u <b>"{{deletePopupCtrl.wishTitle}}"</b> wilt verwijderen?
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-warning" type="button" ng-click="deletePopupCtrl.ok()">Ja</button>
-                <button class="btn btn-warning" type="button" ng-click="deletePopupCtrl.cancel()">Nee</button>
-            </div>
-
-          </script>
-        </div>
-      </div>
-      <!-- End wish button container -->
-    </div>
-  </div>
-  <!-- End wish image -->
-  <div class="wish-descr">
-    <div class="wish-title font-alt" style="color:#000000">
-      {{wish.title}}
-    </div>
-    <div class="wish-price ">
-      {{wish.price | currency : "€" : 2}}
-    </div>
-  </div>
-</div>
-<!-- End wish item container -->
+  -->
