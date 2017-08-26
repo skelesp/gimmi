@@ -2,3 +2,4 @@ __archive/
 _analysis/
 _db_dump/
 lib/vendor/
+.vscode/launch.json
