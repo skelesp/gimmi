@@ -12,7 +12,7 @@
 			.state('gimmi', {
 				url: '/',
 				views: {
-					'receiverSearch@': {
+					'receiverSearch@gimmi': {
 						controller: 'receiverSearchCtrl as receiverSearchCtrl',
 						templateUrl: 'app/people/receiver/receiverSearch.tmpl.html'
 					},

@@ -19,14 +19,8 @@
 	<body ng-controller="ApplicationCtrl as ApplicationCtrl">
 
 		<!-- PAGE -->
-
-		<div class="page" id="top">
-
-			<div ui-view="navbar"></div>
-
-			<div ui-view="content"></div>
-
-		</div>
+		<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
+		<div ui-view="content"></div>
 
 		<!-- SCRIPTS -->
 		<!-- Bootstrap 4 -->

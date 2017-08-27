@@ -9,14 +9,20 @@
   border-left: 5px solid rgb(248, 249, 250);
 }
 .card {
-  /*background-color: #f5f5f5;*/
-  border: 1px solid rgba(250, 159, 159, 0.4);
+  border: 1px solid rgba(250, 159, 159, 0.2);
   margin-bottom: 10px;
   display: inline-block;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+}
+h6.card-title  {
+  font-size: 0.80rem;
 }
 .card .form-control, .card .btn{
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+}
+
+.card-footer a i { /* layout van de action icons op wish card */
+  font-size: 1.4rem;
 }
 
 .card-columns {
