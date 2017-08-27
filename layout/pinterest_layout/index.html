@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="img\favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img\favicon.ico" type="image/x-icon">
+    <!-- Stylesheets and fonts -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+    <script src="https://use.fontawesome.com/1c59529a77.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Gimmi new layout</title>
+  </head>
+
+<body>
+  <!-- Navigatiebar  -->
+  <nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top">
+    <div class="navbar-brand">
+      <img src="img/LogoGIMMI.png" class="d-inline-block align-top rounded logo" alt="Gimmi logo">
+    </div>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse justify-content-between" id="collapsingNavbar">
+        <div><!--placeholder to evenly space flexbox items and center links--></div>
+        <form class="form-inline">
+          <div class="input-group">
+              <label class="h6 mr-3 d-xs-none d-md-inline-block">Ik zoek een cadeau voor </label>
+              <!-- <span class="input-group-addon">fa-gift </span> -->
+              <input class="form-control form-control-sm" type="text" placeholder="...">
+              <!--<label class="h6 ml-3">gelukkig maken</label>-->
+          </div>
+        </form>
+        <ul class="nav navbar-nav">
+          <li class="nav-item"><a class="nav-link" href=""><span class="fa fa-user-o mr-1" aria-hidden="true"></span>Stijn</a></li>
+          <li class="nav-item"><a class="nav-link" href=""><span class="fa fa-sign-out mr-1" aria-hidden="true"></span>Logout</a></li>
+        </ul>
+    </div>
+  </nav>
+  <!-- Titel van de lijst -->
+  <blockquote class="blockquote p-3">
+      <h4>Cadeau-ideeën voor</h4>
+      <h1>Stijn Beeckmans</h1>
+  </blockquote>
+  <!-- Lijst van wensen -->
+  <div class="card-columns ml-3 mr-3">
+    <!-- Create wish card -->
+    <div class="card">
+      <img class="card-img-top rounded img-fluid mb-3" ng-show="createWishCtrl.newWish.image" src="https://www.decozine.be/wp-content/uploads/2016/07/lamzac.jpg" alt="Gekozen afbeelding" ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
+      <form name="wishCreateForm" class="m-2" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" novalidate="">
+    		<div class="form-group">
+    			<input type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Titel" required="">
+    		</div>
+    		<div class="form-group">
+    			<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in € (enkel getal ingeven)" ng-model="createWishCtrl.newWish.price">
+    		</div>
+    		<div class="form-group">
+    			<input type="hidden" class="form-control form-control-sm" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url" placeholder="Link naar het cadeau">
+    		</div>
+    		<div class="form-group">
+        	<input type="hidden" class="form-control form-control-sm" id="newWishImage" ng-model="createWishCtrl.newWish.image" placeholder="Zoek een afbeelding">
+    		</div>
+        <button type="button" class="btn btn-danger btn-sm ml-3" ng-hide="createWishCtrl.newWish.image" ng-disabled="!createWishCtrl.newWish.title" google-image-search="" data-image-result="createWishCtrl.newWish.image" disabled="disabled">
+                <span class="glyphicon glyphicon-picture"></span>Afbeelding zoeken
+        </button>
+
+    		<button type="submit" class="btn btn-danger btn-sm float-right" ng-disabled="wishCreateForm.$invalid" disabled="disabled">
+    							Toevoegen
+    		</button>
+    		<button type="button" class="btn btn-default btn-sm float-left" ng-click="createWishCtrl.reset();">
+    							Reset
+    		</button>
+    	</form>
+    </div>
+    <!-- Wish cards -->
+    <div class="card">
+      <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://cdn.shopify.com/s/files/1/1804/1949/files/sequence-mobile.jpg?v=1496487413" alt="Trono">
+      <div class="card-block p-1">
+        <h6 class="card-title mb-1 font-weight-bold">Trono</h6>
+        <p class="card-subtitle text-muted text-truncate">Idee van Stijn B.</p>
+        <p class="card-text mx-auto my-1 text-right font-weight-bold">€ 95</p>
+      </div>
+      <div class="card-footer text-muted p-1">
+        <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid rounded w-100 mb-2" src="http://wp.patheos.com.s3.amazonaws.com/blogs/faithwalkers/files/2013/03/bigstock-Test-word-on-white-keyboard-27134336.jpg" alt="Test on keyboard">
+      <div class="card-block p-1">
+        <h6 class="card-title mb-1 font-weight-bold">Keyboard Test</h6>
+        <p class="card-subtitle text-muted text-truncate">Idee van Stijn B.</p>
+        <p class="card-text mx-auto my-1 text-right font-weight-bold">€ 1.000.000,00</p>
+      </div>
+      <div class="card-footer text-muted p-1">
+        <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://s-media-cache-ak0.pinimg.com/236x/73/1e/88/731e881bd4afbaf12807dfbfb8759540--le-monde-jean.jpg" alt="Gimmi Logo">
+      <div class="card-block p-1">
+        <h6 class="card-title mb-1 font-weight-bold">XIII strip center</h6>
+        <p class="card-subtitle text-muted text-truncate">Idee van Stijn B.</p>
+        <p class="card-text mx-auto my-1 text-right font-weight-bold">€ 10</p>
+      </div>
+      <div class="card-footer text-muted p-1">
+        <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+        <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="card">
+        <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://pdj-ecom-cdn.azureedge.net/-/media/pioneerdj/images/products/mixer/djm-850/black/djm-850-main.png?h=600&w=800&hash=273FFBFAC8A7E17843842101B9933F01F1EAA887" alt="Test image">
+        <div class="card-block p-1">
+          <h6 class="card-title mb-1 font-weight-bold">Pioneer DJM 850</h6>
+          <p class="card-subtitle text-muted text-truncate">Idee van Chloé V.D.M.</p>
+          <p class="card-text mx-auto my-1 text-right font-weight-bold">€ 800</p>
+        </div>
+        <div class="card-footer text-muted p-1">
+          <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+        </div>
+    </div>
+    <div class="card">
+        <img class="card-img-top img-fluid rounded w-100 mb-2" src="http://static.keymusic.com/products/225447/XL/gibson-les-paul-traditional-2015-heritage-cherry-sunburst-2.jpg" alt="Test image">
+        <div class="card-block p-1">
+          <h6 class="card-title mb-1 font-weight-bold">Gibson Gitaar</h6>
+          <p class="card-subtitle text-muted text-truncate">Idee van Stijn B.</p>
+          <p class="card-text mx-auto my-1 text-right font-weight-bold">€ 2500</p>
+        </div>
+        <div class="card-footer text-muted p-1">
+          <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+        </div>
+    </div>
+    <div class="card">
+        <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://fimgs.net/images/secundar/o.36710.jpg" alt="Test image">
+        <div class="card-block p-1">
+          <h6 class="card-title mb-1 font-weight-bold">Parfum Hugo Boss</h6>
+          <p class="card-subtitle text-muted text-truncate">Idee van Stijn B.</p>
+          <p class="card-text mx-auto my-1 text-right font-weight-bold">€ 100</p>
+        </div>
+        <div class="card-footer text-muted p-1">
+          <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+        </div>
+    </div>
+    <div class="card">
+        <img class="card-img-top img-fluid rounded w-100 mb-2" src="https://www.tuinplantendepauw.be/files/2016-11/meerstam4.jpg" alt="Test image">
+        <div class="card-block p-1">
+          <h6 class="card-title mb-1 font-weight-bold">Meerstammige boom</h6>
+          <p class="card-subtitle text-muted text-truncate">Idee van Stijn B.</p>
+          <p class="card-text mx-auto my-1 text-right font-weight-bold">€ 250</p>
+        </div>
+        <div class="card-footer text-muted p-1">
+          <i class="fa fa-cart-plus fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-clone  fa-2x mr-3" aria-hidden="true"></i>
+          <i class="fa fa-info  fa-2x mr-3" aria-hidden="true"></i>
+        </div>
+    </div>
+  </div> <!-- Einde van de lijst -->
+
+</body>
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+</html>

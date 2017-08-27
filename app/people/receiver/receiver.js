@@ -9,7 +9,7 @@
 			.state('gimmi.login', {
 				url: 'login',
 				views: {
-					'receiverSearch@': {
+					'content@': {
 						templateUrl: 'app/people/receiver/login.tmpl.html',
 						controller:'loginCtrl as loginCtrl'
 					}
@@ -21,7 +21,7 @@
 			.state('gimmi.register_person', {
 				url: 'registration',
 				views: {
-					'receiverSearch@' : {
+					'content@' : {
 						templateUrl: 'app/people/receiver/person_registration.tmpl.html',
 						controller: 'personRegistrationCtrl as personRegistrationCtrl'
 					}

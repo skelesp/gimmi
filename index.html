@@ -1,62 +1,40 @@
+<!DOCTYPE html>
 <html ng-app="Gimmi">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-
-		<!-- FONTS -->
-		<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,300italic,400italic,500,500italic,600,600italic,700,700italic,800' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-
-		<!-- STYLESHEETS -->
-		<link href="layout/avonmore_shop_test/css/bootstrap.css" rel="stylesheet" type="text/css">
-		<link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-		<link href="layout/avonmore_shop_test/css/preloader.css" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="layout/avonmore_shop_test/font-awesome/css/font-awesome.min.css">
-		<link href="layout/avonmore_shop_test/css/vertical.min.css" rel="stylesheet" type="text/css">
-		<link href="layout/avonmore_shop_test/css/magnific-popup.css" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="layout/avonmore_shop_test/css/owl.carousel.css">
-		<link rel="stylesheet" href="layout/avonmore_shop_test/css/flaticon.css">
-		<link rel="stylesheet" type="text/css" href="layout/avonmore_shop_test/revslider/css/settings.css" media="screen">
-		<link href="layout/avonmore_shop_test/css/styles.css" rel="stylesheet" type="text/css">
-
+		<!-- Meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Stylesheets and fonts -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+		<script src="https://use.fontawesome.com/1c59529a77.js"></script>
+		<link rel="stylesheet" href="/layout/css/style.css">
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="/layout/img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="/layout/img/favicon.ico" type="image/x-icon">
+		<!-- Site title -->
 		<title>GIMMI - The perfect gift picker</title>
 
 	</head>
 	<body ng-controller="ApplicationCtrl as ApplicationCtrl">
 
 		<!-- PAGE -->
+		<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
+		<div ui-view="content"></div>
 
-		<div class="page" id="top">
-
-			<!-- preloader -->
-
-			<div class="preloader">
-				<div class="loader"></div>
-			</div>
-
-			<!-- /preloader -->
-
-			<div ui-view="navbar"></div>
-
-			<div ui-view="receiverSearch"></div>
-
-			<div ui-view="content"></div>
-
-		</div>
-
-		<!-- APP SCRIPTS -->
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<!-- SCRIPTS -->
+		<!-- Bootstrap 4 -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+		<!-- Angular 1.x -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
-		<script src="lib/vendor/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 		<script src="lib/vendor/angular-1.5.7/angular-ui-router.min.js"></script>
 		<script src="lib/vendor/angular-1.5.7/ui-bootstrap-tpls-2.0.1.min.js"></script>
-
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
+		<!-- Gimmi -->
 		<script src="app/config.js"></script>
 		<script src="app/gimmi-app.js"></script>
 		<script src="app/common/models/receiver-model.js"></script>
@@ -73,24 +51,6 @@
 		<script src="app/gcse/gcse-service.js"></script>
 		<script src="app/gcse/gcse-popupController.js"></script>
 		<!-- /SCRIPTS -->
-
-		<!-- LAYOUT SCRIPTS -->
-		<script type='text/javascript' src="layout/avonmore_shop_test/js/plugins.js"></script>
-		<script type='text/javascript' src='layout/avonmore_shop_test/revslider/js/jquery.themepunch.tools.min.js'></script>
-	  <script type='text/javascript' src='layout/avonmore_shop_test/revslider/js/jquery.themepunch.revolution.min.js'></script>
-		<script type='text/javascript' src='layout/avonmore_shop_test/revslider/js/jquery.themepunch.tools.min.js'></script>
-    <script type='text/javascript' src='layout/avonmore_shop_test/revslider/js/jquery.themepunch.revolution.min.js'></script>
-    <script type="text/javascript" src="layout/avonmore_shop_test/revslider/js/extensions/revolution.extension.slideanims.min.js"></script>
-    <script type="text/javascript" src="layout/avonmore_shop_test/revslider/js/extensions/revolution.extension.layeranimation.min.js"></script>
-    <script type="text/javascript" src="layout/avonmore_shop_test/revslider/js/extensions/revolution.extension.navigation.min.js"></script>
-    <script type="text/javascript" src="layout/avonmore_shop_test/revslider/js/extensions/revolution.extension.parallax.min.js"></script>
-    <script type="text/javascript" src="layout/avonmore_shop_test/revslider/js/extensions/revolution.extension.video.min.js"></script>
-		<script type="text/javascript" src="layout/avonmore_shop_test/revslider/js/extensions/revolution.extension.actions.min.js"></script>
-		<script type="text/javascript" src="layout/avonmore_shop_test/revslider/js/extensions/revolution.extension.kenburn.min.js"></script>
-		<script type="text/javascript" src="layout/avonmore_shop_test/revslider/js/extensions/revolution.extension.migration.min.js"></script>
-		<script type='text/javascript' src="layout/avonmore_shop_test/js/scripts.js"></script>
-
-		<!-- /PAGE -->
 
 	</body>
 </html>

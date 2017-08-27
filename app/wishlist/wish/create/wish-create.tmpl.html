@@ -1,69 +1,35 @@
-<!-- wish create container -->
-<div class="col-sm-3 col-lg-3 mb-50 mb-xss-30 wish">
-	<form name="wishCreateForm"
-				class="create-form"
-				role="form"
-				ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)"
-				novalidate>
-
+<!-- Create wish card -->
+<div class="card">
+	<img class="card-img-top rounded img-fluid mb-3" id="newWishImage" ng-model="createWishCtrl.newWish.image" src="https://www.decozine.be/wp-content/uploads/2016/07/lamzac.jpg"
+	 alt="Gekozen afbeelding" ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
+	<form name="wishCreateForm" class="m-2" role="form" ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)"
+	 novalidate="">
 		<div class="form-group">
-			<input 	type="text"
-							class="form-control"
-							id="newWishTitle"
-							ng-model="createWishCtrl.newWish.title"
-							placeholder="Titel"
-							required/>
+			<input type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Titel"
+			 required="">
 		</div>
 		<div class="form-group">
-			<input 	type="number"
-							class="form-control"
-							name="inputPrice"
-							id="newWishPrice"
-							placeholder="Prijs in € (enkel getal ingeven)"
-							ng-model="createWishCtrl.newWish.price"/>
-				<span ng-show="wishCreateForm.inputPrice.$error.number">
-					Enkel getallen toegelaten!
-			</span>
+			<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in € (enkel getal ingeven)"
+			 ng-model="createWishCtrl.newWish.price">
 		</div>
 		<div class="form-group">
-			<input 	type="hidden"
-							class="form-control"
-							name="inputUrl"
-							id="newWishUrl"
-							ng-model="createWishCtrl.newWish.url"
-							placeholder="Link naar het cadeau"/>
-				<span ng-show="wishCreateForm.inputUrl.$error.url">
-					Dit is geen geldige link (vergeet "http://" niet)!
-				</span>
+			<input type="hidden" class="form-control form-control-sm" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url"
+			 placeholder="Link naar het cadeau">
 		</div>
 		<div class="form-group">
-			<img ng-show="createWishCtrl.newWish.image" src="{{createWishCtrl.newWish.image}}" alt="Gekozen afbeelding" ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
-    	<input 	type="hidden"
-							class="form-control"
-							id="newWishImage"
-							ng-model="createWishCtrl.newWish.image"
-							placeholder="Zoek een afbeelding"/>
-
-			<button type="button"	class="btn btn-danger btn-lg"
-							ng-hide="createWishCtrl.newWish.image"
-							ng-disabled="!createWishCtrl.newWish.title"
-							google-image-search="{{createWishCtrl.newWish.title}}" data-image-result="createWishCtrl.newWish.image">
-							<span class="glyphicon glyphicon-picture"></span>
-							Afbeelding zoeken
-			</button>
-
+			<input type="hidden" class="form-control form-control-sm" id="newWishImage" ng-model="createWishCtrl.newWish.image" placeholder="Zoek een afbeelding">
 		</div>
+		<button type="button" class="btn btn-danger btn-sm ml-3" ng-hide="createWishCtrl.newWish.image" ng-disabled="!createWishCtrl.newWish.title"
+		 google-image-search="" data-image-result="createWishCtrl.newWish.image" disabled="disabled">
+                <span class="glyphicon glyphicon-picture"></span>Afbeelding zoeken
+        </button>
 
-		<button type="submit"
-						class="btn btn-danger btn-lg"
-						ng-disabled="wishCreateForm.$invalid">
-							Toevoegen
-		</button>
-		<button type="button"
-						class="btn btn-default btn-lg"
-						ng-click="createWishCtrl.reset();">
-							Reset
-		</button>
+		<button type="submit" class="btn btn-danger btn-sm float-right" ng-disabled="wishCreateForm.$invalid" disabled="disabled">
+    							Toevoegen
+    		</button>
+		<button type="button" class="btn btn-default btn-sm float-left" ng-click="createWishCtrl.reset();">
+    							Reset
+    		</button>
 	</form>
 </div>
-<!-- wish create container -->
+
