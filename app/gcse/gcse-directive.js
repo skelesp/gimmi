@@ -22,7 +22,7 @@ angular.module('gcse',[
                 var popup = $uibModal.open({
                   ariaLabelledBy: 'modal-title',
       			      ariaDescribedBy: 'modal-body',
-                  templateUrl: CONFIG.siteBaseUrl + '/app/gcse/gcse-popup.html',
+                  templateUrl: 'app/gcse/gcse-popup.html',
                   controller: 'popupController',
                   controllerAs: 'popupCtrl',
                   animation: true,
