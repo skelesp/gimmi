@@ -18,7 +18,7 @@
     <a class="badge badge-light mx-1 text-muted" uib-tooltip="Annuleer uw reservatie" href="" ng-show="wishCtrl.reservationStatus(wish) === 'reserved' && wishCtrl.reservedByUser(wish.reservation.reservedBy)" ng-click="wishCtrl.deleteReservation(wish)"><i class="fa fa-cart-arrow-down fa-1x" aria-hidden="true"></i></a>
     <a class="badge badge-light mx-1 text-muted" uib-tooltip="Kopieer naar uw eigen lijst" href="" ng-hide="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id)" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone fa-1x" aria-hidden="true"></i></a>
     <a class="badge badge-light mx-1 text-muted" uib-tooltip="Wijzig" href="" ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit fa-1x" aria-hidden="true"></i></a>
-    <a class="badge badge-light mx-1 text-muted" uib-tooltip="Verwijder" href="" ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash fa-1x" aria-hidden="true"></i></a>
+    <a class="badge badge-light mx-1 text-muted" uib-tooltip="Verwijder" tooltip-placement="bottom-right" href="" ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash fa-1x" aria-hidden="true"></i></a>
   </div>
 </div>
 
