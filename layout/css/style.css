@@ -20,9 +20,11 @@ h6.card-title  {
 .card .form-control, .card .btn{
   font-size: 0.85rem;
 }
-
 .card-footer a i { /* layout van de action icons op wish card */
   font-size: 1.4rem;
+}
+.card-image-overlay {
+  position: relative;
 }
 
 .card-columns {

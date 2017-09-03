@@ -1,7 +1,12 @@
 <!-- Wish item container -->
 <div class="card">
-  <img class="card-img-top img-fluid rounded w-100 mb-2" ng-src="{{wish.image}}"
-    alt="Afbeelding van de wens niet beschikbaar">
+  <div class="card-image-overlay">
+    <img class="card-img-top img-fluid rounded w-100 mb-2" ng-src="{{wish.image}}" alt="Afbeelding van de wens niet beschikbaar">
+    <div class="card-img-overlay p-1">
+      <span class="float-right w-50 badge badge-pill badge-warning text-center" ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd</span>
+      <span class="float-right w-75 badge badge-pill badge-info text-center" ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd door u</span>
+    </div>
+  </div>
   <div class="card-block p-1">
     <h6 class="card-title mb-1 font-weight-bold">{{wish.title}}</h6>
     <p class="card-subtitle text-muted text-truncate">Idee van iemand anders</p>
@@ -9,13 +14,15 @@
   </div>
   <div class="card-footer text-muted p-1">
     <a class="badge badge-light mx-1 text-muted" ui-sref="gimmi.wishlist.wish({wishID: wish._id})"><i class="fa fa-info fa-1x" aria-hidden="true"></i></a>
-    <a class="badge badge-light mx-1 text-muted" href=""><i class="fa fa-cart-plus fa-1x" aria-hidden="true"></i></a>
+    <a class="badge badge-light mx-1 text-muted" href="" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')"><i class="fa fa-cart-plus fa-1x" aria-hidden="true"></i></a>
+    <a class="badge badge-light mx-1 text-muted" href="" ng-show="wishCtrl.reservationStatus(wish) === 'reserved' && wishCtrl.reservedByUser(wish.reservation.reservedBy)" ng-click="wishCtrl.deleteReservation(wish)"><i class="fa fa-cart-arrow-down fa-1x" aria-hidden="true"></i></a>
     <a class="badge badge-light mx-1 text-muted" href="" ng-hide="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id)" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone fa-1x" aria-hidden="true"></i></a>
     <a class="badge badge-light mx-1 text-muted" href="" ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit fa-1x" aria-hidden="true"></i></a>
     <a class="badge badge-light mx-1 text-muted" href="" ng-show="wishCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash fa-1x" aria-hidden="true"></i></a>
   </div>
 </div>
 
+<!-- Template for edit wish popup -->
 <script type="text/ng-template" id="editWish.html">
   <div class="modal-header" style="color:#000000">
     <h3 class="modal-title" id="modal-title">
@@ -46,6 +53,7 @@
   </div>
 </script>
 
+<!-- Template for delete wish popup -->
 <script type="text/ng-template" id="deleteVerification.html">
 
   <div class="modal-header" style="color:#000000">
@@ -65,38 +73,18 @@
 
 </script>
 
-<!-- //////////////////////////////////////////////////////////////// -->
+<!-- Template for wish reservation popup -->
+<script type="text/ng-template" id="wishReservation.html">
+  <div class="modal-header" style="color:#000000">
+    <h3 class="modal-title" id="modal-title">
+      Reserveer {{wishReservationPopupCtrl.wishTitle}}
+    </h3>
+  </div>
 
-
-  <!-- wish image
-  <div class="wish-img">
-    <div class='wish-special font-alt' ng-if="wishCtrl.reservationStatus(wish) === 'reserved'">
-        <span ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd</span>
-        <span ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">Gereserveerd door u</span>
-    </div> 
-  </div>-->
-
-  <!-- wish button container
-  <div class='wish-button-cont'>
-    <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'">
-      <a class="button button-small button-shadow" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')">Ik reserveer dit ...</a>
-      <script type="text/ng-template" id="wishReservation.html">
-        <div class="modal-header" style="color:#000000">
-            <h3 class="modal-title" id="modal-title">
-              Reserveer {{wishReservationPopupCtrl.wishTitle}}
-            </h3>
-        </div>
-
-        <div class="row modal-body" id="modal-body" style="color:#000000">
-          <form name="wishReservationForm"
-                class="create-form"
-                role="form"
-                novalidate>
-            <div class="form-group">
-              <select class="form-control"
-                      id="reservationReason"
-                      ng-model="wishReservationPopupCtrl.reservation.reason"
-                      required>
+  <div class="row modal-body" id="modal-body" style="color:#000000">
+    <form name="wishReservationForm" class="create-form" role="form" novalidate>
+      <div class="form-group">
+        <select class="form-control" id="reservationReason" ng-model="wishReservationPopupCtrl.reservation.reason" required>
                 <option selected disabled hidden>"Voor welke gelegenheid wilt u deze cadeau geven?"</option>
                 <option value="Verjaardag">Verjaardag</option>
                 <option value="Housewarming">Housewarming</option>
@@ -112,22 +100,15 @@
                 <option value="Sinterklaas">Sinterklaas</option>
                 <option value="Kerstmis">Kerstmis</option>
                 <option value="Nieuwjaar">Nieuwjaar</option>
-                <option value="Andere reden">Andere reden</option>
+                <option value="Zomaar...">Zomaar...</option>
             </select>
-            </div>
-          </div>
-        </form>
+      </div>
+  </div>
+  </form>
 
-        <div class="modal-footer">
-            <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.ok()">Reserveer</button>
-            <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.cancel()">Annuleer</button>
-        </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.ok()">Reserveer</button>
+    <button class="btn btn-warning" type="button" ng-click="wishReservationPopupCtrl.cancel()">Annuleer</button>
+  </div>
 
-      </script>
-    </div>-->
-  <!--  
-    <div class='wish-action' ng-show="wishCtrl.reservationStatus(wish) === 'reserved' && wishCtrl.reservedByUser(wish.reservation.reservedBy)">
-      <a class="button button-small button-shadow" ng-click="wishCtrl.deleteReservation(wish)">Annuleer uw reservatie</a>
-    </div>
-    
-  -->
+</script>
