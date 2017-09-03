@@ -7,7 +7,7 @@
 	'wishlist.wish',
 	'wishlist.receiver'
 ])
-	.config(function($stateProvider, $urlRouterProvider, $httpProvider){
+	.config(function($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider){
 		$stateProvider
 			.state('gimmi', {
 				url: '/',
@@ -45,7 +45,12 @@
                     return $q.reject(response);
                 }
             };
-        }]);
+		}]);
+		
+		$uibTooltipProvider.options({
+			'placement' : 'bottom-left',
+			'popupCloseDelay' : '10' 
+		});
 	})
 	.controller('ApplicationCtrl', ['$scope', '$state', 'UserService', function($scope, $state, UserService){
 		var self = this;
