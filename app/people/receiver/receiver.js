@@ -86,38 +86,37 @@
 					},
 					function(err){
 						self.error = true;
-						self.errorMessage = "Registration failed due to '"+err+"'";
+						if (err === "User already exists") {
+							self.errorMessage = "Er bestaat al een gebruiker met dit emailadres. Gelieve in te loggen met deze email of een ander emailadres te gebruiken.";
+						}
 						self.disabled = false;
 					}
 			);
 		}
 
 	}])
-	.controller('receiverSearchCtrl', ['$scope', '$state', 'receiverModel', function($scope, $state, receiverModel) {
-		var receiverSearchCtrl = this;
-
-		receiverModel.getReceivers()
-			.then(function(receivers) {
-				receiverSearchCtrl.receivers = receivers;
-			});
+	.controller('receiverSearchCtrl', ['$scope', '$state', 'receivers', function($scope, $state, receivers) {
+		var _self = this;
+		
+		_self.receivers = receivers;
 
 		$scope.$on('login', function(_, user){
 			receiverModel.getReceivers()
 				.then(function(receivers) {
-					receiverSearchCtrl.receivers = receivers;
-				});
+					_self.receivers = receivers;
+			});
 		});
 
 		$scope.$on('logout', function(){
-				receiverSearchCtrl.receivers = null;
+			_self.receivers = null;
 		});
 
-		receiverSearchCtrl.showWishlist = function(keyEvent, selected) {
+		_self.showWishlist = function(keyEvent, selected) {
 		  if (keyEvent.which === 13){
 				receiverModel.getReceiverByName(selected.fullName)
 					.then(function(receiver){
 						$state.go('gimmi.wishlist',{receiverID: receiver.id});
-					});
+				});
 				$scope.selected = null;
 			}
 		};
