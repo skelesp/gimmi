@@ -30,16 +30,16 @@
 		}
 
 		model.setCurrentReceiver = function (receiverID){
-				return PersonService.getPersonFromID(receiverID)
-					.then(function(receiver){
-						currentReceiver = receiver;
-					}, function(error){
-						if (error) {
-							console.error(error);
-						} else {
-							console.error("current receiver not found by id!");
-						}
-					});
+			return PersonService.getPersonFromID(receiverID)
+				.then(function(receiver){
+					currentReceiver = receiver;
+				}, function(error){
+					if (error) {
+						console.error(error);
+					} else {
+						console.error("current receiver not found by id!");
+					}
+				});
 		};
 
 		model.getCurrentReceiver = function(){

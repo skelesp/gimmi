@@ -3,6 +3,7 @@
 	'ngAnimate',
 	'ngStorage',
 	'ui.router',
+	'gimmi.models.receiver',
 	'wishlist',
 	'wishlist.wish',
 	'wishlist.receiver'
@@ -14,7 +15,12 @@
 				views: {
 					'receiverSearch@gimmi': {
 						controller: 'receiverSearchCtrl as receiverSearchCtrl',
-						templateUrl: 'app/people/receiver/receiverSearch.tmpl.html'
+						templateUrl: 'app/people/receiver/receiverSearch.tmpl.html',
+						resolve: {
+							receivers: ['receiverModel', function(receiverModel){
+								return receiverModel.getReceivers();
+							}]
+						}
 					},
 					'content@': {
 						templateUrl: 'app/intro.tmpl.html'

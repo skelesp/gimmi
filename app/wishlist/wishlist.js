@@ -21,6 +21,15 @@
 								}]
 						}
 					},
+					'receiverSearch@gimmi': {
+						controller: 'receiverSearchCtrl as receiverSearchCtrl',
+						templateUrl: 'app/people/receiver/receiverSearch.tmpl.html',
+						resolve: {
+							receivers: ['receiverModel', function (receiverModel) {
+								return receiverModel.getReceivers();
+							}]
+						}
+					},
 					'wishlist_item@gimmi.wishlist': {
 						templateUrl: 'app/wishlist/wishlist_item.tmpl.html',
 						controller: 'wishCtrl as wishCtrl'
