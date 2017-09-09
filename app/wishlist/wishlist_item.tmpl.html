@@ -9,7 +9,7 @@
   </div>
   <div class="card-block p-1">
     <h6 class="card-title mb-1 font-weight-bold">{{wish.title}}</h6>
-    <p class="card-subtitle text-muted text-truncate">Idee van iemand anders</p>
+    <p class="card-subtitle text-muted text-truncate" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy, wishlistCtrl.currentReceiver._id)">Idee van {{wish.creator[0].firstName + " " + wish.creator[0].lastName.substring(0,1) + "."}}</p>
     <p class="card-text mx-auto my-1 text-right font-weight-bold">{{wish.price | currency : "€" : 2}}</p>
   </div>
   <div class="card-footer text-muted p-1">

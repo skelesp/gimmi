@@ -60,18 +60,20 @@
 	}])
 	.controller('wishCtrl', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
 		var _self = this;
+		/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
+		/* TODO: Verplaats naar wishlistctrl, nu wordt dit voor elke wish overlopen, maar is altijd hetzelfde! */
 
 		_self.userIsReceiver = function(receiverID) {
 			return UserService.userIsReceiver(receiverID);
 		};
 
 		_self.userIsCreator = function(creatorID){
-			if (UserService.getCurrentUser()._id === creatorID) {
-				return true;
-			} else {
-				return false;
-			}
+			return UserService.getCurrentUser()._id === creatorID;
 		};
+
+		_self.receiverIsCreator = function(creatorID, receiverID) {
+			return creatorID === receiverID;
+		}
 
 		_self.reservedByUser = function(reservatorID){
 			if (UserService.getCurrentUser()._id === reservatorID) {
