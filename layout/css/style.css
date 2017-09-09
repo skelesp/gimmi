@@ -27,6 +27,16 @@ h6.card-title  {
   position: relative; /*https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4*/
 }
 
+/* -- Header design -- */
+.jumbotron {
+  color: #f8f8f8;
+  background: url(../img/give-hand.jpg) no-repeat center center;
+  background-size:cover;
+  filter: grayscale(100%);
+}
+
+/* END -- Header design -- */
+
 /* -- Create card style addons -- */
 .blurredCardOverlay {
   background-color: rgba(255, 255, 255, 0.80)
