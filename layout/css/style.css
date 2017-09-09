@@ -24,8 +24,17 @@ h6.card-title  {
   font-size: 1.4rem;
 }
 .card-image-overlay {
-  position: relative;
+  position: relative; /*https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4*/
 }
+
+/* -- Create card style addons -- */
+#createCardOverlay {
+  background-color: rgba(255, 255, 255, 0.80)
+}
+#createCardOverlay a, p {
+  color: rgb(87, 87, 87);
+}
+/* END -- Create card style addons --*/
 
 .card-columns {
 -webkit-column-count: 2;

@@ -218,47 +218,46 @@
 		$uibModalInstance.dismiss('cancel');
 	};
 })
-	.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
-												function($state, $stateParams, $uibModal, wishModel, receiverModel, UserService, gcseService){
-    var _self = this;
-		_self.newWish = {
+	.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
+												function($state, $stateParams, $uibModal, CONFIG, wishModel, receiverModel, UserService, gcseService){
+		/* Initialize variables */
+		var _self = this;
+		var defaultWish = {
 			title: '',
 			price: '',
 			url: '',
-			image: ''
+			image: CONFIG.defaultImage
 		};
+		
+		/* Available in view */
+		_self.newWish = angular.copy(defaultWish);
 		_self.noImages = true;
+		_self.defaultImage = defaultWish.image;
+		_self.reset = resetForm;
+		_self.createWish = createWish;
+		_self.currentReceiverID = receiverModel.getCurrentReceiver()._id;
+		_self.currentUserID = UserService.getCurrentUser()._id;
+		
+		/* Functions in createWishCtrl */
+		function returnToWishes(){
+			$state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
+		}
 
-    function returnToWishes(){
-      $state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
-    }
-
-    function createWish(wish, receiverID, userID) {
+		function createWish(wish, receiverID, userID) {
 			if (!wish.image) {
 				wish.image = '';
 			}
-      wishModel.createWish(wish, receiverID, userID);
+			wishModel.createWish(wish, receiverID, userID);
 			resetForm();
-      returnToWishes();
-    }
+			returnToWishes();
+		}
 
-    function resetForm() {
-      _self.newWish = {
-        title: '',
-        price: '',
-				url: '',
-				image: ''
-      }
+		function resetForm() {
+			_self.newWish = angular.copy(defaultWish);
 			_self.googleImages = [];
-    }
+		}
 
-    _self.reset = resetForm;
-    _self.createWish = createWish;
-
-    _self.currentReceiverID = receiverModel.getCurrentReceiver()._id;
-    _self.currentUserID = UserService.getCurrentUser()._id;
-
-    resetForm();
+		resetForm();
 
   }])
 	.controller('sendWishlistController', ['$stateParams', 'CONFIG', function($stateParams, CONFIG){
