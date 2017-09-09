@@ -4,7 +4,8 @@
     <input  type="text" 
             class="form-control form-control-sm"
             placeholder="..." 
-            ng-click="selected=null;" ng-model="selected" 
+            ng-click="selected=null;" 
+            ng-model="selected" 
             typeahead-template-url="app/people/receiver/receiverSearch.popup.tmpl.html"
             uib-typeahead="receiver as receiver.fullName for receiver in receiverSearchCtrl.receivers | filter:{fullName: $viewValue}
             | limitTo:8"
@@ -15,8 +16,8 @@
         typeahead-show-hint="true" 
     -->
   </div>
-  <!-- /custom-search-input -->
-  <div ng-if="noResults && selected">
+  <!-- <div ng-if="noResults && selected">
     Geen personen gevonden!
-  </div>
+  </div> -->
+  <!-- /custom-search-input --> 
 </form>
