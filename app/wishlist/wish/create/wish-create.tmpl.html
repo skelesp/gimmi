@@ -2,7 +2,7 @@
 <div class="card">
 	<div class="card-image-overlay">
 		<img class="card-img-top rounded img-fluid mb-2" alt="Afbeelding van wens" ng-src="{{createWishCtrl.newWish.image}}"/>
-		<div class="card-img-overlay pt-4" id="createCardOverlay">
+		<div class="card-img-overlay pt-4 blurredCardOverlay">
 			<p ng-hide="createWishCtrl.newWish.title"><i class="fa fa-arrow-down mr-1" aria-hidden="true"></i>Vul hieronder de titel en prijs in en selecteer daarna een afbeelding</p>
 			<a href="" ng-show="createWishCtrl.newWish.title" google-image-search="{{createWishCtrl.newWish.title}}" data-image-result="createWishCtrl.newWish.image">
 				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen voor "{{createWishCtrl.newWish.title}}"
