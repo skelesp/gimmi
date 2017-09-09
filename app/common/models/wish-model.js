@@ -49,7 +49,7 @@ angular.module('gimmi.models.wish', [
 			wish.createdBy = userID;
 
 			if (!wish.image){
-				wish.image="layout/avonmore_shop_test/images/wish_item_bg.png";
+				wish.image = CONFIG.defaultImage;
 			}
 			
 			$http.post(URLS.WISH, wish).success(function(wish){
@@ -67,7 +67,7 @@ angular.module('gimmi.models.wish', [
 		model.updateWish = function(wish) {
 			var convertedWish = convertUndefinedToNovalue(wish);
 			if (!wish.image){
-				wish.image="layout/avonmore_shop_test/images/wish_item_bg.png";
+				wish.image = CONFIG.defaultImage;
 			}
 			$http.put(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
 				if (wishlist) {
