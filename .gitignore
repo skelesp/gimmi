@@ -3,3 +3,5 @@ _analysis/
 _db_dump/
 lib/vendor/
 .vscode/launch.json
+app/config.js
+.gitignore
