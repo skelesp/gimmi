@@ -113,7 +113,8 @@
 				controllerAs: 'editPopupCtrl',
 				resolve: {
 					wish: function () {
-						return wish;
+						var originalWish = angular.copy(wish);
+						return originalWish;
 					}
 				}
 			});
