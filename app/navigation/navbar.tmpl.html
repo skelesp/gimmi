@@ -24,8 +24,8 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" ng-show="ApplicationCtrl.currentUser._id">
-          <div class="slide-container"><span class="fa fa-user-o mr-1" aria-hidden="true"></span> {{ApplicationCtrl.currentUser.firstName}}</div>
+        <a class="nav-link" ng-show="ApplicationCtrl.currentUser._id" ui-sref="gimmi.wishlist({receiverID: ApplicationCtrl.currentUser._id})" uib-tooltip="Ga naar uw lijst" tooltip-placement="bottom-left">
+          <div class="slide-container"><span class="fa fa-user-o mr-1" aria-hidden="true"></span>{{ApplicationCtrl.currentUser.firstName}}</div>
         </a>
       </li>
       <li class="nav-item">
