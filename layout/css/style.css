@@ -32,6 +32,12 @@ h6.card-title  {
   position: relative; /*https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4*/
 }
 
+[ng-click],
+[data-ng-click],
+[x-ng-click] {
+    cursor: pointer;
+}
+
 /* -- Header design -- */
 .jumbotron {
   color: #f8f8f8;

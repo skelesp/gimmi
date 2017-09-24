@@ -6,7 +6,8 @@
 	'gimmi.models.receiver',
 	'wishlist',
 	'wishlist.wish',
-	'wishlist.receiver'
+	'wishlist.receiver',
+	'landingPage'
 ])
 	.config(function($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider){
 		$stateProvider
@@ -23,7 +24,9 @@
 						}
 					},
 					'content@': {
-						templateUrl: 'app/intro.tmpl.html'
+						templateUrl: 'app/intro.tmpl.html',
+						controller: 'landingPageCtrl',
+						controllerAs: 'lp'
 					},
 					'navbar@': {
 						templateUrl: 'app/navigation/navbar.tmpl.html'

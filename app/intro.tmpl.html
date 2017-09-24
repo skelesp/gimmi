@@ -32,21 +32,21 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-6 text-center">
-                <div class="service-box">
+                <div class="service-box" ng-click="lp.toRegistration()">
                     <i class="fa fa-4x fa-user-plus text-danger sr-icons"></i>
                     <h3>Registreer</h3>
-                    <p class="text-muted">Registreer je meteen op Gimmi. Er wordt automatisch een lijst voor u aangemaakt!</p>
+                    <p class="text-muted">Registreer je meteen op Gimmi. Er wordt automatisch een lijst voor u aangemaakt! (Het is ook mogelijk om anderen te registreren en een lijst voor hen aan te maken.)</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 text-center">
-                <div class="service-box">
+                <div class="service-box" ng-click="lp.toWishlist(ApplicationCtrl.currentUser._id)">
                     <i class="fa fa-4x fa-list-alt text-danger sr-icons"></i>
                     <h3>Voeg wensen toe</h3>
                     <p class="text-muted">Voeg meteen zo veel mogelijk cadeaus toe die je wenst te krijgen. Kom regelmatig terug om deze te updaten!</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 text-center">
-                <div class="service-box">
+                <div class="service-box" ng-click="lp.sendWishlist(ApplicationCtrl.currentUser._id)">
                     <i class="fa fa-4x fa-paper-plane text-danger sr-icons"></i>
                     <h3>Verspreid uw lijst</h3>
                     <p class="text-muted">Verstuur uw lijst naar al uw vrienden, zodat zij kunnen zien wat jij wilt!</p>
