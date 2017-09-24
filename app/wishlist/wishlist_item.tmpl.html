@@ -9,7 +9,7 @@
   </div>
   <div class="card-block p-1">
     <h6 class="card-title mb-1 font-weight-bold text-capitalize">{{wish.title}}</h6>
-    <p class="card-subtitle text-muted text-truncate" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy, wishlistCtrl.currentReceiver._id)">Idee van {{wish.creator[0].firstName + " " + wish.creator[0].lastName.substring(0,1) + "."}}</p>
+    <p class="card-subtitle text-muted text-truncate" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
     <p class="card-text mx-auto my-1 text-left font-weight-bold">{{wish.price | currency : "€" : 2}}</p>
   </div>
   <div class="card-footer text-muted p-1">
@@ -17,8 +17,8 @@
     <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Reserveer" href="" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')"><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
     <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Annuleer uw reservatie" href="" ng-show="wishCtrl.reservationStatus(wish) === 'reserved' && wishCtrl.reservedByUser(wish.reservation.reservedBy)" ng-click="wishCtrl.deleteReservation(wish)"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></a>
     <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Kopieer naar uw eigen lijst" href="" ng-hide="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id)" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone" aria-hidden="true"></i></a>
-    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Wijzig" href="" ng-show="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id) || wishCtrl.userIsCreator(wish.createdBy)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit" aria-hidden="true"></i></a>
-    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Verwijder" tooltip-placement="bottom-right" href="" ng-show="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id) || wishCtrl.userIsCreator(wish.createdBy)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Wijzig" href="" ng-show="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id) || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit" aria-hidden="true"></i></a>
+    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Verwijder" tooltip-placement="bottom-right" href="" ng-show="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id) || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash" aria-hidden="true"></i></a>
   </div>
 </div>
 
