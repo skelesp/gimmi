@@ -31,10 +31,11 @@
     		Toevoegen
 		</button>
 		<button ng-show="createWishCtrl.newWish.image === createWishCtrl.defaultImage && createWishCtrl.newWish.title !== ''" type="button" 
-		class="btn btn-danger btn-sm float-right mb-1" google-image-search="{{createWishCtrl.newWish.title}}" data-image-result="createWishCtrl.newWish.image">
+		class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" google-image-search="{{createWishCtrl.newWish.title}}" data-image-result="createWishCtrl.newWish.image">
     		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding
 		</button>
-		<button ng-show="createWishCtrl.newWish.title !== '' || createWishCtrl.newWish.price !== ''" type="button" class="btn btn-default btn-sm float-left mb-1" ng-click="createWishCtrl.reset();">
+		<button ng-show="createWishCtrl.newWish.title !== '' || createWishCtrl.newWish.price !== ''" type="button" class="btn btn-default btn-sm float-left mb-1 mr-1"
+		 ng-click="createWishCtrl.reset();">
     		Reset
     	</button>
 	</form>
