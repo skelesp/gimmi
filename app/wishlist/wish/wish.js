@@ -26,7 +26,7 @@
 				if (wish.reservation) {
 					_self.reservedBy = wish.reservation.reservedBy.fullName;
 				}
-				_self.createdBy = wish.createdBy.fullName;
+				_self.creator = wish.createdBy.fullName;
 				_self.createdAt = wish.createdAt;
 				_self.receiver = receiverModel.getCurrentReceiverName();
 				_self.receiverID = wish.receiver;
