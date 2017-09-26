@@ -228,51 +228,51 @@
 		$uibModalInstance.dismiss('cancel');
 	};
 })
-	.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
-												function($state, $stateParams, $uibModal, CONFIG, wishModel, receiverModel, UserService, gcseService){
-		/* Initialize variables */
-		var _self = this;
-		var defaultWish = {
-			title: '',
-			price: '',
-			url: '',
-			image: CONFIG.defaultImage
-		};
-		
-		/* Available in view */
-		_self.newWish = angular.copy(defaultWish);
-		_self.noImages = true;
-		_self.defaultImage = defaultWish.image;
-		_self.reset = resetForm;
-		_self.createWish = createWish;
-		_self.currentReceiverID = receiverModel.getCurrentReceiver()._id;
-		_self.currentUserID = UserService.getCurrentUser()._id;
-		
-		/* Functions in createWishCtrl */
-		function returnToWishes(){
-			$state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
-		}
+.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
+											function($state, $stateParams, $uibModal, CONFIG, wishModel, receiverModel, UserService, gcseService){
+	/* Initialize variables */
+	var _self = this;
+	var defaultWish = {
+		title: '',
+		price: '',
+		url: '',
+		image: ''
+	};
+	
+	/* Available in view */
+	_self.newWish = angular.copy(defaultWish);
+	_self.noImages = true;
+	_self.defaultImage = CONFIG.defaultImage;
+	_self.reset = resetForm;
+	_self.createWish = createWish;
+	_self.currentReceiverID = receiverModel.getCurrentReceiver()._id;
+	_self.currentUserID = UserService.getCurrentUser()._id;
+	
+	/* Functions in createWishCtrl */
+	function returnToWishes(){
+		$state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
+	}
 
-		function createWish(wish, receiverID, userID) {
-			if (!wish.image) {
-				wish.image = '';
-			}
-			wishModel.createWish(wish, receiverID, userID);
-			resetForm();
-			returnToWishes();
+	function createWish(wish, receiverID, userID) {
+		if (!wish.image) {
+			wish.image = '';
 		}
-
-		function resetForm() {
-			_self.newWish = angular.copy(defaultWish);
-			_self.googleImages = [];
-		}
-
+		wishModel.createWish(wish, receiverID, userID);
 		resetForm();
+		returnToWishes();
+	}
 
-  }])
-	.controller('sendWishlistController', ['$stateParams', 'CONFIG', function($stateParams, CONFIG){
-		var self = this;
+	function resetForm() {
+		_self.newWish = angular.copy(defaultWish);
+		_self.googleImages = [];
+	}
 
-		self.url = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
-	}])
+	resetForm();
+
+}])
+.controller('sendWishlistController', ['$stateParams', 'CONFIG', function($stateParams, CONFIG){
+	var self = this;
+
+	self.url = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
+}])
 ;
