@@ -8,7 +8,7 @@
             Gereserveerd</span>
       <span class="float-left w-75 badge badge-pill badge-info text-center" 
             ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">
-            Gereserveerd door u <i class="fa fa-trash-o ml-2" aria-hidden="true" uib-tooltip="Annuleer uw reservatie" tooltip-placement="bottom-right" tooltip-class="customTooltip" ng-click="wishCtrl.deleteReservation(wish)"></i></span>
+            Gereserveerd door u <i class="fa fa-ban ml-2 text-warning" aria-hidden="true" uib-tooltip="Annuleer uw reservatie" tooltip-placement="bottom-right" tooltip-class="customTooltip" ng-click="wishCtrl.deleteReservation(wish)"></i></span>
     </div>
   </div>
   <div class="card-block p-1">
@@ -33,7 +33,7 @@
     </h3>
   </div>
   <div class="row modal-body" id="modal-body">
-    <form name="wishEditForm" class="create-form p-2" role="form" novalidate>
+    <form name="wishEditForm" class="p-2" role="form" novalidate>
       <div class='pic'>
         <img class="img-thumbnail mb-2" ng-src="{{editPopupCtrl.wish.image}}" google-image-search="{{editPopupCtrl.wish.title}}" data-image-result="editPopupCtrl.wish.image"
         />
