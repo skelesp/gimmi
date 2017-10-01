@@ -39,6 +39,9 @@ h6.card-title  {
     cursor: pointer;
 }
 
+.pointer {
+  cursor: pointer;
+}
 /* UIB Tooltip styling*/
 .tooltip.customTooltip .tooltip-inner{
   font-size: 0.65rem;
