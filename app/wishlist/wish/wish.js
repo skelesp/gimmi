@@ -42,15 +42,18 @@
 				controllerAs: 'wishDetailsEditCtrl',
 				resolve: {
 					wish: function () {
-						return wish;
+						var originalWish = angular.copy(wish);
+						return originalWish;
 					}
 				}
 			});
 
 			editDetailsPopup.result.then(function (wish) {
 				//TODO: updateWish zou een promise moeten worden
-				wishModel.updateWish(wish);
-				console.info("wish " + wish + "is updated");
+				wishModel.updateWish(wish).then(function(wish){
+					_self.wish = wish;
+				});
+				console.info("wish " + wish._id + "is updated");
 			});
 		}
 		//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object

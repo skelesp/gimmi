@@ -66,6 +66,7 @@ angular.module('gimmi.models.wish', [
 
 		model.updateWish = function(wish) {
 			var convertedWish = convertUndefinedToNovalue(wish);
+			var defer = $q.defer();
 			if (!wish.image){
 				wish.image = CONFIG.defaultImage;
 			}
@@ -76,8 +77,10 @@ angular.module('gimmi.models.wish', [
 					});
 					wishlist.wishes[index] = wish;
 				}
+				defer.resolve(wish);
 				console.info("wish updated", wish);
 			});
+			return defer.promise;
 		}
 
 		function convertUndefinedToNovalue (object) {
