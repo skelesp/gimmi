@@ -108,7 +108,7 @@
 			ariaLabelledBy: 'modal-title',
 			ariaDescribedBy: 'modal-body',
 			templateUrl: 'editWish.html',
-			size: 'sm',
+			size: 'md',
 			controller: 'editPopupCtrl',
 			controllerAs: 'editPopupCtrl',
 			resolve: {

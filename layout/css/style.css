@@ -25,12 +25,19 @@ h6.card-title  {
 .card .form-control, .card .btn{
   font-size: 0.85rem;
 }
-.card-footer a i { /* layout van de action icons op wish card */
+
+.card-footer a i, .card-footer button i { /* layout van de action icons op wish card */
   font-size: 1.1rem;
+  cursor: pointer;
 }
 .card-image-overlay {
   position: relative; /*https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4*/
 }
+
+/* Fix for card buttons in IE */
+
+/* END Fix for card buttons in IE */
+
 
 /* Pointer on ng-click elements */
 [ng-click],
@@ -38,7 +45,6 @@ h6.card-title  {
 [x-ng-click] {
     cursor: pointer;
 }
-
 .pointer {
   cursor: pointer;
 }
