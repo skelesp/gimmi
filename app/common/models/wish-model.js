@@ -119,10 +119,12 @@ angular.module('gimmi.models.wish', [
 
 		model.deleteReservation = function(wishID) {
 			$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wishID;
-				});
-				wishlist.wishes[index] = wish;
+				if (wishlist) {
+					var index = _.findIndex(wishlist.wishes, function (w) {
+						return w._id === wishID;
+					});
+					wishlist.wishes[index] = wish;
+				}
 				console.info("Reservation deleted for ", wish._id);
 			});
 		}

@@ -90,6 +90,7 @@
 		};
 		_self.deleteReservation = function (wish) {
 			wishModel.deleteReservation(wish._id);
+			delete _self.wish.reservation;
 		};
 		_self.copy = function (wish) {
 			var userID = UserService.getCurrentUser()._id;
