@@ -25,7 +25,7 @@
 		<div class="form-group">
 			<input type="hidden" class="form-control form-control-sm" id="newWishImage" ng-model="createWishCtrl.newWish.image" placeholder="Zoek een afbeelding">
 		</div>
-		<button type="button" class="btn btn-danger btn-sm float-right mb-1" 
+		<button type="button" class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
 				ng-show="createWishCtrl.newWish.image !== ''"
 				ng-click="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" 
 				ng-disabled="wishCreateForm.$invalid" disabled="disabled">
