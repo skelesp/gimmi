@@ -12,47 +12,139 @@
 				views: {
 					'content@': {
 						templateUrl: 'app/wishlist/wish/wish_info.tmpl.html',
-						controller:'wishInfoCtrl as wishInfoCtrl'
+						controller:'wishInfoCtrl as wishInfoCtrl',
+						resolve: {
+							wish: ['$stateParams', 'wishModel', function ($stateParams, wishModel){
+									return wishModel.getWishById($stateParams.wishID);
+								}]
+						}
 					}
 				}
 			})
 		;
 	})
-	.controller('wishInfoCtrl', ['$stateParams', '$uibModal', 'wishModel', 'receiverModel', function ($stateParams, $uibModal, wishModel, receiverModel){
-			var _self = this;
-
-			wishModel.getWishById($stateParams.wishID).then( function(wish){
-				_self.wish = wish;
-				if (wish.reservation) {
-					_self.reservedBy = wish.reservation.reservedBy.fullName;
+	.controller('wishInfoCtrl', ['$stateParams', '$uibModal', '$state', 'wishModel', 'receiverModel', 'UserService', 'wish', function ($stateParams, $uibModal, $state, wishModel, receiverModel, UserService, wish){
+		var _self = this;
+		console.info("Wens geopend:", wish._id);
+		_self.wish = wish;
+		_self.reservedBy = angular.isDefined(_self.wish.reservation) ? _self.wish.reservation.reservedBy.fullName : "";
+		_self.receiver = receiverModel.getCurrentReceiverName();
+		_self.receiverID = wish.receiver;
+		
+		_self.editWishDetails = function(wish){
+			//Create a popup instance for wish details edit
+			var editDetailsPopup = $uibModal.open({
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'app/wishlist/wish/wish_detail_edit-modal.html',
+				size: 'lg',
+				controller: 'wishDetailsEditCtrl',
+				controllerAs: 'wishDetailsEditCtrl',
+				resolve: {
+					wish: function () {
+						var originalWish = angular.copy(wish);
+						return originalWish;
+					}
 				}
-				_self.creator = wish.createdBy.fullName;
-				_self.createdAt = wish.createdAt;
-				_self.receiver = receiverModel.getCurrentReceiverName();
-				_self.receiverID = wish.receiver;
 			});
 
-			_self.editWishDetails = function(wish){
-				//Create a popup instance for wish details edit
-				var editDetailsPopup = $uibModal.open({
-					ariaLabelledBy: 'modal-title',
-					ariaDescribedBy: 'modal-body',
-					templateUrl: 'app/wishlist/wish/wish_detail_edit-modal.html',
-					size: 'lg',
-					controller: 'wishDetailsEditCtrl',
-					controllerAs: 'wishDetailsEditCtrl',
-					resolve: {
-						wish: function () {
-							return wish;
-						}
-					}
+			editDetailsPopup.result.then(function (wish) {
+				//TODO: updateWish zou een promise moeten worden
+				wishModel.updateWish(wish).then(function(wish){
+					_self.wish = wish;
 				});
-
-				editDetailsPopup.result.then(function (wish) {
-					wishModel.updateWish(wish);
-					console.log("wish is updated");
-				});
+				console.info("wish " + wish._id + "is updated");
+			});
+		}
+		//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
+		_self.reservationStatus = function (wish) {
+			var reservationStatus = "unreserved";
+			if (wish.reservation) {
+				reservationStatus = "reserved";
 			}
+			return reservationStatus;
+		}
+		_self.addReservation = function (wish, userID, reason) {
+			/*var reservation = {
+				reservator: userID,
+				reason: reason
+			};*/
+			var wishReservationPopup = $uibModal.open({
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'wishReservation.html',
+				size: 'md',
+				controller: 'wishReservationPopupCtrl',
+				controllerAs: 'wishReservationPopupCtrl',
+				resolve: {
+					wish: function () {
+						return wish;
+					}
+				}
+			});
+
+			wishReservationPopup.result.then(function (reservation) {
+				reservation.reservationDate = new Date();
+				reservation.reservedBy = userID;
+				wishModel.addReservation(wish._id, reservation).then(function(wish){
+					_self.wish = wish;
+				});
+			});
+		};
+		_self.deleteReservation = function (wish) {
+			wishModel.deleteReservation(wish._id);
+			delete _self.wish.reservation;
+		};
+		_self.copy = function (wish) {
+			var userID = UserService.getCurrentUser()._id;
+			var newWish = {};
+			newWish.title = wish.title;
+			newWish.image = wish.image;
+			newWish.url = wish.url;
+			newWish.price = wish.price;
+			wishModel.createWish(newWish, userID, userID);
+		};
+		_self.deleteWish = function deleteWishVerification(wish) {
+			//Create a popup instance for delete verification
+			var deletePopup = $uibModal.open({
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'deleteVerification.html',
+				size: 'md',
+				controller: 'deletePopupCtrl',
+				controllerAs: 'deletePopupCtrl',
+				resolve: {
+					wish: function () {
+						return wish;
+					}
+				}
+			});
+
+			deletePopup.result.then(function (wish) {
+				wishModel.deleteWish(wish);
+				console.info(wish._id + " is verwijderd.");
+				$state.go('gimmi.wishlist', { receiverID: _self.receiverID });
+			});
+		};
+		_self.userIsReceiver = function (receiverID) {
+			return UserService.userIsReceiver(receiverID);
+		};
+
+		_self.userIsCreator = function (creatorID) {
+			return UserService.getCurrentUser()._id === creatorID;
+		};
+
+		_self.receiverIsCreator = function (creatorID, receiverID) {
+			return creatorID === receiverID;
+		}
+
+		_self.reservedByUser = function (reservatorID) {
+			if (UserService.getCurrentUser()._id === reservatorID) {
+				return true;
+			} else {
+				return false;
+			}
+		};
 	}])
 	.controller('wishDetailsEditCtrl', ['$uibModalInstance', 'wish', function($uibModalInstance, wish){
 		var _self = this,

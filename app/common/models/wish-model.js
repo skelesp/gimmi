@@ -66,6 +66,7 @@ angular.module('gimmi.models.wish', [
 
 		model.updateWish = function(wish) {
 			var convertedWish = convertUndefinedToNovalue(wish);
+			var defer = $q.defer();
 			if (!wish.image){
 				wish.image = CONFIG.defaultImage;
 			}
@@ -76,8 +77,10 @@ angular.module('gimmi.models.wish', [
 					});
 					wishlist.wishes[index] = wish;
 				}
+				defer.resolve(wish);
 				console.info("wish updated", wish);
 			});
+			return defer.promise;
 		}
 
 		function convertUndefinedToNovalue (object) {
@@ -101,23 +104,30 @@ angular.module('gimmi.models.wish', [
 		}
 
 		model.addReservation = function(wishID, reservation) {
+			var defer = $q.defer();
 			$http.post(URLS.WISH+"/"+wishID+"/reservation", reservation).success(function(wish){
 				if (wishlist) {
 					var index = _.findIndex(wishlist.wishes, function(w){
 						return w._id === wishID;
 					});
-					wishlist.wishes[index] = wish;
+					var wishlistWish = angular.copy(wish);
+					wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
+					wishlist.wishes[index] = wishlistWish;
 				}
 				console.info("Reservation added to", wish._id);
+				defer.resolve(wish);
 			});
+			return defer.promise;
 		}
 
 		model.deleteReservation = function(wishID) {
 			$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wishID;
-				});
-				wishlist.wishes[index] = wish;
+				if (wishlist) {
+					var index = _.findIndex(wishlist.wishes, function (w) {
+						return w._id === wishID;
+					});
+					wishlist.wishes[index] = wish;
+				}
 				console.info("Reservation deleted for ", wish._id);
 			});
 		}

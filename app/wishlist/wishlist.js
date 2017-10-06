@@ -7,192 +7,191 @@
 	'wishlist.wish',
 	'gcse'
 ])
-	.config(function($stateProvider){
-		$stateProvider
-			.state('gimmi.wishlist', {
-				url: 'wishlist/:receiverID',
-				views: {
-					'content@': {
-						templateUrl: 'app/wishlist/wishlist.tmpl.html',
-						controller:'wishlistCtrl as wishlistCtrl',
-						resolve: {
-								currentReceiver: ['$stateParams', 'receiverModel', function($stateParams, receiverModel){
-									return receiverModel.setCurrentReceiver($stateParams.receiverID);
-								}]
-						}
-					},
-					'receiverSearch@gimmi': {
-						controller: 'receiverSearchCtrl as receiverSearchCtrl',
-						templateUrl: 'app/people/receiver/receiverSearch.tmpl.html',
-						resolve: {
-							receivers: ['receiverModel', function (receiverModel) {
-								return receiverModel.getReceivers();
+.config(function($stateProvider){
+	$stateProvider
+		.state('gimmi.wishlist', {
+			url: 'wishlist/:receiverID',
+			views: {
+				'content@': {
+					templateUrl: 'app/wishlist/wishlist.tmpl.html',
+					controller:'wishlistCtrl as wishlistCtrl',
+					resolve: {
+							currentReceiver: ['$stateParams', 'receiverModel', function($stateParams, receiverModel){
+								return receiverModel.setCurrentReceiver($stateParams.receiverID);
 							}]
-						}
-					},
-					'wishlist_item@gimmi.wishlist': {
-						templateUrl: 'app/wishlist/wishlist_item.tmpl.html',
-						controller: 'wishCtrl as wishCtrl'
-					},
-					'wish_create@gimmi.wishlist': {
-						templateUrl: 'app/wishlist/wish/create/wish-create.tmpl.html',
-						controller: 'createWishCtrl as createWishCtrl'
 					}
-				}
-			})
-			.state('gimmi.wishlist.send',{
-				url: '/send',
-				views:{
-					'content@': {
-						templateUrl: 'app/wishlist/sendWishlist.tmpl.html',
-						controller: 'sendWishlistController as sendWishlistCtrl'
+				},
+				'receiverSearch@gimmi': {
+					controller: 'receiverSearchCtrl as receiverSearchCtrl',
+					templateUrl: 'app/people/receiver/receiverSearch.tmpl.html',
+					resolve: {
+						receivers: ['receiverModel', function (receiverModel) {
+							return receiverModel.getReceivers();
+						}]
 					}
+				},
+				'wishlist_item@gimmi.wishlist': {
+					templateUrl: 'app/wishlist/wishlist_item.tmpl.html',
+					controller: 'wishCtrl as wishCtrl'
+				},
+				'wish_create@gimmi.wishlist': {
+					templateUrl: 'app/wishlist/wish/create/wish-create.tmpl.html',
+					controller: 'createWishCtrl as createWishCtrl'
 				}
-			})
-		;
-	})
-	.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService',
-					function wishlistCtrl($stateParams, wishModel, receiverModel, UserService){
-		var wishlistCtrl = this;
-
-		var currentReceiver = receiverModel.getCurrentReceiver();
-		wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
-		wishlistCtrl.currentReceiver = currentReceiver;
-		if (currentReceiver) {
-				wishModel.getWishlist(wishlistCtrl.currentReceiver._id).then(function(wishlist) {
-					wishlistCtrl.wishes = wishlist.wishes;
-				});
-				wishlistCtrl.userIsReceiver = UserService.userIsReceiver(wishlistCtrl.currentReceiver._id);
-		} else {
-			wishlistCtrl.userIsReceiver = false;
-		}
-	}])
-	.controller('wishCtrl', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
-		var _self = this;
-		/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
-		/* TODO: Verplaats naar wishlistctrl, nu wordt dit voor elke wish overlopen, maar is altijd hetzelfde! */
-
-		_self.userIsReceiver = function(receiverID) {
-			return UserService.userIsReceiver(receiverID);
-		};
-
-		_self.userIsCreator = function(creatorID){
-			return UserService.getCurrentUser()._id === creatorID;
-		};
-
-		_self.receiverIsCreator = function(creatorID, receiverID) {
-			return creatorID === receiverID;
-		}
-
-		_self.reservedByUser = function(reservatorID){
-			if (UserService.getCurrentUser()._id === reservatorID) {
-				return true;
-			} else {
-				return false;
 			}
-		};
-
-		function copy(wish){
-			var userID = UserService.getCurrentUser()._id;
-			var newWish = {};
-			newWish.title = wish.title;
-			newWish.image = wish.image;
-			newWish.url = wish.url;
-			newWish.price =  wish.price;
-			wishModel.createWish(newWish, userID, userID);
-		}
-
-		function edit(wish){
-			console.info("Wish in edit mode");
-			var editPopup = $uibModal.open({
-				ariaLabelledBy: 'modal-title',
-				ariaDescribedBy: 'modal-body',
-				templateUrl: 'editWish.html',
-				size: 'sm',
-				controller: 'editPopupCtrl',
-				controllerAs: 'editPopupCtrl',
-				resolve: {
-					wish: function () {
-						var originalWish = angular.copy(wish);
-						return originalWish;
-					}
+		})
+		.state('gimmi.wishlist.send',{
+			url: '/send',
+			views:{
+				'content@': {
+					templateUrl: 'app/wishlist/sendWishlist.tmpl.html',
+					controller: 'sendWishlistController as sendWishlistCtrl'
 				}
-			});
-
-			editPopup.result.then(function(wish) {
-				wishModel.updateWish(wish);
-				console.info(wish.title + " is gewijzigd.");
-			});
-		}
-
-		function deleteWishVerification (wish) {
-			//Create a popup instance for delete verification
-			var deletePopup = $uibModal.open({
-				ariaLabelledBy: 'modal-title',
-				ariaDescribedBy: 'modal-body',
-				templateUrl: 'deleteVerification.html',
-				size: 'md',
-				controller: 'deletePopupCtrl',
-				controllerAs: 'deletePopupCtrl',
-				resolve: {
-					wish: function () {
-						return wish;
-					}
-				}
-			});
-
-			deletePopup.result.then(function (wish) {
-				wishModel.deleteWish(wish);
-				console.info(wish._id + " is verwijderd.")
-			});
-		}
-
-		function addReservation (wish, userID, reason) {
-			/*var reservation = {
-				reservator: userID,
-				reason: reason
-			};*/
-			var wishReservationPopup = $uibModal.open({
-				ariaLabelledBy: 'modal-title',
-				ariaDescribedBy: 'modal-body',
-				templateUrl: 'wishReservation.html',
-				size: 'md',
-				controller: 'wishReservationPopupCtrl',
-				controllerAs: 'wishReservationPopupCtrl',
-				resolve: {
-					wish: function () {
-						return wish;
-					}
-				}
-			});
-
-			wishReservationPopup.result.then(function(reservation) {
-				reservation.reservationDate = new Date();
-				reservation.reservedBy = userID;
-
-				wishModel.addReservation(wish._id, reservation);
-			});
-		}
-
-		function deleteReservation (wish) {
-				wishModel.deleteReservation(wish._id);
-		}
-		//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
-		function getReservationStatus (wish) {
-			var reservationStatus = "unreserved";
-			if (wish.reservation) {
-				reservationStatus = "reserved";
 			}
-			return reservationStatus;
-		}
-		_self.reservationStatus = getReservationStatus;
-		_self.copy = copy;
-		_self.edit = edit;
-		_self.deleteWish = deleteWishVerification;
-		_self.addReservation = addReservation;
-		_self.deleteReservation = deleteReservation;
+		})
+	;
+})
+.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService',
+				function wishlistCtrl($stateParams, wishModel, receiverModel, UserService){
+	var wishlistCtrl = this;
+
+	var currentReceiver = receiverModel.getCurrentReceiver();
+	wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
+	wishlistCtrl.currentReceiver = currentReceiver;
+	if (currentReceiver) {
+			wishModel.getWishlist(wishlistCtrl.currentReceiver._id).then(function(wishlist) {
+				wishlistCtrl.wishes = wishlist.wishes;
+			});
+			wishlistCtrl.userIsReceiver = UserService.userIsReceiver(wishlistCtrl.currentReceiver._id);
+	} else {
+		wishlistCtrl.userIsReceiver = false;
 	}
-)
+}])
+	.controller('wishCtrl', ['$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
+	var _self = this;
+	/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
+	/* TODO: Verplaats naar wishlistctrl, nu wordt dit voor elke wish overlopen, maar is altijd hetzelfde! */
+
+	_self.userIsReceiver = function(receiverID) {
+		return UserService.userIsReceiver(receiverID);
+	};
+
+	_self.userIsCreator = function(creatorID){
+		return UserService.getCurrentUser()._id === creatorID;
+	};
+
+	_self.receiverIsCreator = function(creatorID, receiverID) {
+		return creatorID === receiverID;
+	}
+
+	_self.reservedByUser = function(reservatorID){
+		if (UserService.getCurrentUser()._id === reservatorID) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	function copy(wish){
+		var userID = UserService.getCurrentUser()._id;
+		var newWish = {};
+		newWish.title = wish.title;
+		newWish.image = wish.image;
+		newWish.url = wish.url;
+		newWish.price =  wish.price;
+		wishModel.createWish(newWish, userID, userID);
+	}
+
+	function edit(wish){
+		console.info("Wish in edit mode");
+		var editPopup = $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'editWish.html',
+			size: 'sm',
+			controller: 'editPopupCtrl',
+			controllerAs: 'editPopupCtrl',
+			resolve: {
+				wish: function () {
+					var originalWish = angular.copy(wish);
+					return originalWish;
+				}
+			}
+		});
+
+		editPopup.result.then(function(wish) {
+			wishModel.updateWish(wish);
+			console.info(wish.title + " is gewijzigd.");
+		});
+	}
+
+	function deleteWishVerification (wish) {
+		//Create a popup instance for delete verification
+		var deletePopup = $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'deleteVerification.html',
+			size: 'md',
+			controller: 'deletePopupCtrl',
+			controllerAs: 'deletePopupCtrl',
+			resolve: {
+				wish: function () {
+					return wish;
+				}
+			}
+		});
+
+		deletePopup.result.then(function (wish) {
+			wishModel.deleteWish(wish);
+			console.info(wish._id + " is verwijderd.")
+		});
+	}
+
+	function addReservation (wish, userID, reason) {
+		/*var reservation = {
+			reservator: userID,
+			reason: reason
+		};*/
+		var wishReservationPopup = $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'wishReservation.html',
+			size: 'md',
+			controller: 'wishReservationPopupCtrl',
+			controllerAs: 'wishReservationPopupCtrl',
+			resolve: {
+				wish: function () {
+					return wish;
+				}
+			}
+		});
+
+		wishReservationPopup.result.then(function(reservation) {
+			reservation.reservationDate = new Date();
+			reservation.reservedBy = userID;
+
+			wishModel.addReservation(wish._id, reservation);
+		});
+	}
+
+	function deleteReservation (wish) {
+			wishModel.deleteReservation(wish._id);
+	}
+	//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
+	function getReservationStatus (wish) {
+		var reservationStatus = "unreserved";
+		if (wish.reservation) {
+			reservationStatus = "reserved";
+		}
+		return reservationStatus;
+	}
+	_self.reservationStatus = getReservationStatus;
+	_self.copy = copy;
+	_self.edit = edit;
+	_self.deleteWish = deleteWishVerification;
+	_self.addReservation = addReservation;
+	_self.deleteReservation = deleteReservation;
+}])
 .controller('editPopupCtrl', function($uibModalInstance, wish) {
 	var _self = this;
 
