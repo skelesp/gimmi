@@ -101,6 +101,8 @@ angular.module('gimmi.models.wish', [
 		}
 
 		model.addReservation = function(wishID, reservation) {
+			console.log("Start reservartion");
+			var defer = $q.defer();
 			$http.post(URLS.WISH+"/"+wishID+"/reservation", reservation).success(function(wish){
 				if (wishlist) {
 					var index = _.findIndex(wishlist.wishes, function(w){
@@ -108,8 +110,10 @@ angular.module('gimmi.models.wish', [
 					});
 					wishlist.wishes[index] = wish;
 				}
-				console.info("Reservation added to", wish._id);
+				console.info("Reservation added to", wish);
+				defer.resolve(wish);
 			});
+			return defer.promise;
 		}
 
 		model.deleteReservation = function(wishID) {
