@@ -7,12 +7,12 @@
 	<!-- Wishlist header -->
 	<blockquote class="blockquote p-3">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-auto">
 				<h4>Cadeau-ideeën voor</h4>
 				<h1>{{wishlistCtrl.currentReceiver.fullName}}</h1>
 			</div>
-			<div class="col-sm-4 float-right">
-				<a class="badge badge-pill badge-secondary float-right" ng-show="wishlistCtrl.userIsReceiver" ui-sref="gimmi.wishlist.send">
+			<div class="col-sm-4 float-left">
+				<a class="badge badge-pill badge-secondary float-left" ng-show="wishlistCtrl.userIsReceiver" ui-sref="gimmi.wishlist.send">
 					Verstuur mijn lijst
 				</a>
 				<a class="badge badge-pill badge-secondary float-right" ng-show="!wishlistCtrl.userIsReceiver" ui-sref="gimmi.wishlist({receiverID: wishlistCtrl.currentUserID})">
