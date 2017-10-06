@@ -108,7 +108,9 @@ angular.module('gimmi.models.wish', [
 					var index = _.findIndex(wishlist.wishes, function(w){
 						return w._id === wishID;
 					});
-					wishlist.wishes[index] = wish;
+					var wishlistWish = angular.copy(wish);
+					wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
+					wishlist.wishes[index] = wishlistWish;
 				}
 				console.info("Reservation added to", wish);
 				defer.resolve(wish);
