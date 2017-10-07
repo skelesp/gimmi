@@ -17,39 +17,36 @@
     <p class="card-text mx-auto my-1 text-left font-weight-bold">{{wish.price | currency : "€" : 2}}</p>
   </div>
   <div class="card-footer text-muted p-1">
-    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Bekijk de details" tooltip-class="customTooltip" tooltip-placement="top-left" ui-sref="gimmi.wishlist.wish({wishID: wish._id})"><i class="fa fa-info" aria-hidden="true"></i></a>
-    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Reserveer" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')"><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
-    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Kopieer naar uw eigen lijst" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-hide="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id)" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone" aria-hidden="true"></i></a>
-    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Wijzig" tooltip-class="customTooltip" tooltip-placement="top-right" href="" ng-show="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id) || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit" aria-hidden="true"></i></a>
-    <a class="badge badge-light mx-1 p-1 text-muted" uib-tooltip="Verwijder" tooltip-class="customTooltip" tooltip-placement="top-right" href="" ng-show="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id) || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+    <button class="btn btn-light mx-1 p-1 text-muted" ui-sref="gimmi.wishlist.wish({wishID: wish._id})"><i class="fa fa-info" aria-hidden="true" uib-tooltip="Bekijk de details" tooltip-class="customTooltip" tooltip-placement="top-left"></i></button>
+    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Reserveer" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')"><i class="fa fa-cart-plus" aria-hidden="true"></i></button>
+    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Kopieer naar uw eigen lijst" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-hide="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id)" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone" aria-hidden="true"></i></button>
+    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Wijzig" tooltip-class="customTooltip" tooltip-placement="top-right" href="" ng-show="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id) || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit" aria-hidden="true"></i></button>
+    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Verwijder" tooltip-class="customTooltip" tooltip-placement="top-right" href="" ng-show="wishCtrl.userIsReceiver(wishlistCtrl.currentReceiver._id) || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash" aria-hidden="true"></i></button>
   </div>
 </div>
 
 <!-- Template for edit wish popup -->
 <script type="text/ng-template" id="editWish.html">
   <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">
-      Wijzig {{editPopupCtrl.wish.title}}
-    </h3>
+    <h3 class="modal-title">Wijzig {{::editPopupCtrl.wish.title}}</h3>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="editPopupCtrl.cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-  <div class="row modal-body" id="modal-body">
-    <form name="wishEditForm" class="p-2" role="form" novalidate>
-      <div class='pic'>
-        <img class="img-thumbnail mb-2" ng-src="{{editPopupCtrl.wish.image}}" google-image-search="{{editPopupCtrl.wish.title}}" data-image-result="editPopupCtrl.wish.image"
-        />
+  <div class="modal-body">
+    <form name="wishEditForm" class="p-2" role="form">
+      <div class="form-group">
+        <img class="img-fluid" ng-src="{{editPopupCtrl.wish.image}}" google-image-search="{{editPopupCtrl.wish.title}}" data-image-result="editPopupCtrl.wish.image"/>
       </div>
       <div class="form-group">
         <input type="text" class="form-control" id="WishTitle" ng-model="editPopupCtrl.wish.title" placeholder="Titel" required/>
       </div>
       <div class="form-group">
-        <input type="number" class="form-control" name="inputPrice" id="WishPrice" placeholder="Prijs in € (enkel getal ingeven)"
-          ng-model="editPopupCtrl.wish.price" />
-        <span ng-show="wishEditForm.inputPrice.$error.number">
-                  Enkel getallen toegelaten!
-              </span>
+        <input type="number" class="form-control" name="inputPrice" id="WishPrice" placeholder="Prijs in € (enkel getal ingeven)" ng-model="editPopupCtrl.wish.price" />
+        <span ng-show="wishEditForm.inputPrice.$error.number">Enkel getallen toegelaten!</span>
       </div>
+    </form>
   </div>
-  </form>
   <div class="modal-footer">
     <button class="btn btn-warning" type="button" ng-click="editPopupCtrl.ok()">Opslaan</button>
     <button class="btn btn-warning" type="button" ng-click="editPopupCtrl.cancel()">Annuleer</button>
