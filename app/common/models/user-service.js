@@ -195,6 +195,7 @@ angular.module('gimmi.authentication', [
 
       function logOutFacebook () {
         FB.logout(function(res){
+          console.info("User logged out of Facebook:", res);
           statusChangeCallbackFacebook(res);
         });
       }

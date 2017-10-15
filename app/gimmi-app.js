@@ -151,11 +151,11 @@
 		self.currentUser = null;
 		$scope.$broadcast('logout');
 		$state.go('gimmi.login');
-		console.info("User logged out from the app.");
+		console.info("User logged out from Gimmi");
 	};
 
 	self.logOutFacebook = function() {
-		UserService.logOutFacebook;
+		UserService.logOutFacebook();
 		self.logout();
 	}
 }])
