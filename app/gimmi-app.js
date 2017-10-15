@@ -149,8 +149,14 @@
 	self.logout = function(){
 		UserService.logout();
 		self.currentUser = null;
-			$scope.$broadcast('logout');
+		$scope.$broadcast('logout');
 		$state.go('gimmi.login');
+		console.info("User logged out from the app.");
 	};
+
+	self.logOutFacebook = function() {
+		UserService.logOutFacebook;
+		self.logout();
+	}
 }])
 ;

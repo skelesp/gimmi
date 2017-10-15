@@ -188,8 +188,7 @@ angular.module('gimmi.authentication', [
           The user is not logged to the app, or into Facebook:
           destroy the session on the server.
           */
-          console.info("User not logged to the app.");
-          $state.go('gimmi.login');
+          //TODO: DELETE facebook account in DB ==> eerst controleren wat de best practice hierrond is...
         }
         return defer.promise;
       }

@@ -55,7 +55,20 @@
 					self.disabled = false;
 				});
 		}
-
+		self.logInFacebook = function(){
+			UserService.logInFacebook()
+				.then(function (user) {
+					$scope.$emit('login', user);
+					$scope.$broadcast('login', user);
+					$state.go('gimmi.wishlist', { receiverID: user._id });
+				})
+				.catch(function () {
+					self.error = true;
+					self.errorMessage = "Invalid username / password";
+					self.disabled = false;
+				});
+		}
+		self.checkLoginStatus = UserService.checkLoginStatus;
 
 	})
 	.controller('logoutCtrl', function(){
