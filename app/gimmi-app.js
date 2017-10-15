@@ -9,10 +9,9 @@
 	'wishlist.receiver',
 	'landingPage'
 ])
-.run(['$rootScope', '$window', 'CONFIG', function ($rootScope, $window, config) {
+.run(['$rootScope', '$window', 'CONFIG', 'UserService', function ($rootScope, $window, config, UserService) {
 
-	/* $rootScope.user = {}; */
-	console.log('Start running app');
+	console.info('Start running app');
 	$window.fbAsyncInit = function () {
 		// Executed when the SDK is loaded
 
@@ -59,8 +58,9 @@
 			autoLogAppEvents: true
 		});
 		FB.AppEvents.logPageView();
-		/* sAuth.watchAuthenticationStatusChange(); */
-		console.log("FB SDK initiated");
+		console.info("FB SDK initiated");
+
+		UserService.checkLoginStatus();
 
 	};
 
@@ -78,7 +78,7 @@
 		js = d.createElement('script');
 		js.id = id;
 		js.async = true;
-		js.src = "//connect.facebook.net/en_US/sdk.js";
+		js.src = "//connect.facebook.net/nl_NL/sdk.js";
 
 		ref.parentNode.insertBefore(js, ref);
 
