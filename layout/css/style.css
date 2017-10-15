@@ -38,6 +38,12 @@ h6.card-title  {
 
 /* END Fix for card buttons in IE */
 
+/* Custom Facebook login button*/
+.btn-fb {
+  background-color: #3b5998;
+  color: white;
+}
+/* END Custom Facebook login button*/
 
 /* Pointer on ng-click elements */
 [ng-click],

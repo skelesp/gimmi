@@ -29,9 +29,10 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" ng-show="ApplicationCtrl.currentUser._id" ng-click="ApplicationCtrl.logout()">
-          <div class="slide-container"><span class="fa fa-sign-out mr-1" aria-hidden="true"></span>Logout</div>
+        <a class="nav-link" ng-show="ApplicationCtrl.currentUser._id && !ApplicationCtrl.currentUser.accounts.facebook" ng-click="ApplicationCtrl.logout()">
+          <div class="slide-container"><span class="fa fa-sign-out mr-1" aria-hidden="true"></span>Uitloggen</div>
         </a>
+        <div class="btn btn-fb btn-sm" ng-show="ApplicationCtrl.currentUser.accounts.facebook" ng-click="ApplicationCtrl.logOutFacebook()"><i class="fa fa-facebook-official mr-1" aria-hidden="true"></i> Uitloggen</div>
       </li>
       <li class="nav-item"><a class="nav-link" href=""></a></li>
     </ul>
