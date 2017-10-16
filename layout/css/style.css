@@ -43,6 +43,11 @@ h6.card-title  {
   background-color: #3b5998;
   color: white;
 }
+
+.avatar {
+  height: 30px;
+  width: 30px;
+}
 /* END Custom Facebook login button*/
 
 /* Pointer on ng-click elements */

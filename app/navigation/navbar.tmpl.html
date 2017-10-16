@@ -25,14 +25,18 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" ng-show="ApplicationCtrl.currentUser._id" ui-sref="gimmi.wishlist({receiverID: ApplicationCtrl.currentUser._id})" uib-tooltip="Ga naar uw lijst" tooltip-class="customTooltip" tooltip-placement="bottom-left">
-          <div class=""><img class="rounded-circle logo mr-1" ng-src="{{ApplicationCtrl.currentUser.accounts.facebook.profile_pic}}"><span ng-hide="ApplicationCtrl.currentUser.accounts.facebook.profile_pic" class="fa fa-user-o mr-1" aria-hidden="true"></span>{{ApplicationCtrl.currentUser.firstName}}</div>
+          <div class="">
+            <img ng-show="ApplicationCtrl.currentUser.loginStrategy === 'facebook'" class="rounded-circle avatar mr-1" ng-src="{{ApplicationCtrl.currentUser.accounts.facebook.profile_pic}}">
+            <span ng-show="ApplicationCtrl.currentUser.loginStrategy === 'local'" class="fa fa-user-o mr-1" aria-hidden="true"></span>
+            {{ApplicationCtrl.currentUser.firstName}}
+          </div>
         </a>
       </li>
-      <li class="nav-item pt-2">
-        <a class="nav-link" ng-show="ApplicationCtrl.currentUser._id && !ApplicationCtrl.currentUser.accounts.facebook" ng-click="ApplicationCtrl.logout()">
+      <li class="nav-item">
+        <a class="nav-link" ng-show="ApplicationCtrl.currentUser.loginStrategy === 'local'" ng-click="ApplicationCtrl.logout()" href="">
           <div class="slide-container"><span class="fa fa-sign-out mr-1" aria-hidden="true"></span>Uitloggen</div>
         </a>
-        <div class="btn btn-fb btn-sm" ng-show="ApplicationCtrl.currentUser.accounts.facebook" ng-click="ApplicationCtrl.logOutFacebook()"><i class="fa fa-facebook-official mr-1" aria-hidden="true"></i> Uitloggen</div>
+        <div class="btn btn-fb btn-sm mt-2" ng-show="ApplicationCtrl.currentUser.loginStrategy === 'facebook'" ng-click="ApplicationCtrl.logOutFacebook()"><i class="fa fa-facebook-official mr-1" aria-hidden="true"></i> Uitloggen</div>
       </li>
       <li class="nav-item"><a class="nav-link" href=""></a></li>
     </ul>
