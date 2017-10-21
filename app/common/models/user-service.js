@@ -168,7 +168,7 @@ angular.module('gimmi.authentication', [
             userInfo = info;
             $http.post(baseUrl + '/authenticate', { userInfo: userInfo, fb: res, account: "facebook" })
               .success(function (data, status) {
-                //Bij het inloggen met FB is het niet duidelijk of een gebruiker 
+                //Bij het inloggen met FB is het niet duidelijk of een gebruiker al bestond of niet ==> status 200 en 201 zijn ok
                 if ((status === 200 || status === 201) && data.token) { 
                   $localStorage.token = data.token;
                   currentUser = PersonService.getPersonFromToken(data.token);
@@ -181,7 +181,11 @@ angular.module('gimmi.authentication', [
               .error(function (data) {
                 defer.reject();
               });
-          });
+          },
+        function(error){
+          //handle error
+          console.error(error.type + ": " + error.message);
+        });
 
         } else {
           /*
@@ -204,7 +208,12 @@ angular.module('gimmi.authentication', [
       function getUserInfoFromFB () {
         var defer = $q.defer();
         FB.api('/me?fields=first_name,last_name,email,picture', function (res) {
-          defer.resolve(res);
+          if (!res || res.error){
+            defer.reject(res.error);
+            console.error(res.error);
+          } else {
+            defer.resolve(res);
+          }
         });
         return defer.promise;
       }
