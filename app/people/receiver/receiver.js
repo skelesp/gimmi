@@ -74,7 +74,7 @@
 	.controller('logoutCtrl', function(){
 
 	})
-	.controller('personRegistrationCtrl', ["$state", "$localStorage", "$scope", "PersonService", "receiverModel", function($state, $localStorage, $scope, PersonService, receiverModel){
+	.controller('personRegistrationCtrl', ["$state", "$localStorage", "$scope", "PersonService", "UserService", "receiverModel", function ($state, $localStorage, $scope, PersonService, UserService, receiverModel){
 		var self = this;
 
 		// Set variables to detect errors
@@ -105,6 +105,20 @@
 						self.disabled = false;
 					}
 			);
+		}
+
+		self.logInFacebook = function () {
+			UserService.logInFacebook()
+				.then(function (user) {
+					$scope.$emit('login', user);
+					$scope.$broadcast('login', user);
+					$state.go('gimmi.wishlist', { receiverID: user._id });
+				})
+				.catch(function () {
+					self.error = true;
+					self.errorMessage = "Invalid username / password";
+					self.disabled = false;
+				});
 		}
 
 	}])
