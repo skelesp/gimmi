@@ -1,3 +1,13 @@
-<div>
-  <p style="color:black;">Kopieer deze link <a href="{{sendWishlistCtrl.url}}" class="label label-default">{{sendWishlistCtrl.url}}</a> en verzend hem via mail / post hem op sociale media / ...</p>
+<div class="container">
+  <div class="row">
+    <h3>Communiceer uw lijst</h2>
+  </div>
+  <div class="row">
+    <ul>
+      <li><button class="btn btn-social btn-facebook btn-sm" ng-click="sendWishlistCtrl.postOnFacebook()"><i class="fa fa-facebook mr-1" aria-hidden="true"></i>Post een link op uw Facebook</button></li>
+      <li><button class="btn btn-social btn-facebook btn-sm" ng-click="sendWishlistCtrl.sendToFacebookFriends()"><i class="fa fa-facebook mr-1" aria-hidden="true"></i>Stuur een link naar uw Facebookvrienden</button></li>
+      <li><button class="btn btn-social btn-facebook btn-sm" ng-click="sendWishlistCtrl.shareOnFacebook()"><i class="fa fa-facebook mr-1" aria-hidden="true"></i>Deel de link op facebook</button></li>
+      <li><h6>Kopieer deze link <a href="{{sendWishlistCtrl.url}}" class="label label-default" target="_blank">{{sendWishlistCtrl.url}}</a></h6></li>
+    </ul>
+  </div>
 </div>

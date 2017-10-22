@@ -271,7 +271,36 @@
 }])
 .controller('sendWishlistController', ['$stateParams', 'CONFIG', function($stateParams, CONFIG){
 	var self = this;
-
-	self.url = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
+	wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
+	self.url = wishUrl;
+	self.postOnFacebook = function(){
+		FB.ui({
+			method: 'feed',
+			link: wishUrl,
+			caption: 'Een link naar mijn favoriete cadeaus',
+			description: "Testbeschrijving"
+		}, function (response) {
+			console.log(response);
+			console.log(wishUrl);
+		});
+	};
+	self.sendToFacebookFriends = function(){
+		FB.ui({
+			method: 'send',
+			link: wishUrl
+		}, function (response) {
+			console.log(response);
+			console.log(wishUrl);
+		});
+	}
+	self.shareOnFacebook = function(){
+		FB.ui({
+			method: 'share',
+			href: wishUrl
+		}, function (response) {
+			console.log(response);
+			console.log(wishUrl);
+		});
+	}
 }])
 ;

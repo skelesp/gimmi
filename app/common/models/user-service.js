@@ -128,7 +128,7 @@ angular.module('gimmi.authentication', [
             })
             ;
         }, { 
-          scope: 'public_profile,email,user_friends', 
+          scope: 'public_profile,email,user_friends,publish_actions', 
           return_scopes: true
         });
         return defer.promise;
