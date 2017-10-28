@@ -1,11 +1,30 @@
-<div class="container-fluid">
+<div class="container mt-2">
   <div class="row">
-    <div class="col-md-3">
-      <h3>Communiceer uw lijst</h2>
-      <button class="btn btn-social btn-facebook btn-sm" ng-click="sendWishlistCtrl.postOnFacebook()"><i class="fa fa-facebook mr-1" aria-hidden="true"></i><i class="fa fa-pencil-square-o mr-2" aria-hidden="true"></i> Post een link op uw Facebookprofiel</button>
-      <button class="btn btn-social btn-facebook btn-sm" ng-click="sendWishlistCtrl.sendToFacebookFriends()"><i class="fa fa-facebook mr-1" aria-hidden="true"></i><i class="fa fa-comment mr-2" aria-hidden="true"></i>Stuur de link in een privébericht naar uw Facebookvrienden</button>
-      <button class="btn btn-social btn-facebook btn-sm" ng-click="sendWishlistCtrl.shareOnFacebook()"><i class="fa fa-facebook mr-1" aria-hidden="true"></i><i class="fa fa-share-alt mr-2" aria-hidden="true"></i> Deel de link met facebookvrienden of in evenementen/groepen</button>
-      <h6>Kopieer deze link <a href="{{sendWishlistCtrl.url}}" class="label label-default" target="_blank">{{sendWishlistCtrl.url}}</a></h6>
+    <div class="col-xs-3">
+      <a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})" class="badge badge-secondary mb-2 lead"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Terug naar lijst</a>
+      <h3>Deel uw wensen</h2>
+      <div class="btn-group" role="group">
+        <button id="btnGroupFacebook" type="button" class="btn btn-social btn-facebook btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <i class="fa fa-facebook mr-1" aria-hidden="true"></i> Via facebook
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupFacebook">
+          <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.postOnFacebook()">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Post een link op uw Facebookprofiel
+          </a>
+          <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.sendToFacebookFriends()"><i class="fa fa-comment mr-2" aria-hidden="true"></i>Stuur de link in een privébericht</a>
+          <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.shareOnFacebook()"><i class="fa fa-share-alt mr-2" aria-hidden="true"></i> Deel de link in een groep of evenement</a>
+        </div>
+      </div>
+      <div class="btn-group" role="group">
+        <button id="btnGroupLink" type="button" class="btn btn-social btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-link mr-2" aria-hidden="true"></i> Kopieer de link
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupLink">
+          <a class="dropdown-item" href="{{sendWishlistCtrl.url}}" class="label label-default" target="_blank">{{sendWishlistCtrl.url}}</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
