@@ -7,7 +7,8 @@
 	'wishlist',
 	'wishlist.wish',
 	'wishlist.receiver',
-	'landingPage'
+	'landingPage',
+	'ngFlash'
 ])
 .run(['$rootScope', '$window', 'CONFIG', 'UserService', function ($rootScope, $window, config, UserService) {
 
@@ -85,7 +86,7 @@
 	}(document));
 
 }])
-.config(function($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider){
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, FlashProvider){
 	$stateProvider
 		.state('gimmi', {
 			url: '/',
@@ -136,6 +137,11 @@
 		'placement' : 'bottom-left',
 		'popupCloseDelay' : '10' 
 	});
+
+	//Flash message config
+	FlashProvider.setTimeout(5000);
+	FlashProvider.setShowClose(true);
+	FlashProvider.setTemplatePreset('transclude');
 })
 .controller('ApplicationCtrl', ['$scope', '$state', 'UserService', function($scope, $state, UserService){
 	var self = this;
