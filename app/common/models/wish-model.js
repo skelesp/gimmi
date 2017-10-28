@@ -1,7 +1,7 @@
 angular.module('gimmi.models.wish', [
 	'gimmi.config'
 ])
-	.service('wishModel', function($http, $q, CONFIG){
+	.service('wishModel', function($http, $q, CONFIG, Flash){
 		var model = this,
 			URLS = {
 				WISHLIST: CONFIG.apiUrl + '/api/wishlist',
@@ -59,9 +59,11 @@ angular.module('gimmi.models.wish', [
 					wishlist.count++;
 				} else {
 					console.info("%s copied a wish from wishlist %s", userID, receiverID);
+					// Show flashmessage voor succesvolle copy
+					var message = "Het cadeau '" + wish.title + "' werd gekopieerd naar uw lijst.";
+					var flashID = Flash.create('success', message);
 				}
 			});
-
 		};
 
 		model.updateWish = function(wish) {
