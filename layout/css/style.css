@@ -71,6 +71,15 @@ h6.card-title  {
 }
 /* END Custom Facebook login button*/
 
+/* Flash messages */
+.flash-message {
+  position: fixed;
+  bottom: 5px;
+  right: 15px;
+  z-index: 7000;
+}
+/* END Flash messages */
+
 /* Pointer on ng-click elements */
 [ng-click],
 [data-ng-click],

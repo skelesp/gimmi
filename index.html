@@ -18,6 +18,14 @@
 	<body ng-controller="ApplicationCtrl as ApplicationCtrl">
 			<!-- PAGE -->
 			<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
+			<flash-message>
+				<div class="flash-message alert alert-{{flash.type}} alert-dismissible fade show" role="alert">
+					{{flash.text}}
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			</flash-message>
 			<div ui-view="content"></div>
 		
 		<!-- SCRIPTS -->
@@ -33,7 +41,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
 		<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
-		<script src="lib/vendor/ngclipboard.min.js">
+		<script src="lib/vendor/ngclipboard.min.js"></script>
+		<script src="lib/vendor/angular-flash.min.js"></script>
 		</script>
 		<!-- Gimmi -->
 		<script src="app/config.js"></script>
