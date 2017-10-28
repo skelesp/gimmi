@@ -1,12 +1,35 @@
 <div class="container mt-2">
-  <div class="row">
-    <div class="col-xs-3">
-      <a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})" class="badge badge-secondary mb-2 lead"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Terug naar lijst</a>
-      <h3>Deel uw wensen</h2>
+  <a ui-sref="gimmi.wishlist({receiverID: sendWishlistCtrl.receiverID})" class="badge badge-secondary mb-2 lead"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Terug naar lijst</a>
+  <h3>Deel uw wensen</h2>
+  <div class="row mt-3">
+    <div class="col-sm-6">
+      <!-- 
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+          <span class="input-group-addon" id="basic-addon1">@</span>
+        </div> -->
+      <h6>Kopieer de link hieronder</h6>
+      <div class="input-group">
+        <!-- Target -->
+        <input type="text" class="form-control" aria-label="wishlist link" id="linkToWishlist" value="{{sendWishlistCtrl.url}}" readonly>
+        <span class="input-group-button">
+        <!-- Trigger -->
+          <button class="btn"
+           ngclipboard data-clipboard-target="#linkToWishlist" ngclipboard-success="sendWishlistCtrl.wishIsCopied(e);"
+           uib-tooltip="Kopieer link naar klembord" tooltip-placement="bottom">
+            <i class="fa fa-clipboard" aria-hidden="true"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <h6>Deel op social media</h6>
       <div class="btn-group" role="group">
-        <button id="btnGroupFacebook" type="button" class="btn btn-social btn-facebook btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false">
-          <i class="fa fa-facebook mr-1" aria-hidden="true"></i> Via facebook
+        <button id="btnGroupFacebook" type="button" class="btn btn-social btn-facebook btn-sm dropdown-toggle" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-facebook mr-1" aria-hidden="true"></i> Deel op Facebook
         </button>
         <div class="dropdown-menu" aria-labelledby="btnGroupFacebook">
           <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.postOnFacebook()">
@@ -16,15 +39,7 @@
           <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.shareOnFacebook()"><i class="fa fa-share-alt mr-2" aria-hidden="true"></i> Deel de link in een groep of evenement</a>
         </div>
       </div>
-      <div class="btn-group" role="group">
-        <button id="btnGroupLink" type="button" class="btn btn-social btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-link mr-2" aria-hidden="true"></i> Kopieer de link
-        </button>
-        <div class="dropdown-menu" aria-labelledby="btnGroupLink">
-          <a class="dropdown-item" href="{{sendWishlistCtrl.url}}" class="label label-default" target="_blank">{{sendWishlistCtrl.url}}</a>
-        </div>
-      </div>
     </div>
   </div>
+</div>
 </div>
