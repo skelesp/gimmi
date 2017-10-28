@@ -270,7 +270,7 @@
 	resetForm();
 
 }])
-.controller('sendWishlistController', ['$state', '$stateParams', 'CONFIG', 'UserService', function($state, $stateParams, CONFIG, UserService){
+.controller('sendWishlistController', ['$state', '$stateParams', 'CONFIG', 'UserService', 'Flash', function($state, $stateParams, CONFIG, UserService, Flash){
 	var self = this;
 	if (!UserService.isLoggedIn) {
 		state.go('gimmi.login');
@@ -311,6 +311,8 @@
 	self.wishIsCopied = function(e) {
 		e.clearSelection();
 		console.info("URL copied to clipboard: " + e.text);
+		var message = "De link werd gekopieerd naar het klembord. U kan deze nu overal plakken.";
+		var flashID = Flash.create('success', message);
 		self.showCopyTooltip = true;
 	}
 }])
