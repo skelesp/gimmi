@@ -5,7 +5,8 @@
 	'gimmi.config',
 	'gimmi.authentication',
 	'wishlist.wish',
-	'gcse'
+	'gcse',
+	'ngclipboard'
 ])
 .config(function($stateProvider){
 	$stateProvider
@@ -269,9 +270,48 @@
 	resetForm();
 
 }])
-.controller('sendWishlistController', ['$stateParams', 'CONFIG', function($stateParams, CONFIG){
+.controller('sendWishlistController', ['$state', '$stateParams', 'CONFIG', 'UserService', function($state, $stateParams, CONFIG, UserService){
 	var self = this;
-
-	self.url = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
+	if (!UserService.isLoggedIn) {
+		state.go('gimmi.login');
+	}
+	wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
+	self.receiverID = $stateParams.receiverID;
+	self.url = wishUrl;
+	self.postOnFacebook = function(){
+		FB.ui({
+			method: 'feed',
+			link: wishUrl,
+			caption: 'Een link naar mijn favoriete cadeaus',
+			description: "Testbeschrijving"
+		}, function (response) {
+			console.log(response);
+			console.log(wishUrl);
+		});
+	};
+	self.sendToFacebookFriends = function(){
+		FB.ui({
+			method: 'send',
+			link: wishUrl
+		}, function (response) {
+			console.log(response);
+			console.log(wishUrl);
+		});
+	}
+	self.shareOnFacebook = function(){
+		FB.ui({
+			method: 'share',
+			href: wishUrl
+		}, function (response) {
+			console.log(response);
+			console.log(wishUrl);
+		});
+	}
+	self.showCopyTooltip = false;
+	self.wishIsCopied = function(e) {
+		e.clearSelection();
+		console.info("URL copied to clipboard: " + e.text);
+		self.showCopyTooltip = true;
+	}
 }])
 ;
