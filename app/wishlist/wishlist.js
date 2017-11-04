@@ -308,6 +308,7 @@
 		});
 	}
 	self.messengerLink = "fb-messenger://share/?link=" + encodeURIComponent(wishUrl) + "&app_id=" + CONFIG.fbID;
+	self.whatsappLink = "whatsapp://send?text=Hieronder een link waarop ik mijn wishlist voor cadeau's heb gezet. %0A%0A" + encodeURIComponent(wishUrl);
 	self.showCopyTooltip = false;
 	self.wishIsCopied = function(e) {
 		e.clearSelection();
