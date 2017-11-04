@@ -109,9 +109,8 @@
 							.then(function(receivers) {
 								console.log("receivers updated", receivers);
 							});
-						console.log("url: " + $rootScope.attemptedUrl);
 						if ($rootScope.attemptedUrl) {
-							console.log("redirect to " + $rootScope.attemptedUrl)
+							console.info("redirect to " + $rootScope.attemptedUrl)
 							$location.path($rootScope.attemptedUrl);
 							delete $rootScope.attemptedUrl;
 						} else {
