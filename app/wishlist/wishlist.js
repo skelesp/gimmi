@@ -270,12 +270,16 @@
 	resetForm();
 
 }])
-.controller('sendWishlistController', ['$state', '$stateParams', 'CONFIG', 'UserService', 'Flash', function($state, $stateParams, CONFIG, UserService, Flash){
+	.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', 'CONFIG', 'UserService', 'Flash', function ($rootScope, $state, $stateParams, CONFIG, UserService, Flash){
 	var self = this;
+	wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
+	//#105: onderstaande IF moet eigenlijk in de route staan en niet in de controller...
+	//Deze code lijkt gewoon niets te doen... Hier komt Angular nooit in...
 	if (!UserService.isLoggedIn) {
+		console.log(wishUrl);
+		$rootscope.attemptedUrl = wishUrl;
 		state.go('gimmi.login');
 	}
-	wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
 	self.receiverID = $stateParams.receiverID;
 	self.url = wishUrl;
 	self.postOnFacebook = function(){
