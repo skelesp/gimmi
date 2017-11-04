@@ -29,8 +29,10 @@
 			})
 		;
 	})
-	.controller('loginCtrl', function($localStorage, $state, $scope, UserService){
+	.controller('loginCtrl', function($location, $rootScope, $localStorage, $state, $scope, UserService, Flash){
 		var self = this;
+
+		console.log("Test: " + $rootScope.attemptedUrl);
 
 		self.isLoggedIn = function(){
 			return UserService.isLoggedIn();
@@ -47,7 +49,13 @@
 				.then(function(user){
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
-					$state.go('gimmi.wishlist',{receiverID: user._id});
+					if ($rootScope.attemptedUrl) {
+						console.log("redirect to " + $rootScope.attemptedUrl)
+						$location.path($rootScope.attemptedUrl);
+						delete $rootScope.attemptedUrl;
+					} else {
+						$state.go('gimmi.wishlist', { receiverID: user._id });
+					}
 				})
 				.catch(function(){
 					self.error = true;
@@ -60,7 +68,13 @@
 				.then(function (user) {
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
-					$state.go('gimmi.wishlist', { receiverID: user._id });
+					if ($rootScope.attemptedUrl) {
+						console.log("redirect to " + $rootScope.attemptedUrl)
+						$location.path($rootScope.attemptedUrl);
+						delete $rootScope.attemptedUrl;
+					} else {
+						$state.go('gimmi.wishlist', { receiverID: user._id });
+					}
 				})
 				.catch(function () {
 					self.error = true;
@@ -74,7 +88,7 @@
 	.controller('logoutCtrl', function(){
 
 	})
-	.controller('personRegistrationCtrl', ["$state", "$localStorage", "$scope", "PersonService", "UserService", "receiverModel", function ($state, $localStorage, $scope, PersonService, UserService, receiverModel){
+	.controller('personRegistrationCtrl', ["$rootScope", "$location", "$state", "$localStorage", "$scope", "PersonService", "UserService", "receiverModel", function ($rootScope, $location, $state, $localStorage, $scope, PersonService, UserService, receiverModel){
 		var self = this;
 
 		// Set variables to detect errors
@@ -95,7 +109,14 @@
 							.then(function(receivers) {
 								console.log("receivers updated", receivers);
 							});
-						$state.go('gimmi.wishlist',{receiverID: user._id});
+						console.log("url: " + $rootScope.attemptedUrl);
+						if ($rootScope.attemptedUrl) {
+							console.log("redirect to " + $rootScope.attemptedUrl)
+							$location.path($rootScope.attemptedUrl);
+							delete $rootScope.attemptedUrl;
+						} else {
+							$state.go('gimmi.wishlist',{receiverID: user._id});
+						}
 					},
 					function(err){
 						self.error = true;
@@ -112,7 +133,13 @@
 				.then(function (user) {
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
-					$state.go('gimmi.wishlist', { receiverID: user._id });
+					if ($rootScope.attemptedUrl) {
+						console.log("redirect to " + $rootScope.attemptedUrl)
+						$location.path($rootScope.attemptedUrl);
+						delete $rootScope.attemptedUrl;
+					} else {
+						$state.go('gimmi.wishlist', { receiverID: user._id });
+					}
 				})
 				.catch(function () {
 					self.error = true;

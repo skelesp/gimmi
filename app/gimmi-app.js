@@ -116,7 +116,7 @@
 
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|fb-messenger|whatsapp):/);
 
-	$httpProvider.interceptors.push(['$q', '$localStorage', '$injector', function($q, $localStorage, $injector) {
+	$httpProvider.interceptors.push(['$location', '$rootScope', '$q', '$localStorage', '$injector', 'CONFIG', function($location, $rootScope, $q, $localStorage, $injector, CONFIG) {
 		return {
 			'request': function (config) {
 				config.headers = config.headers || {};
@@ -127,10 +127,11 @@
 			},
 			'responseError': function(response) {
 				if(response.status === 401) {
+					$rootScope.attemptedUrl = $location.path();
 					$injector.get('$state').go('gimmi.login');
 				} else if (response.status === 403) {
-										// TODO: doe iets als de gebruiker een actie heeft uitgevoerd die niet toegestaan is
-									}
+					// TODO: doe iets als de gebruiker een actie heeft uitgevoerd die niet toegestaan is
+				}
 				return $q.reject(response);
 			}
 		};
