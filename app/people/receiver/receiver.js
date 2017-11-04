@@ -32,7 +32,7 @@
 	.controller('loginCtrl', function($location, $rootScope, $localStorage, $state, $scope, UserService, Flash){
 		var self = this;
 
-		console.log("Test: " + $rootScope.attemptedUrl);
+		console.info("Test: " + $rootScope.attemptedUrl);
 
 		self.isLoggedIn = function(){
 			return UserService.isLoggedIn();
@@ -50,7 +50,7 @@
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
 					if ($rootScope.attemptedUrl) {
-						console.log("redirect to " + $rootScope.attemptedUrl)
+						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
 					} else {
@@ -69,7 +69,7 @@
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
 					if ($rootScope.attemptedUrl) {
-						console.log("redirect to " + $rootScope.attemptedUrl)
+						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
 					} else {
@@ -107,7 +107,7 @@
 						$scope.$broadcast('login', user);
 						receiverModel.refreshReceivers()
 							.then(function(receivers) {
-								console.log("receivers updated", receivers);
+								console.info("receivers updated", receivers);
 							});
 						if ($rootScope.attemptedUrl) {
 							console.info("redirect to " + $rootScope.attemptedUrl)
@@ -133,7 +133,7 @@
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
 					if ($rootScope.attemptedUrl) {
-						console.log("redirect to " + $rootScope.attemptedUrl)
+						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
 					} else {
