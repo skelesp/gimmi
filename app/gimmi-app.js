@@ -114,7 +114,7 @@
 	;
 	$urlRouterProvider.otherwise('/');
 
-	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|fb-messenger):/);
+	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|fb-messenger|whatsapp):/);
 
 	$httpProvider.interceptors.push(['$q', '$localStorage', '$injector', function($q, $localStorage, $injector) {
 		return {
