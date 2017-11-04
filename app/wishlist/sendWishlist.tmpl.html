@@ -27,7 +27,7 @@
   </div>
   <div class="row mt-3">
     <div class="col">
-      <a class="btn btn-social btn-whatsapp btn-sm" href="{{sendWishlistCtrl.whatsappLink}}">
+      <a class="btn btn-social btn-whatsapp btn-sm" ng-show="ApplicationCtrl.onMobileDevice" ng-href="{{sendWishlistCtrl.whatsappLink}}">
         <i class="fa fa-whatsapp mr-2" aria-hidden="true"></i> Verstuur via Whatsapp
       </a>
     </div>
