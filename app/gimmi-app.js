@@ -8,7 +8,8 @@
 	'wishlist.wish',
 	'wishlist.receiver',
 	'landingPage',
-	'ngFlash'
+	'ngFlash',
+	'ng.deviceDetector'
 ])
 .run(['$rootScope', '$window', 'CONFIG', 'UserService', function ($rootScope, $window, config, UserService) {
 
@@ -86,7 +87,7 @@
 	}(document));
 
 }])
-.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, FlashProvider){
+	.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
 	$stateProvider
 		.state('gimmi', {
 			url: '/',
@@ -112,6 +113,8 @@
 		})
 	;
 	$urlRouterProvider.otherwise('/');
+
+	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|fb-messenger):/);
 
 	$httpProvider.interceptors.push(['$q', '$localStorage', '$injector', function($q, $localStorage, $injector) {
 		return {
@@ -143,11 +146,12 @@
 	FlashProvider.setShowClose(true);
 	FlashProvider.setTemplatePreset('transclude');
 })
-.controller('ApplicationCtrl', ['$scope', '$state', 'UserService', function($scope, $state, UserService){
+.controller('ApplicationCtrl', ['$scope', '$state', 'UserService', 'deviceDetector', 'Flash', function($scope, $state, UserService, device, Flash){
 	var self = this;
 
 	self.currentUser = UserService.getCurrentUser();
-
+	self.onMobileDevice = device.isMobile(); // zit dit niet beter als een constant in Angular?
+	
 	$scope.$on('login', function(_, user){
 		self.currentUser = user;
 	})

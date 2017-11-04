@@ -307,6 +307,7 @@
 			console.log(wishUrl);
 		});
 	}
+	self.messengerLink = "fb-messenger://share/?link=" + encodeURIComponent(wishUrl) + "&app_id=" + CONFIG.fbID;
 	self.showCopyTooltip = false;
 	self.wishIsCopied = function(e) {
 		e.clearSelection();

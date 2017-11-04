@@ -29,14 +29,21 @@
       <div class="btn-group" role="group">
         <button id="btnGroupFacebook" type="button" class="btn btn-social btn-facebook btn-sm dropdown-toggle" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-facebook mr-1" aria-hidden="true"></i> Deel op Facebook
+          <i class="fa fa-facebook mr-1" aria-hidden="true"></i>Deel op Facebook
         </button>
         <div class="dropdown-menu" aria-labelledby="btnGroupFacebook">
           <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.postOnFacebook()">
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Post een link op uw Facebookprofiel
+            <i class="fa fa-pencil-square-o mr-2" aria-hidden="true"></i>Post een link op uw Facebookprofiel
           </a>
-          <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.sendToFacebookFriends()"><i class="fa fa-comment mr-2" aria-hidden="true"></i>Stuur de link in een privébericht</a>
-          <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.shareOnFacebook()"><i class="fa fa-share-alt mr-2" aria-hidden="true"></i> Deel de link in een groep of evenement</a>
+          <a class="dropdown-item" href="" ng-hide="ApplicationCtrl.onMobileDevice" ng-click="sendWishlistCtrl.sendToFacebookFriends()">
+            <i class="fa fa-comment mr-2" aria-hidden="true"></i>Stuur de link in een privébericht
+          </a>
+          <a class="dropdown-item" ng-show="ApplicationCtrl.onMobileDevice" ng-href="{{sendWishlistCtrl.messengerLink}}">
+            <i class="fa fa-comment mr-2" aria-hidden="true"></i>Stuur de link via Messenger
+          </a>
+          <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.shareOnFacebook()">
+            <i class="fa fa-share-alt mr-2" aria-hidden="true"></i> Deel de link in een groep of evenement
+          </a>
         </div>
       </div>
     </div>
