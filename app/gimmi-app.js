@@ -87,7 +87,7 @@
 	}(document));
 
 }])
-.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, FlashProvider){
+	.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
 	$stateProvider
 		.state('gimmi', {
 			url: '/',
@@ -113,6 +113,8 @@
 		})
 	;
 	$urlRouterProvider.otherwise('/');
+
+	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|fb-messenger):/);
 
 	$httpProvider.interceptors.push(['$q', '$localStorage', '$injector', function($q, $localStorage, $injector) {
 		return {
