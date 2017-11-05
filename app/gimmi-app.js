@@ -9,7 +9,8 @@
 	'wishlist.receiver',
 	'landingPage',
 	'ngFlash',
-	'ng.deviceDetector'
+	'ng.deviceDetector',
+	'gimmi.communication'
 ])
 .run(['$rootScope', '$window', 'CONFIG', 'UserService', function ($rootScope, $window, config, UserService) {
 
