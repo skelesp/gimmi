@@ -68,6 +68,10 @@ h6.card-title  {
 .btn-whatsapp:hover,.btn-whatsapp:focus,.btn-whatsapp:active,.btn-whatsapp.active,.open .dropdown-toggle.btn-whatsapp{color:#fff;background-color:#075E54;border-color:rgba(0,0,0,0.2)}
 .btn-whatsapp:active,.btn-whatsapp.active,.open .dropdown-toggle.btn-whatsapp{background-image:none}
 .btn-whatsapp.disabled,.btn-whatsapp[disabled],fieldset[disabled] .btn-whatsapp,.btn-whatsapp.disabled:hover,.btn-whatsapp[disabled]:hover,fieldset[disabled] .btn-whatsapp:hover,.btn-whatsapp.disabled:focus,.btn-whatsapp[disabled]:focus,fieldset[disabled] .btn-whatsapp:focus,.btn-whatsapp.disabled:active,.btn-whatsapp[disabled]:active,fieldset[disabled] .btn-whatsapp:active,.btn-whatsapp.disabled.active,.btn-whatsapp[disabled].active,fieldset[disabled] .btn-whatsapp.active{background-color:#128C7E;border-color:rgba(0,0,0,0.2)}
+.btn-mail{color:#fff;background-color:rgb(140, 30, 18);border-color:rgba(0,0,0,0.2)}
+.btn-mail:hover,.btn-mail:focus,.btn-mail:active,.btn-mail.active,.open .dropdown-toggle.btn-mail{color:#fff;background-color:rgb(104, 22, 14);border-color:rgba(0,0,0,0.2)}
+.btn-mail:active,.btn-mail.active,.open .dropdown-toggle.btn-mail{background-image:none}
+.btn-mail.disabled,.btn-mail[disabled],fieldset[disabled] .btn-mail,.btn-mail.disabled:hover,.btn-mail[disabled]:hover,fieldset[disabled] .btn-mail:hover,.btn-mail.disabled:focus,.btn-mail[disabled]:focus,fieldset[disabled] .btn-mail:focus,.btn-mail.disabled:active,.btn-mail[disabled]:active,fieldset[disabled] .btn-mail:active,.btn-mail.disabled.active,.btn-mail[disabled].active,fieldset[disabled] .btn-mail.active{background-color:rgb(140, 30, 18);border-color:rgba(0,0,0,0.2)}
 
 .avatar {
   height: 30px;

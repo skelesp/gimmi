@@ -270,9 +270,9 @@
 	resetForm();
 
 }])
-	.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', 'CONFIG', 'UserService', 'Flash', function ($rootScope, $state, $stateParams, CONFIG, UserService, Flash){
+	.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
 	var self = this;
-	wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
+	var wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
 	//#105: onderstaande IF moet eigenlijk in de route staan en niet in de controller...
 	//Deze code lijkt gewoon niets te doen... Hier komt Angular nooit in...
 	if (!UserService.isLoggedIn) {
@@ -311,6 +311,40 @@
 			console.log(wishUrl);
 		});
 	}
+	self.sendInvitationPopup = function(){
+		var invitationPopup = $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: '/app/communication/invitationPopup.tmpl.html',
+			controller: 'invitationPopupCtrl',
+			controllerAs: 'invitationPopupCtrl',
+			resolve: {}
+		});
+		invitationPopup.result.then(function (mailTo) {
+			var receiver = receiverModel.getCurrentReceiver();
+
+			var mailTo = mailTo.split(',');
+			mailTo.forEach(to => {
+				var mailUrl = self.url + '?e=' + to
+				var mailHtml = 'Beste,<br />' + receiver.fullName + ' nodigt u uit om zijn/haar cadeau-wishlist op Gimmi te bekijken.<br />Klik <a href="' + mailUrl + '">hier</a> of kopieer de link: ' + mailUrl + '<br /><p><i>Kies het perfecte cadeau voor ' + receiver.firstName + ' (en registreer u om zelf een wishlist aan te maken!).</i></p><br />Gimmi<br />The perfect gift'
+				mail = {
+					to: to,
+					subject: receiver.fullName + " nodigt u uit op zijn cadeaulijst op Gimmi.",
+					html: mailHtml
+				}
+				
+				CommunicationService.sendMail(mail).then(function(mailResponse){
+					console.log(mailResponse);
+					var message = "Uw mail werd verzonden.";
+					var flashID = Flash.create('success', message);
+				}, function(error){
+					var message = "Er is iets fout gelopen bij het verzenden van de mail:" + error;
+					var flashID = Flash.create('danger', message);
+				});
+			});
+		});
+	};
+
 	self.messengerLink = "fb-messenger://share/?link=" + encodeURIComponent(wishUrl) + "&app_id=" + CONFIG.fbID;
 	self.whatsappLink = "whatsapp://send?text=Hieronder een link waarop ik mijn wishlist voor cadeau's heb gezet. %0A%0A" + encodeURIComponent(wishUrl);
 	self.showCopyTooltip = false;
@@ -321,5 +355,17 @@
 		var flashID = Flash.create('success', message);
 		self.showCopyTooltip = true;
 	}
+}])
+	.controller("invitationPopupCtrl", ['$uibModalInstance', function ($uibModalInstance){
+	var self = this;
+
+	self.mailTo;
+	self.ok = function(){
+		$uibModalInstance.close(self.mailTo);
+	};
+
+	self.cancel = function(){
+		$uibModalInstance.dismiss('Cancel');
+	};
 }])
 ;
