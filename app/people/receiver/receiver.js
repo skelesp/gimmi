@@ -97,6 +97,10 @@
 		self.disabled = false;
 		self.infoMessage = "";
 
+		if ($rootScope.attemptedEmail) {
+			self.newPerson = { email: $rootScope.attemptedEmail};
+		}
+
 		self.register = function(newPerson){
 			PersonService.register(newPerson)
 				.then(
