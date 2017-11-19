@@ -128,8 +128,11 @@
 			},
 			'responseError': function(response) {
 				if(response.status === 401) {
-					if ($location.path() !== "/login") {
+					if ($location.path() !== "/login") { // Save the URL to which an unauthorised user wanted to navigate
 						$rootScope.attemptedUrl = $location.path();
+						if ($location.search().e) { // Save the email on which the user has received an invitation (= QS "e" in invitation link)
+							$rootScope.attemptedEmail = $location.search().e;
+						}
 					}					
 					$injector.get('$state').go('gimmi.login');
 				} else if (response.status === 403) {
