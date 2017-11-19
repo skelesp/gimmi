@@ -32,8 +32,6 @@
 	.controller('loginCtrl', function($location, $rootScope, $localStorage, $state, $scope, UserService, Flash){
 		var self = this;
 
-		console.info("Test: " + $rootScope.attemptedUrl);
-
 		self.isLoggedIn = function(){
 			return UserService.isLoggedIn();
 		}

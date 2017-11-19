@@ -128,7 +128,9 @@
 			},
 			'responseError': function(response) {
 				if(response.status === 401) {
-					$rootScope.attemptedUrl = $location.path();
+					if ($location.path() !== "/login") {
+						$rootScope.attemptedUrl = $location.path();
+					}					
 					$injector.get('$state').go('gimmi.login');
 				} else if (response.status === 403) {
 					// TODO: doe iets als de gebruiker een actie heeft uitgevoerd die niet toegestaan is
