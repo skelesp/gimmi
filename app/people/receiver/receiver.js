@@ -54,6 +54,7 @@
 						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
+						delete $rootScope.attemptedEmail;
 					} else {
 						$state.go('gimmi.wishlist', { receiverID: user._id });
 					}
@@ -73,6 +74,7 @@
 						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
+						delete $rootScope.attemptedEmail;
 					} else {
 						$state.go('gimmi.wishlist', { receiverID: user._id });
 					}
@@ -118,6 +120,7 @@
 							console.info("redirect to " + $rootScope.attemptedUrl)
 							$location.path($rootScope.attemptedUrl);
 							delete $rootScope.attemptedUrl;
+							delete $rootScope.attemptedEmail;
 						} else {
 							$state.go('gimmi.wishlist',{receiverID: user._id});
 						}
@@ -141,6 +144,7 @@
 						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
+						delete $rootScope.attemptedEmail;
 					} else {
 						$state.go('gimmi.wishlist', { receiverID: user._id });
 					}
