@@ -32,12 +32,13 @@
 	.controller('loginCtrl', function($location, $rootScope, $localStorage, $state, $scope, UserService, Flash){
 		var self = this;
 
-		console.info("Test: " + $rootScope.attemptedUrl);
-
 		self.isLoggedIn = function(){
 			return UserService.isLoggedIn();
 		}
-
+		if ($rootScope.attemptedEmail) {
+			self.email = $rootScope.attemptedEmail;
+			console.log(self.email);
+		}
 		self.login = function() {
 			// Set variables to detect errors
 			self.error = false;
@@ -53,6 +54,7 @@
 						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
+						delete $rootScope.attemptedEmail;
 					} else {
 						$state.go('gimmi.wishlist', { receiverID: user._id });
 					}
@@ -72,6 +74,7 @@
 						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
+						delete $rootScope.attemptedEmail;
 					} else {
 						$state.go('gimmi.wishlist', { receiverID: user._id });
 					}
@@ -96,6 +99,10 @@
 		self.disabled = false;
 		self.infoMessage = "";
 
+		if ($rootScope.attemptedEmail) {
+			self.newPerson = { email: $rootScope.attemptedEmail};
+		}
+
 		self.register = function(newPerson){
 			PersonService.register(newPerson)
 				.then(
@@ -113,6 +120,7 @@
 							console.info("redirect to " + $rootScope.attemptedUrl)
 							$location.path($rootScope.attemptedUrl);
 							delete $rootScope.attemptedUrl;
+							delete $rootScope.attemptedEmail;
 						} else {
 							$state.go('gimmi.wishlist',{receiverID: user._id});
 						}
@@ -136,6 +144,7 @@
 						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
 						delete $rootScope.attemptedUrl;
+						delete $rootScope.attemptedEmail;
 					} else {
 						$state.go('gimmi.wishlist', { receiverID: user._id });
 					}
