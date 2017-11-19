@@ -324,7 +324,7 @@
 			var receiver = receiverModel.getCurrentReceiver();
 
 			var mailTo = mailTo.split(',');
-			mailTo.forEach(to => {
+			mailTo.forEach(function (to) {
 				var mailUrl = self.url + '?e=' + to
 				var mailHtml = '<html><body>Beste,<br />' + receiver.fullName + ' nodigt u uit om zijn/haar cadeau-wishlist op Gimmi te bekijken.<br />Klik <a href="' + mailUrl + '">hier</a> of kopieer de link: ' + mailUrl + '<br /><p><i>Kies het perfecte cadeau voor ' + receiver.firstName + ' (en registreer u om zelf een wishlist aan te maken!).</i></p><br /><p>Gimmi</p><br /><p>The perfect gift</p></body></html>'
 				mail = {
