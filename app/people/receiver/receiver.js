@@ -35,7 +35,10 @@
 		self.isLoggedIn = function(){
 			return UserService.isLoggedIn();
 		}
-
+		if ($rootScope.attemptedEmail) {
+			self.email = $rootScope.attemptedEmail;
+			console.log(self.email);
+		}
 		self.login = function() {
 			// Set variables to detect errors
 			self.error = false;
