@@ -23,21 +23,31 @@
           <div class=""><span>Registreer</span></div>
         </a>
       </li>
+
       <li class="nav-item">
-        <a class="nav-link" ng-show="ApplicationCtrl.currentUser._id" ui-sref="gimmi.wishlist({receiverID: ApplicationCtrl.currentUser._id})" uib-tooltip="Ga naar uw lijst" tooltip-class="customTooltip" tooltip-placement="bottom-left">
-          <div class="">
-            <img ng-show="ApplicationCtrl.currentUser.loginStrategy === 'facebook'" class="rounded-circle avatar mr-1" ng-src="{{ApplicationCtrl.currentUser.accounts.facebook.profile_pic}}">
-            <span ng-show="ApplicationCtrl.currentUser.loginStrategy === 'local'" class="fa fa-user-o mr-1" aria-hidden="true"></span>
+        
+      </li>
+     
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+           ng-show="ApplicationCtrl.currentUser._id">
+          <img ng-show="ApplicationCtrl.currentUser.loginStrategy === 'facebook'" class="rounded-circle avatar mr-1" ng-src="{{ApplicationCtrl.currentUser.accounts.facebook.profile_pic}}">
+          <span ng-show="ApplicationCtrl.currentUser.loginStrategy === 'local'" class="fa fa-user-o mr-1" aria-hidden="true"></span>
             {{ApplicationCtrl.currentUser.firstName}}
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" ui-sref="gimmi.wishlist({receiverID: ApplicationCtrl.currentUser._id})">Uw wensenlijst</a>
+          <a class="dropdown-item" ui-sref="gimmi.wishlist({receiverID: ApplicationCtrl.currentUser._id})">Uw gegevens</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" ng-show="ApplicationCtrl.currentUser.loginStrategy === 'local'" ng-click="ApplicationCtrl.logout()" href="">
+            <div class="slide-container"><i class="fa fa-sign-out mr-1" aria-hidden="true"></i>Uitloggen</div>
+          </a>
+          <div class="dropdown-item">
+            <div class="btn btn-social btn-sm btn-facebook" ng-show="ApplicationCtrl.currentUser.loginStrategy === 'facebook'" ng-click="ApplicationCtrl.logOutFacebook()">
+              <i class="fa fa-facebook mr-1" aria-hidden="true"></i> Uitloggen</div>
+            </div>
           </div>
-        </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" ng-show="ApplicationCtrl.currentUser.loginStrategy === 'local'" ng-click="ApplicationCtrl.logout()" href="">
-          <div class="slide-container"><i class="fa fa-sign-out mr-1" aria-hidden="true"></i>Uitloggen</div>
-        </a>
-        <div class="btn btn-social btn-sm btn-facebook mt-1" ng-show="ApplicationCtrl.currentUser.loginStrategy === 'facebook'" ng-click="ApplicationCtrl.logOutFacebook()"><i class="fa fa-facebook mr-1" aria-hidden="true"></i> Uitloggen</div>
-      </li>
-      <li class="nav-item"><a class="nav-link" href=""></a></li>
+
     </ul>
   </div>
