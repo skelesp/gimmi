@@ -50,13 +50,16 @@
                             <small id="accountHelp" class="form-text text-muted">De login van deze account is uw emailadres</small>
                             <div class="form-group">
                                 <label for="Password1">Nieuw wachtwoord</label>
-                                <input type="password" class="form-control" id="Password1" placeholder="Geef een nieuw wachtwoord in">
+                                <input type="password" class="form-control" id="Password1" ng-model="personCtrl.password" placeholder="Geef een nieuw wachtwoord in">
                             </div>
                             <div class="form-group">
-                                <label for="Password2">Wachtwoordcontrole</label>
-                                <input type="password" class="form-control" id="Password2" placeholder="Geef het nieuwe wachtwoord nogmaals in">
+                                <label for="Password2">Herhaal uw wachtwoord</label>
+                                <input type="password" class="form-control" id="Password2" ng-model="personCtrl.passwordRepeat" placeholder="Geef het nieuwe wachtwoord nogmaals in">
                             </div>
-                            <button type="button" class="btn btn-primary" ng-click="personCtrl.saveLocalAccount()">Wachtwoord van Gimmi account wijzigen</button>
+                            <button type="button" class="btn btn-primary" 
+                                    ng-click="personCtrl.saveLocalAccount()" 
+                                    ng-disabled="personCtrl.password === '' || personCtrl.password !== personCtrl.passwordRepeat">
+                                    Wachtwoord van Gimmi account wijzigen</button>
                         </div>
                     </div>
                 </div>

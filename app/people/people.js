@@ -21,6 +21,8 @@ angular.module('gimmi.person')
         person.birthday = new Date(person.birthday); //Dit moet in de personService aangepast worden!!
         _self.person = person;
         _self.datePickerOpen = false;
+        _self.password = "";
+        _self.passwordRepeat = "";
         _self.savePersonDetails = function(){
             PersonService.updatePersonDetails(_self.person).then(function(person){
                 console.log("Updated person :", person);
@@ -28,8 +30,8 @@ angular.module('gimmi.person')
             });
         }
         _self.saveLocalAccount = function(){
-            console.log(_self.person.local);
-            Flash.create('success', "Uw Gimmi-account is bijgewerkt.")
+            console.log("new password = " + _self.password);
+            Flash.create('success', "Uw paswoord voor uw Gimmi-account is bijgewerkt.")
         }
         _self.unlinkFacebookAccount = function(){
             console.log(_self.person.facebook);
