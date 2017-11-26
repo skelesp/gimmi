@@ -29,7 +29,7 @@
       </li>
      
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-show="ApplicationCtrl.currentUser._id">
+        <a class="nav-link dropdown-toggle" href id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-show="ApplicationCtrl.currentUser._id">
           <img ng-show="ApplicationCtrl.currentUser.loginStrategy === 'facebook'" class="rounded-circle avatar mr-1" ng-src="{{ApplicationCtrl.currentUser.accounts.facebook.profile_pic}}">
           <span ng-show="ApplicationCtrl.currentUser.loginStrategy === 'local'" class="fa fa-user-o mr-1" aria-hidden="true"></span>
             {{ApplicationCtrl.currentUser.firstName}}
