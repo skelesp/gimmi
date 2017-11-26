@@ -16,14 +16,16 @@ angular.module('gimmi.person')
                 }
             })
     }])
-    .controller('personCtrl', function (uibDateParser, Flash, person) {
+    .controller('personCtrl', ['uibDateParser', 'Flash', 'PersonService', 'person', function (uibDateParser, Flash, PersonService, person) {
         var _self = this;
         person.birthday = new Date(person.birthday); //Dit moet in de personService aangepast worden!!
         _self.person = person;
         _self.datePickerOpen = false;
         _self.savePersonDetails = function(){
-            console.log(_self.person);
-            Flash.create('success', "Uw gegevens zijn bijgewerkt.")
+            PersonService.updatePersonDetails(_self.person).then(function(person){
+                console.log("Updated person :", person);
+                Flash.create('success', "Uw gegevens zijn bijgewerkt.");
+            });
         }
         _self.saveLocalAccount = function(){
             console.log(_self.person.local);
@@ -33,5 +35,5 @@ angular.module('gimmi.person')
             console.log(_self.person.facebook);
             Flash.create('success', "Uw Facebook-account is ontkoppeld.")
         }
-    })
+    }])
 ;
