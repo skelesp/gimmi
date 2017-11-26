@@ -56,7 +56,7 @@
                                 <label for="Password2">Herhaal uw wachtwoord</label>
                                 <input type="password" class="form-control" id="Password2" ng-model="personCtrl.passwordRepeat" placeholder="Geef het nieuwe wachtwoord nogmaals in">
                             </div>
-                            <button type="button" class="btn btn-primary" 
+                            <button type="button" class="btn btn-primary btn-sm" 
                                     ng-click="personCtrl.saveLocalAccount()" 
                                     ng-disabled="personCtrl.password === '' || personCtrl.password !== personCtrl.passwordRepeat">
                                     Wachtwoord van Gimmi account wijzigen</button>
@@ -68,7 +68,7 @@
                         <button type="button" class="btn btn-secondary btn-sm btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseFacebookAccount" aria-expanded="false" aria-controls="collapseFacebookAccount">Gelinkte Facebook account</button>
                         <div class="collapse p-3" id="collapseFacebookAccount"> 
                             <small id="facebookAccountHelp" class="form-text text-muted text-justify mb-3">Uw Facebook-account is gekoppeld aan Gimmi. Dit wilt zeggen dat u met één klik kan inloggen en geen paswoord hoeft te onthouden voor Gimmi. Door op de knop hieronder te klikken ontkoppelt u uw Facebook-account. Om dan nog te kunnen inloggen op uw account zal u een paswoord moeten opgeven.</small>
-                            <button type="button" class="btn btn-primary" ng-click="personCtrl.unlinkFacebookAccount()">Facebook account ontkoppelen</button>
+                            <button type="button" class="btn btn-primary btn-sm" ng-click="personCtrl.unlinkFacebookAccount()">Facebook account ontkoppelen</button>
                         </div>
                     </div>
                 </div>
