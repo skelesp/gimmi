@@ -15,9 +15,6 @@
 					}
 				}
 			})
-			.state('gimmi.person',{
-				url: 'person/:personID',
-			})
 			.state('gimmi.register_person', {
 				url: 'registration',
 				views: {

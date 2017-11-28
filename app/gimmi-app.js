@@ -4,6 +4,7 @@
 	'ngStorage',
 	'ui.router',
 	'gimmi.models.receiver',
+	'gimmi.person',
 	'wishlist',
 	'wishlist.wish',
 	'wishlist.receiver',

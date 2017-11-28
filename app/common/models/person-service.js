@@ -72,11 +72,28 @@ angular.module('gimmi.person', [
 
   			return deferred.promise;
   		}
-
+      
+      function updatePersonDetails (person){
+        var deferred = $q.defer();
+        console.log("Person to update:", person);
+        if (person) {
+          $http.put(CONFIG.apiUrl + '/api/people/' + person._id, person)
+            .success(function(person){
+              deferred.resolve(person);
+            })
+            .error(function(error){
+              deferred.reject({error: "something went wrong"});
+            });
+        } else {
+          deferred.reject({error: "No person object found"});
+        }
+        return deferred.promise;
+      }
       // - return available functions for use in the controllers -
       return ({
         register: register,
         getPersonFromToken: getPersonFromToken,
-        getPersonFromID: getPersonFromID
+        getPersonFromID: getPersonFromID,
+        updatePersonDetails: updatePersonDetails
       });
     }]);

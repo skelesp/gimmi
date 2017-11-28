@@ -26,6 +26,9 @@ h6.card-title  {
   font-size: 0.85rem;
 }
 
+.font-sm {
+  font-size: 0.75rem;
+}
 .card-footer a i, .card-footer button i { /* layout van de action icons op wish card */
   font-size: 1.1rem;
   cursor: pointer;

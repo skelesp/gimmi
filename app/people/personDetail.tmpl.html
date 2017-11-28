@@ -1,0 +1,78 @@
+<div class="container">
+    <div class="row">
+        <h2>{{personCtrl.person.fullName}}</h2>
+    </div>
+    <form>
+        <div class="row">
+            <div class="col-md-5">
+                <h4>Persoonsgegevens</h4>
+                    <div class="form-group">
+                        <label for="email1">Emailadres</label>
+                        <input type="email" readonly class="form-control" id="email1" aria-describedby="emailHelp" placeholder="Geen email gekend" ng-model="personCtrl.person.email">
+                        <small id="emailHelp" class="form-text text-muted">Je emailadres kan niet gewijzigd worden</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">Voornaam</label>
+                        <input type="text" class="form-control" id="firstName" ng-model="personCtrl.person.firstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Familienaam</label>
+                        <input type="text" class="form-control" id="lastName" ng-model="personCtrl.person.lastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Geboortedatum</label>
+                        <input type="date" class="form-control" id="birthday" ng-model="personCtrl.person.birthday">
+                        <small id="birthdayHelp" class="form-text text-muted">Datum weergeven als dd/MM/yyyy (bv. "31/12/2017")</small>
+                    </div>
+                    <button type="button" class="btn btn-primary" ng-click="personCtrl.savePersonDetails()">Persoonsgegevens opslaan</button>
+                    <!-- <div class="form-group">
+                        <label for="birthday">Geboortedatum</label>
+                        <p class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="personCtrl.datePickerOpen = true">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                            <input type="text" class="form-control" id="birthday" ng-model="personCtrl.person.birthday" uib-datepicker-popup="{{personCtrl.dateFormat}}" is-open="personCtrl.datePickerOpen">
+                        </p>
+                        <small id="birthdayHelp" class="form-text text-muted">Datum weergeven als dd/MM/yyyy (bv. "31/12/2017")</small>
+                    </div> -->
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <div class="row">
+                    <h4>Accounts</h4>
+                </div>
+                <div class="row" ng-show="personCtrl.hasLocalAccount()">
+                    <div class="col">
+                        <button type="button" class="btn btn-secondary btn-sm btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseLocalAccount" aria-expanded="false" aria-controls="collapseLocalAccount">Gimmi account</button>
+                        <div class="collapse p-3" id="collapseLocalAccount"> 
+                            <small id="accountHelp" class="form-text text-muted">De login van deze account is uw emailadres</small>
+                            <div class="form-group">
+                                <label for="Password1">Nieuw wachtwoord</label>
+                                <input type="password" class="form-control" id="Password1" ng-model="personCtrl.password" placeholder="Geef een nieuw wachtwoord in">
+                            </div>
+                            <div class="form-group">
+                                <label for="Password2">Herhaal uw wachtwoord</label>
+                                <input type="password" class="form-control" id="Password2" ng-model="personCtrl.passwordRepeat" placeholder="Geef het nieuwe wachtwoord nogmaals in">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm" 
+                                    ng-click="personCtrl.saveLocalAccount()" 
+                                    ng-disabled="personCtrl.password === '' || personCtrl.password !== personCtrl.passwordRepeat">
+                                    Wachtwoord van Gimmi account wijzigen</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3" ng-show="personCtrl.hasFacebookAccount()">
+                    <div class="col">
+                        <button type="button" class="btn btn-secondary btn-sm btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseFacebookAccount" aria-expanded="false" aria-controls="collapseFacebookAccount">Gelinkte Facebook account</button>
+                        <div class="collapse p-3" id="collapseFacebookAccount"> 
+                            <small id="facebookAccountHelp" class="form-text text-muted text-justify mb-3">Uw Facebook-account is gekoppeld aan Gimmi. Dit wilt zeggen dat u met één klik kan inloggen en geen paswoord hoeft te onthouden voor Gimmi. Door op de knop hieronder te klikken ontkoppelt u uw Facebook-account. Om dan nog te kunnen inloggen op uw account zal u een paswoord moeten opgeven.</small>
+                            <button type="button" class="btn btn-primary btn-sm" ng-click="personCtrl.unlinkFacebookAccount()">Facebook account ontkoppelen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
