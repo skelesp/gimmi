@@ -23,6 +23,20 @@ angular.module('gimmi.person')
         _self.datePickerOpen = false;
         _self.password = "";
         _self.passwordRepeat = "";
+        _self.hasFacebookAccount = function(){
+            if (_self.person.accounts.facebook) {
+                return true;
+            } else{
+                return false;
+            }
+        }
+        _self.hasLocalAccount = function () {
+            if (_self.person.accounts.local) {
+                return true;
+            } else {
+                return false;
+            }
+        }
         _self.savePersonDetails = function(){
             PersonService.updatePersonDetails(_self.person).then(function(person){
                 console.log("Updated person :", person);
