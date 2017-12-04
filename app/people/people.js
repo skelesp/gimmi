@@ -38,6 +38,7 @@ angular.module('gimmi.person')
             }
         }
         _self.savePersonDetails = function(){
+            _self.personSaved = true;
             PersonService.updatePersonDetails(_self.person).then(function(person){
                 console.log("Updated person :", person);
                 Flash.create('success', "Uw gegevens zijn bijgewerkt.");

@@ -4,7 +4,7 @@
     </div>
     <form novalidate>
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-5" ng-class="{'was-validated': personCtrl.personSaved}">
                 <h4>Persoonsgegevens</h4>
                     <div class="form-group">
                         <label for="email1">Emailadres</label>
@@ -14,9 +14,6 @@
                     <div class="form-group">
                         <label for="firstName">Voornaam</label>
                         <input type="text" class="form-control" id="firstName" ng-model="personCtrl.person.firstName" required>
-                        <div class="invalid-feedback">
-                            Dit veld is verplicht.
-                        </div>
                     </div>
                     <div class="form-group">
                         <label for="lastName">Familienaam</label>
@@ -51,18 +48,19 @@
                         <button type="button" class="btn btn-secondary btn-sm btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseLocalAccount" aria-expanded="false" aria-controls="collapseLocalAccount">Gimmi account</button>
                         <div class="collapse p-3" id="collapseLocalAccount"> 
                             <small id="accountHelp" class="form-text text-muted">De login van deze account is uw emailadres</small>
-                            <div class="form-group is-invalid">
+                            <div class="form-group">
                                 <label for="Password1">Nieuw wachtwoord</label>
-                                <input type="password" class="form-control" id="Password1" ng-model="personCtrl.password" placeholder="Geef een nieuw wachtwoord in" required>
+                                <input type="password" class="form-control" id="Password1" placeholder="Geef een nieuw wachtwoord in" required ng-model="personCtrl.password">
                                 <div class="invalid-feedback">
                                     U moet een wachtwoord ingeven.
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="Password2">Herhaal uw wachtwoord</label>
-                                <input type="password" class="form-control" id="Password2" ng-model="personCtrl.passwordRepeat" placeholder="Geef het nieuwe wachtwoord nogmaals in" required>
+                                <input type="password" class="form-control" id="Password2" ng-model="personCtrl.passwordRepeat" placeholder="Geef het nieuwe wachtwoord nogmaals in" required
+                                ng-class="{'is-invalid': personCtrl.password !== personCtrl.passwordRepeat}">
                                 <div class="invalid-feedback">
-                                    Wachtwoorden komen niet overeen.
+                                    Uw wachtwoorden komen niet overeen
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary btn-sm" 
