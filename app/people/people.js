@@ -39,14 +39,19 @@ angular.module('gimmi.person')
         }
         _self.savePersonDetails = function(){
             _self.personSaved = true;
-            PersonService.updatePersonDetails(_self.person).then(function(person){
+            PersonService.updatePersonDetails(_self.person)
+            .then(function(person){
                 console.log("Updated person :", person);
                 Flash.create('success', "Uw gegevens zijn bijgewerkt.");
+            }, function(error){
+                Flash.create('danger', error);
             });
         }
-        _self.saveLocalAccount = function(){
-            console.log("new password = " + _self.password);
-            Flash.create('success', "Uw paswoord voor uw Gimmi-account is bijgewerkt.")
+        _self.saveLocalPassword = function(){
+            PersonService.updatePassword(_self.person, _self.password)
+            .then(function(person){
+                Flash.create('success', "Uw paswoord voor uw Gimmi-account is bijgewerkt.")
+            });
         }
         _self.unlinkFacebookAccount = function(){
             console.log(_self.person.facebook);
