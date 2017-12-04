@@ -85,9 +85,6 @@
 		self.checkLoginStatus = UserService.checkLoginStatus;
 
 	})
-	.controller('logoutCtrl', function(){
-
-	})
 	.controller('personRegistrationCtrl', ["$rootScope", "$location", "$state", "$localStorage", "$scope", "PersonService", "UserService", "receiverModel", function ($rootScope, $location, $state, $localStorage, $scope, PersonService, UserService, receiverModel){
 		var self = this;
 
