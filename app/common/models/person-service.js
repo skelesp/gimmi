@@ -99,7 +99,7 @@ angular.module('gimmi.person', [
           }
           $http.put(CONFIG.apiUrl + '/api/people/' + person._id + '/password', body)
           .success(function(person){
-            console.log("Wachtwoord werd gewijzigd: " + person._id);
+            console.log("Wachtwoord werd gewijzigd voor " + person._id);
             deferred.resolve(person);
           })
           .error(function(error){
@@ -110,6 +110,10 @@ angular.module('gimmi.person', [
         }
 
         return deferred.promise;
+      }
+
+      function updateAccounts (person){
+
       }
       // - return available functions for use in the controllers -
       return ({
