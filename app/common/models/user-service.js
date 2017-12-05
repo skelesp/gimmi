@@ -4,8 +4,8 @@ angular.module('gimmi.authentication', [
   'gimmi.models.receiver'
 ])
   .factory('UserService',
-    ['$q', '$localStorage', '$http', '$state', 'PersonService', 'receiverModel', 'CONFIG',
-    function ($q, $localStorage, $http, $state, PersonService, receiverModel, CONFIG) {
+    ['$q', '$localStorage', '$http', '$state', '$rootScope', 'PersonService', 'receiverModel', 'CONFIG',
+    function ($q, $localStorage, $http, $state, $rootScope, PersonService, receiverModel, CONFIG) {
       // create user variable
       var baseUrl = CONFIG.apiUrl + '/api';
       var currentUser = getUserFromStorage();
@@ -82,6 +82,8 @@ angular.module('gimmi.authentication', [
           if (status === 200 && data.token) {
             $localStorage.token = data.token;
             currentUser = PersonService.getPersonFromToken(data.token);
+            $rootScope.$emit('login', currentUser);
+            $rootScope.$broadcast('login', currentUser);
             deferred.resolve(currentUser);
           } else {
             deferred.reject();
