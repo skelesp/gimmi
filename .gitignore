@@ -2,6 +2,6 @@ __archive/
 _analysis/
 _db_dump/
 lib/vendor/
-.vscode/launch.json
+.vscode/
 app/config.js
 .gitignore

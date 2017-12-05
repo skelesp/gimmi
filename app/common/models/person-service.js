@@ -89,11 +89,38 @@ angular.module('gimmi.person', [
         }
         return deferred.promise;
       }
+
+      function updatePassword (person, pw){
+        var deferred = $q.defer();
+        
+        if (pw) {
+          var body = {
+            pw: pw
+          }
+          $http.put(CONFIG.apiUrl + '/api/people/' + person._id + '/password', body)
+          .success(function(person){
+            console.log("Wachtwoord werd gewijzigd voor " + person._id);
+            deferred.resolve(person);
+          })
+          .error(function(error){
+
+          });
+        } else {
+          deferred.reject("Er is geen wachtwoord ingegeven.");
+        }
+
+        return deferred.promise;
+      }
+
+      function updateAccounts (person){
+
+      }
       // - return available functions for use in the controllers -
       return ({
         register: register,
         getPersonFromToken: getPersonFromToken,
         getPersonFromID: getPersonFromID,
-        updatePersonDetails: updatePersonDetails
+        updatePersonDetails: updatePersonDetails,
+        updatePassword: updatePassword
       });
     }]);
