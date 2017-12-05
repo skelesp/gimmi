@@ -18,7 +18,9 @@ angular.module('gimmi.person')
     }])
     .controller('personCtrl', ['uibDateParser', 'Flash', 'PersonService', 'person', function (uibDateParser, Flash, PersonService, person) {
         var _self = this;
+        if (person.birthday) {
         person.birthday = new Date(person.birthday); //Dit moet in de personService aangepast worden!!
+        }
         _self.person = person;
         _self.datePickerOpen = false;
         _self.password = "";
