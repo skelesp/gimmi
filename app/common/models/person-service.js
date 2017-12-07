@@ -79,6 +79,7 @@ angular.module('gimmi.person', [
           $http.put(CONFIG.apiUrl + '/api/people/' + person._id, person)
             .success(function(person){
               person.birthday = new Date(person.birthday);
+              $injector.get('UserService').refreshCurrentUser("person", person);
               deferred.resolve(person);
             })
             .error(function(error){
