@@ -16,7 +16,7 @@ angular.module('gimmi.person')
                 }
             })
     }])
-    .controller('personCtrl', ['uibDateParser', 'Flash', 'PersonService', 'person', function (uibDateParser, Flash, PersonService, person) {
+    .controller('personCtrl', ['$uibModal', 'uibDateParser', 'Flash', 'PersonService', 'person', function ($uibModal, uibDateParser, Flash, PersonService, person) {
         var _self = this;
         if (person.birthday) {
         person.birthday = new Date(person.birthday); //Dit moet in de personService aangepast worden!!
@@ -43,8 +43,8 @@ angular.module('gimmi.person')
             _self.personSaved = true;
             PersonService.updatePersonDetails(_self.person)
             .then(function(person){
-                console.log("Updated person :", person);
                 Flash.create('success', "Uw gegevens zijn bijgewerkt.");
+                _self.person = person;
             }, function(error){
                 Flash.create('danger', error);
             });
@@ -52,7 +52,7 @@ angular.module('gimmi.person')
         _self.saveLocalPassword = function(){
             PersonService.updatePassword(_self.person, _self.password)
             .then(function(person){
-                Flash.create('success', "Uw paswoord voor uw Gimmi-account is bijgewerkt.")
+                _self.password = _self.passwordRepeat = "";
             });
         }
         _self.unlinkFacebookAccount = function(){
