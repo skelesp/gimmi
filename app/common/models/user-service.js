@@ -30,7 +30,16 @@ angular.module('gimmi.authentication', [
           }
           return decodeURIComponent(escape(window.atob(output)));
       }
- 
+  
+      function refreshCurrentUser (token) {
+        if (token) {
+          $localStorage.token = token;
+          currentUser = getUserFromStorage();
+        } else {
+          logout();
+        }
+      }
+
       function getUserFromStorage() {
           var token = $localStorage.token;
           var user = {};
@@ -40,14 +49,12 @@ angular.module('gimmi.authentication', [
               if (! isExpired(decoded.exp)) {
                 user = decoded;
               } else {
-                delete $localStorage.token;
-                currentUser = {};
-                $state.go('gimmi.login');
-                Flash.create('Warning', "Uw sessie is verlopen. Gelieve opnieuw in te loggen.")
+                logout();
+                Flash.create('warning', "Uw sessie is verlopen. Gelieve opnieuw in te loggen.");
               }
           }
           return user;
-      }
+      }
 
       function isExpired (expDate) {
         if (expDate){
@@ -103,6 +110,8 @@ angular.module('gimmi.authentication', [
       function logout(){
         delete $localStorage.token;
         currentUser = {};
+        $state.go('gimmi.login');
+        Flash.create('warning', "U bent uitgelgd.");
       }
 
       // - Get current user
@@ -233,6 +242,7 @@ angular.module('gimmi.authentication', [
         userIsReceiver: userIsReceiver,
         checkLoginStatus: checkLoginStatus,
         logInFacebook: logInFacebook,
-        logOutFacebook: logOutFacebook
+        logOutFacebook: logOutFacebook,
+        refreshCurrentUser: refreshCurrentUser
       });
   }]);

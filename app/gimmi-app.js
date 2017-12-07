@@ -158,10 +158,17 @@
 	var self = this;
 
 	self.currentUser = UserService.getCurrentUser();
+	$scope.$watch(function(){ // When currentUser changes, it needs to be refreshed. (after update of person details/accounts)
+		return UserService.getCurrentUser();
+	}, function(newVal) {
+		console.log('Current user changed');
+		self.currentUser = newVal;
+	});
 	self.onMobileDevice = device.isMobile(); // zit dit niet beter als een constant in Angular?
 	
 	$scope.$on('login', function(_, user){
 		self.currentUser = user;
+		console.log("user is logged in", user);
 	})
 
 	self.logout = function(){

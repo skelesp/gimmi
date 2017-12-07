@@ -2,8 +2,8 @@ angular.module('gimmi.person', [
   'gimmi.config'
 ])
   .factory('PersonService',
-    ['$q', '$http', 'Flash', 'CONFIG',
-    function ($q, $http, Flash, CONFIG) {
+    ['$q', '$http', '$injector', 'Flash', 'CONFIG',
+    function ($q, $http, $injector, Flash, CONFIG) {
 
       function urlBase64Decode(str) {
           var output = str.replace('-', '+').replace('_', '/');
@@ -78,6 +78,7 @@ angular.module('gimmi.person', [
         if (person) {
           $http.put(CONFIG.apiUrl + '/api/people/' + person._id, person)
             .success(function(person){
+              person.birthday = new Date(person.birthday);
               deferred.resolve(person);
             })
             .error(function(error){
@@ -113,8 +114,13 @@ angular.module('gimmi.person', [
         return deferred.promise;
       }
 
-      function updateAccounts (person){
-
+      function deleteFacebookAccount (person){
+        $http.delete(CONFIG.apiUrl + '/api/people/' + person._id + '/account/facebook')
+        .success(function(token){
+          console.log("Facebook account verwijder voor " + person._id);
+          Flash.create('success', "Uw Facebook-account is ontkoppeld. Als u een lokale Gimmi account hebt, zal u onder die account ingelogd blijven. Anders wordt u uitgelogd.");
+          $injector.get('UserService').refreshCurrentUser(token);
+        })
       }
       // - return available functions for use in the controllers -
       return ({

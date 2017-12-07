@@ -19,7 +19,7 @@ angular.module('gimmi.person')
     .controller('personCtrl', ['$uibModal', 'uibDateParser', 'Flash', 'PersonService', 'person', function ($uibModal, uibDateParser, Flash, PersonService, person) {
         var _self = this;
         if (person.birthday) {
-        person.birthday = new Date(person.birthday); //Dit moet in de personService aangepast worden!!
+            person.birthday = new Date(person.birthday); //Dit moet in de personService aangepast worden!!
         }
         _self.person = person;
         _self.datePickerOpen = false;
@@ -56,8 +56,49 @@ angular.module('gimmi.person')
             });
         }
         _self.unlinkFacebookAccount = function(){
-            console.log(_self.person.facebook);
-            Flash.create('success', "Uw Facebook-account is ontkoppeld.")
+            var unlinkFBpopup = $uibModal.open({
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'unlinkFBpopup.html',
+                size: 'lg',
+                controller: 'unlinkFacebookCtrl',
+                controllerAs: 'unlinkFacebookCtrl',
+                resolve: {
+                    hasLocalAccount : function () {
+                        return _self.hasLocalAccount();
+                    },
+                    email : function() {
+                        return _self.person.email;
+                    }
+                }
+            });
+
+            unlinkFBpopup.result.then(function(pw){
+                if (!_self.hasLocalAccount()){
+                    PersonService.updatePassword(_self.person, pw)
+                        .then(function (person) {
+                            _self.person = person;
+                            PersonService.deleteFacebookAccount(_self.person);
+                        });
+                } else {
+                    PersonService.deleteFacebookAccount(_self.person);
+                }
+                delete _self.person.accounts.facebook;
+            });
         }
     }])
+    .controller('unlinkFacebookCtrl', ['$uibModalInstance', 'hasLocalAccount' , 'email' , function (modal, hasLocalAccount, email){
+        var _self = this;
+        _self.hasLocalAccount = hasLocalAccount;
+        _self.email = email;
+        _self.password = "";
+        _self.passwordRepeat = "";
+        
+        _self.ok = function () {
+            modal.close(_self.password);
+        };
+        _self.cancel = function () {
+            modal.dismiss('cancel');
+        };
+    }]);
 ;
