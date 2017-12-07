@@ -205,8 +205,10 @@ angular.module('gimmi.authentication', [
           The user is not logged to the app, or into Facebook:
           destroy the session on the server.
           */
-          delete $localStorage.token;
-          currentUser = {};
+          console.log("not logged in to facebook");
+          if (currentUser.loginStrategy && currentUser.loginStrategy === "facebook") { //prevent logout after login with Gimmi Account
+            logout();
+          }
         }
         return defer.promise;
       }
