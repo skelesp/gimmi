@@ -40,6 +40,12 @@ angular.module('gimmi.authentication', [
             console.log("Empty token ==> logout");
             logout();
           }
+        } else if (inputType === "person") {
+          if (input){
+            currentUser.firstName = input.firstName;
+            currentUser.lastName = input.lastName;
+            currentUser.birthday = input.birthday;
+          }
         }
       }
 
