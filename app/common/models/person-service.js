@@ -119,7 +119,8 @@ angular.module('gimmi.person', [
         .success(function(token){
           console.log("Facebook account verwijder voor " + person._id);
           Flash.create('success', "Uw Facebook-account is ontkoppeld. Als u een lokale Gimmi account hebt, zal u onder die account ingelogd blijven. Anders wordt u uitgelogd.");
-          $injector.get('UserService').refreshCurrentUser(token);
+          $injector.get('UserService').logOutFacebook();
+          $injector.get('UserService').refreshCurrentUser("token", token);
         })
       }
       // - return available functions for use in the controllers -

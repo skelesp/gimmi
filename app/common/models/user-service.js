@@ -31,12 +31,15 @@ angular.module('gimmi.authentication', [
           return decodeURIComponent(escape(window.atob(output)));
       }
   
-      function refreshCurrentUser (token) {
-        if (token) {
-          $localStorage.token = token;
-          currentUser = getUserFromStorage();
-        } else {
-          logout();
+      function refreshCurrentUser (inputType, input) {
+        if (inputType === "token") {
+          if (input) {
+            $localStorage.token = input;
+            currentUser = getUserFromStorage();
+          } else {
+            console.log("Empty token ==> logout");
+            logout();
+          }
         }
       }
 
@@ -49,6 +52,7 @@ angular.module('gimmi.authentication', [
               if (! isExpired(decoded.exp)) {
                 user = decoded;
               } else {
+                console.log("Expired token");
                 logout();
                 Flash.create('warning', "Uw sessie is verlopen. Gelieve opnieuw in te loggen.");
               }
@@ -112,6 +116,7 @@ angular.module('gimmi.authentication', [
         currentUser = {};
         $state.go('gimmi.login');
         Flash.create('warning', "U bent uitgelgd.");
+        console.log("User logged out");
       }
 
       // - Get current user
@@ -150,9 +155,8 @@ angular.module('gimmi.authentication', [
       // - Watch the FB authentication status
       function checkLoginStatus () {
         FB.getLoginStatus(function(res){
-         
+          console.log("Get login status of FB");
           statusChangeCallbackFacebook(res);
-          
         });
       };
 
