@@ -2,8 +2,8 @@ angular.module('gimmi.person', [
   'gimmi.config'
 ])
   .factory('PersonService',
-    ['$q', '$http', 'CONFIG',
-    function ($q, $http, CONFIG) {
+    ['$q', '$http', '$injector', 'Flash', 'CONFIG',
+    function ($q, $http, $injector, Flash, CONFIG) {
 
       function urlBase64Decode(str) {
           var output = str.replace('-', '+').replace('_', '/');
@@ -75,10 +75,10 @@ angular.module('gimmi.person', [
       
       function updatePersonDetails (person){
         var deferred = $q.defer();
-        console.log("Person to update:", person);
         if (person) {
           $http.put(CONFIG.apiUrl + '/api/people/' + person._id, person)
             .success(function(person){
+              person.birthday = new Date(person.birthday);
               deferred.resolve(person);
             })
             .error(function(error){
@@ -97,9 +97,11 @@ angular.module('gimmi.person', [
           var body = {
             pw: pw
           }
-          $http.put(CONFIG.apiUrl + '/api/people/' + person._id + '/password', body)
+          $http.put(CONFIG.apiUrl + '/api/people/' + person._id + '/account/local', body)
           .success(function(person){
-            console.log("Wachtwoord werd gewijzigd voor " + person._id);
+            console.log("Het lokale wachtwoord werd gewijzigd voor " + person._id);
+            Flash.create('success', "Uw paswoord voor uw Gimmi-account is bijgewerkt.");
+            // Send email on password change
             deferred.resolve(person);
           })
           .error(function(error){
@@ -112,8 +114,14 @@ angular.module('gimmi.person', [
         return deferred.promise;
       }
 
-      function updateAccounts (person){
-
+      function deleteFacebookAccount (person){
+        $http.delete(CONFIG.apiUrl + '/api/people/' + person._id + '/account/facebook')
+        .success(function(token){
+          console.log("Facebook account verwijder voor " + person._id);
+          Flash.create('success', "Uw Facebook-account is ontkoppeld. Als u een lokale Gimmi account hebt, zal u onder die account ingelogd blijven. Anders wordt u uitgelogd.");
+          $injector.get('UserService').logOutFacebook();
+          $injector.get('UserService').refreshCurrentUser("token", token);
+        })
       }
       // - return available functions for use in the controllers -
       return ({
@@ -121,6 +129,7 @@ angular.module('gimmi.person', [
         getPersonFromToken: getPersonFromToken,
         getPersonFromID: getPersonFromID,
         updatePersonDetails: updatePersonDetails,
-        updatePassword: updatePassword
+        updatePassword: updatePassword,
+        deleteFacebookAccount: deleteFacebookAccount
       });
     }]);

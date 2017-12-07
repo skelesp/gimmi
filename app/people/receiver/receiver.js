@@ -45,8 +45,6 @@
 			// Call login from service
 			UserService.authenticate(self.email, self.password)
 				.then(function(user){
-					$scope.$emit('login', user);
-					$scope.$broadcast('login', user);
 					if ($rootScope.attemptedUrl) {
 						console.info("redirect to " + $rootScope.attemptedUrl)
 						$location.path($rootScope.attemptedUrl);
@@ -151,7 +149,7 @@
 		}
 
 	}])
-	.controller('receiverSearchCtrl', ['$scope', '$state', 'receivers', function($scope, $state, receivers) {
+	.controller('receiverSearchCtrl', ['$scope', '$state', 'receivers', 'receiverModel', function($scope, $state, receivers, receiverModel) {
 		var _self = this;
 		
 		_self.receivers = receivers;

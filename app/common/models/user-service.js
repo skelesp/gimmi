@@ -4,8 +4,8 @@ angular.module('gimmi.authentication', [
   'gimmi.models.receiver'
 ])
   .factory('UserService',
-    ['$q', '$localStorage', '$http', '$state', 'PersonService', 'receiverModel', 'CONFIG',
-    function ($q, $localStorage, $http, $state, PersonService, receiverModel, CONFIG) {
+    ['$q', '$localStorage', '$http', '$state', '$rootScope', 'PersonService', 'receiverModel', 'Flash', 'CONFIG',
+    function ($q, $localStorage, $http, $state, $rootScope, PersonService, receiverModel, Flash, CONFIG) {
       // create user variable
       var baseUrl = CONFIG.apiUrl + '/api';
       var currentUser = getUserFromStorage();
@@ -30,7 +30,19 @@ angular.module('gimmi.authentication', [
           }
           return decodeURIComponent(escape(window.atob(output)));
       }
- 
+  
+      function refreshCurrentUser (inputType, input) {
+        if (inputType === "token") {
+          if (input) {
+            $localStorage.token = input;
+            currentUser = getUserFromStorage();
+          } else {
+            console.log("Empty token ==> logout");
+            logout();
+          }
+        }
+      }
+
       function getUserFromStorage() {
           var token = $localStorage.token;
           var user = {};
@@ -40,12 +52,13 @@ angular.module('gimmi.authentication', [
               if (! isExpired(decoded.exp)) {
                 user = decoded;
               } else {
-                delete $localStorage.token;
-                currentUser = {};
+                console.log("Expired token");
+                logout();
+                Flash.create('warning', "Uw sessie is verlopen. Gelieve opnieuw in te loggen.");
               }
           }
           return user;
-      }
+      }
 
       function isExpired (expDate) {
         if (expDate){
@@ -82,6 +95,8 @@ angular.module('gimmi.authentication', [
           if (status === 200 && data.token) {
             $localStorage.token = data.token;
             currentUser = PersonService.getPersonFromToken(data.token);
+            $rootScope.$emit('login', currentUser);
+            $rootScope.$broadcast('login', currentUser);
             deferred.resolve(currentUser);
           } else {
             deferred.reject();
@@ -99,6 +114,9 @@ angular.module('gimmi.authentication', [
       function logout(){
         delete $localStorage.token;
         currentUser = {};
+        $state.go('gimmi.login');
+        Flash.create('warning', "U bent uitgelgd.");
+        console.log("User logged out");
       }
 
       // - Get current user
@@ -137,9 +155,8 @@ angular.module('gimmi.authentication', [
       // - Watch the FB authentication status
       function checkLoginStatus () {
         FB.getLoginStatus(function(res){
-         
+          console.log("Get login status of FB");
           statusChangeCallbackFacebook(res);
-          
         });
       };
 
@@ -192,8 +209,10 @@ angular.module('gimmi.authentication', [
           The user is not logged to the app, or into Facebook:
           destroy the session on the server.
           */
-          delete $localStorage.token;
-          currentUser = {};
+          console.log("not logged in to facebook");
+          if (currentUser.loginStrategy && currentUser.loginStrategy === "facebook") { //prevent logout after login with Gimmi Account
+            logout();
+          }
         }
         return defer.promise;
       }
@@ -229,6 +248,7 @@ angular.module('gimmi.authentication', [
         userIsReceiver: userIsReceiver,
         checkLoginStatus: checkLoginStatus,
         logInFacebook: logInFacebook,
-        logOutFacebook: logOutFacebook
+        logOutFacebook: logOutFacebook,
+        refreshCurrentUser: refreshCurrentUser
       });
   }]);
