@@ -4,8 +4,8 @@ angular.module('gimmi.authentication', [
   'gimmi.models.receiver'
 ])
   .factory('UserService',
-    ['$q', '$localStorage', '$http', '$state', '$rootScope', 'PersonService', 'receiverModel', 'CONFIG',
-    function ($q, $localStorage, $http, $state, $rootScope, PersonService, receiverModel, CONFIG) {
+    ['$q', '$localStorage', '$http', '$state', '$rootScope', 'PersonService', 'receiverModel', 'Flash', 'CONFIG',
+    function ($q, $localStorage, $http, $state, $rootScope, PersonService, receiverModel, Flash, CONFIG) {
       // create user variable
       var baseUrl = CONFIG.apiUrl + '/api';
       var currentUser = getUserFromStorage();
@@ -42,6 +42,8 @@ angular.module('gimmi.authentication', [
               } else {
                 delete $localStorage.token;
                 currentUser = {};
+                $state.go('gimmi.login');
+                Flash.create('Warning', "Uw sessie is verlopen. Gelieve opnieuw in te loggen.")
               }
           }
           return user;
