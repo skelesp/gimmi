@@ -69,7 +69,11 @@
 		
 		function redirectAfterAuthentication(userID) {
 			if ($rootScope.returnToState) {
-				$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
+				if ($rootScope.returnToState === "gimmi.wishlist.send"){
+					$state.go($rootScope.returnToState, {receiverID: userID});
+				} else {
+					$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
+				}
 				delete $rootScope.returnToState;
 				delete $rootScope.returnToStateParams;
 				delete $rootScope.attemptedEmail;
