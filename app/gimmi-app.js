@@ -92,6 +92,14 @@
 		}
 	});
 
+	$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+		event.preventDefault();
+		console.error("Error in state '" + toState.name + "'");
+		console.error(error);
+		$state.go(fromState.name, fromParams);
+		Flash.create("danger", "De gevraagde pagina kan niet getoond worden.");
+	});
+
 	};
 
 	(function (d) {
