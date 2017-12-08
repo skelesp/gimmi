@@ -1,4 +1,4 @@
-angular.module('Gimmi', [
+﻿angular.module('Gimmi', [
 	'ui.bootstrap',
 	'ngAnimate',
 	'ngStorage',
@@ -13,9 +13,13 @@ angular.module('Gimmi', [
 	'ng.deviceDetector',
 	'gimmi.communication'
 ])
-.run(['$rootScope', '$window', 'CONFIG', 'UserService', function ($rootScope, $window, config, UserService) {
+	.run(['$rootScope', '$window', '$state', '$stateParams', '$location', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, Flash, config, UserService) {
 
 	console.info('Start running app');
+	
+	/************/
+	/* FACEBOOK */
+	/************/
 	$window.fbAsyncInit = function () {
 		// Executed when the SDK is loaded
 
@@ -65,6 +69,28 @@ angular.module('Gimmi', [
 		console.info("FB SDK initiated");
 
 		UserService.checkLoginStatus();
+
+	/*******************/
+	/* EVENT LISTENERS */
+	/*******************/
+	//Listen on state changes and check authentication	
+	$rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+		if (toState.authenticate && !UserService.isLoggedIn()) {
+			
+			// Save data of original URL
+			$rootScope.returnToState = toState.name;
+			$rootScope.returnToStateParams = toParams;
+			if ($location.search().e) { // Save the email on which the user has received an invitation (= QS "e" in invitation link)
+				$rootScope.attemptedEmail = $location.search().e;
+			}
+
+			// Save 
+			console.log("Need login for restricted access route --> redirect to login page");
+			$state.go('gimmi.login');
+			event.preventDefault(); 
+			Flash.create("info", "Om de gevraagde pagina te kunnen bekijken moet u eerst inloggen.");
+		}
+	});
 
 	};
 
@@ -150,7 +176,7 @@ angular.module('Gimmi', [
 	});
 
 	//Flash message config
-	FlashProvider.setTimeout(5000);
+	FlashProvider.setTimeout(2000);
 	FlashProvider.setShowClose(true);
 	FlashProvider.setTemplatePreset('transclude');
 })

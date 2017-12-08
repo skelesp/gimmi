@@ -34,7 +34,7 @@
 		}
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
-			console.log(self.email);
+			delete $rootScope.attemptedEmail;
 		}
 		self.login = function() {
 			// Set variables to detect errors
@@ -45,14 +45,7 @@
 			// Call login from service
 			UserService.authenticate(self.email, self.password)
 				.then(function(user){
-					if ($rootScope.attemptedUrl) {
-						console.info("redirect to " + $rootScope.attemptedUrl)
-						$location.path($rootScope.attemptedUrl);
-						delete $rootScope.attemptedUrl;
-						delete $rootScope.attemptedEmail;
-					} else {
-						$state.go('gimmi.wishlist', { receiverID: user._id });
-					}
+					redirectAfterAuthentication(user._id);
 				})
 				.catch(function(){
 					self.error = true;
@@ -65,14 +58,7 @@
 				.then(function (user) {
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
-					if ($rootScope.attemptedUrl) {
-						console.info("redirect to " + $rootScope.attemptedUrl)
-						$location.path($rootScope.attemptedUrl);
-						delete $rootScope.attemptedUrl;
-						delete $rootScope.attemptedEmail;
-					} else {
-						$state.go('gimmi.wishlist', { receiverID: user._id });
-					}
+					redirectAfterAuthentication(user._id);
 				})
 				.catch(function () {
 					self.error = true;
@@ -81,6 +67,20 @@
 				});
 		}
 		self.checkLoginStatus = UserService.checkLoginStatus;
+		
+		function redirectAfterAuthentication(userID) {
+			if ($rootScope.returnToState) {
+				$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
+				delete $rootScope.returnToState;
+				delete $rootScope.returnToStateParams;
+			} else if ($rootScope.attemptedUrl) {
+				console.info("redirect to " + $rootScope.attemptedUrl)
+				$location.path($rootScope.attemptedUrl);
+				delete $rootScope.attemptedUrl;
+			} else {
+				$state.go('gimmi.wishlist', { receiverID: userID });
+			}
+		}
 
 	})
 	.controller('personRegistrationCtrl', ["$rootScope", "$location", "$state", "$localStorage", "$scope", "PersonService", "UserService", "receiverModel", function ($rootScope, $location, $state, $localStorage, $scope, PersonService, UserService, receiverModel){
@@ -93,6 +93,7 @@
 
 		if ($rootScope.attemptedEmail) {
 			self.newPerson = { email: $rootScope.attemptedEmail};
+			delete $rootScope.attemptedEmail;
 		}
 
 		self.register = function(newPerson){
@@ -102,20 +103,14 @@
 						$localStorage.token = token;
 						self.infoMessage = "Registratie voltooid!";
 						var user = PersonService.getPersonFromToken(token);
+						UserService.refreshCurrentUser("token", token);
 						$scope.$emit('login', user);
 						$scope.$broadcast('login', user);
 						receiverModel.refreshReceivers()
 							.then(function(receivers) {
 								console.info("receivers updated", receivers);
 							});
-						if ($rootScope.attemptedUrl) {
-							console.info("redirect to " + $rootScope.attemptedUrl)
-							$location.path($rootScope.attemptedUrl);
-							delete $rootScope.attemptedUrl;
-							delete $rootScope.attemptedEmail;
-						} else {
-							$state.go('gimmi.wishlist',{receiverID: user._id});
-						}
+						redirectAfterAuthentication(user._id);
 					},
 					function(err){
 						self.error = true;
@@ -132,20 +127,27 @@
 				.then(function (user) {
 					$scope.$emit('login', user);
 					$scope.$broadcast('login', user);
-					if ($rootScope.attemptedUrl) {
-						console.info("redirect to " + $rootScope.attemptedUrl)
-						$location.path($rootScope.attemptedUrl);
-						delete $rootScope.attemptedUrl;
-						delete $rootScope.attemptedEmail;
-					} else {
-						$state.go('gimmi.wishlist', { receiverID: user._id });
-					}
+					redirectAfterAuthentication(user._id);
 				})
 				.catch(function () {
 					self.error = true;
 					self.errorMessage = "Invalid username / password";
 					self.disabled = false;
 				});
+		}
+
+		function redirectAfterAuthentication(userID) {
+			if ($rootScope.returnToState) {
+				$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
+				delete $rootScope.returnToState;
+				delete $rootScope.returnToStateParams;
+			} else if ($rootScope.attemptedUrl) {
+				console.info("redirect to " + $rootScope.attemptedUrl)
+				$location.path($rootScope.attemptedUrl);
+				delete $rootScope.attemptedUrl;
+			} else {
+				$state.go('gimmi.wishlist', { receiverID: userID });
+			}
 		}
 
 	}])

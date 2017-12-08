@@ -92,7 +92,7 @@ angular.module('gimmi.authentication', [
           return false;
         } else {
           return true;
-      }
+        }
       }
       // - Authenticate a person on the server -
       function authenticate (email, password) {
