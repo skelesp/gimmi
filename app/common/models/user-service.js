@@ -132,7 +132,7 @@ angular.module('gimmi.authentication', [
 
       // - Is the user also the receiver?
       function userIsReceiver(receiverID){
-  			if ( receiverID === getCurrentUser()._id) {
+  			if ( isLoggedIn() && receiverID === getCurrentUser()._id) {
   				return true;
   			} else {
   				return false;

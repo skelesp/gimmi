@@ -1,4 +1,4 @@
-﻿angular.module('wishlist', [
+angular.module('wishlist', [
 	'gimmi.models.wishlist',
 	'gimmi.models.receiver',
 	'wishlist.receiver',
@@ -78,7 +78,13 @@
 	};
 
 	_self.userIsCreator = function(creatorID){
+		if (UserService.isLoggedIn()) {
 		return UserService.getCurrentUser()._id === creatorID;
+	};
+		} else {
+			return false;
+		}
+		
 	};
 
 	_self.receiverIsCreator = function(creatorID, receiverID) {
@@ -86,8 +92,12 @@
 	}
 
 	_self.reservedByUser = function(reservatorID){
+		if (UserService.isLoggedIn()) {
 		if (UserService.getCurrentUser()._id === reservatorID) {
 			return true;
+		} else {
+			return false;
+		}
 		} else {
 			return false;
 		}
