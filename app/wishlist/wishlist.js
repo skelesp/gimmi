@@ -39,7 +39,8 @@
 					templateUrl: 'app/wishlist/wish/create/wish-create.tmpl.html',
 					controller: 'createWishCtrl as createWishCtrl'
 				}
-			}
+			},
+			authenticate: true
 		})
 		.state('gimmi.wishlist.send',{
 			url: '/send',
@@ -48,7 +49,8 @@
 					templateUrl: 'app/wishlist/sendWishlist.tmpl.html',
 					controller: 'sendWishlistController as sendWishlistCtrl'
 				}
-			}
+			},
+			authenticate: true
 		})
 	;
 })
@@ -78,7 +80,12 @@
 	};
 
 	_self.userIsCreator = function(creatorID){
-		return UserService.getCurrentUser()._id === creatorID;
+		if (UserService.isLoggedIn()) {
+			return UserService.getCurrentUser()._id === creatorID;
+		} else {
+			return false;
+		}
+		
 	};
 
 	_self.receiverIsCreator = function(creatorID, receiverID) {
@@ -86,8 +93,12 @@
 	}
 
 	_self.reservedByUser = function(reservatorID){
-		if (UserService.getCurrentUser()._id === reservatorID) {
-			return true;
+		if (UserService.isLoggedIn()) {
+			if (UserService.getCurrentUser()._id === reservatorID) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -274,12 +285,6 @@
 	var self = this;
 	var wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
 	//#105: onderstaande IF moet eigenlijk in de route staan en niet in de controller...
-	//Deze code lijkt gewoon niets te doen... Hier komt Angular nooit in...
-	if (!UserService.isLoggedIn) {
-		console.log(wishUrl);
-		$rootscope.attemptedUrl = wishUrl;
-		state.go('gimmi.login');
-	}
 	self.receiverID = $stateParams.receiverID;
 	self.url = wishUrl;
 	self.postOnFacebook = function(){

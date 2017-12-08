@@ -88,7 +88,11 @@ angular.module('gimmi.authentication', [
       }
 
       function isLoggedIn(){
-        return !angular.isUndefined(currentUser);
+        if (angular.isUndefined(currentUser) || !currentUser.loginStrategy) {
+          return false;
+        } else {
+          return true;
+        }
       }
       // - Authenticate a person on the server -
       function authenticate (email, password) {
@@ -119,9 +123,9 @@ angular.module('gimmi.authentication', [
       // - Logout a person -
       function logout(){
         delete $localStorage.token;
-        currentUser = {};
-        $state.go('gimmi.login');
-        Flash.create('warning', "U bent uitgelgd.");
+        currentUser = undefined;
+        $state.go('gimmi');
+        Flash.create('warning', "U bent uitgelogd.");
         console.log("User logged out");
       }
 
@@ -132,7 +136,7 @@ angular.module('gimmi.authentication', [
 
       // - Is the user also the receiver?
       function userIsReceiver(receiverID){
-  			if ( receiverID === getCurrentUser()._id) {
+  			if ( isLoggedIn() && receiverID === getCurrentUser()._id) {
   				return true;
   			} else {
   				return false;
@@ -216,7 +220,7 @@ angular.module('gimmi.authentication', [
           destroy the session on the server.
           */
           console.log("not logged in to facebook");
-          if (currentUser.loginStrategy && currentUser.loginStrategy === "facebook") { //prevent logout after login with Gimmi Account
+          if (currentUser && currentUser.loginStrategy === "facebook") { //prevent logout after login with Gimmi Account
             logout();
           }
         }
