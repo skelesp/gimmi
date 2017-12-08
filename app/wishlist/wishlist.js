@@ -54,21 +54,20 @@
 		})
 	;
 })
-.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService',
-				function wishlistCtrl($stateParams, wishModel, receiverModel, UserService){
-	var wishlistCtrl = this;
+	.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService', 'currentReceiver',
+		function wishlistCtrl($stateParams, wishModel, receiverModel, UserService, currentReceiver){
+		var wishlistCtrl = this;
 
-	var currentReceiver = receiverModel.getCurrentReceiver();
-	wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
-	wishlistCtrl.currentReceiver = currentReceiver;
-	if (currentReceiver) {
-			wishModel.getWishlist(wishlistCtrl.currentReceiver._id).then(function(wishlist) {
-				wishlistCtrl.wishes = wishlist.wishes;
-			});
-			wishlistCtrl.userIsReceiver = UserService.userIsReceiver(wishlistCtrl.currentReceiver._id);
-	} else {
-		wishlistCtrl.userIsReceiver = false;
-	}
+		wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
+		wishlistCtrl.currentReceiver = currentReceiver;
+		if (currentReceiver) {
+				wishModel.getWishlist(wishlistCtrl.currentReceiver._id).then(function(wishlist) {
+					wishlistCtrl.wishes = wishlist.wishes;
+				});
+				wishlistCtrl.userIsReceiver = UserService.userIsReceiver(wishlistCtrl.currentReceiver._id);
+		} else {
+			wishlistCtrl.userIsReceiver = false;
+		}
 }])
 	.controller('wishCtrl', ['$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
 	var _self = this;
