@@ -88,7 +88,11 @@ angular.module('gimmi.authentication', [
       }
 
       function isLoggedIn(){
-        return !angular.isUndefined(currentUser);
+        if (angular.isUndefined(currentUser) || !currentUser.loginStrategy) {
+          return false;
+        } else {
+          return true;
+      }
       }
       // - Authenticate a person on the server -
       function authenticate (email, password) {
