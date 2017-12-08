@@ -124,6 +124,7 @@ angular.module('gimmi.authentication', [
       function logout(){
         delete $localStorage.token;
         currentUser = undefined;
+        receiverModel.setCurrentReceiver(null);
         $state.go('gimmi');
         Flash.create('warning', "U bent uitgelogd.");
         console.log("User logged out");
