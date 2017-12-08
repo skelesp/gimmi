@@ -13,7 +13,8 @@ angular.module('gimmi.person')
                     person: ['$stateParams', 'PersonService', function ($stateParams, PersonService) {
                         return PersonService.getPersonFromID($stateParams.personID);
                     }]
-                }
+                },
+                authenticate: true
             })
     }])
     .controller('personCtrl', ['$uibModal', 'uibDateParser', 'Flash', 'PersonService', 'person', function ($uibModal, uibDateParser, Flash, PersonService, person) {
