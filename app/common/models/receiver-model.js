@@ -30,16 +30,24 @@
 		}
 
 		model.setCurrentReceiver = function (receiverID){
-			return PersonService.getPersonFromID(receiverID)
-				.then(function(receiver){
-					currentReceiver = receiver;
-				}, function(error){
-					if (error) {
-						console.error(error);
-					} else {
-						console.error("current receiver not found by id!");
-					}
-				});
+			var deferred = $q.defer();
+			if (receiverID) {
+				PersonService.getPersonFromID(receiverID)
+					.then(function (receiver) {
+						currentReceiver = receiver;
+						deferred.resolve(currentReceiver);
+					}, function (error) {
+						if (error) {
+							console.error(error);
+						} else {
+							console.error("current receiver not found by id!");
+						}
+					});
+			} else {
+				currentReceiver = {};
+				deferred.reject(currentReceiver);
+			}
+			return deferred.promise;
 		};
 
 		model.getCurrentReceiver = function(){
