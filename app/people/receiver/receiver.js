@@ -34,7 +34,6 @@
 		}
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
-			delete $rootScope.attemptedEmail;
 		}
 		self.login = function() {
 			// Set variables to detect errors
@@ -73,10 +72,12 @@
 				$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
 				delete $rootScope.returnToState;
 				delete $rootScope.returnToStateParams;
+				delete $rootScope.attemptedEmail;
 			} else if ($rootScope.attemptedUrl) {
 				console.info("redirect to " + $rootScope.attemptedUrl)
 				$location.path($rootScope.attemptedUrl);
 				delete $rootScope.attemptedUrl;
+				delete $rootScope.attemptedEmail;
 			} else {
 				$state.go('gimmi.wishlist', { receiverID: userID });
 			}
@@ -93,7 +94,6 @@
 
 		if ($rootScope.attemptedEmail) {
 			self.newPerson = { email: $rootScope.attemptedEmail};
-			delete $rootScope.attemptedEmail;
 		}
 
 		self.register = function(newPerson){
@@ -141,10 +141,12 @@
 				$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
 				delete $rootScope.returnToState;
 				delete $rootScope.returnToStateParams;
+				delete $rootScope.attemptedEmail;
 			} else if ($rootScope.attemptedUrl) {
 				console.info("redirect to " + $rootScope.attemptedUrl)
 				$location.path($rootScope.attemptedUrl);
 				delete $rootScope.attemptedUrl;
+				delete $rootScope.attemptedEmail;
 			} else {
 				$state.go('gimmi.wishlist', { receiverID: userID });
 			}
