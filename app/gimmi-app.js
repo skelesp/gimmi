@@ -1,4 +1,4 @@
-﻿angular.module('Gimmi', [
+angular.module('Gimmi', [
 	'ui.bootstrap',
 	'ngAnimate',
 	'ngStorage',
@@ -173,9 +173,7 @@
 
 	self.logout = function(){
 		UserService.logout();
-		self.currentUser = null;
 		$scope.$broadcast('logout');
-		$state.go('gimmi.login');
 	};
 
 	self.logOutFacebook = function() {
