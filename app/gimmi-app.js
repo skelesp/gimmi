@@ -74,7 +74,7 @@
 	/* EVENT LISTENERS */
 	/*******************/
 	//Listen on state changes and check authentication	
-	$rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		if (toState.authenticate && !UserService.isLoggedIn()) {
 			
 			// Save data of original URL
