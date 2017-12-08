@@ -326,10 +326,10 @@
 			var mailTo = mailTo.split(',');
 			mailTo.forEach(function (to) {
 				var mailUrl = self.url + '?e=' + to
-				var mailHtml = '<html><body>Beste,<br />' + receiver.fullName + ' nodigt u uit om zijn/haar cadeau-wishlist op Gimmi te bekijken.<br />Klik <a href="' + mailUrl + '">hier</a> of kopieer de link: ' + mailUrl + '<br /><p><i>Kies het perfecte cadeau voor ' + receiver.firstName + ' (en registreer u om zelf een wishlist aan te maken!).</i></p><br /><p>Gimmi</p><br /><p>The perfect gift</p></body></html>'
+				var mailHtml = '<html><body>Beste,<br />' + receiver.firstName + " " + receiver.lastName + ' nodigt u uit om zijn/haar wensenlijst op Gimmi te bekijken.<br />Klik <a href="' + mailUrl + '">hier</a> of kopieer de link: ' + mailUrl + '<br /><p><i>Kies het perfecte cadeau voor ' + receiver.firstName + ' (en registreer u om zelf een wishlist aan te maken!).</i></p><br /><p>Gimmi</p><br /><p>The perfect gift</p></body></html>'
 				mail = {
 					to: to,
-					subject: receiver.fullName + " nodigt u uit op zijn cadeaulijst op Gimmi.",
+					subject: receiver.firstName + " " + receiver.lastName + " nodigt u uit op zijn/haar wensenlijst op Gimmi.",
 					html: mailHtml
 				}
 				
