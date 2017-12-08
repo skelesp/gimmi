@@ -17,9 +17,12 @@
 					templateUrl: 'app/wishlist/wishlist.tmpl.html',
 					controller:'wishlistCtrl as wishlistCtrl',
 					resolve: {
-							currentReceiver: ['$stateParams', 'receiverModel', function($stateParams, receiverModel){
-								return receiverModel.setCurrentReceiver($stateParams.receiverID);
-							}]
+						wishlist: ['$stateParams', 'wishModel', function ($stateParams, wishModel){
+							return wishModel.getWishlist($stateParams.receiverID);
+						}],
+						currentReceiver: ['wishlist', 'receiverModel', function(wishlist, receiverModel){
+							return receiverModel.setCurrentReceiver(wishlist._id.receiver);
+						}]
 					}
 				},
 				'receiverSearch@gimmi': {
@@ -54,29 +57,23 @@
 		})
 	;
 })
-	.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService', 'currentReceiver',
-		function wishlistCtrl($stateParams, wishModel, receiverModel, UserService, currentReceiver){
-		var wishlistCtrl = this;
+.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService', 'wishlist', 'currentReceiver',
+	function wishlistCtrl($stateParams, wishModel, receiverModel, UserService, wishlist, currentReceiver){
+	var _self = this;
 
-		wishlistCtrl.currentUserID = UserService.getCurrentUser().id;
-		wishlistCtrl.currentReceiver = currentReceiver;
-		if (currentReceiver) {
-				wishModel.getWishlist(wishlistCtrl.currentReceiver._id).then(function(wishlist) {
-					wishlistCtrl.wishes = wishlist.wishes;
-				});
-				wishlistCtrl.userIsReceiver = UserService.userIsReceiver(wishlistCtrl.currentReceiver._id);
-		} else {
-			wishlistCtrl.userIsReceiver = false;
-		}
+	_self.currentUserID = UserService.getCurrentUser().id;
+	_self.currentReceiver = currentReceiver;
+	_self.wishes = wishlist.wishes;
+	
+	if (currentReceiver) {
+		_self.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
+	} else {
+		_self.userIsReceiver = false;
+	}
 }])
-	.controller('wishCtrl', ['$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
+.controller('wishCtrl', ['$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
 	var _self = this;
 	/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
-	/* TODO: Verplaats naar wishlistctrl, nu wordt dit voor elke wish overlopen, maar is altijd hetzelfde! */
-
-	_self.userIsReceiver = function(receiverID) {
-		return UserService.userIsReceiver(receiverID);
-	};
 
 	_self.userIsCreator = function(creatorID){
 		if (UserService.isLoggedIn()) {
@@ -84,7 +81,6 @@
 		} else {
 			return false;
 		}
-		
 	};
 
 	_self.receiverIsCreator = function(creatorID, receiverID) {

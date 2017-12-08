@@ -37,7 +37,7 @@ angular.module('gimmi.models.wish', [
 			} else {
 				$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
 					wishlist = result.data[0];
-					deferred.resolve(result.data[0]);
+					deferred.resolve(wishlist);
 				});
 			}
 
