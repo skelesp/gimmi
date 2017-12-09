@@ -32,7 +32,7 @@ angular.module('gimmi.models.wish', [
 		model.getWishlist = function(receiverID) {
 			var deferred = $q.defer();
 
-			if (wishlist && wishlist._id.receiverID === receiverID) {
+			if (wishlist && wishlist._id.receiver._id === receiverID) {
 				deferred.resolve(wishlist);
 			} else {
 				$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
@@ -53,7 +53,7 @@ angular.module('gimmi.models.wish', [
 			}
 			
 			$http.post(URLS.WISH, wish).success(function(wish){
-				if (wishlist._id.receiverID === receiverID) {
+				if (wishlist._id.receiver._id === receiverID) {
 					console.info("Wish created: " + wish.title);
 					wishlist.wishes.push(wish);
 					wishlist.count++;
