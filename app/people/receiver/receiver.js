@@ -71,6 +71,8 @@
 			if ($rootScope.returnToState) {
 				if ($rootScope.returnToState === "gimmi.wishlist.send"){
 					$state.go($rootScope.returnToState, {receiverID: userID});
+				} else if ($rootScope.returnToState === "gimmi.wishlist" && !$rootScope.returnToStateParams.receiverID) {
+					$state.go($rootScope.returnToState, { receiverID: userID });
 				} else {
 					$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
 				}
