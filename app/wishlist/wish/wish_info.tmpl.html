@@ -47,7 +47,7 @@
       'No reason')"><i class="fa fa-cart-plus" aria-hidden="true"></i> Reserveer</button>
       <button type="button" name="unreserveWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'reserved' && wishInfoCtrl.reservedByUser(wishInfoCtrl.wish.reservation.reservedBy._id)" ng-click="wishInfoCtrl.deleteReservation(wishInfoCtrl.wish)"><i class="fa fa-ban" aria-hidden="true"></i> Verwijder uw reservatie</button>
       <button type="button" name="copyWish" class="btn btn-block btn-outline-info text-left" ng-hide="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID)" ng-click="wishInfoCtrl.copy(wishInfoCtrl.wish)"><i class="fa fa-clone" aria-hidden="true"></i> Zet ook op mijn lijst!</button>
-      <button type="button" name="deleteWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID) || wishInfoCtrl.userIsCreator(wishInfoCtrl.wish.createdBy._id)" ng-click="wishInfoCtrl.deleteWish(wishInfoCtrl.wish)"><i class="fa fa-trash" aria-hidden="true"></i> Verwijder dit cadeau</button>
+      <button type="button" name="deleteWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID) || wishInfoCtrl.userIsCreator(wishInfoCtrl.wish.createdBy._id)" ng-click="wishInfoCtrl.deleteWish(wishInfoCtrl.wish)"><i class="fa fa-trash" aria-hidden="true"></i> Verwijder deze wens</button>
     </div>
   </div>
 </div>

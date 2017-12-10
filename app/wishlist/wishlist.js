@@ -286,7 +286,7 @@
 		FB.ui({
 			method: 'feed',
 			link: wishUrl,
-			caption: 'Een link naar mijn favoriete cadeaus',
+			caption: 'Een link naar mijn wensenlijst',
 			description: "Testbeschrijving"
 		}, function (response) {
 			console.log(response);
@@ -346,7 +346,7 @@
 	};
 
 	self.messengerLink = "fb-messenger://share/?link=" + encodeURIComponent(wishUrl) + "&app_id=" + CONFIG.fbID;
-	self.whatsappLink = "whatsapp://send?text=Hieronder een link waarop ik mijn wishlist voor cadeau's heb gezet. %0A%0A" + encodeURIComponent(wishUrl);
+	self.whatsappLink = "whatsapp://send?text=Hieronder een link waarop ik mijn wensenlijst heb gezet. %0A%0A" + encodeURIComponent(wishUrl);
 	self.showCopyTooltip = false;
 	self.wishIsCopied = function(e) {
 		e.clearSelection();
