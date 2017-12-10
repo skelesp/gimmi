@@ -234,8 +234,8 @@
 		$uibModalInstance.dismiss('cancel');
 	};
 })
-.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
-											function($state, $stateParams, $uibModal, CONFIG, wishModel, receiverModel, UserService, gcseService){
+.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', '$window', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
+	function ($state, $stateParams, $uibModal, $window, CONFIG, wishModel, receiverModel, UserService, gcseService){
 	/* Initialize variables */
 	var _self = this;
 	var defaultWish = {
@@ -275,6 +275,12 @@
 
 	resetForm();
 
+	_self.goToPrice = function(){
+		$window.document.getElementById('newWishPrice').focus();
+	}
+	_self.goToImage = function () {
+		// Hoe de GSCE directive oproepen?
+	}
 }])
 	.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
 	var self = this;
