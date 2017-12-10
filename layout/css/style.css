@@ -36,6 +36,9 @@ h6.card-title  {
 .card-image-overlay {
   position: relative; /*https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4*/
 }
+.wishCardTitle {
+  font-size: 0.8rem;
+}
 
 /* Fix for card buttons in IE */
 
