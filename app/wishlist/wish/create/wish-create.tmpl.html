@@ -15,11 +15,12 @@
 	</div>
 	<form name="wishCreateForm" class="m-2" role="form" novalidate="">
 		<div class="form-group">
-			<input type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" placeholder="Titel"
-			 required="" ng-keyup="$event.keyCode == 13 && createWishCtrl.goToPrice()">
+			<input type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" 
+					placeholder="Titel" required="" ng-keyup="$event.keyCode == 13 && createWishCtrl.goToPrice()">
 		</div>
 		<div class="form-group">
-			<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in €" ng-model="createWishCtrl.newWish.price">
+			<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in €" 
+					ng-model="createWishCtrl.newWish.price" ng-keyup="$event.keyCode == 13 && createWishCtrl.openImageSearch()">
 		</div>
 		<div class="form-group">
 			<input type="hidden" class="form-control form-control-sm" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url"
@@ -36,6 +37,7 @@
 		</button>
 		<button ng-show="createWishCtrl.newWish.image === '' && createWishCtrl.newWish.title !== ''" type="button" 
 				class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
+				id="searchImageBtn"
 				google-image-search
 				data-search-term="{{createWishCtrl.newWish.title}}" 
 				data-image-result="createWishCtrl.newWish"
