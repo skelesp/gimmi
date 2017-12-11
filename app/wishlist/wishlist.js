@@ -234,8 +234,8 @@
 		$uibModalInstance.dismiss('cancel');
 	};
 })
-.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
-											function($state, $stateParams, $uibModal, CONFIG, wishModel, receiverModel, UserService, gcseService){
+.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', '$window', '$timeout', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
+	function ($state, $stateParams, $uibModal, $window, $timeout, CONFIG, wishModel, receiverModel, UserService, gcseService){
 	/* Initialize variables */
 	var _self = this;
 	var defaultWish = {
@@ -259,7 +259,8 @@
 		$state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
 	}
 
-	function createWish(wish, receiverID, userID) {
+	function createWish(receiverID, userID) {
+		var wish = _self.newWish;
 		if (!wish.image) {
 			wish.image = '';
 		}
@@ -275,6 +276,14 @@
 
 	resetForm();
 
+	_self.goToPrice = function(){
+		$window.document.getElementById('newWishPrice').focus();
+	}
+	_self.openImageSearch = function () {
+		$timeout(function () {
+			angular.element('#searchImageBtn').triggerHandler('click');
+		});
+	}
 }])
 	.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
 	var self = this;

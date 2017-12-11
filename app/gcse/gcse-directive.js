@@ -2,18 +2,19 @@ angular.module('gcse',[
   'ui.bootstrap',
   'gimmi.config'
 ])
-  .directive('googleImageSearch', ['$uibModal', 'gcseService', 'CONFIG', function($uibModal, gcseService, CONFIG){
+  .directive('googleImageSearch', ['$uibModal', 'gcseService', 'CONFIG', 'Flash', function($uibModal, gcseService, CONFIG, Flash){
       return {
         scope: {
-          googleImageSearch: '@',
-          imageResult: '='
+          searchTerm: '@',
+          imageResult: '=',
+          onImageSelect: '&' 
         },
         replace: false,
         restrict: 'AE',
         link: function ($scope, $element, $attrs) {
           $element.on('click', function(){
             var googleImages = [];
-            var query = $scope.googleImageSearch;
+            var query = $scope.searchTerm;
 
             if (query){ //Search query has been entered
       				gcseService.getImageLinks(query).then(function (results) {
@@ -34,7 +35,10 @@ angular.module('gcse',[
                   }
                 }).result
                 .then(function (selectedImage) {
-                  $scope.imageResult = selectedImage;
+                  $scope.imageResult.image = selectedImage;
+                  if ($scope.onImageSelect) {
+                    $scope.onImageSelect();
+                  }
                 })
                 .catch(function () {
                   // Modal dismissed.
@@ -42,6 +46,7 @@ angular.module('gcse',[
               });
             } else {
               console.error("Geen zoekterm beschikbaar");
+              Flash.create("warning", "U moet eerst een titel invullen voordat u verder kan.")
             }
         });
       }

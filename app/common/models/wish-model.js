@@ -57,6 +57,8 @@ angular.module('gimmi.models.wish', [
 					console.info("Wish created: " + wish.title);
 					wishlist.wishes.push(wish);
 					wishlist.count++;
+					var message = "De wens '" + wish.title + "' werd toegevoegd aan deze lijst.";
+					var flashID = Flash.create('success', message);
 				} else {
 					console.info("%s copied a wish from wishlist %s", userID, receiverID);
 					// Show flashmessage voor succesvolle copy
