@@ -5,7 +5,10 @@
 		<img class="card-img-top rounded img-fluid mb-2" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
 		<div class="card-img-overlay pt-4 blurredCardOverlay">
 			<p ng-hide="createWishCtrl.newWish.title"><i class="fa fa-arrow-down mr-1" aria-hidden="true"></i>Vul hieronder de titel en prijs in en selecteer daarna een afbeelding</p>
-			<a href="" ng-show="createWishCtrl.newWish.title" google-image-search="{{createWishCtrl.newWish.title}}" data-image-result="createWishCtrl.newWish.image">
+			<a href="" ng-show="createWishCtrl.newWish.title" 
+						google-image-search 
+						data-search-term="{{createWishCtrl.newWish.title}}" 
+						data-image-result="createWishCtrl.newWish.image">
 				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen voor "{{createWishCtrl.newWish.title}}"
 			</a>
 		</div>
@@ -32,7 +35,11 @@
     		Toevoegen
 		</button>
 		<button ng-show="createWishCtrl.newWish.image === '' && createWishCtrl.newWish.title !== ''" type="button" 
-		class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" google-image-search="{{createWishCtrl.newWish.title}}" data-image-result="createWishCtrl.newWish.image">
+				class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
+				google-image-search
+				data-search-term="{{createWishCtrl.newWish.title}}" 
+				data-image-result="createWishCtrl.newWish"
+				on-image-select="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)">
     		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding
 		</button>
 		<button ng-show="createWishCtrl.newWish.title !== '' || createWishCtrl.newWish.price !== ''" type="button" class="btn btn-default btn-sm float-left mb-1 mr-1"

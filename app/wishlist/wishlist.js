@@ -259,7 +259,8 @@
 		$state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
 	}
 
-	function createWish(wish, receiverID, userID) {
+	function createWish(receiverID, userID) {
+		var wish = _self.newWish;
 		if (!wish.image) {
 			wish.image = '';
 		}
