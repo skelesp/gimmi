@@ -2,7 +2,7 @@ angular.module('gcse',[
   'ui.bootstrap',
   'gimmi.config'
 ])
-  .directive('googleImageSearch', ['$uibModal', 'gcseService', 'CONFIG', function($uibModal, gcseService, CONFIG){
+  .directive('googleImageSearch', ['$uibModal', 'gcseService', 'CONFIG', 'Flash', function($uibModal, gcseService, CONFIG, Flash){
       return {
         scope: {
           searchTerm: '@',
@@ -46,6 +46,7 @@ angular.module('gcse',[
               });
             } else {
               console.error("Geen zoekterm beschikbaar");
+              Flash.create("warning", "U moet eerst een titel invullen voordat u verder kan.")
             }
         });
       }
