@@ -37,7 +37,7 @@
   <div class="modal-body">
     <form name="wishEditForm" class="p-2" role="form">
       <div class="form-group">
-        <img class="img-fluid" ng-src="{{editPopupCtrl.wish.image}}" google-image-search="{{editPopupCtrl.wish.title}}" data-image-result="editPopupCtrl.wish.image"/>
+        <img class="img-fluid" ng-src="{{editPopupCtrl.wish.image}}" google-image-search data-search-term="{{editPopupCtrl.wish.title}}" data-image-result="editPopupCtrl.wish.image"/>
       </div>
       <div class="form-group">
         <input type="text" class="form-control" id="WishTitle" ng-model="editPopupCtrl.wish.title" placeholder="Titel" required/>
