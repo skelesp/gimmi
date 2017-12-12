@@ -44,7 +44,7 @@ angular.module('gimmi.person')
             _self.personSaved = true;
             PersonService.updatePersonDetails(_self.person)
             .then(function(person){
-                Flash.create('success', "Uw gegevens zijn bijgewerkt.");
+                Flash.create('success', "Je gegevens zijn bijgewerkt.");
                 _self.person = person;
             }, function(error){
                 Flash.create('danger', error);

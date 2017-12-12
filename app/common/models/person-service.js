@@ -101,7 +101,7 @@ angular.module('gimmi.person', [
           $http.put(CONFIG.apiUrl + '/api/people/' + person._id + '/account/local', body)
           .success(function(person){
             console.log("Het lokale wachtwoord werd gewijzigd voor " + person._id);
-            Flash.create('success', "Uw paswoord voor uw Gimmi-account is bijgewerkt.");
+            Flash.create('success', "Het paswoord voor je Gimmi-account is bijgewerkt.");
             // Send email on password change
             deferred.resolve(person);
           })
@@ -119,7 +119,7 @@ angular.module('gimmi.person', [
         $http.delete(CONFIG.apiUrl + '/api/people/' + person._id + '/account/facebook')
         .success(function(token){
           console.log("Facebook account verwijder voor " + person._id);
-          Flash.create('success', "Uw Facebook-account is ontkoppeld. Als u een lokale Gimmi account hebt, zal u onder die account ingelogd blijven. Anders wordt u uitgelogd.");
+          Flash.create('success', "Je Facebook-account is ontkoppeld. Als je een lokale Gimmi account hebt, zal je onder die account ingelogd blijven. Anders word je uitgelogd.");
           $injector.get('UserService').logOutFacebook();
           $injector.get('UserService').refreshCurrentUser("token", token);
         })

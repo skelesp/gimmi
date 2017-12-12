@@ -88,7 +88,7 @@
 			console.log("Need login for restricted access route --> redirect to login page");
 			$state.go('gimmi.login');
 			event.preventDefault(); 
-			Flash.create("info", "Om de gevraagde pagina te kunnen bekijken moet u eerst inloggen.");
+			Flash.create("info", "Om de gevraagde pagina te kunnen bekijken moet je eerst inloggen/registreren.");
 		}
 	});
 

@@ -46,7 +46,7 @@ angular.module('gcse',[
               });
             } else {
               console.error("Geen zoekterm beschikbaar");
-              Flash.create("warning", "U moet eerst een titel invullen voordat u verder kan.")
+              Flash.create("warning", "Er is een titel nodig om een afbeelding te zoeken.")
             }
         });
       }

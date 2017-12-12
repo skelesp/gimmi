@@ -62,7 +62,7 @@ angular.module('gimmi.models.wish', [
 				} else {
 					console.info("%s copied a wish from wishlist %s", userID, receiverID);
 					// Show flashmessage voor succesvolle copy
-					var message = "De wens '" + wish.title + "' werd gekopieerd naar uw lijst.";
+					var message = "De wens '" + wish.title + "' werd gekopieerd naar je eigen lijst.";
 					var flashID = Flash.create('success', message);
 				}
 			});
