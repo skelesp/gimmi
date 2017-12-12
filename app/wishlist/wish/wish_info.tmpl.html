@@ -45,7 +45,7 @@
       <button type="button" name="editWish" class="btn btn-block btn-outline-info text-left" ng-click="wishInfoCtrl.editWishDetails(wishInfoCtrl.wish)"><i class="fa fa-edit" aria-hidden="true"></i> Wijzig de details</button>
       <button type="button" name="reserveWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'unreserved'" ng-click="wishInfoCtrl.addReservation(wishInfoCtrl.wish, ApplicationCtrl.currentUser._id,
       'No reason')"><i class="fa fa-cart-plus" aria-hidden="true"></i> Reserveer</button>
-      <button type="button" name="unreserveWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'reserved' && wishInfoCtrl.reservedByUser(wishInfoCtrl.wish.reservation.reservedBy._id)" ng-click="wishInfoCtrl.deleteReservation(wishInfoCtrl.wish)"><i class="fa fa-ban" aria-hidden="true"></i> Verwijder uw reservatie</button>
+      <button type="button" name="unreserveWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'reserved' && wishInfoCtrl.reservedByUser(wishInfoCtrl.wish.reservation.reservedBy._id)" ng-click="wishInfoCtrl.deleteReservation(wishInfoCtrl.wish)"><i class="fa fa-ban" aria-hidden="true"></i> Verwijder je reservatie</button>
       <button type="button" name="copyWish" class="btn btn-block btn-outline-info text-left" ng-hide="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID)" ng-click="wishInfoCtrl.copy(wishInfoCtrl.wish)"><i class="fa fa-clone" aria-hidden="true"></i> Zet ook op mijn lijst!</button>
       <button type="button" name="deleteWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID) || wishInfoCtrl.userIsCreator(wishInfoCtrl.wish.createdBy._id)" ng-click="wishInfoCtrl.deleteWish(wishInfoCtrl.wish)"><i class="fa fa-trash" aria-hidden="true"></i> Verwijder deze wens</button>
     </div>
@@ -65,7 +65,7 @@
     <form name="wishReservationForm" class="create-form" role="form" novalidate>
       <div class="form-group">
         <select class="form-control" id="reservationReason" ng-model="wishReservationPopupCtrl.reservation.reason" required>
-                <option selected disabled hidden>"Voor welke gelegenheid wilt u deze cadeau geven?"</option>
+                <option selected disabled hidden>"Voor welke gelegenheid wilt je dit cadeau geven?"</option>
                 <option value="Verjaardag">Verjaardag</option>
                 <option value="Housewarming">Housewarming</option>
                 <option value="Geboorte">Geboorte</option>

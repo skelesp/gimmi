@@ -60,7 +60,7 @@ angular.module('gimmi.authentication', [
               } else {
                 console.log("Expired token");
                 logout();
-                Flash.create('warning', "Uw sessie is verlopen. Gelieve opnieuw in te loggen.");
+                Flash.create('warning', "Je sessie is verlopen. Gelieve opnieuw in te loggen.");
               }
           }
           return user;
@@ -126,7 +126,7 @@ angular.module('gimmi.authentication', [
         currentUser = undefined;
         receiverModel.setCurrentReceiver(null);
         $state.go('gimmi');
-        Flash.create('warning', "U bent uitgelogd.");
+        Flash.create('warning', "Je bent nu uitgelogd.");
         console.log("User logged out");
       }
 

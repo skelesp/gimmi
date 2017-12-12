@@ -335,16 +335,16 @@
 			var mailTo = mailTo.split(',');
 			mailTo.forEach(function (to) {
 				var mailUrl = self.url + '?e=' + to
-				var mailHtml = '<html><body>Beste,<br />' + receiver.firstName + " " + receiver.lastName + ' nodigt u uit om zijn/haar wensenlijst op Gimmi te bekijken.<br />Klik <a href="' + mailUrl + '">hier</a> of kopieer de link: ' + mailUrl + '<br /><p><i>Kies het perfecte cadeau voor ' + receiver.firstName + ' (en registreer u om zelf een wishlist aan te maken!).</i></p><br /><p>Gimmi</p><br /><p>The perfect gift</p></body></html>'
+				var mailHtml = '<html><body>Beste,<br />' + receiver.firstName + " " + receiver.lastName + ' nodigt je uit om zijn/haar wensenlijst op Gimmi te bekijken.<br />Klik <a href="' + mailUrl + '">hier</a> of kopieer de link: ' + mailUrl + '<br /><p><i>Kies het perfecte cadeau voor ' + receiver.firstName + ' (en registreer je om zelf een wishlist aan te maken!).</i></p><br /><p>Gimmi</p><br /><p>The perfect gift</p></body></html>'
 				mail = {
 					to: to,
-					subject: receiver.firstName + " " + receiver.lastName + " nodigt u uit op zijn/haar wensenlijst op Gimmi.",
+					subject: receiver.firstName + " " + receiver.lastName + " nodigt je uit op zijn/haar wensenlijst op Gimmi.",
 					html: mailHtml
 				}
 				
 				CommunicationService.sendMail(mail).then(function(mailResponse){
 					console.log(mailResponse);
-					var message = "Uw mail werd verzonden.";
+					var message = "De mail werd verzonden.";
 					var flashID = Flash.create('success', message);
 				}, function(error){
 					var message = "Er is iets fout gelopen bij het verzenden van de mail:" + error;
@@ -360,7 +360,7 @@
 	self.wishIsCopied = function(e) {
 		e.clearSelection();
 		console.info("URL copied to clipboard: " + e.text);
-		var message = "De link werd gekopieerd naar het klembord. U kan deze nu overal plakken.";
+		var message = "De link werd gekopieerd naar het klembord. Je kan deze nu overal plakken.";
 		var flashID = Flash.create('success', message);
 		self.showCopyTooltip = true;
 	}

@@ -8,7 +8,7 @@
             Gereserveerd</span>
       <span class="float-left w-75 badge badge-pill badge-info text-center" 
             ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">
-            Gereserveerd door u <i class="fa fa-ban ml-2 text-warning" aria-hidden="true" uib-tooltip="Annuleer uw reservatie" tooltip-placement="bottom-right" tooltip-class="customTooltip" ng-click="wishCtrl.deleteReservation(wish)"></i></span>
+            Mijn reservatie <i class="fa fa-ban ml-2 text-warning" aria-hidden="true" uib-tooltip="Annuleer je reservatie" tooltip-placement="bottom-right" tooltip-class="customTooltip" ng-click="wishCtrl.deleteReservation(wish)"></i></span>
     </div>
   </div>
   <div class="card-block p-1">
@@ -20,7 +20,7 @@
     <button class="btn btn-light mx-1 p-1 text-muted" ui-sref="gimmi.wishlist.wish({wishID: wish._id})"><i class="fa fa-info" aria-hidden="true" uib-tooltip="Bekijk de details" tooltip-class="customTooltip" tooltip-placement="top-left"></i></button>
     <a class="btn btn-light mx-1 p-1 text-muted" href="{{wish.url}}" target="_blank" ng-show="wish.url"><i class="fa fa-globe" aria-hidden="true" uib-tooltip="Ga naar website voor meer info" tooltip-class="customTooltip" tooltip-placement="top-left"></i></a>
     <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Reserveer" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason')"><i class="fa fa-cart-plus" aria-hidden="true"></i></button>
-    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Kopieer naar uw eigen lijst" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-hide="wishlistCtrl.userIsReceiver" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone" aria-hidden="true"></i></button>
+    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Kopieer naar je eigen lijst" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-hide="wishlistCtrl.userIsReceiver" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone" aria-hidden="true"></i></button>
     <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Wijzig" tooltip-class="customTooltip" tooltip-placement="top-right" href="" ng-show="wishlistCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit" aria-hidden="true"></i></button>
     <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Verwijder" tooltip-class="customTooltip" tooltip-placement="top-right" href="" ng-show="wishlistCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash" aria-hidden="true"></i></button>
   </div>
@@ -59,12 +59,12 @@
 
   <div class="modal-header" style="color:#000000">
     <h3 class="modal-title" id="modal-title">
-      Wilt u verwijderen?
+      Bevestiging voor verwijderen
     </h3>
   </div>
 
   <div class="row modal-body" id="modal-body" style="color:#000000">
-    Bent u zeker dat u <b>"{{deletePopupCtrl.wishTitle}}"</b> wilt verwijderen?
+    Ben je zeker dat je <b>"{{deletePopupCtrl.wishTitle}}"</b> wilt verwijderen?
   </div>
 
   <div class="modal-footer">
@@ -86,7 +86,7 @@
     <form name="wishReservationForm" class="create-form" role="form" novalidate>
       <div class="form-group">
         <select class="form-control" id="reservationReason" ng-model="wishReservationPopupCtrl.reservation.reason" required>
-                <option selected disabled hidden>"Voor welke gelegenheid wilt u deze cadeau geven?"</option>
+                <option selected disabled hidden>"Voor welke gelegenheid wil je deze cadeau geven?"</option>
                 <option value="Verjaardag">Verjaardag</option>
                 <option value="Housewarming">Housewarming</option>
                 <option value="Geboorte">Geboorte</option>
