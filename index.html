@@ -35,7 +35,7 @@
 			<!-- PAGE -->
 			<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
 			<flash-message>
-				<div class="flash-message alert alert-{{flash.type}} alert-dismissible fade show" role="alert">
+				<div class="flash-message alert alert-{{flash.type}} alert-dismissible fade show" role="alert" ng-cloak>
 					{{flash.text}}
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
