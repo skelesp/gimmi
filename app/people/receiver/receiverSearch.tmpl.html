@@ -1,41 +1,23 @@
-<!-- home-section -->
-
-<section class="page-section scroll bg-section-red">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-      <form name="receiverSearchForm"
-            class="searchForm form-horizontal"
-            role="form"
-            ng-submit=""
-            novalidate>
-      <label for="receiverSearch"><h2>Wie wil je gelukkig maken?</h2></label>
-        <div id="custom-search-input">
-            <div class="input-group col-md-6">
-                <input  type="text" ng-click="selected=null;" ng-model="selected"
-                        typeahead-template-url="app/people/receiver/receiverSearch.popup.tmpl.html"
-                        uib-typeahead="receiver as receiver.fullName for receiver in receiverSearchCtrl.receivers | filter:{fullName: $viewValue} | limitTo:8"
-                        typeahead-show-hint="true"
-                        typeahead-min-length="1"
-                        typeahead-no-results="noResults"
-                        typeahead-focus-first="true"
-                        class="form-control"
-                        placeholder="The lucky one"
-                        ng-keyup="receiverSearchCtrl.showWishlist($event, selected)">
-              <!-- TODO: maak eerst een functie waar ng-submit naar kan verwijzen na het klikken op deze knop
-                <span class="input-group-btn" >
-                    <button class="btn btn-info btn-lg" type="button">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
-                </span>
-              -->
-            </div>
-        </div> <!-- /custom-search-input -->
-        <div ng-if="noResults && selected">
-          Geen personen gevonden!
-        </div>
-      </form>
-      </div>
-    </div><!-- /row -->
-  </div><!-- /container -->
-</section><!-- /home section -->
+<form name="receiverSearchForm" class="form-inline" ng-submit="" novalidate>
+  <div class="input-group">
+    <label class="h6 mr-3 mt-1 d-xs-none d-md-inline-block">Ik zoek een cadeau voor </label>
+    <input  type="text" 
+            class="form-control form-control-sm"
+            placeholder="..." 
+            ng-click="selected=null;" 
+            ng-model="selected" 
+            typeahead-template-url="app/people/receiver/receiverSearch.popup.tmpl.html"
+            uib-typeahead="receiver as receiver.fullName for receiver in receiverSearchCtrl.receivers | filter:{fullName: $viewValue}
+            | limitTo:8"
+            typeahead-min-length="1" typeahead-no-results="noResults" typeahead-focus-first="true" ng-keyup="receiverSearchCtrl.showWishlist($event,
+            selected)" >
+    <!-- TODO: maak eerst een functie waar ng-submit naar kan verwijzen na het klikken op deze knop en voeg dan een input group button toe -->
+    <!-- show-hint op type-ahead inputveld misvormt de input...
+        typeahead-show-hint="true" 
+    -->
+  </div>
+  <!-- <div ng-if="noResults && selected">
+    Geen personen gevonden!
+  </div> -->
+  <!-- /custom-search-input --> 
+</form>

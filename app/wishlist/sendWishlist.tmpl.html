@@ -1,3 +1,64 @@
-<div>
-  <p style="color:black;">Kopieer deze link <a href="{{sendWishlistCtrl.url}}" class="label label-default">{{sendWishlistCtrl.url}}</a> en verzend hem via mail / post hem op sociale media / ...</p>
+<div class="container mt-2">
+  <a ui-sref="gimmi.wishlist({receiverID: sendWishlistCtrl.receiverID})" class="badge badge-secondary mb-2 lead"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Terug naar lijst</a>
+  <h3>Deel je wensenlijst</h2>
+  <div class="row mt-3">
+    <div class="col">
+      <div class="btn-group" role="group">
+        <button id="btnGroupFacebook" type="button" class="btn btn-social btn-facebook btn-sm dropdown-toggle" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-facebook mr-1" aria-hidden="true"></i>Deel op Facebook
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupFacebook">
+          <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.postOnFacebook()">
+            <i class="fa fa-pencil-square-o mr-2" aria-hidden="true"></i>Post een link op je eigen Facebookprofiel
+          </a>
+          <a class="dropdown-item" href="" ng-hide="ApplicationCtrl.onMobileDevice" ng-click="sendWishlistCtrl.sendToFacebookFriends()">
+            <i class="fa fa-comment mr-2" aria-hidden="true"></i>Stuur de link in een privébericht
+          </a>
+          <a class="dropdown-item" ng-show="ApplicationCtrl.onMobileDevice" ng-href="{{sendWishlistCtrl.messengerLink}}">
+            <i class="fa fa-comment mr-2" aria-hidden="true"></i>Stuur de link via Messenger
+          </a>
+          <a class="dropdown-item" href="" ng-click="sendWishlistCtrl.shareOnFacebook()">
+            <i class="fa fa-share-alt mr-2" aria-hidden="true"></i> Deel de link in een groep of evenement
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <a class="btn btn-social btn-whatsapp btn-sm" ng-show="ApplicationCtrl.onMobileDevice" ng-href="{{sendWishlistCtrl.whatsappLink}}">
+        <i class="fa fa-whatsapp mr-2" aria-hidden="true"></i> Verstuur via Whatsapp
+      </a>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <a class="btn btn-social btn-mail btn-sm" href="" ng-click="sendWishlistCtrl.sendInvitationPopup()">
+        <i class="fa fa-envelope-o mr-2" aria-hidden="true"></i> Verstuur een uitnodiging via mail
+      </a>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-sm-6">
+      <!-- 
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+          <span class="input-group-addon" id="basic-addon1">@</span>
+        </div> -->
+      <h6>Kopieer de link hieronder en plak hem in een mail/bericht/document/...</h6>
+      <div class="input-group">
+        <!-- Target -->
+        <input type="text" class="form-control" aria-label="wishlist link" id="linkToWishlist" value="{{sendWishlistCtrl.url}}" readonly>
+        <span class="input-group-button">
+        <!-- Trigger -->
+          <button class="btn"
+           ngclipboard data-clipboard-target="#linkToWishlist" ngclipboard-success="sendWishlistCtrl.wishIsCopied(e);"
+           uib-tooltip="Kopieer link naar klembord" tooltip-placement="bottom">
+            <i class="fa fa-clipboard" aria-hidden="true"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
 </div>

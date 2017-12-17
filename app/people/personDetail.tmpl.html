@@ -1,0 +1,126 @@
+<div class="container">
+    <div class="row">
+        <h2>{{personCtrl.person.fullName}}</h2>
+    </div>
+    <form novalidate>
+        <div class="row">
+            <div class="col-md-5" ng-class="{'was-validated': personCtrl.personSaved}">
+                <h4>Persoonsgegevens</h4>
+                    <div class="form-group">
+                        <label for="email1">Emailadres</label>
+                        <input type="email" readonly class="form-control" id="email1" aria-describedby="emailHelp" placeholder="Geen email gekend" ng-model="personCtrl.person.email">
+                        <small id="emailHelp" class="form-text text-muted">Je emailadres kan niet gewijzigd worden</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">Voornaam</label>
+                        <input type="text" class="form-control" id="firstName" ng-model="personCtrl.person.firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Familienaam</label>
+                        <input type="text" class="form-control" id="lastName" ng-model="personCtrl.person.lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Geboortedatum</label>
+                        <input type="date" class="form-control" id="birthday" ng-model="personCtrl.person.birthday" required>
+                        <small id="birthdayHelp" class="form-text text-muted">Datum weergeven als dd/MM/yyyy (bv. "31/12/2017")</small>
+                    </div>
+                    <button type="button" class="btn btn-primary" ng-click="personCtrl.savePersonDetails()">Persoonsgegevens opslaan</button>
+                    <!-- <div class="form-group">
+                        <label for="birthday">Geboortedatum</label>
+                        <p class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="personCtrl.datePickerOpen = true">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                            <input type="text" class="form-control" id="birthday" ng-model="personCtrl.person.birthday" uib-datepicker-popup="{{personCtrl.dateFormat}}" is-open="personCtrl.datePickerOpen">
+                        </p>
+                        <small id="birthdayHelp" class="form-text text-muted">Datum weergeven als dd/MM/yyyy (bv. "31/12/2017")</small>
+                    </div> -->
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <div class="row">
+                    <h4>Accounts</h4>
+                </div>
+                <div class="row" ng-show="personCtrl.hasLocalAccount()">
+                    <div class="col">
+                        <button type="button" class="btn btn-secondary btn-sm btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseLocalAccount" aria-expanded="false" aria-controls="collapseLocalAccount">Gimmi account</button>
+                        <div class="collapse p-3" id="collapseLocalAccount"> 
+                            <small id="accountHelp" class="form-text text-muted mb-2">De login van deze account is je emailadres: {{personCtrl.person.email}}. <br />Hier kan je het wachtwoord van je account updaten.</small>
+                            <div class="form-group">
+                                <label for="Password1">Nieuw wachtwoord</label>
+                                <input type="password" class="form-control" id="Password1" placeholder="Geef een nieuw wachtwoord in" required ng-model="personCtrl.password">
+                                <div class="invalid-feedback">
+                                    Er moet een wachtwoord ingegeven worden.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Password2">Herhaal je wachtwoord</label>
+                                <input type="password" class="form-control" id="Password2" ng-model="personCtrl.passwordRepeat" placeholder="Geef het nieuwe wachtwoord nogmaals in" required
+                                ng-class="{'is-invalid': personCtrl.password !== personCtrl.passwordRepeat}">
+                                <div class="invalid-feedback">
+                                    De wachtwoorden komen niet overeen
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm" 
+                                    ng-click="personCtrl.saveLocalPassword()" 
+                                    ng-disabled="personCtrl.password === '' || personCtrl.password === undefined || personCtrl.password !== personCtrl.passwordRepeat">
+                                    Wachtwoord van Gimmi account wijzigen</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3" ng-show="personCtrl.hasFacebookAccount()">
+                    <div class="col">
+                        <button type="button" class="btn btn-secondary btn-sm btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseFacebookAccount" aria-expanded="false" aria-controls="collapseFacebookAccount">Gelinkte Facebook account</button>
+                        <div class="collapse p-3" id="collapseFacebookAccount"> 
+                            <small id="facebookAccountHelp" class="form-text text-muted text-justify mb-3">Je Facebook-account is gekoppeld aan Gimmi. Dit wilt zeggen dat je met één klik kan inloggen en geen paswoord hoeft te onthouden voor Gimmi. Door op de knop hieronder te klikken ontkoppelt je je Facebook-account. Om dan nog te kunnen inloggen op je account zal je een paswoord moeten opgeven.</small>
+                            <button type="button" class="btn btn-primary btn-sm" ng-click="personCtrl.unlinkFacebookAccount()">Facebook account ontkoppelen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/ng-template" id="unlinkFBpopup.html">
+    <div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+      Ontkoppel je facebook account
+    </h3>
+  </div>
+
+  <div class="modal-body ml-2" id="modal-body">
+    <p>Je staat op het punt om je Facebook-account te ontkoppelen.</p>
+    <p class="text-muted" ng-show="unlinkFacebookCtrl.hasLocalAccount">
+        Je hebt ook een Gimmi account met email ({{unlinkFacebookCtrl.email}}) en wachtwoord. Je kan nog steeds inloggen via deze account.
+    </p>
+    <form novalidate ng-hide="unlinkFacebookCtrl.hasLocalAccount"> 
+        <small id="accountHelp" class="form-text text-muted mb-2">
+            Je hebt momenteel geen wachtwoord voor je Gimmi-account. <br />
+            Zonder wachtwoord zal je niet meer kunnen inloggen op Gimmi (en zal je eigen wensenlijst niet meer beheerd kunnen worden). Dus gelieve hieronder een wachtwoord te kiezen voor deze account. De login van deze account is je emailadres: <b>{{unlinkFacebookCtrl.email}}</b>
+        </small>
+        <div class="form-group">
+            <label for="Password1">Nieuw wachtwoord</label>
+            <input type="password" class="form-control" id="Password1" placeholder="Geef een nieuw wachtwoord in" required ng-model="unlinkFacebookCtrl.password">
+            <div class="invalid-feedback">
+                Er moet een wachtwoord ingegeven worden.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Password2">Herhaal je wachtwoord</label>
+            <input type="password" class="form-control" id="Password2" ng-model="unlinkFacebookCtrl.passwordRepeat" placeholder="Geef het nieuwe wachtwoord nogmaals in" required
+            ng-class="{'is-invalid': unlinkFacebookCtrl.password !== unlinkFacebookCtrl.passwordRepeat}">
+            <div class="invalid-feedback">
+                Je wachtwoorden komen niet overeen
+            </div>
+        </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="unlinkFacebookCtrl.ok()" ng-disabled="!unlinkFacebookCtrl.hasLocalAccount && (unlinkFacebookCtrl.password === '' || unlinkFacebookCtrl.password === undefined || unlinkFacebookCtrl.password !== unlinkFacebookCtrl.passwordRepeat)">Ontkoppel</button>
+    <button class="btn btn-danger" type="button" ng-click="unlinkFacebookCtrl.cancel()">Annuleer</button>
+  </div>
+</script>

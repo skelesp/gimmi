@@ -2,8 +2,8 @@ angular.module('gimmi.person', [
   'gimmi.config'
 ])
   .factory('PersonService',
-    ['$q', '$http', 'CONFIG',
-    function ($q, $http, CONFIG) {
+    ['$q', '$http', '$injector', 'Flash', 'CONFIG',
+    function ($q, $http, $injector, Flash, CONFIG) {
 
       function urlBase64Decode(str) {
           var output = str.replace('-', '+').replace('_', '/');
@@ -72,11 +72,65 @@ angular.module('gimmi.person', [
 
   			return deferred.promise;
   		}
+      
+      function updatePersonDetails (person){
+        var deferred = $q.defer();
+        if (person) {
+          $http.put(CONFIG.apiUrl + '/api/people/' + person._id, person)
+            .success(function(person){
+              person.birthday = new Date(person.birthday);
+              $injector.get('UserService').refreshCurrentUser("person", person);
+              deferred.resolve(person);
+            })
+            .error(function(error){
+              deferred.reject({error: "something went wrong"});
+            });
+        } else {
+          deferred.reject({error: "No person object found"});
+        }
+        return deferred.promise;
+      }
 
+      function updatePassword (person, pw){
+        var deferred = $q.defer();
+        
+        if (pw) {
+          var body = {
+            pw: pw
+          }
+          $http.put(CONFIG.apiUrl + '/api/people/' + person._id + '/account/local', body)
+          .success(function(person){
+            console.log("Het lokale wachtwoord werd gewijzigd voor " + person._id);
+            Flash.create('success', "Het paswoord voor je Gimmi-account is bijgewerkt.");
+            // Send email on password change
+            deferred.resolve(person);
+          })
+          .error(function(error){
+
+          });
+        } else {
+          deferred.reject("Er is geen wachtwoord ingegeven.");
+        }
+
+        return deferred.promise;
+      }
+
+      function deleteFacebookAccount (person){
+        $http.delete(CONFIG.apiUrl + '/api/people/' + person._id + '/account/facebook')
+        .success(function(token){
+          console.log("Facebook account verwijder voor " + person._id);
+          Flash.create('success', "Je Facebook-account is ontkoppeld. Als je een lokale Gimmi account hebt, zal je onder die account ingelogd blijven. Anders word je uitgelogd.");
+          $injector.get('UserService').logOutFacebook();
+          $injector.get('UserService').refreshCurrentUser("token", token);
+        })
+      }
       // - return available functions for use in the controllers -
       return ({
         register: register,
         getPersonFromToken: getPersonFromToken,
-        getPersonFromID: getPersonFromID
+        getPersonFromID: getPersonFromID,
+        updatePersonDetails: updatePersonDetails,
+        updatePassword: updatePassword,
+        deleteFacebookAccount: deleteFacebookAccount
       });
     }]);

@@ -29,17 +29,16 @@
 			return model.getReceivers();
 		}
 
-		model.setCurrentReceiver = function (receiverID){
-				return PersonService.getPersonFromID(receiverID)
-					.then(function(receiver){
-						currentReceiver = receiver;
-					}, function(error){
-						if (error) {
-							console.error(error);
-						} else {
-							console.error("current receiver not found by id!");
-						}
-					});
+		model.setCurrentReceiver = function (receiver){
+			var deferred = $q.defer();
+			if (receiver) {
+				currentReceiver = receiver;
+				deferred.resolve(currentReceiver);
+			} else {
+				currentReceiver = {};
+				deferred.reject(currentReceiver);
+			}
+			return deferred.promise;
 		};
 
 		model.getCurrentReceiver = function(){

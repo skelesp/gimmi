@@ -4,8 +4,8 @@ angular.module('gimmi.authentication', [
   'gimmi.models.receiver'
 ])
   .factory('UserService',
-    ['$q', '$localStorage', '$http', 'PersonService', 'receiverModel', 'CONFIG',
-    function ($q, $localStorage, $http, PersonService, receiverModel, CONFIG) {
+    ['$q', '$localStorage', '$http', '$state', '$rootScope', 'PersonService', 'receiverModel', 'Flash', 'CONFIG',
+    function ($q, $localStorage, $http, $state, $rootScope, PersonService, receiverModel, Flash, CONFIG) {
       // create user variable
       var baseUrl = CONFIG.apiUrl + '/api';
       var currentUser = getUserFromStorage();
@@ -30,7 +30,25 @@ angular.module('gimmi.authentication', [
           }
           return decodeURIComponent(escape(window.atob(output)));
       }
- 
+  
+      function refreshCurrentUser (inputType, input) {
+        if (inputType === "token") {
+          if (input) {
+            $localStorage.token = input;
+            currentUser = getUserFromStorage();
+          } else {
+            console.log("Empty token ==> logout");
+            logout();
+          }
+        } else if (inputType === "person") {
+          if (input){
+            currentUser.firstName = input.firstName;
+            currentUser.lastName = input.lastName;
+            currentUser.birthday = input.birthday;
+          }
+        }
+      }
+
       function getUserFromStorage() {
           var token = $localStorage.token;
           var user = {};
@@ -40,12 +58,13 @@ angular.module('gimmi.authentication', [
               if (! isExpired(decoded.exp)) {
                 user = decoded;
               } else {
-                delete $localStorage.token;
-                currentUser = {};
+                console.log("Expired token");
+                logout();
+                Flash.create('warning', "Je sessie is verlopen. Gelieve opnieuw in te loggen.");
               }
           }
           return user;
-      }
+      }
 
       function isExpired (expDate) {
         if (expDate){
@@ -69,19 +88,25 @@ angular.module('gimmi.authentication', [
       }
 
       function isLoggedIn(){
-        return !angular.isUndefined(currentUser);
+        if (angular.isUndefined(currentUser) || !currentUser.loginStrategy) {
+          return false;
+        } else {
+          return true;
+        }
       }
       // - Authenticate a person on the server -
       function authenticate (email, password) {
         // Create a new instance of deferred
         var deferred = $q.defer();
         // Send a post request to the server
-        $http.post(baseUrl + '/authenticate', {email: email, password: password})
+        $http.post(baseUrl + '/authenticate', {email: email, password: password, account: "local"})
         // Handle success
         .success(function(data, status){
           if (status === 200 && data.token) {
             $localStorage.token = data.token;
             currentUser = PersonService.getPersonFromToken(data.token);
+            $rootScope.$emit('login', currentUser);
+            $rootScope.$broadcast('login', currentUser);
             deferred.resolve(currentUser);
           } else {
             deferred.reject();
@@ -98,7 +123,11 @@ angular.module('gimmi.authentication', [
       // - Logout a person -
       function logout(){
         delete $localStorage.token;
-        currentUser = {};
+        currentUser = undefined;
+        receiverModel.setCurrentReceiver(null);
+        $state.go('gimmi');
+        Flash.create('warning', "Je bent nu uitgelogd.");
+        console.log("User logged out");
       }
 
       // - Get current user
@@ -108,12 +137,117 @@ angular.module('gimmi.authentication', [
 
       // - Is the user also the receiver?
       function userIsReceiver(receiverID){
-  			if ( receiverID === getCurrentUser()._id) {
+  			if ( isLoggedIn() && receiverID === getCurrentUser()._id) {
   				return true;
   			} else {
   				return false;
   			}
   		};
+
+      // - Login to Facebook
+      function logInFacebook (){
+        var defer = $q.defer();
+        FB.login(function(res){
+          statusChangeCallbackFacebook(res)
+            .then(function(user){
+              defer.resolve(user);
+            })
+            .catch(function(){
+              defer.reject();
+            })
+            ;
+        }, { 
+          scope: 'public_profile,email,user_friends,publish_actions', 
+          return_scopes: true
+        });
+        return defer.promise;
+      }
+
+      // - Watch the FB authentication status
+      function checkLoginStatus () {
+        FB.getLoginStatus(function(res){
+          console.log("Get login status of FB");
+          statusChangeCallbackFacebook(res);
+        });
+      };
+
+      // - Handle Facebook authResponse
+      function statusChangeCallbackFacebook (res){
+        var defer = $q.defer();
+        if (res.status === 'connected') {
+          /*
+          The user is already logged,
+          is possible retrieve his personal info
+          */
+          /* 
+          The response object will look like this:
+          {
+            status: 'connected',
+              authResponse: {
+              accessToken: '...',
+                expiresIn:'...',
+                  signedRequest:'...',
+                    userID:'...'
+            }
+          }
+          The access token can be used to make requests to the Facebook APIs on behalf of that user. 
+          The userID is the unique identifier for the user who's present in your app. */
+          getUserInfoFromFB().then(function(info){
+            userInfo = info;
+            $http.post(baseUrl + '/authenticate', { userInfo: userInfo, fb: res, account: "facebook" })
+              .success(function (data, status) {
+                //Bij het inloggen met FB is het niet duidelijk of een gebruiker al bestond of niet ==> status 200 en 201 zijn ok
+                if ((status === 200 || status === 201) && data.token) { 
+                  $localStorage.token = data.token;
+                  currentUser = PersonService.getPersonFromToken(data.token);
+                  defer.resolve(currentUser);
+                } else {
+                  defer.reject();
+                }
+              })
+              // Handle error
+              .error(function (data) {
+                defer.reject();
+              });
+          },
+        function(error){
+          //handle error
+          console.error(error.type + ": " + error.message);
+        });
+
+        } else {
+          /*
+          The user is not logged to the app, or into Facebook:
+          destroy the session on the server.
+          */
+          console.log("not logged in to facebook");
+          if (currentUser && currentUser.loginStrategy === "facebook") { //prevent logout after login with Gimmi Account
+            logout();
+          }
+        }
+        return defer.promise;
+      }
+
+      function logOutFacebook () {
+        FB.logout(function(res){
+          console.info("User logged out of Facebook:", res);
+          statusChangeCallbackFacebook(res);
+        });
+      }
+
+      // - Get user info from Facebook
+      function getUserInfoFromFB () {
+        var defer = $q.defer();
+        FB.api('/me?fields=first_name,last_name,email,picture', function (res) {
+          if (!res || res.error){
+            defer.reject(res.error);
+            console.error(res.error);
+          } else {
+            defer.resolve(res);
+          }
+        });
+        return defer.promise;
+      }
 
       // return available functions for use in the controllers
       return ({
@@ -122,6 +256,10 @@ angular.module('gimmi.authentication', [
         authenticate: authenticate,
         logout: logout,
         isLoggedIn: isLoggedIn,
-        userIsReceiver: userIsReceiver
+        userIsReceiver: userIsReceiver,
+        checkLoginStatus: checkLoginStatus,
+        logInFacebook: logInFacebook,
+        logOutFacebook: logOutFacebook,
+        refreshCurrentUser: refreshCurrentUser
       });
   }]);

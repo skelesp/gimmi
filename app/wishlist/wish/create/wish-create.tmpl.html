@@ -1,89 +1,53 @@
-<!-- wish create container -->
-<div class="col-sm-3 col-lg-3 mb-50 mb-xss-30 wish">
-	<form name="wishCreateForm"
-				class="create-form"
-				role="form"
-				ng-submit="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)"
-				novalidate>
-
+<!-- Create wish card -->
+<div class="card">
+	<div class="card-image-overlay">
+		<img class="card-img-top rounded img-fluid mb-2" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image" ng-src="{{createWishCtrl.newWish.image}}"/>
+		<img class="card-img-top rounded img-fluid mb-2" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
+		<div class="card-img-overlay pt-4 blurredCardOverlay">
+			<p ng-hide="createWishCtrl.newWish.title"><i class="fa fa-arrow-down mr-1" aria-hidden="true"></i>Vul hieronder de titel en prijs in en selecteer daarna een afbeelding</p>
+			<a href="" ng-show="createWishCtrl.newWish.title" 
+						google-image-search 
+						data-search-term="{{createWishCtrl.newWish.title}}" 
+						data-image-result="createWishCtrl.newWish.image">
+				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen voor "{{createWishCtrl.newWish.title}}"
+			</a>
+		</div>
+	</div>
+	<form name="wishCreateForm" class="m-2" role="form" novalidate="">
 		<div class="form-group">
-			<input 	type="text"
-							class="form-control"
-							id="newWishTitle"
-							ng-model="createWishCtrl.newWish.title"
-							placeholder="Titel"
-							required/>
+			<input type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" 
+					placeholder="Titel" required="" ng-keyup="$event.keyCode == 13 && createWishCtrl.goToPrice()">
 		</div>
 		<div class="form-group">
-			<input 	type="number"
-							class="form-control"
-							name="inputPrice"
-							id="newWishPrice"
-							placeholder="Prijs in € (enkel getal ingeven)"
-							ng-model="createWishCtrl.newWish.price"/>
-				<span ng-show="wishCreateForm.inputPrice.$error.number">
-					Enkel getallen toegelaten!
-			</span>
+			<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in €" 
+					ng-model="createWishCtrl.newWish.price" ng-keyup="$event.keyCode == 13 && createWishCtrl.openImageSearch()">
 		</div>
 		<div class="form-group">
-			<input 	type="hidden"
-							class="form-control"
-							name="inputUrl"
-							id="newWishUrl"
-							ng-model="createWishCtrl.newWish.url"
-							placeholder="Link naar het cadeau"/>
-				<span ng-show="wishCreateForm.inputUrl.$error.url">
-					Dit is geen geldige link (vergeet "http://" niet)!
-				</span>
+			<input type="hidden" class="form-control form-control-sm" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url"
+			 placeholder="Link naar website met info over de wens">
 		</div>
 		<div class="form-group">
-			<img ng-show="createWishCtrl.newWish.image" src="{{createWishCtrl.newWish.image}}" alt="Gekozen afbeelding" ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);">
-    	<input 	type="hidden"
-							class="form-control"
-							id="newWishImage"
-							ng-model="createWishCtrl.newWish.image"
-							placeholder="Zoek een afbeelding"/>
-
-			<button type="button"
-							class="btn btn-danger btn-lg"
-							ng-hide="createWishCtrl.newWish.image"
-							ng-disabled="!createWishCtrl.newWish.title"
-							ng-click="createWishCtrl.searchImages(createWishCtrl.newWish.title);"><span class="glyphicon glyphicon-picture"></span> Afbeelding zoeken
-			</button>
-			<script type="text/ng-template" id="googleImageSearchResults.html">
-            <div class="modal-header" style="color:#000000">
-                <h3 class="modal-title" id="modal-title">
-                  Klik op de gewenste afbeelding
-                  <button class="btn btn-warning" type="button" ng-click="imagePopupCtrl.cancel()">Cancel</button>
-                </h3>
-
-            </div>
-            <div class="row modal-body" id="modal-body" style="color:#000000">
-							<p ng-show="imagePopupCtrl.noImages" >Er zijn geen afbeeldingen gevonden voor "{{imagePopupCtrl.searchTerm}}". Kies één van de onderstaande standaardafbeeldingen.</p>
-							<div ng-if="imagePopupCtrl.items" ng-repeat="image in imagePopupCtrl.items track by $index" class="col-md-3">
-								<img class="img-thumbnail" ng-if="image" ng-src="{{image}}" ng-click="imagePopupCtrl.selected.item = image;imagePopupCtrl.ok()" />
-							</div>
-							<div ng-if="!imagePopupCtrl.items">
-								<p> Loading... </p>
-							</div>
-
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-warning" type="button" ng-click="imagePopupCtrl.cancel()">Cancel</button>
-            </div>
-        </script>
+			<input type="hidden" class="form-control form-control-sm" id="newWishImage" ng-model="createWishCtrl.newWish.image" placeholder="Zoek een afbeelding">
 		</div>
-
-		<button type="submit"
-						class="btn btn-danger btn-lg"
-						ng-disabled="wishCreateForm.$invalid">
-							Toevoegen
+		<button type="button" class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
+				ng-show="createWishCtrl.newWish.image !== ''"
+				ng-click="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" 
+				ng-disabled="wishCreateForm.$invalid" disabled="disabled">
+    		Toevoegen
 		</button>
-		<button type="button"
-						class="btn btn-default btn-lg"
-						ng-click="createWishCtrl.reset();">
-							Reset
+		<button ng-show="createWishCtrl.newWish.image === '' && createWishCtrl.newWish.title !== ''" type="button" 
+				class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
+				id="searchImageBtn"
+				google-image-search
+				data-search-term="{{createWishCtrl.newWish.title}}" 
+				data-image-result="createWishCtrl.newWish"
+				on-image-select="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)">
+    		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding
 		</button>
+		<button ng-show="createWishCtrl.newWish.title !== '' || createWishCtrl.newWish.price !== ''" type="button" class="btn btn-default btn-sm float-left mb-1 mr-1"
+		 ng-click="createWishCtrl.reset();">
+    		Reset
+    	</button>
 	</form>
 </div>
-<!-- wish create container -->
+

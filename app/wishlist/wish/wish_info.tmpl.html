@@ -1,46 +1,94 @@
-<!-- page section -->
-<section class="page-section" style="color:#000" >
-  <div class="container">
+<div class="container mt-2">
+  <a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})" class="badge badge-secondary mb-2 lead"> <i class="fa fa-arrow-left" aria-hidden="true"></i> Terug naar lijst</a>
+  <div class="jumbotron pt-3 pb-1">
     <div class="row">
-      <div class="col-md-2 lead">
-        <a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})" style="color:#000;"><span class="glyphicon glyphicon-arrow-left"></span> Terug naar lijst</a>
+      <div class="col col-12">
+        <h2>{{wishInfoCtrl.wish.title}}</h2>
+        <h6>voor {{wishInfoCtrl.receiver}}
+          <a class="badge badge-light text-dark p-0 ml-2" ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})" uib-tooltip="Terug naar lijst" tooltip-placement="top-left" tooltip-class="customTooltip"><i class="fa fa-list-alt" aria-hidden="true"></i></a>
+        </h6>
       </div>
     </div>
-
-    <div class="well">
-      <h1>{{wishInfoCtrl.title}}
-      <span class="label label-warning pull-right" style="font-size: 36px">{{wishInfoCtrl.price | currency : "€" : 2}}</span><br />
-      <small>voor {{wishInfoCtrl.receiver}}
-      <a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})"><span class="glyphicon glyphicon-list-alt" style="color:#000"></span></a></small>
-      </h1>
-    </div>
     <div class="row">
-
-      <div class="col-md-5"><img src="{{wishInfoCtrl.image}}" alt="wish image" /></div>
-      <div class="col-md-4">
-          <ul class="list-group">
-            <li class="list-group-item">
-              <span class="glyphicon glyphicon-calendar" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>
-              Toegevoegd op: {{wishInfoCtrl.createdAt | date: 'dd / MM / \'yy' }}</li>
-            <li class="list-group-item">
-              <span class="glyphicon glyphicon-user" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>
-              Toegevoegd door: {{wishInfoCtrl.createdBy}}</li>
-            <li class="list-group-item" ng-show="wishInfoCtrl.url">
-              <a style="color:#000" href="{{wishInfoCtrl.url}}" target="_blank">
-                <span class="glyphicon glyphicon-globe" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>
-                Externe website</a></li>
-            <li class="list-group-item" ng-show="wishInfoCtrl.reservedBy">
-              <span class="glyphicon glyphicon-gift" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>Gereserveerd door: {{wishInfoCtrl.reservedBy}}</li>
-            <li class="list-group-item" ng-hide="wishInfoCtrl.reservedBy">
-              <span class="glyphicon glyphicon-gift" style="font-size: 1.5em;margin-right: 10px;" aria-hidden="true"></span>Nog niet gereserveerd</li>
-          </ul>
-      </div>
-      <div class="col-md-2 pull-right">
-        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Wijzig de details</button>
-        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Reserveer</button>
-        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Zet ook op mijn lijst!</button>
-        <button type="button" name="editWish" class="btn btn-block btn-default" style="color: #000">Verwijder deze wens</button>
+      <div class="col-12">
+        <h3 class="float-right"><span class="badge badge-pill badge-warning">{{wishInfoCtrl.wish.price | currency : "€" : 2}}</span></h3>
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-5"><img src="{{wishInfoCtrl.wish.image}}" class="img-fluid" alt="wish image" /></div>
+    <div class="col-md-4">
+        <ul class="list-group my-2">
+          <li class="list-group-item">
+            <span class="fa fa-calendar-plus-o mr-2" aria-hidden="true"></span>
+            Toegevoegd op: {{wishInfoCtrl.wish.createdAt | date: 'dd / MM / \'yy' }}</li>
+          <li class="list-group-item">
+            <span class="fa fa-user mr-3" aria-hidden="true"></span>
+            Idee van: {{wishInfoCtrl.wish.createdBy.fullName}}</li>
+          <li class="list-group-item" ng-show="wishInfoCtrl.wish.url">
+            <a href="{{wishInfoCtrl.wish.url}}" target="_blank">
+              <span class="fa fa-external-link mr-2" aria-hidden="true"></span>
+              Externe website</a></li>
+          <li class="list-group-item" ng-show="wishInfoCtrl.wish.reservation">
+            <span class="fa fa-gift mr-3" aria-hidden="true"></span>Gereserveerd door: {{wishInfoCtrl.wish.reservation.reservedBy.fullName}}</li>
+          <li class="list-group-item" ng-hide="wishInfoCtrl.wish.reservation">
+            <span class="fa fa-gift mr-3" aria-hidden="true"></span>Nog niet gereserveerd</li>
+          <li class="list-group-item" ng-show="wishInfoCtrl.wish.color">
+            <span class="fa fa-paint-brush mr-2" aria-hidden="true"></span>{{wishInfoCtrl.wish.color}}</li>
+          <li class="list-group-item" ng-show="wishInfoCtrl.wish.size">
+            <span class="fa fa-expand mr-2" aria-hidden="true"></span>{{wishInfoCtrl.wish.size}}</li>
+          <li class="list-group-item" ng-show="wishInfoCtrl.wish.description">
+            <span class="fa fa-commenting-o mr-2" aria-hidden="true"></span>{{wishInfoCtrl.wish.description}}</li>
+        </ul>
+    </div>
+    <div class="col-md-3 pull-right">
+      <button type="button" name="editWish" class="btn btn-block btn-outline-info text-left" ng-click="wishInfoCtrl.editWishDetails(wishInfoCtrl.wish)"><i class="fa fa-edit" aria-hidden="true"></i> Wijzig de details</button>
+      <button type="button" name="reserveWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'unreserved'" ng-click="wishInfoCtrl.addReservation(wishInfoCtrl.wish, ApplicationCtrl.currentUser._id,
+      'No reason')"><i class="fa fa-cart-plus" aria-hidden="true"></i> Reserveer</button>
+      <button type="button" name="unreserveWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'reserved' && wishInfoCtrl.reservedByUser(wishInfoCtrl.wish.reservation.reservedBy._id)" ng-click="wishInfoCtrl.deleteReservation(wishInfoCtrl.wish)"><i class="fa fa-ban" aria-hidden="true"></i> Verwijder je reservatie</button>
+      <button type="button" name="copyWish" class="btn btn-block btn-outline-info text-left" ng-hide="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID)" ng-click="wishInfoCtrl.copy(wishInfoCtrl.wish)"><i class="fa fa-clone" aria-hidden="true"></i> Zet ook op mijn lijst!</button>
+      <button type="button" name="deleteWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID) || wishInfoCtrl.userIsCreator(wishInfoCtrl.wish.createdBy._id)" ng-click="wishInfoCtrl.deleteWish(wishInfoCtrl.wish)"><i class="fa fa-trash" aria-hidden="true"></i> Verwijder deze wens</button>
+    </div>
+  </div>
+</div>
 </section>
+
+<!-- Template for wish reservation popup -->
+<script type="text/ng-template" id="wishReservation.html">
+  <div class="modal-header" style="color:#000000">
+    <h3 class="modal-title" id="modal-title">
+      Reserveer {{wishReservationPopupCtrl.wishTitle}}
+    </h3>
+  </div>
+
+  <div class="modal-body" id="modal-body" style="color:#000000">
+    <form name="wishReservationForm" class="create-form" role="form" novalidate>
+      <div class="form-group">
+        <select class="form-control" id="reservationReason" ng-model="wishReservationPopupCtrl.reservation.reason" required>
+                <option selected disabled hidden>"Voor welke gelegenheid wilt je dit cadeau geven?"</option>
+                <option value="Verjaardag">Verjaardag</option>
+                <option value="Housewarming">Housewarming</option>
+                <option value="Geboorte">Geboorte</option>
+                <option value="Huwelijk">Huwelijk</option>
+                <option value="Afscheid collega">Afscheid collega</option>
+                <option value="Afscheid">Afscheid</option>
+                <option value="Vrijgezellenfeest">Vrijgezellenfeest</option>
+                <option value="Vakantie">Vakantie</option>
+                <option value="Communie / Lentefeest">Communie / Lentefeest</option>
+                <option value="Vaderdag">Vaderdag</option>
+                <option value="Moederdag">Moederdag</option>
+                <option value="Sinterklaas">Sinterklaas</option>
+                <option value="Kerstmis">Kerstmis</option>
+                <option value="Nieuwjaar">Nieuwjaar</option>
+                <option value="Zomaar...">Zomaar...</option>
+            </select>
+      </div>
+  </div>
+  </form>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="wishReservationPopupCtrl.ok()">Reserveer</button>
+    <button class="btn btn-danger" type="button" ng-click="wishReservationPopupCtrl.cancel()">Annuleer</button>
+  </div>
+
+</script>

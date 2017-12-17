@@ -1,7 +1,7 @@
 angular.module('gimmi.models.wish', [
 	'gimmi.config'
 ])
-	.service('wishModel', function($http, $q, CONFIG){
+	.service('wishModel', function($http, $q, CONFIG, Flash){
 		var model = this,
 			URLS = {
 				WISHLIST: CONFIG.apiUrl + '/api/wishlist',
@@ -32,12 +32,12 @@ angular.module('gimmi.models.wish', [
 		model.getWishlist = function(receiverID) {
 			var deferred = $q.defer();
 
-			if (wishlist && wishlist._id.receiverID === receiverID) {
+			if (wishlist && wishlist._id.receiver._id === receiverID) {
 				deferred.resolve(wishlist);
 			} else {
 				$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
 					wishlist = result.data[0];
-					deferred.resolve(result.data[0]);
+					deferred.resolve(wishlist);
 				});
 			}
 
@@ -48,54 +48,90 @@ angular.module('gimmi.models.wish', [
 			wish.receiver = receiverID;
 			wish.createdBy = userID;
 
+			if (!wish.image){
+				wish.image = CONFIG.defaultImage;
+			}
+			
 			$http.post(URLS.WISH, wish).success(function(wish){
-				if (wishlist._id.receiverID === receiverID) {
+				if (wishlist._id.receiver._id === receiverID) {
 					console.info("Wish created: " + wish.title);
 					wishlist.wishes.push(wish);
 					wishlist.count++;
+					var message = "De wens '" + wish.title + "' werd toegevoegd aan deze lijst.";
+					var flashID = Flash.create('success', message);
 				} else {
 					console.info("%s copied a wish from wishlist %s", userID, receiverID);
+					// Show flashmessage voor succesvolle copy
+					var message = "De wens '" + wish.title + "' werd gekopieerd naar je eigen lijst.";
+					var flashID = Flash.create('success', message);
 				}
 			});
-
 		};
 
 		model.updateWish = function(wish) {
-			$http.post(URLS.WISH+"/"+wish._id, wish).success(function(wish){
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wish._id;
-				});
-
-				wishlist.wishes[index] = wish;
+			var convertedWish = convertUndefinedToNovalue(wish);
+			var defer = $q.defer();
+			if (!wish.image){
+				wish.image = CONFIG.defaultImage;
+			}
+			$http.put(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
+				if (wishlist) {
+					var index = _.findIndex(wishlist.wishes, function(w){
+						return w._id === wish._id;
+					});
+					wishlist.wishes[index] = wish;
+				}
+				defer.resolve(wish);
 				console.info("wish updated", wish);
 			});
+			return defer.promise;
 		}
 
+		function convertUndefinedToNovalue (object) {
+			return _.mapValues(object, function(value){
+				if (typeof value === 'undefined' || value === "") {
+					return "#*/NO_VALUE/*#";
+				} else {
+					return value;
+				}
+			});
+		}
 		model.deleteWish = function(wish) {
 			$http.delete(URLS.WISH+"/"+wish._id).success(function(){
-				_.remove(wishlist.wishes, function(w){
-					return w._id === wish._id;
-				});
+				if (wishlist) {
+					_.remove(wishlist.wishes, function(w){
+						return w._id === wish._id;
+					});
+				}
 				console.info("wish deleted: " + wish._id);
 			});
 		}
 
 		model.addReservation = function(wishID, reservation) {
+			var defer = $q.defer();
 			$http.post(URLS.WISH+"/"+wishID+"/reservation", reservation).success(function(wish){
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wishID;
-				});
-					wishlist.wishes[index] = wish;
+				if (wishlist) {
+					var index = _.findIndex(wishlist.wishes, function(w){
+						return w._id === wishID;
+					});
+					var wishlistWish = angular.copy(wish);
+					wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
+					wishlist.wishes[index] = wishlistWish;
+				}
 				console.info("Reservation added to", wish._id);
+				defer.resolve(wish);
 			});
+			return defer.promise;
 		}
 
 		model.deleteReservation = function(wishID) {
 			$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wishID;
-				});
-				wishlist.wishes[index] = wish;
+				if (wishlist) {
+					var index = _.findIndex(wishlist.wishes, function (w) {
+						return w._id === wishID;
+					});
+					wishlist.wishes[index] = wish;
+				}
 				console.info("Reservation deleted for ", wish._id);
 			});
 		}
