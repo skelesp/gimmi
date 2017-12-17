@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="card-block p-1">
-    <a class="badge badge-light wishCardTitle text-capitalize" ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</a>
+    <div class="wishCardTitle text-capitalize pointer" ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</div>
     <p class="card-subtitle text-muted text-truncate ml-1 mt-1" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
     <p class="card-text mx-auto my-1 text-left font-weight-bold">{{wish.price | currency : "€" : 2}}</p>
   </div>
