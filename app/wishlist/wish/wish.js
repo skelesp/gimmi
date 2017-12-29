@@ -19,7 +19,8 @@
 								}]
 						}
 					}
-				}
+				},
+				authenticate: true
 			})
 		;
 	})
