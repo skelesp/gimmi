@@ -2,7 +2,9 @@
 <div class="card shadow mt-1">
   <div class="card-image-overlay">
     <img class="card-img-top img-fluid rounded w-100 mb-2" ng-src="{{wish.image}}" alt="Afbeelding van de wens niet beschikbaar">
-    <div class="card-img-overlay p-1" ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) === 'reserved'}">
+    <div class="card-img-overlay p-1" 
+         ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) === 'reserved'}"
+         ng-click="wishCtrl.goToWishDetail(wish._id)">
       <span class="float-left w-50 badge badge-pill badge-warning text-center" 
             ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">
             Gereserveerd</span>
@@ -12,7 +14,7 @@
     </div>
   </div>
   <div class="card-block p-1">
-    <div class="wishCardTitle text-capitalize pointer" ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</div>
+    <a class="wishCardTitle text-capitalize pointer" ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</a>
     <p class="card-subtitle text-muted text-truncate ml-1 mt-1" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
     <p class="card-text mx-auto my-1 text-left font-weight-bold">{{wish.price | currency : "€" : 2}}</p>
   </div>
