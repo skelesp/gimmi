@@ -38,6 +38,8 @@ h6.card-title  {
 }
 .wishCardTitle {
   font-size: 0.8rem;
+  font-weight: 700;
+  color: black;
 }
 
 /* Fix for card buttons in IE */

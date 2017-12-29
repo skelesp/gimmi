@@ -71,7 +71,7 @@
 		_self.userIsReceiver = false;
 	}
 }])
-.controller('wishCtrl', ['$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
+	.controller('wishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function ($state, $stateParams, $uibModal, wishModel, receiverModel, UserService) {
 	var _self = this;
 	/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
 
@@ -98,6 +98,11 @@
 			return false;
 		}
 	};
+
+	_self.goToWishDetail = function(wishID) {
+		$state.go('gimmi.wishlist.wish', { wishID: wishID});
+		console.log("image clicked");
+	}
 
 	function copy(wish){
 		var userID = UserService.getCurrentUser()._id;
