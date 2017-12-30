@@ -284,6 +284,9 @@
 	_self.goToPrice = function(){
 		$window.document.getElementById('newWishPrice').focus();
 	}
+	_self.goToTitle = function () {
+		$window.document.getElementById('newWishTitle').focus();
+	}
 	_self.openImageSearch = function () {
 		$timeout(function () {
 			angular.element('#searchImageBtn').triggerHandler('click');

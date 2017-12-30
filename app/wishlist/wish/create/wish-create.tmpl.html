@@ -4,7 +4,8 @@
 		<img class="card-img-top rounded img-fluid mb-2" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image" ng-src="{{createWishCtrl.newWish.image}}"/>
 		<img class="card-img-top rounded img-fluid mb-2" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
 		<div class="card-img-overlay pt-4 blurredCardOverlay">
-			<p ng-hide="createWishCtrl.newWish.title"><i class="fa fa-arrow-down mr-1" aria-hidden="true"></i>Vul hieronder de titel en prijs in en selecteer daarna een afbeelding</p>
+			<p ng-hide="createWishCtrl.newWish.title"><i class="fa fa-plus mr-2" aria-hidden="true"></i>Wens toevoegen?<br/>
+			<i class="fa fa-arrow-down mr-1" aria-hidden="true"></i>Vul hieronder de titel en prijs in en selecteer daarna een afbeelding</p>
 			<a href="" ng-show="createWishCtrl.newWish.title" 
 						google-image-search 
 						data-search-term="{{createWishCtrl.newWish.title}}" 
@@ -41,6 +42,7 @@
 				google-image-search
 				data-search-term="{{createWishCtrl.newWish.title}}" 
 				data-image-result="createWishCtrl.newWish"
+				data-on-cancel="createWishCtrl.goToTitle()"
 				on-image-select="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)">
     		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding
 		</button>
