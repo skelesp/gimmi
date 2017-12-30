@@ -8,13 +8,16 @@
   <form name="wishEditForm" class="p-2" role="form" novalidate>
       <div class="form-group">
         <img  class="img-thumbnail pointer" ng-src="{{wishDetailsEditCtrl.wish.image}}"
-              google-image-search data-search-term="{{wishDetailsEditCtrl.wish.title}}" data-image-result="wishDetailsEditCtrl.wish.image" />
+              google-image-search 
+              data-search-term="{{wishDetailsEditCtrl.wish.title}}" 
+              data-image-result="wishDetailsEditCtrl.wish.image"
+              data-on-cancel="wishDetailsEditCtrl.goToTitle()" />
       </div>
       <div class="form-group">
-        <label for="wishTitle" class="form-control-label">Titel</label>
+        <label for="DetailWishTitle" class="form-control-label">Titel</label>
         <input 	type="text"
                 class="form-control"
-                id="WishTitle"
+                id="DetailWishTitle"
                 ng-model="wishDetailsEditCtrl.wish.title"
                 placeholder="Titel"
                 required/>

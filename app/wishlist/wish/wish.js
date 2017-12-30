@@ -147,7 +147,7 @@
 			}
 		};
 	}])
-	.controller('wishDetailsEditCtrl', ['$uibModalInstance', 'wish', function($uibModalInstance, wish){
+	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', function($window, $uibModalInstance, wish){
 		var _self = this,
 		originalKeys = Object.keys(wish);
 
@@ -158,5 +158,8 @@
 		_self.cancel = function () {
 			$uibModalInstance.dismiss('cancel');
 		};
+		_self.goToTitle = function() {
+			$window.document.getElementById('DetailWishTitle').focus();
+		}
 	}])
 ;
