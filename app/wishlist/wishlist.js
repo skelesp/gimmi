@@ -204,7 +204,7 @@
 	_self.addReservation = addReservation;
 	_self.deleteReservation = deleteReservation;
 }])
-.controller('editPopupCtrl', function($uibModalInstance, wish) {
+.controller('editPopupCtrl', function($window, $uibModalInstance, wish) {
 	var _self = this;
 
 	_self.wish = wish;
@@ -213,6 +213,9 @@
 	};
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
+	};
+	_self.goToTitle = function(){
+		$window.document.getElementById('EditWishTitle').focus();
 	};
 })
 .controller('wishReservationPopupCtrl', function($uibModalInstance, wish) {
