@@ -1,3 +1,7 @@
+/* For all configuration options see:
+Angular module : http://jtblin.github.io/angular-chart.js/ 
+ChartJS library: http://www.chartjs.org/docs/latest/ */
+
 angular.module('gimmi.reporting', [
     'chart.js',
     'gimmi.config'
@@ -18,33 +22,65 @@ angular.module('gimmi.reporting', [
 .controller('reportingCtrl', [function(){
 
 }])
-    .controller('leanstartupCtrl', [function () {
-    var _self = this;
+.controller('leanstartupCtrl', ['$http', 'CONFIG', function ($http, CONFIG) {
+var _self = this;
 
-    _self.labels = ['2016/11', '2016/12', '2017/01', '2017/02', '2017/03', '2017/04', '2017/05', '2017/06', '2017/07', '2017/08', '2017/09', '2017/10', '2017/11', '2017/12'];
-    _self.series = ['Registered', 'Activated'];
-    _self.data = [
-        [65, 59, 80, 81, 56, 55, 40]
-    ];
-    _self.onHover = function (points) {
-        if (points.length > 0) {
-            console.log('Point', points[0].value);
-        } else {
-            console.log('No point');
-        }
-    };
-    _self.datasetOverride = [{ yAxisID: 'y-axis-1' }];
+$http.get(CONFIG.apiUrl + '/api/reporting/leanstartup').success(function(reportData){
+    _self.data = reportData.data;
+    _self.labels = reportData.labels;
+    _self.series = reportData.series;
+})
+_self.onHover = function (points) {
+    if (points.length > 0) {
+        console.log('Point', points[0].value);
+    } else {
+        console.log('No point');
+    }
+};
+_self.datasetOverride = [
+    //dataset 1: registration
+    { 
+        yAxisID: 'y-axis-1'
+    },
+    //dataset 2: activation
+    { 
+        yAxisID: 'y-axis-1',
+        borderColor: '#9572f7',
+        pointBackgroundColor: '#9572f7'
+    }
+];
 
-    _self.options = {
-        scales: {
-            yAxes: [
-                {
-                    id: 'y-axis-1',
-                    type: 'linear',
-                    display: true,
-                    position: 'left'
+_self.options = {
+    scales: {
+        yAxes: [
+            {
+                id: 'y-axis-1',
+                type: 'linear',
+                display: true,
+                position: 'left',
+                ticks: {
+                    beginAtZero: true,
+                    min: 0,
+                    suggestedMax: 20
                 }
-            ]
+            }
+        ]
+    },
+    elements: {
+        line: {
+            tension: 0,
+            fill: false
         }
-    };
+    },
+    legend: {
+        display: true,
+        position: 'right'
+    },
+    title: 
+    {
+        display: true,
+        text: 'Lean startup dashboard',
+        fontSize: 24
+    }
+};
 }]);
