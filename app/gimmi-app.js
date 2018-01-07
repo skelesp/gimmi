@@ -11,7 +11,8 @@
 	'landingPage',
 	'ngFlash',
 	'ng.deviceDetector',
-	'gimmi.communication'
+	'gimmi.communication',
+	'gimmi.reporting'
 ])
 	.run(['$rootScope', '$window', '$state', '$stateParams', '$location', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, Flash, config, UserService) {
 
