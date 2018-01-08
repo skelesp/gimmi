@@ -159,7 +159,7 @@
 		});
 	}
 
-	function addReservation (wish, userID, reason) {
+	function addReservation (wish, userID, reason, receiver) {
 		/*var reservation = {
 			reservator: userID,
 			reason: reason
@@ -174,6 +174,9 @@
 			resolve: {
 				wish: function () {
 					return wish;
+				},
+				receiver: function() {
+					return receiver
 				}
 			}
 		});
@@ -218,13 +221,18 @@
 		$window.document.getElementById('EditWishTitle').focus();
 	};
 })
-.controller('wishReservationPopupCtrl', function($uibModalInstance, wish) {
+.controller('wishReservationPopupCtrl', function($uibModalInstance, wish, receiver) {
 	var _self = this;
-	var reservation = {amount: 1, reason: ''};
+	// Define default values
+	var reservation = {
+		amount: 1, 
+		reason: '', 
+		hideUntil: new Date()
+	};
 	_self.reservation = reservation;
 	_self.wishTitle = wish.title;
+	_self.receiverName = receiver.firstName;
 	_self.ok = function () {
-
 		$uibModalInstance.close(reservation);
 	};
 	_self.cancel = function () {
