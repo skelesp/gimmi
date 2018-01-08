@@ -80,6 +80,9 @@
 				resolve: {
 					wish: function () {
 						return wish;
+					},
+					receiver: function () {
+						return _self.receiver
 					}
 				}
 			});
@@ -139,13 +142,19 @@
 			return creatorID === receiverID;
 		}
 
-		_self.reservedByUser = function (reservatorID) {
+		_self.reservedByUser = reservedByUser;
+		
+		function reservedByUser (reservatorID) {
 			if (UserService.getCurrentUser()._id === reservatorID) {
 				return true;
 			} else {
 				return false;
 			}
 		};
+		_self.isIncognitoReservation = function (wish) {
+			var now = new Date();
+			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy._id)) && (wish.reservation.hideUntil > now.toISOString()));
+		}
 	}])
 	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', function($window, $uibModalInstance, wish){
 		var _self = this,
