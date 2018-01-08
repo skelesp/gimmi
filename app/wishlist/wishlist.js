@@ -71,7 +71,7 @@
 		_self.userIsReceiver = false;
 	}
 }])
-	.controller('wishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function ($state, $stateParams, $uibModal, wishModel, receiverModel, UserService) {
+.controller('wishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function ($state, $stateParams, $uibModal, wishModel, receiverModel, UserService) {
 	var _self = this;
 	/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
 
@@ -87,7 +87,7 @@
 		return creatorID === receiverID;
 	}
 
-	_self.reservedByUser = function(reservatorID){
+	function reservedByUser (reservatorID){
 		if (UserService.isLoggedIn()) {
 			if (UserService.getCurrentUser()._id === reservatorID) {
 				return true;
@@ -192,15 +192,23 @@
 	function deleteReservation (wish) {
 			wishModel.deleteReservation(wish._id);
 	}
+
+	function isIncognitoReservation(wish){
+		var now = new Date();
+		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()) );
+	}
 	//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
 	function getReservationStatus (wish) {
 		var reservationStatus = "unreserved";
 		if (wish.reservation) {
-			reservationStatus = "reserved";
+			if (!isIncognitoReservation(wish)) {
+				reservationStatus = "reserved";
+			}
 		}
 		return reservationStatus;
 	}
 	_self.reservationStatus = getReservationStatus;
+	_self.reservedByUser = reservedByUser;
 	_self.copy = copy;
 	_self.edit = edit;
 	_self.deleteWish = deleteWishVerification;
@@ -304,7 +312,7 @@
 		});
 	}
 }])
-	.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
+.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
 	var self = this;
 	var wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
 	//#105: onderstaande IF moet eigenlijk in de route staan en niet in de controller...
@@ -384,7 +392,7 @@
 		self.showCopyTooltip = true;
 	}
 }])
-	.controller("invitationPopupCtrl", ['$uibModalInstance', function ($uibModalInstance){
+.controller("invitationPopupCtrl", ['$uibModalInstance', function ($uibModalInstance){
 	var self = this;
 
 	self.mailTo;
