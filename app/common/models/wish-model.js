@@ -79,6 +79,11 @@ angular.module('gimmi.models.wish', [
 					var index = _.findIndex(wishlist.wishes, function(w){
 						return w._id === wish._id;
 					});
+					// TEMP FIX until #906 is implemented
+					if (wish.reservation) {
+						wish.reservation.reservedBy = wish.reservation.reservedBy._id
+					}
+					// END TEMP FIX
 					wishlist.wishes[index] = wish;
 				}
 				defer.resolve(wish);
