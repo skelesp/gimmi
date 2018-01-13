@@ -111,7 +111,7 @@
 		newWish.image = wish.image;
 		newWish.url = wish.url;
 		newWish.price =  wish.price;
-		wishModel.createWish(newWish, userID, userID);
+		wishModel.createWish(newWish, userID, userID, wish._id);
 	}
 
 	function edit(wish){

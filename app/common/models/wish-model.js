@@ -44,9 +44,13 @@ angular.module('gimmi.models.wish', [
 			return deferred.promise;
 		};
 
-		model.createWish = function (wish, receiverID, userID){
+		model.createWish = function (wish, receiverID, userID, copyOf){
 			wish.receiver = receiverID;
 			wish.createdBy = userID;
+
+			if (copyOf) {
+				wish.copyOf = copyOf;
+			}
 
 			if (!wish.image){
 				wish.image = CONFIG.defaultImage;
