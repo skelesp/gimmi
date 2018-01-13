@@ -111,7 +111,37 @@
 		newWish.image = wish.image;
 		newWish.url = wish.url;
 		newWish.price =  wish.price;
-		wishModel.createWish(newWish, userID, userID, wish._id);
+		
+		wishModel.getCopies(userID)
+			.then(function (results) {
+				var copyExistsOnList = _.find(results, function (r) {
+					return r.copyOf === wish._id;
+				})
+
+				if (copyExistsOnList) {
+					var copyWarningPopup = $uibModal.open({
+						ariaLabelledBy: 'modal-title',
+						ariaDescribedBy: 'modal-body',
+						templateUrl: 'copyWishWarning.html',
+						size: 'md',
+						controller: 'copyWarningPopupCtrl',
+						controllerAs: 'copyWarningPopupCtrl',
+						resolve: {
+							wish: function () {
+								return wish;
+							}
+						}
+					});
+
+					copyWarningPopup.result.then(function (wish) {
+						wishModel.createWish(newWish, userID, userID, wish._id);
+					});
+				} else {
+					wishModel.createWish(newWish, userID, userID, wish._id);
+				}
+			}, function (err) {
+				console.log(err);
+			})
 	}
 
 	function edit(wish){
@@ -227,6 +257,17 @@
 	};
 	_self.goToTitle = function(){
 		$window.document.getElementById('EditWishTitle').focus();
+	};
+})
+.controller('copyWarningPopupCtrl', function ($window, $uibModalInstance, wish) {
+	var _self = this;
+
+	_self.title = wish.title;
+	_self.ok = function () {
+		$uibModalInstance.close(wish);
+	};
+	_self.cancel = function () {
+		$uibModalInstance.dismiss('cancel');
 	};
 })
 .controller('wishReservationPopupCtrl', function($uibModalInstance, wish, receiver) {

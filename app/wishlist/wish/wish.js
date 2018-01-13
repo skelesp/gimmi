@@ -106,7 +106,14 @@
 			newWish.image = wish.image;
 			newWish.url = wish.url;
 			newWish.price = wish.price;
-			wishModel.createWish(newWish, userID, userID, wish._id);
+
+			wishModel.getCopies(userID)
+				.then(function(results){
+					console.log(results);		
+					wishModel.createWish(newWish, userID, userID, wish._id);
+				}, function(err){
+					console.log(err);
+				})
 		};
 		_self.deleteWish = function deleteWishVerification(wish) {
 			//Create a popup instance for delete verification
