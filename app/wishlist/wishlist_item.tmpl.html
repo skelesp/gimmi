@@ -83,6 +83,25 @@
   </div>
 
 </script>
+<!-- Template for warning on copy popup -->
+<script type="text/ng-template" id="copyWishWarning.html">
+
+  <div class="modal-header" style="color:#000000">
+    <h3 class="modal-title" id="modal-title">
+      Wens is al eens gekopieerd
+    </h3>
+  </div>
+
+  <div class="modal-body" id="modal-body" style="color:#000000">
+    Je hebt <b>"{{copyWarningPopupCtrl.title}}"</b> al eens gekopieerd naar je lijst.<br/> Ben je zeker dat je deze wens nog eens wilt kopiëren?
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="copyWarningPopupCtrl.ok()">Ja</button>
+    <button class="btn btn-danger" type="button" ng-click="copyWarningPopupCtrl.cancel()">Nee</button>
+  </div>
+
+</script>
 
 <!-- Template for wish reservation popup -->
 <script type="text/ng-template" id="wishReservation.html">
