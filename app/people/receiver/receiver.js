@@ -29,12 +29,15 @@
 	.controller('loginCtrl', function($location, $rootScope, $localStorage, $state, $scope, UserService, Flash){
 		var self = this;
 
-		self.isLoggedIn = function(){
-			return UserService.isLoggedIn();
+		if ( UserService.isLoggedIn()) {
+			console.log("Gebruiker is al ingelogd --> redirect opgeroepen voor " + UserService.currentUser._id);
+			redirectAfterAuthentication(UserService.currentUser._id);
 		}
+
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
 		}
+
 		self.login = function() {
 			// Set variables to detect errors
 			self.error = false;
