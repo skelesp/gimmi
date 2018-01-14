@@ -109,12 +109,14 @@
 
 			wishModel.getCopies(userID)
 				.then(function (results) {
+					// Check if wish is already copied to list
 					var copyExistsOnList = _.find(results, function (r) {
 						return r.copyOf === wish._id;
-					})
+					});
 
-					if (copyExistsOnList) {
-						var copyWarningPopup = $uibModal.open({
+					(copyExistsOnList
+						// If copy exists: open modal and return result (=promise)
+						? $uibModal.open({
 							ariaLabelledBy: 'modal-title',
 							ariaDescribedBy: 'modal-body',
 							templateUrl: 'copyWishWarning.html',
@@ -126,15 +128,15 @@
 									return wish;
 								}
 							}
-						});
-
-						copyWarningPopup.result.then(function (wish) {
+						}).result
+						// If copy doesn't exist: immediately resolve a promise with the wish
+						: Promise.resolve(wish))
+						.then(function (wish) { // When promise resolves: create copy of wish
 							wishModel.createWish(newWish, userID, userID, wish._id);
+						}, function (err) { // When promise is rejected (modal is cancelled): log to console
+							console.log("Copy is cancelled");
 						});
-					} else {
-						wishModel.createWish(newWish, userID, userID, wish._id);
-					}
-				}, function (err) {
+				}, function (err) { // Log getCopies error to console
 					console.log(err);
 				});
 		};
