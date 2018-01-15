@@ -16,12 +16,17 @@
 	</div>
 	<form name="wishCreateForm" class="m-2" role="form" novalidate="">
 		<div class="form-group">
-			<input type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" 
+			<input  type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" 
 					placeholder="Titel" required="" ng-keyup="$event.keyCode == 13 && createWishCtrl.goToPrice()">
 		</div>
 		<div class="form-group">
-			<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in €" 
+			<div class="input-group mb-2">
+				<div class="input-group-prepend">
+					<div class="input-group-text">€</div>
+				</div>
+				<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in €" 
 					ng-model="createWishCtrl.newWish.price" ng-keyup="$event.keyCode == 13 && createWishCtrl.openImageSearch()">
+			</div>
 		</div>
 		<div class="form-group">
 			<input type="hidden" class="form-control form-control-sm" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url"

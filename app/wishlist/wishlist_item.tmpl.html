@@ -50,8 +50,13 @@
         <input type="text" class="form-control" id="EditWishTitle" ng-model="editPopupCtrl.wish.title" placeholder="Titel" required/>
       </div>
       <div class="form-group">
-        <input type="number" class="form-control" name="inputPrice" id="WishPrice" placeholder="Prijs in € (enkel getal ingeven)" ng-model="editPopupCtrl.wish.price" />
-        <span ng-show="wishEditForm.inputPrice.$error.number">Enkel getallen toegelaten!</span>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">€</div>
+          </div>
+          <input type="number" class="form-control" name="inputPrice" id="WishPrice" placeholder="Prijs in € (enkel getal ingeven)" ng-model="editPopupCtrl.wish.price" />
+          <span ng-show="wishEditForm.inputPrice.$error.number">Enkel getallen toegelaten!</span>
+        </div>
       </div>
       <div class="form-group">
         <input type="text" class="form-control" name="inputUrl" id="WishUrl" placeholder="Website met meer info over deze wens" ng-model="editPopupCtrl.wish.url" />
