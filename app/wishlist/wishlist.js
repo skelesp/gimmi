@@ -99,9 +99,11 @@
 		}
 	};
 
-	_self.goToWishDetail = function(wishID) {
-		$state.go('gimmi.wishlist.wish', { wishID: wishID});
-		console.log("image clicked");
+	_self.goToWishDetail = function(wish) {
+		if ( getReservationStatus(wish) !== 'reserved') {
+			$state.go('gimmi.wishlist.wish', { wishID: wish._id });
+			console.log("image clicked");
+		}
 	}
 
 	function copy(wish){
