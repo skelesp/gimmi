@@ -14,9 +14,9 @@
     </div>
   </div>
   <div class="card-block p-1">
-    <a class="wishCardTitle text-capitalize pointer" ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</a>
-    <p class="card-subtitle text-muted text-truncate ml-1 mt-1" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
-    <p class="card-text mx-auto my-1 text-left font-weight-bold">{{wish.price | currency : "€" : 2}}</p>
+    <a class="wishCardTitle text-dark text-capitalize pointer" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }" ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</a>
+    <p class="text-muted text-truncate ml-1 my-1" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
+    <p class="card-text mx-auto my-1 text-left font-weight-bold" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }">{{wish.price | currency : "€" : 2}}</p>
   </div>
   <div class="card-footer text-muted p-1">
     <button class="btn btn-light mx-1 p-1 text-muted" ui-sref="gimmi.wishlist.wish({wishID: wish._id})"><i class="fa fa-info" aria-hidden="true" uib-tooltip="Bekijk de details" tooltip-class="customTooltip" tooltip-placement="top-left"></i></button>
