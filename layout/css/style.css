@@ -33,9 +33,6 @@ h6.card-title  {
   font-size: 1.1rem;
   cursor: pointer;
 }
-.card-image-overlay {
-  position: relative; /*https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4*/
-}
 .wishCardTitle {
   font-size: 0.8rem;
   font-weight: 700;
