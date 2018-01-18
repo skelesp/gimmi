@@ -1,15 +1,18 @@
 <!-- Create wish card -->
-<div class="card">
-	<div class="card-image-overlay">
-		<img class="card-img-top rounded img-fluid mb-2" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image" ng-src="{{createWishCtrl.newWish.image}}"/>
-		<img class="card-img-top rounded img-fluid mb-2" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
+<div class="card border border-danger shadow">
+	<div class="position-relative">
+		<img class="card-img-top rounded img-fluid my-3" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image" ng-src="{{createWishCtrl.newWish.image}}"/>
+		<img class="card-img-top rounded img-fluid my-3" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
 		<div class="card-img-overlay pt-4 blurredCardOverlay">
-			<p ng-hide="createWishCtrl.newWish.title"><i class="fa fa-plus mr-2" aria-hidden="true"></i>Wens toevoegen?<br/>
-			<i class="fa fa-arrow-down mr-1" aria-hidden="true"></i>Vul hieronder de titel en prijs in en selecteer daarna een afbeelding</p>
+			<p ng-hide="createWishCtrl.newWish.title" class="text-center pt-3">
+				<i class="fa fa-plus fa-5x" aria-hidden="true"></i>
+				<br/>
+				<span class="h6 font-weight-bold">Voeg een wens toe</span>
+			</p>
 			<a href="" ng-show="createWishCtrl.newWish.title" 
 						google-image-search 
 						data-search-term="{{createWishCtrl.newWish.title}}" 
-						data-image-result="createWishCtrl.newWish.image">
+						data-image-result="createWishCtrl.newWish">
 				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen voor "{{createWishCtrl.newWish.title}}"
 			</a>
 		</div>
@@ -37,7 +40,7 @@
 		</div>
 		<button type="button" class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
 				ng-show="createWishCtrl.newWish.image !== ''"
-				ng-click="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" 
+				ng-click="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" 
 				ng-disabled="wishCreateForm.$invalid" disabled="disabled">
     		Toevoegen
 		</button>
