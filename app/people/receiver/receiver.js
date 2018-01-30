@@ -1,4 +1,4 @@
-angular.module('wishlist.receiver', [
+﻿angular.module('wishlist.receiver', [
 	'gimmi.models.wishlist',
 	'gimmi.models.receiver',
 	'gimmi.authentication',
@@ -44,15 +44,13 @@ angular.module('wishlist.receiver', [
 			console.log("Gebruiker is al ingelogd --> redirect opgeroepen voor " + UserService.currentUser._id);
 			redirectAfterAuthentication(UserService.currentUser._id);
 		}
-		if (!invitedPerson) {
-			console.info("U hebt nog geen account --> Redirect naar registratiepagina");
-			$state.go('gimmi.register_person');
-		} else {
-			console.info("U hebt al een account");
-		};
 
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
+			if (!invitedPerson) {
+				console.info("U bent uitgenodigd, maar u hebt nog geen account --> Redirect naar registratiepagina");
+				$state.go('gimmi.register_person');
+			};
 		}
 
 		self.login = function() {
