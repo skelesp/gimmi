@@ -14,7 +14,7 @@
 	'gimmi.communication',
 	'gimmi.reporting'
 ])
-	.run(['$rootScope', '$window', '$state', '$stateParams', '$location', '$uibModalStack', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, $uibModalStack, Flash, config, UserService) {
+.run(['$rootScope', '$window', '$state', '$stateParams', '$location', '$uibModalStack', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, $uibModalStack, Flash, config, UserService) {
 
 	console.info('Start running app');
 	
@@ -139,7 +139,7 @@
 	}(document));
 
 }])
-	.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
 	$stateProvider
 		.state('gimmi', {
 			url: '/',
@@ -204,7 +204,7 @@
 	FlashProvider.setShowClose(true);
 	FlashProvider.setTemplatePreset('transclude');
 })
-.controller('ApplicationCtrl', ['$scope', '$state', 'UserService', 'deviceDetector', 'Flash', function($scope, $state, UserService, device, Flash){
+	.controller('ApplicationCtrl', ['$scope', '$rootScope', '$state', 'UserService', 'deviceDetector', 'Flash', function ($scope, $rootScope, $state, UserService, device, Flash){
 	var self = this;
 
 	self.currentUser = UserService.getCurrentUser();
@@ -229,6 +229,12 @@
 	self.logOutFacebook = function() {
 		UserService.logOutFacebook();
 		self.logout();
+	};
+
+	self.clearAttemptedEmail = function() {
+		console.log("attemptedEmail deleted");
+		delete $rootScope.attemptedEmail;
 	}
+
 }])
 ;

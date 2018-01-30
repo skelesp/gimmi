@@ -1,6 +1,33 @@
 
 <div class="containter m-4">
   <div class="row">
+    <div class="col-md-10">
+      <div class="jumbotron">
+        <h4>Welkom op Gimmi, uw hulp in de cadeauzoektocht!</h4>
+        <p ng-if="personRegistrationCtrl.invitedFor">
+          Jij bent uitgenodigd om de wensenlijst van
+          <strong>{{personRegistrationCtrl.invitedFor}}</strong> te bekijken.
+          <br />
+        </p>
+        <p>
+          Een korte uitleg:
+          <ol>
+            <li>Op Gimmi kan je een wensenlijst aanmaken met je favoriete cadeaus, zodat je met anderen kan delen wat je graag zou krijgen.</li>
+            <li>Deze personen kunnen een cadeau dan reserveren, zodat jij zeker bent dat je elk cadeau maar 1 keer krijgt! </li>
+          </ol>
+          <em>Geniaal toch?!</em>
+        </p>
+        <p>
+          <strong>Om toegang te krijgen tot wenslijsten, moet je wel eerst even registreren hieronder.</strong><br /> 
+          <span ng-if="personRegistrationCtrl.invitedFor">
+            Na het registreren word je meteen naar de wensenlijst van {{personRegistrationCtrl.invitedFor}} gebracht.<br />
+            Maar vul zeker ook je eigen lijst aan!!
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-md-3">
       <div class="btn btn-social btn-facebook my-4" ng-click="personRegistrationCtrl.logInFacebook()"><i class="fa fa-facebook mr-1" aria-hidden="true"></i> Aanmelden met Facebook</div>
     </div>

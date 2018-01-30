@@ -406,7 +406,7 @@
 
 			var mailTo = mailTo.split(',');
 			mailTo.forEach(function (to) {
-				var mailUrl = self.url + '?e=' + to;
+				var mailUrl = self.url + '?e=' + encodeURIComponent(to);
 				var mailHtml = '<html><body>Hallo,<br />' + receiver.firstName + " " + receiver.lastName + ' nodigt je met veel plezier uit op Gimmi. Op deze manier kan je ' + receiver.firstName + ' echt gelukkig maken met het perfecte cadeau! En nog meer goed nieuws: als je op de link van ' + receiver.firstName + ' klikt maken we voor jou ook dadelijk een lijstje aan. Hierop kan je je eigen droomcadeau’s plaatsen en kan je tactvol aan je famillie en vrienden laten weten hoe ze jou gelukkig kunnen maken.<br />Klik <a href="' + mailUrl + '">hier</a> of kopieer de link: ' + mailUrl + '<br /><br /><p>Veel plezier!</p><br /><p>Het Gimmi team</p></body></html>'
 				mail = {
 					to: to,

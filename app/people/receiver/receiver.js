@@ -13,6 +13,17 @@
 						templateUrl: 'app/people/receiver/login.tmpl.html',
 						controller:'loginCtrl as loginCtrl'
 					}
+				},
+				resolve: {
+					invitedPerson: ['$rootScope', 'PersonService', function($rootScope, PersonService){
+						// Als resolve niet ok is, gaat pagina in fout... Hoe oplossen?
+						return PersonService.findByEmail($rootScope.attemptedEmail)
+							.then(function(person){
+								return person
+							}, function(err){
+								return undefined;
+							});
+					}]
 				}
 			})
 			.state('gimmi.register_person', {
@@ -26,7 +37,7 @@
 			})
 		;
 	})
-	.controller('loginCtrl', function($location, $rootScope, $localStorage, $state, $scope, UserService, Flash){
+	.controller('loginCtrl', function ($location, $rootScope, $localStorage, $state, $scope, UserService, Flash, invitedPerson){
 		var self = this;
 
 		if ( UserService.isLoggedIn()) {
@@ -36,6 +47,10 @@
 
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
+			if (!invitedPerson) {
+				console.info("U bent uitgenodigd, maar u hebt nog geen account --> Redirect naar registratiepagina");
+				$state.go('gimmi.register_person');
+			};
 		}
 
 		self.login = function() {
@@ -103,6 +118,13 @@
 
 		if ($rootScope.attemptedEmail) {
 			self.newPerson = { email: $rootScope.attemptedEmail};
+		}
+		if ($rootScope.attemptedUrl) {
+			// Search for a person's name based on the id in the URL ('/wishlist/:id') which was sent in the invitation mail
+			PersonService.getNameById($rootScope.attemptedUrl.split('/')[2])
+				.then(function(person){
+					self.invitedFor = person.fullName;
+				});
 		}
 
 		self.register = function(newPerson){
