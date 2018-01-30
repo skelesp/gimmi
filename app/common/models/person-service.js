@@ -22,15 +22,51 @@ angular.module('gimmi.person', [
           return window.atob(output);
       }
  
-      function getPersonFromToken(token) {
-          var person = {};
-          if (typeof token !== 'undefined') {
-              var encoded = token.split('.')[1];
-              person = JSON.parse(urlBase64Decode(encoded));
-          }
-          return person;
-      }
+      function getPersonFromToken(token) {
+        var person = {};
+        if (typeof token !== 'undefined') {
+          var encoded = token.split('.')[1];
+          person = JSON.parse(urlBase64Decode(encoded));
+        }
+        return person;
+      }
+      // - Get person from ID
+      function getPersonFromID(id) {
+        var deferred = $q.defer();
+        if (id) {
+          $http.get(CONFIG.apiUrl + '/api/people/' + id)
+            .success(function (person) {
+              if (person) {
+                deferred.resolve(person);
+              } else {
+                deferred.reject("Person not found.");
+              }
+            })
+            .error(function (data) {
+              deferred.reject(data.error);
+            });
+        } else {
+          deferred.reject("No id provided");
+        }
 
+        return deferred.promise;
+      }
+      function findByEmail(email) {
+        var person = {};
+        var deferred = $q.defer();
+        if (email) {
+          $http.get(CONFIG.apiUrl + '/api/people/email/' + email)
+            .success(function(person){
+              deferred.resolve(person);
+            })
+            .error(function(data){
+              deferred.reject("No email found");
+            });
+        } else {
+          deferred.reject("No email provided");
+        }
+        return deferred.promise;
+      }
       // - Register a person to the server -
       function register(person, config) {
         // create a new instance of deferred
@@ -51,27 +87,22 @@ angular.module('gimmi.person', [
         return deferred.promise;
       } // - End of register -
 
-      // - Get person from ID
-      function getPersonFromID (id) {
-  			var deferred = $q.defer();
+      function getNameById(id) {
+        var person = {};
+        var deferred = $q.defer();
         if (id) {
-          $http.get(CONFIG.apiUrl + '/api/people/'+id)
-            .success(function(person){
-              if (person) {
-                deferred.resolve(person);
-              } else {
-                deferred.reject("Person not found.");
-              }
+          $http.get(CONFIG.apiUrl + '/api/people/' + id + '/name')
+            .success(function (person) {
+              deferred.resolve(person);
             })
-            .error(function(data){
-              deferred.reject(data.error);
+            .error(function (data) {
+              deferred.reject("No person found");
             });
         } else {
           deferred.reject("No id provided");
         }
-
-  			return deferred.promise;
-  		}
+        return deferred.promise;
+      }
       
       function updatePersonDetails (person){
         var deferred = $q.defer();
@@ -129,6 +160,8 @@ angular.module('gimmi.person', [
         register: register,
         getPersonFromToken: getPersonFromToken,
         getPersonFromID: getPersonFromID,
+        getNameById: getNameById,
+        findByEmail: findByEmail,
         updatePersonDetails: updatePersonDetails,
         updatePassword: updatePassword,
         deleteFacebookAccount: deleteFacebookAccount
