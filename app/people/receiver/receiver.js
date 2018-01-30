@@ -1,4 +1,4 @@
-﻿angular.module('wishlist.receiver', [
+angular.module('wishlist.receiver', [
 	'gimmi.models.wishlist',
 	'gimmi.models.receiver',
 	'gimmi.authentication',
@@ -13,6 +13,17 @@
 						templateUrl: 'app/people/receiver/login.tmpl.html',
 						controller:'loginCtrl as loginCtrl'
 					}
+				},
+				resolve: {
+					invitedPerson: ['$rootScope', 'PersonService', function($rootScope, PersonService){
+						// Als resolve niet ok is, gaat pagina in fout... Hoe oplossen?
+						return PersonService.findByEmail($rootScope.attemptedEmail)
+							.then(function(person){
+								return person
+							}, function(err){
+								return undefined;
+							});
+					}]
 				}
 			})
 			.state('gimmi.register_person', {
@@ -26,13 +37,19 @@
 			})
 		;
 	})
-	.controller('loginCtrl', function($location, $rootScope, $localStorage, $state, $scope, UserService, Flash){
+	.controller('loginCtrl', function ($location, $rootScope, $localStorage, $state, $scope, UserService, Flash, invitedPerson){
 		var self = this;
 
 		if ( UserService.isLoggedIn()) {
 			console.log("Gebruiker is al ingelogd --> redirect opgeroepen voor " + UserService.currentUser._id);
 			redirectAfterAuthentication(UserService.currentUser._id);
 		}
+		if (!invitedPerson) {
+			console.info("U hebt nog geen account --> Redirect naar registratiepagina");
+			$state.go('gimmi.register_person');
+		} else {
+			console.info("U hebt al een account");
+		};
 
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
