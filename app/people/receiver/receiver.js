@@ -121,6 +121,13 @@ angular.module('wishlist.receiver', [
 		if ($rootScope.attemptedEmail) {
 			self.newPerson = { email: $rootScope.attemptedEmail};
 		}
+		if ($rootScope.attemptedUrl) {
+			// Search for a person's name based on the id in the URL ('/wishlist/:id') which was sent in the invitation mail
+			PersonService.getNameById($rootScope.attemptedUrl.split('/')[2])
+				.then(function(person){
+					self.invitedFor = person.fullName;
+				});
+		}
 
 		self.register = function(newPerson){
 			PersonService.register(newPerson)
