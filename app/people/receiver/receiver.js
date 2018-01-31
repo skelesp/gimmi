@@ -119,9 +119,10 @@
 		if ($rootScope.attemptedEmail) {
 			self.newPerson = { email: $rootScope.attemptedEmail};
 		}
-		if ($rootScope.attemptedUrl) {
+		if ($rootScope.attemptedUrl || $rootScope.returnToState) {
 			// Search for a person's name based on the id in the URL ('/wishlist/:id') which was sent in the invitation mail
-			PersonService.getNameById($rootScope.attemptedUrl.split('/')[2])
+			id = $rootScope.returnToState ? $rootScope.returnToStateParams.receiverID : $rootScope.attemptedUrl.split('/')[2];
+			PersonService.getNameById(id)
 				.then(function(person){
 					self.invitedFor = person.fullName;
 				});
