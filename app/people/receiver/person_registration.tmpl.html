@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-10">
       <div class="jumbotron">
-        <h4>Welkom op Gimmi, uw hulp in de cadeauzoektocht!</h4>
+        <h4>Welkom op Gimmi, dé hulp in je cadeauzoektocht!</h4>
         <p ng-if="personRegistrationCtrl.invitedFor">
           Jij bent uitgenodigd om de wensenlijst van
           <strong>{{personRegistrationCtrl.invitedFor}}</strong> te bekijken.
@@ -18,11 +18,12 @@
           <em>Geniaal toch?!</em>
         </p>
         <p>
-          <strong>Om toegang te krijgen tot wenslijsten, moet je wel eerst even registreren hieronder.</strong><br /> 
+          <strong>Om toegang te krijgen tot wenslijsten, moet je wel eerst even registreren hieronder.</strong><br>
+          Of klik <a ui-sref="gimmi.login">hier</a> om je in te loggen met een bestaande account.<br /> 
           <span ng-if="personRegistrationCtrl.invitedFor">
             Na het registreren word je meteen naar de wensenlijst van {{personRegistrationCtrl.invitedFor}} gebracht.<br />
-            Maar vul zeker ook je eigen lijst aan!!
           </span>
+          <em>Bij de registratie maken we automatisch een lijst voor jou aan, dus vul deze maar meteen aan met de leukste cadeaus!</em>
         </p>
       </div>
     </div>
