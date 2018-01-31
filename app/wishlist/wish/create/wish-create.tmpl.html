@@ -5,7 +5,7 @@
 		<img class="card-img-top rounded img-fluid my-3" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
 		<div class="card-img-overlay pt-4 blurredCardOverlay">
 			<p ng-hide="createWishCtrl.newWish.title" class="text-center pt-3">
-				<i class="fa fa-plus fa-5x" aria-hidden="true"></i>
+				<i class="fa fa-plus fa-3x" aria-hidden="true"></i>
 				<br/>
 				<span class="h6 font-weight-bold">Voeg een wens toe</span>
 			</p>
@@ -13,7 +13,7 @@
 						google-image-search 
 						data-search-term="{{createWishCtrl.newWish.title}}" 
 						data-image-result="createWishCtrl.newWish">
-				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen voor "{{createWishCtrl.newWish.title}}"
+				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen
 			</a>
 		</div>
 	</div>
