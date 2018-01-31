@@ -1,26 +1,35 @@
 <!-- Create wish card -->
-<div class="card">
-	<div class="card-image-overlay">
-		<img class="card-img-top rounded img-fluid mb-2" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image" ng-src="{{createWishCtrl.newWish.image}}"/>
-		<img class="card-img-top rounded img-fluid mb-2" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
+<div class="card border border-danger shadow">
+	<div class="position-relative">
+		<img class="card-img-top rounded img-fluid my-3" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image" ng-src="{{createWishCtrl.newWish.image}}"/>
+		<img class="card-img-top rounded img-fluid my-3" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
 		<div class="card-img-overlay pt-4 blurredCardOverlay">
-			<p ng-hide="createWishCtrl.newWish.title"><i class="fa fa-arrow-down mr-1" aria-hidden="true"></i>Vul hieronder de titel en prijs in en selecteer daarna een afbeelding</p>
+			<p ng-hide="createWishCtrl.newWish.title" class="text-center pt-3">
+				<i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+				<br/>
+				<span class="h6 font-weight-bold">Voeg een wens toe</span>
+			</p>
 			<a href="" ng-show="createWishCtrl.newWish.title" 
 						google-image-search 
 						data-search-term="{{createWishCtrl.newWish.title}}" 
-						data-image-result="createWishCtrl.newWish.image">
-				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen voor "{{createWishCtrl.newWish.title}}"
+						data-image-result="createWishCtrl.newWish">
+				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen
 			</a>
 		</div>
 	</div>
 	<form name="wishCreateForm" class="m-2" role="form" novalidate="">
 		<div class="form-group">
-			<input type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" 
+			<input  type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" 
 					placeholder="Titel" required="" ng-keyup="$event.keyCode == 13 && createWishCtrl.goToPrice()">
 		</div>
 		<div class="form-group">
-			<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in €" 
+			<div class="input-group mb-2">
+				<div class="input-group-prepend">
+					<div class="input-group-text">€</div>
+				</div>
+				<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in €" 
 					ng-model="createWishCtrl.newWish.price" ng-keyup="$event.keyCode == 13 && createWishCtrl.openImageSearch()">
+			</div>
 		</div>
 		<div class="form-group">
 			<input type="hidden" class="form-control form-control-sm" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url"
@@ -31,7 +40,7 @@
 		</div>
 		<button type="button" class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
 				ng-show="createWishCtrl.newWish.image !== ''"
-				ng-click="createWishCtrl.createWish(createWishCtrl.newWish, createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" 
+				ng-click="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" 
 				ng-disabled="wishCreateForm.$invalid" disabled="disabled">
     		Toevoegen
 		</button>
@@ -41,6 +50,7 @@
 				google-image-search
 				data-search-term="{{createWishCtrl.newWish.title}}" 
 				data-image-result="createWishCtrl.newWish"
+				data-on-cancel="createWishCtrl.goToTitle()"
 				on-image-select="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)">
     		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding
 		</button>

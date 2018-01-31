@@ -11,12 +11,59 @@
 	'landingPage',
 	'ngFlash',
 	'ng.deviceDetector',
-	'gimmi.communication'
+	'gimmi.communication',
+	'gimmi.reporting'
 ])
-	.run(['$rootScope', '$window', '$state', '$stateParams', '$location', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, Flash, config, UserService) {
+.run(['$rootScope', '$window', '$state', '$stateParams', '$location', '$uibModalStack', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, $uibModalStack, Flash, config, UserService) {
 
 	console.info('Start running app');
-	
+	/*******************/
+	/* EVENT LISTENERS */
+	/*******************/
+	//Listen on state changes and check authentication	
+	$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+		if (toState.authenticate && !UserService.isLoggedIn()) {
+
+			// Save data of original URL
+			$rootScope.returnToState = toState.name;
+			$rootScope.returnToStateParams = toParams;
+			if ($location.search().e) { // Save the email on which the user has received an invitation (= QS "e" in invitation link)
+				$rootScope.attemptedEmail = $location.search().e;
+				$state.go('gimmi.login');
+			} else {
+				$state.go('gimmi.register_person');
+			}
+
+			// Save 
+			console.log("Need login for restricted access route --> redirect to login page");
+			event.preventDefault();
+			Flash.create("info", "Om de gevraagde pagina te kunnen bekijken moet je eerst inloggen/registreren.");
+		}
+	});
+
+	$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+		event.preventDefault();
+		console.error("Error in state '" + toState.name + "'");
+		console.error(error);
+		$state.go(fromState.name, fromParams);
+		Flash.create("danger", "De gevraagde pagina kan niet getoond worden.");
+	});
+
+	// Prevent browser-back to change page when modal is openend
+	// Source: https://stackoverflow.com/questions/23762323/is-there-a-way-to-automatically-close-angular-ui-bootstrap-modal-when-route-chan/23766070#23766070
+	$rootScope.$on('$locationChangeStart', function ($event) {
+		var openedModal = $uibModalStack.getTop();
+		if (openedModal) {
+			if (!!$event.preventDefault) {
+				$event.preventDefault();
+			}
+			if (!!$event.stopPropagation) {
+				$event.stopPropagation();
+			}
+			$uibModalStack.dismiss(openedModal.key);
+		}
+	});
+
 	/************/
 	/* FACEBOOK */
 	/************/
@@ -70,36 +117,6 @@
 
 		UserService.checkLoginStatus();
 
-	/*******************/
-	/* EVENT LISTENERS */
-	/*******************/
-	//Listen on state changes and check authentication	
-		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-		if (toState.authenticate && !UserService.isLoggedIn()) {
-			
-			// Save data of original URL
-			$rootScope.returnToState = toState.name;
-			$rootScope.returnToStateParams = toParams;
-			if ($location.search().e) { // Save the email on which the user has received an invitation (= QS "e" in invitation link)
-				$rootScope.attemptedEmail = $location.search().e;
-			}
-
-			// Save 
-			console.log("Need login for restricted access route --> redirect to login page");
-			$state.go('gimmi.login');
-			event.preventDefault(); 
-			Flash.create("info", "Om de gevraagde pagina te kunnen bekijken moet je eerst inloggen/registreren.");
-		}
-	});
-
-	$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-		event.preventDefault();
-		console.error("Error in state '" + toState.name + "'");
-		console.error(error);
-		$state.go(fromState.name, fromParams);
-		Flash.create("danger", "De gevraagde pagina kan niet getoond worden.");
-	});
-
 	};
 
 	(function (d) {
@@ -123,7 +140,7 @@
 	}(document));
 
 }])
-	.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
 	$stateProvider
 		.state('gimmi', {
 			url: '/',
@@ -188,7 +205,7 @@
 	FlashProvider.setShowClose(true);
 	FlashProvider.setTemplatePreset('transclude');
 })
-.controller('ApplicationCtrl', ['$scope', '$state', 'UserService', 'deviceDetector', 'Flash', function($scope, $state, UserService, device, Flash){
+	.controller('ApplicationCtrl', ['$scope', '$rootScope', '$state', 'UserService', 'deviceDetector', 'Flash', function ($scope, $rootScope, $state, UserService, device, Flash){
 	var self = this;
 
 	self.currentUser = UserService.getCurrentUser();
@@ -213,6 +230,12 @@
 	self.logOutFacebook = function() {
 		UserService.logOutFacebook();
 		self.logout();
+	};
+
+	self.clearAttemptedEmail = function() {
+		console.log("attemptedEmail deleted");
+		delete $rootScope.attemptedEmail;
 	}
+
 }])
 ;

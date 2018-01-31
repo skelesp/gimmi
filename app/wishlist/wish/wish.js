@@ -19,7 +19,8 @@
 								}]
 						}
 					}
-				}
+				},
+				authenticate: true
 			})
 		;
 	})
@@ -79,6 +80,9 @@
 				resolve: {
 					wish: function () {
 						return wish;
+					},
+					receiver: function () {
+						return _self.receiver
 					}
 				}
 			});
@@ -102,7 +106,39 @@
 			newWish.image = wish.image;
 			newWish.url = wish.url;
 			newWish.price = wish.price;
-			wishModel.createWish(newWish, userID, userID);
+
+			wishModel.getCopies(userID)
+				.then(function (results) {
+					// Check if wish is already copied to list
+					var copyExistsOnList = _.find(results, function (r) {
+						return r.copyOf === wish._id;
+					});
+
+					(copyExistsOnList
+						// If copy exists: open modal and return result (=promise)
+						? $uibModal.open({
+							ariaLabelledBy: 'modal-title',
+							ariaDescribedBy: 'modal-body',
+							templateUrl: 'copyWishWarning.html',
+							size: 'md',
+							controller: 'copyWarningPopupCtrl',
+							controllerAs: 'copyWarningPopupCtrl',
+							resolve: {
+								wish: function () {
+									return wish;
+								}
+							}
+						}).result
+						// If copy doesn't exist: immediately resolve a promise with the wish
+						: Promise.resolve(wish))
+						.then(function (wish) { // When promise resolves: create copy of wish
+							wishModel.createWish(newWish, userID, userID, wish._id);
+						}, function (err) { // When promise is rejected (modal is cancelled): log to console
+							console.log("Copy is cancelled");
+						});
+				}, function (err) { // Log getCopies error to console
+					console.log(err);
+				});
 		};
 		_self.deleteWish = function deleteWishVerification(wish) {
 			//Create a popup instance for delete verification
@@ -138,15 +174,21 @@
 			return creatorID === receiverID;
 		}
 
-		_self.reservedByUser = function (reservatorID) {
+		_self.reservedByUser = reservedByUser;
+		
+		function reservedByUser (reservatorID) {
 			if (UserService.getCurrentUser()._id === reservatorID) {
 				return true;
 			} else {
 				return false;
 			}
 		};
+		_self.isIncognitoReservation = function (wish) {
+			var now = new Date();
+			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy._id)) && (wish.reservation.hideUntil > now.toISOString()));
+		}
 	}])
-	.controller('wishDetailsEditCtrl', ['$uibModalInstance', 'wish', function($uibModalInstance, wish){
+	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', function($window, $uibModalInstance, wish){
 		var _self = this,
 		originalKeys = Object.keys(wish);
 
@@ -157,5 +199,8 @@
 		_self.cancel = function () {
 			$uibModalInstance.dismiss('cancel');
 		};
+		_self.goToTitle = function() {
+			$window.document.getElementById('DetailWishTitle').focus();
+		}
 	}])
 ;

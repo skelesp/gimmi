@@ -13,6 +13,17 @@
 						templateUrl: 'app/people/receiver/login.tmpl.html',
 						controller:'loginCtrl as loginCtrl'
 					}
+				},
+				resolve: {
+					invitedPerson: ['$rootScope', 'PersonService', function($rootScope, PersonService){
+						// Als resolve niet ok is, gaat pagina in fout... Hoe oplossen?
+						return PersonService.findByEmail($rootScope.attemptedEmail)
+							.then(function(person){
+								return person
+							}, function(err){
+								return undefined;
+							});
+					}]
 				}
 			})
 			.state('gimmi.register_person', {
@@ -26,15 +37,22 @@
 			})
 		;
 	})
-	.controller('loginCtrl', function($location, $rootScope, $localStorage, $state, $scope, UserService, Flash){
+	.controller('loginCtrl', function ($location, $rootScope, $localStorage, $state, $scope, UserService, Flash, invitedPerson){
 		var self = this;
 
-		self.isLoggedIn = function(){
-			return UserService.isLoggedIn();
+		if ( UserService.isLoggedIn()) {
+			console.log("Gebruiker is al ingelogd --> redirect opgeroepen voor " + UserService.currentUser._id);
+			redirectAfterAuthentication(UserService.currentUser._id);
 		}
+
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
+			if (!invitedPerson) {
+				console.info("U bent uitgenodigd, maar u hebt nog geen account --> Redirect naar registratiepagina");
+				$state.go('gimmi.register_person');
+			};
 		}
+
 		self.login = function() {
 			// Set variables to detect errors
 			self.error = false;
@@ -100,6 +118,14 @@
 
 		if ($rootScope.attemptedEmail) {
 			self.newPerson = { email: $rootScope.attemptedEmail};
+		}
+		if ($rootScope.attemptedUrl || $rootScope.returnToState) {
+			// Search for a person's name based on the id in the URL ('/wishlist/:id') which was sent in the invitation mail
+			id = $rootScope.returnToState ? $rootScope.returnToStateParams.receiverID : $rootScope.attemptedUrl.split('/')[2];
+			PersonService.getNameById(id)
+				.then(function(person){
+					self.invitedFor = person.fullName;
+				});
 		}
 
 		self.register = function(newPerson){

@@ -7,7 +7,8 @@ angular.module('gcse',[
         scope: {
           searchTerm: '@',
           imageResult: '=',
-          onImageSelect: '&' 
+          onImageSelect: '&',
+          onCancel: '&' 
         },
         replace: false,
         restrict: 'AE',
@@ -41,7 +42,9 @@ angular.module('gcse',[
                   }
                 })
                 .catch(function () {
-                  // Modal dismissed.
+                  if ($scope.onCancel) {
+                    $scope.onCancel();
+                  }
                 });
               });
             } else {

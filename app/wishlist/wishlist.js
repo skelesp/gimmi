@@ -71,7 +71,7 @@
 		_self.userIsReceiver = false;
 	}
 }])
-.controller('wishCtrl', ['$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function($stateParams, $uibModal, wishModel, receiverModel, UserService) {
+.controller('wishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function ($state, $stateParams, $uibModal, wishModel, receiverModel, UserService) {
 	var _self = this;
 	/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
 
@@ -87,7 +87,7 @@
 		return creatorID === receiverID;
 	}
 
-	_self.reservedByUser = function(reservatorID){
+	function reservedByUser (reservatorID){
 		if (UserService.isLoggedIn()) {
 			if (UserService.getCurrentUser()._id === reservatorID) {
 				return true;
@@ -99,6 +99,13 @@
 		}
 	};
 
+	_self.goToWishDetail = function(wish) {
+		if ( getReservationStatus(wish) !== 'reserved') {
+			$state.go('gimmi.wishlist.wish', { wishID: wish._id });
+			console.log("image clicked");
+		}
+	}
+
 	function copy(wish){
 		var userID = UserService.getCurrentUser()._id;
 		var newWish = {};
@@ -106,7 +113,39 @@
 		newWish.image = wish.image;
 		newWish.url = wish.url;
 		newWish.price =  wish.price;
-		wishModel.createWish(newWish, userID, userID);
+		
+		wishModel.getCopies(userID)
+			.then(function (results) {
+				// Check if wish is already copied to list
+				var copyExistsOnList = _.find(results, function (r) {
+					return r.copyOf === wish._id;
+				});
+				
+				(copyExistsOnList 
+					// If copy exists: open modal and return result (=promise)
+					? $uibModal.open({ 
+						ariaLabelledBy: 'modal-title',
+						ariaDescribedBy: 'modal-body',
+						templateUrl: 'copyWishWarning.html',
+						size: 'md',
+						controller: 'copyWarningPopupCtrl',
+						controllerAs: 'copyWarningPopupCtrl',
+						resolve: {
+							wish: function () {
+								return wish;
+							}
+						}
+					}).result 
+					// If copy doesn't exist: immediately resolve a promise with the wish
+					: Promise.resolve(wish))
+				.then(function (wish) { // When promise resolves: create copy of wish
+					wishModel.createWish(newWish, userID, userID, wish._id);
+				}, function(err){ // When promise is rejected (modal is cancelled): log to console
+					console.log("Copy is cancelled");
+				});
+			}, function (err) { // Log getCopies error to console
+				console.log(err);
+			});
 	}
 
 	function edit(wish){
@@ -154,7 +193,7 @@
 		});
 	}
 
-	function addReservation (wish, userID, reason) {
+	function addReservation (wish, userID, reason, receiver) {
 		/*var reservation = {
 			reservator: userID,
 			reason: reason
@@ -169,6 +208,9 @@
 			resolve: {
 				wish: function () {
 					return wish;
+				},
+				receiver: function() {
+					return receiver
 				}
 			}
 		});
@@ -184,22 +226,30 @@
 	function deleteReservation (wish) {
 			wishModel.deleteReservation(wish._id);
 	}
+
+	function isIncognitoReservation(wish){
+		var now = new Date();
+		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()) );
+	}
 	//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
 	function getReservationStatus (wish) {
 		var reservationStatus = "unreserved";
 		if (wish.reservation) {
-			reservationStatus = "reserved";
+			if (!isIncognitoReservation(wish)) {
+				reservationStatus = "reserved";
+			}
 		}
 		return reservationStatus;
 	}
 	_self.reservationStatus = getReservationStatus;
+	_self.reservedByUser = reservedByUser;
 	_self.copy = copy;
 	_self.edit = edit;
 	_self.deleteWish = deleteWishVerification;
 	_self.addReservation = addReservation;
 	_self.deleteReservation = deleteReservation;
 }])
-.controller('editPopupCtrl', function($uibModalInstance, wish) {
+.controller('editPopupCtrl', function($window, $uibModalInstance, wish) {
 	var _self = this;
 
 	_self.wish = wish;
@@ -209,14 +259,33 @@
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	};
+	_self.goToTitle = function(){
+		$window.document.getElementById('EditWishTitle').focus();
+	};
 })
-.controller('wishReservationPopupCtrl', function($uibModalInstance, wish) {
+.controller('copyWarningPopupCtrl', function ($window, $uibModalInstance, wish) {
 	var _self = this;
-	var reservation = {amount: 1, reason: ''};
+
+	_self.title = wish.title;
+	_self.ok = function () {
+		$uibModalInstance.close(wish);
+	};
+	_self.cancel = function () {
+		$uibModalInstance.dismiss('cancel');
+	};
+})
+.controller('wishReservationPopupCtrl', function($uibModalInstance, wish, receiver) {
+	var _self = this;
+	// Define default values
+	var reservation = {
+		amount: 1, 
+		reason: '', 
+		hideUntil: new Date()
+	};
 	_self.reservation = reservation;
 	_self.wishTitle = wish.title;
+	_self.receiverName = receiver.firstName;
 	_self.ok = function () {
-
 		$uibModalInstance.close(reservation);
 	};
 	_self.cancel = function () {
@@ -279,13 +348,16 @@
 	_self.goToPrice = function(){
 		$window.document.getElementById('newWishPrice').focus();
 	}
+	_self.goToTitle = function () {
+		$window.document.getElementById('newWishTitle').focus();
+	}
 	_self.openImageSearch = function () {
 		$timeout(function () {
 			angular.element('#searchImageBtn').triggerHandler('click');
 		});
 	}
 }])
-	.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
+.controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
 	var self = this;
 	var wishUrl = CONFIG.siteBaseUrl + "/#/wishlist/" + $stateParams.receiverID;
 	//#105: onderstaande IF moet eigenlijk in de route staan en niet in de controller...
@@ -334,7 +406,7 @@
 
 			var mailTo = mailTo.split(',');
 			mailTo.forEach(function (to) {
-				var mailUrl = self.url + '?e=' + to;
+				var mailUrl = self.url + '?e=' + encodeURIComponent(to);
 				var mailHtml = '<html><body>Hallo,<br />' + receiver.firstName + " " + receiver.lastName + ' nodigt je met veel plezier uit op Gimmi. Op deze manier kan je ' + receiver.firstName + ' echt gelukkig maken met het perfecte cadeau! En nog meer goed nieuws: als je op de link van ' + receiver.firstName + ' klikt maken we voor jou ook dadelijk een lijstje aan. Hierop kan je je eigen droomcadeau’s plaatsen en kan je tactvol aan je famillie en vrienden laten weten hoe ze jou gelukkig kunnen maken.<br />Klik <a href="' + mailUrl + '">hier</a> of kopieer de link: ' + mailUrl + '<br /><br /><p>Veel plezier!</p><br /><p>Het Gimmi team</p></body></html>'
 				mail = {
 					to: to,
@@ -365,7 +437,7 @@
 		self.showCopyTooltip = true;
 	}
 }])
-	.controller("invitationPopupCtrl", ['$uibModalInstance', function ($uibModalInstance){
+.controller("invitationPopupCtrl", ['$uibModalInstance', function ($uibModalInstance){
 	var self = this;
 
 	self.mailTo;
