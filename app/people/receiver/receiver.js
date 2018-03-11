@@ -190,6 +190,11 @@
 		
 		_self.receivers = receivers;
 
+		$scope.$on('receivers:update', function (_, receivers) {
+			_self.receivers = receivers;
+			console.info("receivers are updated");
+		})
+
 		$scope.$on('login', function(_, user){
 			receiverModel.getReceivers()
 				.then(function(receivers) {

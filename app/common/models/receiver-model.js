@@ -2,8 +2,7 @@
 	'gimmi.person',
 	'gimmi.config'
 ])
-	.service('receiverModel', ["$http", "$q", "PersonService", "CONFIG", function($http, $q, PersonService, CONFIG) {
-
+	.service('receiverModel', ["$http", "$q", "$rootScope", "PersonService", "CONFIG", function ($http, $q, $rootScope, PersonService, CONFIG) {
 		var model = this,
 			URLS = {
 				FETCH: CONFIG.apiUrl + '/api/people'
@@ -17,6 +16,7 @@
 
 		function cacheReceivers(result) {
 			receivers = extract(result);
+			$rootScope.$broadcast('receivers:update', receivers);
 			return receivers;
 		}
 
