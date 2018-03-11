@@ -111,7 +111,10 @@ angular.module('gimmi.person', [
             .success(function(person){
               person.birthday = new Date(person.birthday);
               $injector.get('UserService').refreshCurrentUser("person", person);
-              deferred.resolve(person);
+              $injector.get('receiverModel').refreshReceivers()
+                .then(function (receivers) {
+                  deferred.resolve(person);
+                });
             })
             .error(function(error){
               deferred.reject({error: "something went wrong"});
