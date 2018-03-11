@@ -42,7 +42,7 @@
         </ul>
     </div>
     <div class="col-md-3 pull-right">
-      <button type="button" name="editWish" class="btn btn-block btn-outline-info text-left" ng-click="wishInfoCtrl.editWishDetails(wishInfoCtrl.wish)"><i class="fa fa-edit" aria-hidden="true"></i> Wijzig de details</button>
+      <button type="button" name="editWish" class="btn btn-block btn-outline-info text-left" ng-show="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID) || wishInfoCtrl.userIsCreator(wishInfoCtrl.wish.createdBy._id)" ng-click="wishInfoCtrl.deleteWish(wishInfoCtrl.wish)"> ng-click="wishInfoCtrl.editWishDetails(wishInfoCtrl.wish)"><i class="fa fa-edit" aria-hidden="true"></i> Wijzig de details</button>
       <button type="button" name="reserveWish" class="btn btn-block btn-outline-info text-left" 
               ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'unreserved' || wishInfoCtrl.isIncognitoReservation(wishInfoCtrl.wish)" 
               ng-click="wishInfoCtrl.addReservation(wishInfoCtrl.wish, ApplicationCtrl.currentUser._id,'No reason')">
