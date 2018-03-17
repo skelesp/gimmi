@@ -66,7 +66,6 @@
 				})
 				.catch(function(){
 					self.error = true;
-					self.errorMessage = "Invalid username / password";
 					self.disabled = false;
 				});
 		}
@@ -146,9 +145,6 @@
 					},
 					function(err){
 						self.error = true;
-						if (err === "User already exists") {
-							self.errorMessage = "Er bestaat al een gebruiker met dit emailadres. Gelieve in te loggen met deze email of een ander emailadres te gebruiken.";
-						}
 						self.disabled = false;
 					}
 			);
