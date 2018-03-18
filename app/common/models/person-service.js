@@ -148,6 +148,40 @@ angular.module('gimmi.person', [
         }
         return deferred.promise;
       }
+      function validatePasswordResetToken (token){
+        var deferred = $q.defer();
+
+        if (token) {
+          $http.get(CONFIG.apiUrl + '/api/people/account/local/' + token)
+            .success( function (tokenInfo) {
+              deferred.resolve(tokenInfo);
+            })
+            .error( function(error){
+              deferred.reject(error);
+            })
+          ;
+        } else {
+          deferred.reject({error: "No token provided"});
+        }
+        return deferred.promise;
+      }
+      function resetPassword (token, pw) {
+        var deferred = $q.defer();
+
+        if (token && pw) {
+          $http.put(CONFIG.apiUrl + '/api/people/account/local/' + token, {pw: pw})
+            .success(function (person) {
+              deferred.resolve(person);
+            })
+            .error(function (error) {
+              deferred.reject(error);
+            })
+            ;
+        } else {
+          deferred.reject({ error: "No token or password provided" });
+        }
+        return deferred.promise;
+      }
       function updatePassword (person, pw){
         var deferred = $q.defer();
         
@@ -191,6 +225,8 @@ angular.module('gimmi.person', [
         updatePersonDetails: updatePersonDetails,
         updatePassword: updatePassword,
         requestPasswordReset: requestPasswordReset,
+        validatePasswordResetToken: validatePasswordResetToken,
+        resetPassword: resetPassword,
         deleteFacebookAccount: deleteFacebookAccount
       });
     }]);
