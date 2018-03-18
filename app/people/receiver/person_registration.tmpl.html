@@ -35,9 +35,9 @@
     <div class="col-md-5">
       <h3>Registreer je op Gimmi</h3>
       <div ng-show="personRegistrationCtrl.error" class="alert alert-danger">
-        Er bestaat al een gebruiker met dit emailadres. Gelieve in te loggen met deze email of een ander emailadres te gebruiken.
+        Er bestaat al een gebruiker met dit emailadres. Gelieve <a ui-sref="gimmi.login">in te loggen met deze email</a> of een ander emailadres te gebruiken.
         <br/> Indien u uw paswoord vergeten bent, klik
-        <a href='#'>hier</a>.
+        <a ui-sref="gimmi.forgotpassword">hier</a>.
       </div>
       <div ng-show="personRegistrationCtrl.infoMessage" class="alert alert-info">{{personRegistrationCtrl.infoMessage}}</div>
       <form class="form" ng-submit="personRegistrationCtrl.register(personRegistrationCtrl.newPerson)">
