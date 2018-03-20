@@ -45,6 +45,12 @@
 			redirectAfterAuthentication(UserService.currentUser._id);
 		}
 
+		self.saveMailInRootScope = function() {
+			console.log("Nieuwe waarde = " + self.email);
+			$rootScope.attemptedEmail = self.email;
+		}
+		
+
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
 			if (!invitedPerson) {
