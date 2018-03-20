@@ -6,22 +6,21 @@ angular.module('gimmi.person', [
     function ($q, $http, $injector, Flash, CONFIG) {
 
       function urlBase64Decode(str) {
-          var output = str.replace('-', '+').replace('_', '/');
-          switch (output.length % 4) {
-              case 0:
-                  break;
-              case 2:
-                  output += '==';
-                  break;
-              case 3:
-                  output += '=';
-                  break;
-              default:
-                  throw 'Illegal base64url string!';
-          }
-          return window.atob(output);
-      }
- 
+        var output = str.replace('-', '+').replace('_', '/');
+        switch (output.length % 4) {
+          case 0:
+            break;
+          case 2:
+            output += '==';
+            break;
+          case 3:
+            output += '=';
+            break;
+          default:
+            throw 'Illegal base64url string!';
+        }
+        return window.atob(output);
+      }
       function getPersonFromToken(token) {
         var person = {};
         if (typeof token !== 'undefined') {
@@ -124,7 +123,65 @@ angular.module('gimmi.person', [
         }
         return deferred.promise;
       }
+      function requestPasswordReset (email){
+        var deferred = $q.defer();
+        if (email) {
+        var body = {
+            "email": email,
+            "source": CONFIG.siteBaseUrl
+          };
 
+          $http({
+            method: 'DELETE',
+            url: CONFIG.apiUrl + '/api/people/account/local',
+            data: body,
+            headers: { 'Content-Type': 'application/json;charset=utf-8' }
+          })
+            .success(function(token){
+              deferred.resolve();
+            })
+            .error(function(err){
+              deferred.reject({error: "Password reset could not be executed."})
+            })
+        } else {
+          deferred.reject({ error: "No email provided for password reset" })
+        }
+        return deferred.promise;
+      }
+      function validatePasswordResetToken (token){
+        var deferred = $q.defer();
+
+        if (token) {
+          $http.get(CONFIG.apiUrl + '/api/people/account/local/' + token)
+            .success( function (tokenInfo) {
+              deferred.resolve(tokenInfo);
+            })
+            .error( function(error){
+              deferred.reject(error);
+            })
+          ;
+        } else {
+          deferred.reject({error: "No token provided"});
+        }
+        return deferred.promise;
+      }
+      function resetPassword (token, pw) {
+        var deferred = $q.defer();
+
+        if (token && pw) {
+          $http.put(CONFIG.apiUrl + '/api/people/account/local/' + token, {pw: pw})
+            .success(function (person) {
+              deferred.resolve(person);
+            })
+            .error(function (error) {
+              deferred.reject(error);
+            })
+            ;
+        } else {
+          deferred.reject({ error: "No token or password provided" });
+        }
+        return deferred.promise;
+      }
       function updatePassword (person, pw){
         var deferred = $q.defer();
         
@@ -167,6 +224,9 @@ angular.module('gimmi.person', [
         findByEmail: findByEmail,
         updatePersonDetails: updatePersonDetails,
         updatePassword: updatePassword,
+        requestPasswordReset: requestPasswordReset,
+        validatePasswordResetToken: validatePasswordResetToken,
+        resetPassword: resetPassword,
         deleteFacebookAccount: deleteFacebookAccount
       });
     }]);

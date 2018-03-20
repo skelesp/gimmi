@@ -45,6 +45,11 @@
 			redirectAfterAuthentication(UserService.currentUser._id);
 		}
 
+		self.saveMailInRootScope = function() {
+			$rootScope.attemptedEmail = self.email;
+		}
+		
+
 		if ($rootScope.attemptedEmail) {
 			self.email = $rootScope.attemptedEmail;
 			if (!invitedPerson) {
@@ -66,7 +71,6 @@
 				})
 				.catch(function(){
 					self.error = true;
-					self.errorMessage = "Invalid username / password";
 					self.disabled = false;
 				});
 		}
@@ -116,6 +120,11 @@
 		self.disabled = false;
 		self.infoMessage = "";
 
+		self.saveMailInRootScope = function() {
+			console.log("nieuwe waarde = " + self.newPerson.email);
+			$rootScope.attemptedEmail = self.newPerson.email;
+		}
+
 		if ($rootScope.attemptedEmail) {
 			self.newPerson = { email: $rootScope.attemptedEmail};
 		}
@@ -146,9 +155,6 @@
 					},
 					function(err){
 						self.error = true;
-						if (err === "User already exists") {
-							self.errorMessage = "Er bestaat al een gebruiker met dit emailadres. Gelieve in te loggen met deze email of een ander emailadres te gebruiken.";
-						}
 						self.disabled = false;
 					}
 			);
