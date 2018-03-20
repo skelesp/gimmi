@@ -7,16 +7,18 @@
   </div>
   <div class="col-md-4">
     <h4>Login met je email en paswoord</h4>
-    <div ng-show="loginCtrl.error" class="alert alert-danger">{{loginCtrl.errorMessage}}</div>
-    <div ng-show="loginCtrl.test" class="alert alert-info">{{loginCtrl.test}}</div>
+    <div ng-show="loginCtrl.error" class="alert alert-danger">
+      De combinatie emailadres / paswoord is niet correct. <br/> Indien u uw paswoord vergeten bent, klik <a ui-sref="gimmi.forgotpassword">hier</a>.
+    </div>
     <form class="form" ng-submit="loginCtrl.login()">
       <div class="form-group">
         <label>Emailadres</label>
-        <input type="text" class="form-control" name="email" ng-model="loginCtrl.email" required>
+        <input type="text" class="form-control" name="email" ng-model="loginCtrl.email" ng-change="loginCtrl.saveMailInRootScope()" required>
       </div>
       <div class="form-group">
         <label>Paswoord</label>
         <input type="password" class="form-control" name="password" ng-model="loginCtrl.password" required>
+        <small id="forgottenPassword" class="form-text text-muted"><a ui-sref="gimmi.forgotpassword">Paswoord vergeten?</a></small>
       </div>
       <div>
         <button type="submit" class="btn btn-default" ng-disabled="loginCtrl.disabled">Login</button>

@@ -34,7 +34,11 @@
     </div>
     <div class="col-md-5">
       <h3>Registreer je op Gimmi</h3>
-      <div ng-show="personRegistrationCtrl.error" class="alert alert-danger">{{personRegistrationCtrl.errorMessage}}</div>
+      <div ng-show="personRegistrationCtrl.error" class="alert alert-danger">
+        Er bestaat al een gebruiker met dit emailadres. Gelieve <a ui-sref="gimmi.login">in te loggen met deze email</a> of een ander emailadres te gebruiken.
+        <br/> Indien u uw paswoord vergeten bent, klik
+        <a ui-sref="gimmi.forgotpassword">hier</a>.
+      </div>
       <div ng-show="personRegistrationCtrl.infoMessage" class="alert alert-info">{{personRegistrationCtrl.infoMessage}}</div>
       <form class="form" ng-submit="personRegistrationCtrl.register(personRegistrationCtrl.newPerson)">
         <div class="form-group">
@@ -51,7 +55,7 @@
         </div>
         <div class="form-group">
           <label>Emailadres</label>
-          <input type="email" class="form-control" name="email" ng-model="personRegistrationCtrl.newPerson.email" required>
+          <input type="email" class="form-control" name="email" ng-model="personRegistrationCtrl.newPerson.email" ng-change="personRegistrationCtrl.saveMailInRootScope()" required>
         </div>
 
         <div class="form-group">
