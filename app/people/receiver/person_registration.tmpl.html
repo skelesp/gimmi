@@ -55,7 +55,7 @@
         </div>
         <div class="form-group">
           <label>Emailadres</label>
-          <input type="email" class="form-control" name="email" ng-model="personRegistrationCtrl.newPerson.email" required>
+          <input type="email" class="form-control" name="email" ng-model="personRegistrationCtrl.newPerson.email" ng-change="personRegistrationCtrl.saveMailInRootScope()" required>
         </div>
 
         <div class="form-group">

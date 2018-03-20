@@ -46,7 +46,6 @@
 		}
 
 		self.saveMailInRootScope = function() {
-			console.log("Nieuwe waarde = " + self.email);
 			$rootScope.attemptedEmail = self.email;
 		}
 		
@@ -120,6 +119,11 @@
 		self.error = false;
 		self.disabled = false;
 		self.infoMessage = "";
+
+		self.saveMailInRootScope = function() {
+			console.log("nieuwe waarde = " + self.newPerson.email);
+			$rootScope.attemptedEmail = self.newPerson.email;
+		}
 
 		if ($rootScope.attemptedEmail) {
 			self.newPerson = { email: $rootScope.attemptedEmail};
