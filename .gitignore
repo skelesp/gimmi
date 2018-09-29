@@ -4,4 +4,4 @@ _db_dump/
 lib/vendor/
 .vscode/
 app/config.js
-.gitignore
+node_modules
