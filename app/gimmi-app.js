@@ -12,7 +12,8 @@
 	'ngFlash',
 	'ng.deviceDetector',
 	'gimmi.communication',
-	'gimmi.reporting'
+	'gimmi.reporting',
+	'cloudinary'
 ])
 .run(['$rootScope', '$window', '$state', '$stateParams', '$location', '$uibModalStack', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, $uibModalStack, Flash, config, UserService) {
 
@@ -139,6 +140,12 @@
 
 	}(document));
 
+}])
+.config(['cloudinaryProvider', function (cloudinaryProvider) {
+	cloudinaryProvider
+		.set("cloud_name", "hunk4smqo")
+		.set("secure", true)
+		.set("upload_preset", "wish_images");
 }])
 .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
 	$stateProvider

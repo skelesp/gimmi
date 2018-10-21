@@ -2,7 +2,9 @@
 <div class="card shadow mt-1">
    <!-- https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4 -->
   <div class="position-relative">
-    <img class="card-img-top img-fluid rounded w-100 mb-2" ng-src="{{wish.image}}" alt="Afbeelding van de wens niet beschikbaar">
+    <cl-image class="card-img-top img-fluid rounded w-100 mb-2" public-id="wish_images/{{wish.image.public_id}}" version="{{wish.image.version}}" class="thumbnail inline">
+      <cl-transformation fetch-format="auto" />
+    </cl-image> 
     <div class="card-img-overlay p-1 text-center h6" 
          ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) === 'reserved'}"
          ng-click="wishCtrl.goToWishDetail(wish)">
