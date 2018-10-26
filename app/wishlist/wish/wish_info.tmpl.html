@@ -16,7 +16,12 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-5"><img src="{{wishInfoCtrl.wish.image}}" class="img-fluid" alt="wish image" /></div>
+    <div class="col-md-5">
+      <cl-image class="img-fluid" alt="wish image" public-id="wish_images/{{wishInfoCtrl.wish.image.public_id}}" version="{{wishInfoCtrl.wish.image.version}}"
+        class="thumbnail inline">
+        <cl-transformation fetch-format="auto" />
+      </cl-image>
+    </div>
     <div class="col-md-4">
         <ul class="list-group my-2">
           <li class="list-group-item">
