@@ -1,5 +1,5 @@
-angular.module('cloudinaryUploadWidget')
-.directive('clUpload', ['cloudinaryUpload', function(cloudinaryUpload){
+angular.module('cloudinaryModule')
+    .directive('clUpload', ['cloudinaryService', function (cloudinaryService){
     return {
         restrict: 'AE',
         replace: false,
@@ -12,7 +12,7 @@ angular.module('cloudinaryUploadWidget')
         },        
         link: function ($scope, $element, $attrs) {
             /** Create the upload widget on loading the directive */
-            var widget = cloudinaryUpload.createWidget($scope.publicId, function (error, result) {
+            var widget = cloudinaryService.createWidget($scope.publicId, function (error, result) {
                 if (result && result.event === "success") {
                     var uploadedImage = {
                         public_id: result.info.public_id,

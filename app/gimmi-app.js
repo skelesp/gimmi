@@ -15,7 +15,7 @@
 	'gimmi.reporting',
 	'gimmi.config',
 	'cloudinary',
-	'cloudinaryUploadWidget'
+	'cloudinaryModule'
 ])
 .run(['$rootScope', '$window', '$state', '$stateParams', '$location', '$uibModalStack', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, $uibModalStack, Flash, config, UserService) {
 
@@ -143,14 +143,14 @@
 	}(document));
 
 }])
-.config(['cloudinaryProvider', 'cloudinaryUploadProvider', 'CONFIG', function (cloudinaryProvider, cloudinaryUploadProvider, CONFIG) {
+	.config(['cloudinaryProvider', 'cloudinaryServiceProvider', 'CONFIG', function (cloudinaryProvider, cloudinaryServiceProvider, CONFIG) {
 	/* Config for Angular SDK of Cloudinary (cl-image directive) */
 	cloudinaryProvider
 		.set("cloud_name", "hunk4smqo")
 		.set("secure", true)
 		.set("upload_preset", "wish_images");
 
-	cloudinaryUploadProvider
+	cloudinaryServiceProvider
 		.setOption("cloudName", CONFIG.cloudinary.cloudName)
 		.setOption("uploadPreset", CONFIG.cloudinary.uploadPreset)
 		.setOption("apiKey", CONFIG.cloudinary.apiKey)

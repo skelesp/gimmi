@@ -249,20 +249,33 @@
 	_self.addReservation = addReservation;
 	_self.deleteReservation = deleteReservation;
 }])
-.controller('editPopupCtrl', function($window, $uibModalInstance, wish) {
+.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService) {
 	var _self = this;
-
+	var currentImage = wish.image;
 	_self.wish = wish;
 	_self.ok = function () {
-		$uibModalInstance.close(wish);
+		if (_self.wish.image !== currentImage) {
+			cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
+				wish.image = image;
+				$uibModalInstance.close(wish);
+			});
+		} else {
+			$uibModalInstance.close(wish);
+		}
 	};
 	_self.cancel = function () {
-		$uibModalInstance.dismiss('cancel');
+		if (_self.wish.image !== currentImage) {
+			cloudinaryService.deleteImage(_self.wish.image.public_id, function () {
+				$uibModalInstance.dismiss('cancel');
+			});
+		} else {
+			$uibModalInstance.dismiss('cancel');
+		}
 	};
 	_self.goToTitle = function(){
 		$window.document.getElementById('EditWishTitle').focus();
 	};
-})
+}])
 .controller('copyWarningPopupCtrl', function ($window, $uibModalInstance, wish) {
 	var _self = this;
 
