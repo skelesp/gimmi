@@ -2,7 +2,7 @@
 <div class="card shadow mt-1">
    <!-- https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4 -->
   <div class="position-relative">
-    <cl-image class="card-img-top img-fluid rounded w-100 mb-2" public-id="wish_images/{{wish.image.public_id}}" version="{{wish.image.version}}" class="thumbnail inline">
+    <cl-image class="card-img-top img-fluid rounded w-100 mb-2" public-id="{{wish.image.public_id}}" version="{{wish.image.version}}" class="thumbnail inline">
       <cl-transformation fetch-format="auto" />
     </cl-image> 
     <div class="card-img-overlay p-1 text-center h6" 
@@ -43,11 +43,15 @@
     <small id="editHelp" class="form-text text-muted mb-2">Wijzig hieronder de basisgegevens van de wens. Door op de afbeelding te klikken kan je deze ook wijzigen.</small>
     <form name="wishEditForm" class="p-2" role="form">
       <div class="form-group">
-        <img class="img-fluid"  ng-src="{{editPopupCtrl.wish.image}}" 
-                                google-image-search 
-                                data-search-term="{{editPopupCtrl.wish.title}}" 
-                                data-image-result="editPopupCtrl.wish" 
-                                data-on-cancel="editPopupCtrl.goToTitle()"/>
+        <cl-image class="img-fluid" public-id="{{editPopupCtrl.wish.image.public_id}}" version="{{editPopupCtrl.wish.image.version}}">
+          <cl-transformation fetch-format="auto" />
+        </cl-image>
+        <button class="btn btn-danger" type="button"
+                cl-upload 
+                 public-id="{{editPopupCtrl.wish._id}}"
+                 image-result="editPopupCtrl.wish.image" 
+                 on-cancel="editPopupCtrl.goToTitle()">
+        Wijzig de afbeelding</button>    
       </div>
       <div class="form-group">
         <input type="text" class="form-control" id="EditWishTitle" ng-model="editPopupCtrl.wish.title" placeholder="Titel" required/>

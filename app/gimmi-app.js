@@ -13,7 +13,9 @@
 	'ng.deviceDetector',
 	'gimmi.communication',
 	'gimmi.reporting',
-	'cloudinary'
+	'gimmi.config',
+	'cloudinary',
+	'cloudinaryUploadWidget'
 ])
 .run(['$rootScope', '$window', '$state', '$stateParams', '$location', '$uibModalStack', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, $uibModalStack, Flash, config, UserService) {
 
@@ -141,13 +143,23 @@
 	}(document));
 
 }])
-.config(['cloudinaryProvider', function (cloudinaryProvider) {
+.config(['cloudinaryProvider', 'cloudinaryUploadProvider', 'CONFIG', function (cloudinaryProvider, cloudinaryUploadProvider, CONFIG) {
+	/* Config for Angular SDK of Cloudinary (cl-image directive) */
 	cloudinaryProvider
 		.set("cloud_name", "hunk4smqo")
 		.set("secure", true)
 		.set("upload_preset", "wish_images");
+
+	cloudinaryUploadProvider
+		.setOption("cloudName", CONFIG.cloudinary.cloudName)
+		.setOption("uploadPreset", CONFIG.cloudinary.uploadPreset)
+		.setOption("apiKey", CONFIG.cloudinary.apiKey)
+		.setOption("googleApiKey", CONFIG.googleApiKey)
+		.setOption("language", CONFIG.cloudinary.language)
+		//https://cloudinary.com/documentation/upload_widget#localization
+		.setOption("text", CONFIG.cloudinary.text);
 }])
-.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$uibTooltipProvider', '$compileProvider', 'FlashProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
 	$stateProvider
 		.state('gimmi', {
 			url: '/',
@@ -211,8 +223,8 @@
 	FlashProvider.setTimeout(2000);
 	FlashProvider.setShowClose(true);
 	FlashProvider.setTemplatePreset('transclude');
-})
-	.controller('ApplicationCtrl', ['$scope', '$rootScope', '$state', 'UserService', 'deviceDetector', 'Flash', function ($scope, $rootScope, $state, UserService, device, Flash){
+}])
+.controller('ApplicationCtrl', ['$scope', '$rootScope', '$state', 'UserService', 'deviceDetector', 'Flash', function ($scope, $rootScope, $state, UserService, device, Flash){
 	var self = this;
 
 	self.currentUser = UserService.getCurrentUser();

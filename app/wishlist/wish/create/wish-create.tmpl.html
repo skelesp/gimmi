@@ -9,9 +9,9 @@
 				<br/>
 				<span class="h6 font-weight-bold">Voeg een wens toe</span>
 			</p>
-			<a href="" ng-show="createWishCtrl.newWish.title" 
+			<a href="" 	ng-show="createWishCtrl.newWish.title" 
 						google-image-search 
-						data-search-term="{{createWishCtrl.newWish.title}}" 
+						data-search-term="{{createWishCtrl.newWish.title}}"
 						data-image-result="createWishCtrl.newWish">
 				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen
 			</a>
@@ -44,16 +44,14 @@
 				ng-disabled="wishCreateForm.$invalid" disabled="disabled">
     		Toevoegen
 		</button>
-		<button ng-show="createWishCtrl.newWish.image === '' && createWishCtrl.newWish.title !== ''" type="button" 
-				class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
-				id="searchImageBtn"
-				google-image-search
-				data-search-term="{{createWishCtrl.newWish.title}}" 
-				data-image-result="createWishCtrl.newWish"
-				data-on-cancel="createWishCtrl.goToTitle()"
-				on-image-select="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)">
-    		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding
-		</button>
+		<button class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" type="button" id="searchImageBtn"
+				ng-show="createWishCtrl.newWish.image === '' && createWishCtrl.newWish.title !== ''" 		
+				cl-upload 
+				 public-id=""
+				 image-result="createWishCtrl.newWish.image" 
+				 on-cancel="createWishCtrl.goToTitle()"
+				 on-image-upload="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)">
+		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding</button>
 		<button ng-show="createWishCtrl.newWish.title !== '' || createWishCtrl.newWish.price !== ''" type="button" class="btn btn-default btn-sm float-left mb-1 mr-1"
 		 ng-click="createWishCtrl.reset();">
     		Reset
