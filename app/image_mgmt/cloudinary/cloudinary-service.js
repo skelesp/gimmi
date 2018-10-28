@@ -42,7 +42,9 @@ angular.module('cloudinaryModule', [
          * @return {CloudinaryUploadWidget}
          * */
         clsrv.createWidget = function(publicId, callback) {
-            widgetOptions.publicId = publicId;
+            if (publicId) {
+                widgetOptions.publicId = publicId;
+            }
             widgetOptions.uploadSignature = clsrv.getSignature;
             return cloudinary.createUploadWidget(widgetOptions, callback);
         }

@@ -18,7 +18,6 @@ angular.module('cloudinaryModule')
                         public_id: result.info.public_id,
                         version: result.info.version
                     };
-                    console.log("Uploaded image: ", uploadedImage);
                     if ($scope.imageResult) {
                         $scope.$apply(function() {
                             $scope.imageResult = uploadedImage;
@@ -27,7 +26,8 @@ angular.module('cloudinaryModule')
                     if ($scope.onImageUpload) {
                         $scope.$apply($scope.onImageUpload(uploadedImage));
                     }
-                    widget.close();
+                    console.log("Uploaded image:", $scope.imageResult);
+                    widget.close({ quiet: true });
                 } else if (error) {
                     console.error(error);
                     if ($scope.onCancel) {

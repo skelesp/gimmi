@@ -1,27 +1,31 @@
 <!-- Create wish card -->
 <div class="card border border-danger shadow">
+	<!-- Image header of create wish card -->
 	<div class="position-relative">
-		<img class="card-img-top rounded img-fluid my-3" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image" ng-src="{{createWishCtrl.newWish.image}}"/>
-		<img class="card-img-top rounded img-fluid my-3" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image" ng-src="{{createWishCtrl.defaultImage}}"/>
+		<cl-image class="card-img-top rounded img-fluid my-3" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image.public_id" public-id="{{createWishCtrl.newWish.image.public_id}}" version="{{createWishCtrl.newWish.image.version}}"
+		 class="thumbnail inline">
+			<cl-transformation fetch-format="auto" />
+		</cl-image>
+		<cl-image class="card-img-top rounded img-fluid my-3" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image.public_id" public-id="{{createWishCtrl.defaultImage.public_id}}" version="{{createWishCtrl.defaultImage.version}}"
+		 class="thumbnail inline">
+			<cl-transformation fetch-format="auto" />
+		</cl-image>
 		<div class="card-img-overlay pt-4 blurredCardOverlay">
 			<p ng-hide="createWishCtrl.newWish.title" class="text-center pt-3">
 				<i class="fa fa-plus fa-3x" aria-hidden="true"></i>
 				<br/>
 				<span class="h6 font-weight-bold">Voeg een wens toe</span>
 			</p>
-			<a href="" 	ng-show="createWishCtrl.newWish.title" 
-						google-image-search 
-						data-search-term="{{createWishCtrl.newWish.title}}"
-						data-image-result="createWishCtrl.newWish">
-				<i class="fa fa-search fa-2x mr-1" aria-hidden="true"></i> Klik om een andere afbeelding te kiezen
-			</a>
 		</div>
 	</div>
+	<!-- Create wish form -->
 	<form name="wishCreateForm" class="m-2" role="form" novalidate="">
+		<!-- Input wish title -->
 		<div class="form-group">
 			<input  type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" 
 					placeholder="Titel" required="" ng-keyup="$event.keyCode == 13 && createWishCtrl.goToPrice()">
 		</div>
+		<!-- Input wish price -->
 		<div class="form-group">
 			<div class="input-group mb-2">
 				<div class="input-group-prepend">
@@ -31,31 +35,32 @@
 					ng-model="createWishCtrl.newWish.price" ng-keyup="$event.keyCode == 13 && createWishCtrl.openImageSearch()">
 			</div>
 		</div>
+		<!-- Input wish URL -->
 		<div class="form-group">
 			<input type="hidden" class="form-control form-control-sm" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url"
 			 placeholder="Link naar website met info over de wens">
 		</div>
+		<!-- 
 		<div class="form-group">
 			<input type="hidden" class="form-control form-control-sm" id="newWishImage" ng-model="createWishCtrl.newWish.image" placeholder="Zoek een afbeelding">
-		</div>
+		</div> -->
+		<!-- Reset button -->
+		<button type="button" class="btn btn-default btn-sm float-left mb-1 mr-1" ng-show="createWishCtrl.newWish.title !== '' || createWishCtrl.newWish.price !== ''"
+		 ng-click="createWishCtrl.cancel();">
+			Annuleer</button>
+		<!-- Afbeelding button -->
+		<button class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" type="button" id="searchImageBtn"
+				ng-show="!createWishCtrl.newWish.image.public_id && createWishCtrl.newWish.title !== ''"
+				cl-upload 
+				 image-result="createWishCtrl.newWish.image" 
+				 on-cancel="createWishCtrl.goToTitle()">
+		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding</button>
+		<!-- Toevoegen button -->
 		<button type="button" class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
-				ng-show="createWishCtrl.newWish.image !== ''"
+				ng-show="createWishCtrl.newWish.image.public_id"
 				ng-click="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" 
 				ng-disabled="wishCreateForm.$invalid" disabled="disabled">
-    		Toevoegen
-		</button>
-		<button class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" type="button" id="searchImageBtn"
-				ng-show="createWishCtrl.newWish.image === '' && createWishCtrl.newWish.title !== ''" 		
-				cl-upload 
-				 public-id=""
-				 image-result="createWishCtrl.newWish.image" 
-				 on-cancel="createWishCtrl.goToTitle()"
-				 on-image-upload="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)">
-		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding</button>
-		<button ng-show="createWishCtrl.newWish.title !== '' || createWishCtrl.newWish.price !== ''" type="button" class="btn btn-default btn-sm float-left mb-1 mr-1"
-		 ng-click="createWishCtrl.reset();">
-    		Reset
-    	</button>
+    	Toevoegen</button>
 	</form>
 </div>
 

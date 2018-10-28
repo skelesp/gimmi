@@ -1,7 +1,7 @@
 angular.module('gimmi.models.wish', [
 	'gimmi.config'
 ])
-.service('wishModel', function($http, $q, CONFIG, Flash){
+	.service('wishModel', ['$http', '$q', 'CONFIG', 'Flash', 'cloudinaryService', function($http, $q, CONFIG, Flash, cloudinaryService){
 	var model = this,
 		URLS = {
 			WISHLIST: CONFIG.apiUrl + '/api/wishlist',
@@ -67,7 +67,7 @@ angular.module('gimmi.models.wish', [
 
 		return deferred.promise;
 	}
-	model.createWish = function (wish, receiverID, userID, copyOf){
+	model.createWish = function (wish, receiverID, userID, copyOf, callback){
 		wish.receiver = receiverID;
 		wish.createdBy = userID;
 
@@ -79,17 +79,21 @@ angular.module('gimmi.models.wish', [
 			wish.image = CONFIG.defaultImage;
 		}
 		
-		$http.post(URLS.WISH, wish).success(function(wish){
+		$http.post(URLS.WISH, wish).success(function(createdWish){
+			wish = createdWish;
 			if (wishlist._id.receiver._id === receiverID) {
-				wishlist.wishes.push(wish);
+				wishlist.wishes.push(createdWish);
 				wishlist.count++;
-				var message = "De wens '" + wish.title + "' werd toegevoegd aan deze lijst.";
+				var message = "De wens '" + createdWish.title + "' werd toegevoegd aan deze lijst.";
 				var flashID = Flash.create('success', message);
 			} else {
 				console.info("%s copied a wish from wishlist %s", userID, receiverID);
 				// Show flashmessage voor succesvolle copy
-				var message = "De wens '" + wish.title + "' werd gekopieerd naar je eigen lijst.";
+				var message = "De wens '" + createdWish.title + "' werd gekopieerd naar je eigen lijst.";
 				var flashID = Flash.create('success', message);
+			}
+			if (callback) {
+				callback(null, wish);
 			}
 		});
 	};
@@ -125,7 +129,9 @@ angular.module('gimmi.models.wish', [
 					return w._id === wish._id;
 				});
 			}
-			console.info("wish deleted: " + wish._id);
+			cloudinaryService.deleteImage(wish.image.public_id, function () {
+				console.info("wish and image deleted: " + wish._id);
+			});
 		});
 	}
 
@@ -158,5 +164,5 @@ angular.module('gimmi.models.wish', [
 		});
 	}
 
-})
+}])
 ;

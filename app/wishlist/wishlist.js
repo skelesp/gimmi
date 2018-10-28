@@ -316,27 +316,33 @@
 		$uibModalInstance.dismiss('cancel');
 	};
 })
-.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', '$window', '$timeout', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'gcseService',
-	function ($state, $stateParams, $uibModal, $window, $timeout, CONFIG, wishModel, receiverModel, UserService, gcseService){
+.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', '$window', '$timeout', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'cloudinaryService',
+	function ($state, $stateParams, $uibModal, $window, $timeout, CONFIG, wishModel, receiverModel, UserService, cloudinaryService){
 	/* Initialize variables */
 	var _self = this;
 	var defaultWish = {
 		title: '',
 		price: '',
 		url: '',
-		image: ''
+		image: {}
 	};
 	
 	/* Available in view */
 	_self.newWish = angular.copy(defaultWish);
 	_self.noImages = true;
 	_self.defaultImage = CONFIG.defaultImage;
-	_self.reset = resetForm;
+	_self.cancel = cancel;
 	_self.createWish = createWish;
 	_self.currentReceiverID = receiverModel.getCurrentReceiver()._id;
 	_self.currentUserID = UserService.getCurrentUser()._id;
 	
 	/* Functions in createWishCtrl */
+	function cancel() {
+		cloudinaryService.deleteImage(_self.newWish.image.public_id, function(){
+			resetForm();
+			returnToWishes();
+		});
+	}
 	function returnToWishes(){
 		$state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
 	}
@@ -346,12 +352,23 @@
 		if (!wish.image) {
 			wish.image = '';
 		}
-		wishModel.createWish(wish, receiverID, userID);
-		resetForm();
-		returnToWishes();
+		// Create wish with image with random id
+		wishModel.createWish(wish, receiverID, userID, null, function(error, wish){
+			// Rename image to wish_id
+			cloudinaryService.renameImage(_self.newWish.image.public_id, wish._id, function(image){
+				// Update wish with renamed image
+				wish.image = image;
+				wishModel.updateWish(wish).then(function(wish){
+					// Reset the form
+					resetForm();
+					returnToWishes();
+				});
+			});
+		});
 	}
 
 	function resetForm() {
+
 		_self.newWish = angular.copy(defaultWish);
 		_self.googleImages = [];
 	}
