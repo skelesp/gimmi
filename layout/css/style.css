@@ -96,7 +96,7 @@ h6.card-title  {
 [ng-click],
 [data-ng-click],
 [x-ng-click],
-[google-image-search], .pointer {
+[cl-upload], .pointer {
     cursor: pointer;
 }
 .pointer {

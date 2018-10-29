@@ -2,7 +2,7 @@
 	'gimmi.models.wishlist',
 	'gimmi.models.wish',
 	'wishlist.wish.create',
-	'wishlist.wish.edit'
+	'wishlist.wish.edit',
 ])
 	.config(function($stateProvider){
 
@@ -188,16 +188,28 @@
 			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy._id)) && (wish.reservation.hideUntil > now.toISOString()));
 		}
 	}])
-	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', function($window, $uibModalInstance, wish){
-		var _self = this,
-		originalKeys = Object.keys(wish);
-
+	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService){
+		var _self = this;
+		var currentImage = wish.image;
 		_self.wish = wish;
 		_self.ok = function () {
-			$uibModalInstance.close(wish);
+			if (_self.wish.image !== currentImage) {
+				cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
+					wish.image = image;
+					$uibModalInstance.close(wish);
+				});
+			} else {
+				$uibModalInstance.close(wish);
+			}
 		};
 		_self.cancel = function () {
-			$uibModalInstance.dismiss('cancel');
+			if (_self.wish.image !== currentImage) {
+				cloudinaryService.deleteImage(_self.wish.image.public_id, function() {
+					$uibModalInstance.dismiss('cancel');
+				});
+			} else {
+				$uibModalInstance.dismiss('cancel');
+			}
 		};
 		_self.goToTitle = function() {
 			$window.document.getElementById('DetailWishTitle').focus();

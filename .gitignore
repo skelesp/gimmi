@@ -5,3 +5,4 @@ lib/vendor/
 .vscode/
 app/config.js
 node_modules
+bower_components
