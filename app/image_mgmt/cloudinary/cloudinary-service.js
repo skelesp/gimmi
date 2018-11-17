@@ -8,8 +8,7 @@ angular.module('cloudinaryModule', [
      * All options can be found at: https://cloudinary.com/documentation/upload_widget#cloudinary_openuploadwidget_options_resultcallback
      */
     var widgetOptions = {
-        sources: ['local', 'image_search', 'url'],
-        defaultSource: 'image_search',
+        sources: ['image_search', 'local', 'url'],
         resourceType: 'image',
         multiple: false,
         theme: "minimal",
