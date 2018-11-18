@@ -64,6 +64,7 @@
 	_self.currentUserID = UserService.getCurrentUser().id;
 	_self.currentReceiver = currentReceiver;
 	_self.wishes = wishlist.wishes;
+	_self.extraInfo = wishlist.extraInfo;
 	
 	if (currentReceiver) {
 		_self.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
