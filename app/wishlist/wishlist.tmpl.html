@@ -5,10 +5,9 @@
 
 <div ng-if="wishlistCtrl.currentReceiver">
 	<!-- Wishlist header -->
-	<blockquote class="blockquote p-3">
-		<div class="row">
+	<blockquote class="blockquote pl-3 mt-2">
+		<div class="row mb-2">
 			<div class="col-sm-auto">
-				<h4>Wensenlijst van</h4>
 				<h1>{{wishlistCtrl.currentReceiver.firstName}} {{wishlistCtrl.currentReceiver.lastName}}</h1>
 			</div>
 			<div class="col-sm-4 float-left">
@@ -20,9 +19,38 @@
 				</a>
 			</div>
 		</div>
+		<!-- Extra info over de persoon -->
+		<div class="row">
+			<div class="col col-12 col-md-auto">
+				<div class="h6">
+					Waarmee kan je Stijn een plezier doen?
+				</div>
+				<div class="font-sm">
+					<ul>
+						<li ng-repeat="like in wishlistCtrl.extraInfo.likes">
+							<span ng-if="!like.url">{{like.text}}</span>
+							<a ng-if="like.url" ng-href="{{like.url}}" target="_blank">{{like.text}}</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col col-12 col-md-auto">
+				<div class="h6">Wat krijgt Stijn liever niet?</div>
+				<div class="font-sm">
+					<ul>
+						<li ng-repeat="dislike in wishlistCtrl.extraInfo.dislikes">
+							{{dislike.text}}
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
 	</blockquote>
 
 	<!-- Lijst van wensen -->
+	<blockquote class="blockquote pl-3 ">
+		<h3>Wensenlijst</h3>
+	</blockquote>
 	<div class="card-columns ml-3 mr-3">
 		<!-- Create wish form -->
 		<div ui-view="wish_create"></div>
