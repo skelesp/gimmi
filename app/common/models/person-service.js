@@ -67,7 +67,7 @@ angular.module('gimmi.person', [
         return deferred.promise;
       }
       // - Register a person to the server -
-      function register(person, config) {
+      function register(person) {
         // create a new instance of deferred
         var deferred = $q.defer();
         // send a post request to the server
@@ -84,8 +84,7 @@ angular.module('gimmi.person', [
           });
           // return promise object
         return deferred.promise;
-      } // - End of register -
-
+      }
       function getNameById(id) {
         var person = {};
         var deferred = $q.defer();
@@ -102,7 +101,6 @@ angular.module('gimmi.person', [
         }
         return deferred.promise;
       }
-      
       function updatePersonDetails (person){
         var deferred = $q.defer();
         if (person) {
@@ -205,7 +203,21 @@ angular.module('gimmi.person', [
 
         return deferred.promise;
       }
-
+      function updateExtraInfo(personId, likes, dislikes) {
+        var deferred = $q.defer();
+        if (personId) {
+          $http.put(`${CONFIG.apiUrl}/api/people/${personId}/extrainfo`, {likes, dislikes})
+            .success(function (person) {
+              deferred.resolve(person);
+            })
+            .error(function (error) {
+              deferred.reject({ error: "something went wrong" });
+            });
+        } else {
+          deferred.reject({ error: "No person object found" });
+        }
+        return deferred.promise;
+      }
       function deleteFacebookAccount (person){
         $http.delete(CONFIG.apiUrl + '/api/people/' + person._id + '/account/facebook')
         .success(function(token){
@@ -227,6 +239,7 @@ angular.module('gimmi.person', [
         requestPasswordReset: requestPasswordReset,
         validatePasswordResetToken: validatePasswordResetToken,
         resetPassword: resetPassword,
-        deleteFacebookAccount: deleteFacebookAccount
+        deleteFacebookAccount: deleteFacebookAccount,
+        updateExtraInfo: updateExtraInfo
       });
     }]);
