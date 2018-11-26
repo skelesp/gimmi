@@ -57,14 +57,22 @@
 		})
 	;
 })
-.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService', 'wishlist', 'currentReceiver',
-	function wishlistCtrl($stateParams, wishModel, receiverModel, UserService, wishlist, currentReceiver){
+.controller('wishlistCtrl', ['UserService', 'PersonService', 'wishlist', 'currentReceiver',
+	function wishlistCtrl(UserService, PersonService, wishlist, currentReceiver){
 	var _self = this;
 
 	_self.currentUserID = UserService.getCurrentUser().id;
 	_self.currentReceiver = currentReceiver;
 	_self.wishes = wishlist.wishes;
-	_self.extraInfo = wishlist.extraInfo;
+	_self.extraInfo = wishlist._id.receiver.extraInfo;
+	_self.updateExtraInfo = function(likes, dislikes) {
+		PersonService.updateExtraInfo(wishlist._id.receiver._id, likes, dislikes)
+			.then(function(person) {
+				_self.extraInfo = person.extraInfo;
+			}, function(err){
+				console.log(`ERROR while updating extra info: ${err}`);
+			});
+	}
 	
 	if (currentReceiver) {
 		_self.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
@@ -355,7 +363,7 @@
 		}
 		// Create wish with image with random id
 		wishModel.createWish(wish, receiverID, userID, null, function(error, wish){
-			// Rename image to wish_id
+			// Rename temporary image to wish_id
 			cloudinaryService.renameImage(_self.newWish.image.public_id, wish._id, function(image){
 				// Update wish with renamed image
 				wish.image = image;
