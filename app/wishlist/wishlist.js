@@ -77,18 +77,14 @@
 		_self.updatedExtraInfo.likes.splice(index, 1);
 	}
 	_self.addLike = function() {
-		console.log(_self.newLike);
 		if (_self.newLike.text) {
 			_self.updatedExtraInfo.likes.push(_self.newLike);
-			console.log(_self.updatedExtraInfo);
 			_self.newLike = {};
 		}
 	}
 	_self.addDislike = function() {
-		console.log(_self.newDislike);
 		if (_self.newDislike.text) {
 			_self.updatedExtraInfo.dislikes.push(_self.newDislike);
-			console.log(_self.updatedExtraInfo);
 			_self.newDislike = {};
 		}
 	}
@@ -118,7 +114,6 @@
 				}
 			}
 		}
-		console.log(`Extra info edit mode: ${_self.extraInfoEditMode}`);
 	}
 
 	// TODO: verwijder onderstaande code uit controller: hoort hier niet!
