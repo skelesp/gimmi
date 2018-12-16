@@ -36,7 +36,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="col-7 col-md-auto font-sm" ng-show="(wishlistCtrl.extraInfo.likes.length == 0 && wishlistCtrl.extraInfo.dislikes.length == 0) && wishlistCtrl.userIsReceiver">
+			<div class="col-7 col-md-auto font-sm" ng-show="((!wishlistCtrl.extraInfo.likes || wishlistCtrl.extraInfo.likes.length == 0) && (!wishlistCtrl.extraInfo.likes ||wishlistCtrl.extraInfo.dislikes.length == 0)) && wishlistCtrl.userIsReceiver">
 				Voeg extra info over jezelf toe...
 			</div>
 			<div class="col-2 col-md-auto order-md-3" ng-show="wishlistCtrl.userIsReceiver">
