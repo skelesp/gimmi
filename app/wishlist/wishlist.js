@@ -57,14 +57,64 @@
 		})
 	;
 })
-.controller('wishlistCtrl', ['$stateParams', 'wishModel', 'receiverModel', 'UserService', 'wishlist', 'currentReceiver',
-	function wishlistCtrl($stateParams, wishModel, receiverModel, UserService, wishlist, currentReceiver){
+.controller('wishlistCtrl', ['UserService', 'PersonService', 'wishlist', 'currentReceiver',
+	function wishlistCtrl(UserService, PersonService, wishlist, currentReceiver){
 	var _self = this;
 
 	_self.currentUserID = UserService.getCurrentUser().id;
 	_self.currentReceiver = currentReceiver;
 	_self.wishes = wishlist.wishes;
 	
+	/* Extra info */
+	_self.extraInfo = wishlist._id.receiver.extraInfo;
+	_self.extraInfoEditMode = false;
+	_self.toggleExtraInfoMode = toggleExtraInfoMode;
+	
+	_self.deleteDislike = function(index) {
+		_self.updatedExtraInfo.dislikes.splice(index, 1);
+	}
+	_self.deleteLike = function(index) {
+		_self.updatedExtraInfo.likes.splice(index, 1);
+	}
+	_self.addLike = function() {
+		console.log(_self.newLike);
+		if (_self.newLike.text) {
+			_self.updatedExtraInfo.likes.push(_self.newLike);
+			console.log(_self.updatedExtraInfo);
+			_self.newLike = {};
+		}
+	}
+	_self.addDislike = function() {
+		console.log(_self.newDislike);
+		if (_self.newDislike.text) {
+			_self.updatedExtraInfo.dislikes.push(_self.newDislike);
+			console.log(_self.updatedExtraInfo);
+			_self.newDislike = {};
+		}
+	}
+	_self.saveExtraInfo = function() {
+		PersonService.updateExtraInfo(wishlist._id.receiver._id, _self.updatedExtraInfo.likes, _self.updatedExtraInfo.dislikes)
+			.then(function (person) {
+				_self.extraInfo = person.extraInfo;
+				toggleExtraInfoMode();
+			}, function (err) {
+				console.log(`ERROR while updating extra info: ${err}`);
+			});
+	}
+	_self.cancelExtraInfo = function() {
+		delete _self.updatedExtraInfo;
+		toggleExtraInfoMode();
+	}
+	
+	function toggleExtraInfoMode(){
+		_self.extraInfoEditMode = !_self.extraInfoEditMode;
+		if (_self.extraInfoEditMode) {
+			_self.updatedExtraInfo = angular.copy(_self.extraInfo);
+		}
+		console.log(`Extra info edit mode: ${_self.extraInfoEditMode}`);
+	}
+
+	// TODO: verwijder onderstaande code uit controller: hoort hier niet!
 	if (currentReceiver) {
 		_self.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
 	} else {
@@ -354,7 +404,7 @@
 		}
 		// Create wish with image with random id
 		wishModel.createWish(wish, receiverID, userID, null, function(error, wish){
-			// Rename image to wish_id
+			// Rename temporary image to wish_id
 			cloudinaryService.renameImage(_self.newWish.image.public_id, wish._id, function(image){
 				// Update wish with renamed image
 				wish.image = image;
