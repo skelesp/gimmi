@@ -6,6 +6,7 @@
 <div ng-if="wishlistCtrl.currentReceiver">
 	<!-- Wishlist header -->
 	<blockquote class="blockquote pl-3 mt-2">
+		<!-- Wishlist header -->
 		<div class="row mb-2">
 			<div class="col-sm-auto">
 				<h1>{{wishlistCtrl.currentReceiver.firstName}} {{wishlistCtrl.currentReceiver.lastName}}</h1>
@@ -20,8 +21,9 @@
 			</div>
 		</div>
 		<!-- Extra info over de persoon -->
-		<div class="row">
-			<div class="col col-12 col-md-auto">
+		<!-- Read only mode -->
+		<div class="row" ng-hide="wishlistCtrl.extraInfoEditMode">
+			<div class="col-10 col-md-auto" ng-show="wishlistCtrl.extraInfo.likes.length">
 				<div class="h6">
 					Waarmee kan je Stijn een plezier doen?
 				</div>
@@ -34,17 +36,89 @@
 					</ul>
 				</div>
 			</div>
-			<div class="col col-12 col-md-auto">
+			<div class="col-7 col-md-auto font-sm" ng-show="(wishlistCtrl.extraInfo.likes.length == 0 && wishlistCtrl.extraInfo.dislikes.length == 0) && wishlistCtrl.userIsReceiver">
+				Voeg extra info over jezelf toe...
+			</div>
+			<div class="col-2 col-md-auto order-md-3" ng-show="wishlistCtrl.userIsReceiver">
+				<i class="fa fa-pencil fa-flip-horizontal" aria-hidden="true" ng-click="wishlistCtrl.toggleExtraInfoMode()"></i>
+			</div>
+			<div class="col-10 col-md-auto" ng-show="wishlistCtrl.extraInfo.likes.length">
 				<div class="h6">Wat krijgt Stijn liever niet?</div>
 				<div class="font-sm">
 					<ul>
 						<li ng-repeat="dislike in wishlistCtrl.extraInfo.dislikes">
-							{{dislike.text}}
+							<span ng-if="!dislike.url">{{dislike.text}}</span>
+							<a ng-if="dislike.url" ng-href="{{dislike.url}}" target="_blank">{{dislike.text}}</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		<!-- Edit mode -->
+		<form class="row" ng-show="wishlistCtrl.extraInfoEditMode">
+				<!-- Like part -->
+				<div class="col-10 col-md-auto">
+					<div class="h6">Waarmee kan men je een plezier doen?</div>
+					<!-- Existing like rows -->
+					<div class="row no-gutters" ng-repeat="like in wishlistCtrl.updatedExtraInfo.likes">
+						<div class="col-5 mr-1">
+							<input type="text" class="form-control form-control-sm" ng-model="like.text" placeholder="Geef in wat je plezier doet..."></input>
+						</div>
+						<div class="col-5 mr-1">
+							<input type="url" class="form-control form-control-sm" ng-model="like.url" placeholder="url (optioneel)"></input>
+						</div>
+						<div class="col-1">
+							<i class="fa fa-trash" aria-hidden="true" ng-click="wishlistCtrl.deleteLike($index)"></i>
+						</div>
+					</div>
+					<!-- New like row -->
+					<div class="row no-gutters">
+						<div class="col-5 mr-1">
+							<input type="text" class="form-control form-control-sm" ng-model="wishlistCtrl.newLike.text" placeholder="Geef in wat je plezier doet..."></input>
+						</div>
+						<div class="col-5 mr-1">
+							<input type="url" class="form-control form-control-sm" ng-model="wishlistCtrl.newLike.url" placeholder="url (optioneel)"></input>
+						</div>
+						<div class="col-1">
+							<i class="fa fa-plus" aria-hidden="true" ng-show="wishlistCtrl.newLike.text" ng-click="wishlistCtrl.addLike()"></i>
+						</div>
+					</div>
+				</div>
+				<!-- Save/cancel part -->
+				<div class="col-2 col-md-auto order-md-3">
+					<i class="fa fa-check text-success mr-2" aria-hidden="true" ng-click="wishlistCtrl.saveExtraInfo()"></i>
+					<i class="fa fa-times text-danger" aria-hidden="true" ng-click="wishlistCtrl.cancelExtraInfo()"></i>
+				</div>
+				<!-- Dislike part -->
+				<div class="col-10 col-md-auto">
+					<div class="h6">Wat krijgt je liever niet?</div>
+					<!-- Existing dislike rows -->
+					<div class="row no-gutters" ng-repeat="dislike in wishlistCtrl.updatedExtraInfo.dislikes">
+						<div class="col-5 mr-1">
+							<input type="text" class="form-control form-control-sm" ng-model="dislike.text" placeholder="Geef in wat je plezier doet..."></input>
+						</div>
+						<div class="col-5 mr-1">
+							<input type="url" class="form-control form-control-sm" ng-model="dislike.url" placeholder="url (optioneel)"></input>
+						</div>
+						<div class="col-1">
+							<i class="fa fa-trash" aria-hidden="true" ng-click="wishlistCtrl.deleteDislike($index)"></i>
+						</div>
+					</div>
+					<!-- New dislike row -->
+					<div class="row no-gutters">
+						<div class="col-5 mr-1">
+							<input type="text" class="form-control form-control-sm" ng-model="wishlistCtrl.newDislike.text" placeholder="Geef in wat je plezier doet..."></input>
+						</div>
+						<div class="col-5 mr-1">
+							<input type="url" class="form-control form-control-sm" ng-model="wishlistCtrl.newDislike.url" placeholder="url (optioneel)"></input>
+						</div>
+						<div class="col-1">
+							<i class="fa fa-plus" aria-hidden="true" ng-show="wishlistCtrl.newDislike.text" ng-click="wishlistCtrl.addDislike()"></i>
+						</div>
+					</div>
+				</div>
+				
+		</form>
 	</blockquote>
 
 	<!-- Lijst van wensen -->
@@ -53,6 +127,7 @@
 	</blockquote>
 	<div class="card-columns ml-3 mr-3">
 		<!-- Create wish form -->
+		<!-- TODO: directive maken van wish_create "tegel" ipv view -->
 		<div ui-view="wish_create"></div>
 		<!-- /Create wish form -->
 

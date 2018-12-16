@@ -64,16 +64,57 @@
 	_self.currentUserID = UserService.getCurrentUser().id;
 	_self.currentReceiver = currentReceiver;
 	_self.wishes = wishlist.wishes;
+	
+	/* Extra info */
 	_self.extraInfo = wishlist._id.receiver.extraInfo;
-	_self.updateExtraInfo = function(likes, dislikes) {
-		PersonService.updateExtraInfo(wishlist._id.receiver._id, likes, dislikes)
-			.then(function(person) {
+	_self.extraInfoEditMode = false;
+	_self.toggleExtraInfoMode = toggleExtraInfoMode;
+	
+	_self.deleteDislike = function(index) {
+		_self.updatedExtraInfo.dislikes.splice(index, 1);
+	}
+	_self.deleteLike = function(index) {
+		_self.updatedExtraInfo.likes.splice(index, 1);
+	}
+	_self.addLike = function() {
+		console.log(_self.newLike);
+		if (_self.newLike.text) {
+			_self.updatedExtraInfo.likes.push(_self.newLike);
+			console.log(_self.updatedExtraInfo);
+			_self.newLike = {};
+		}
+	}
+	_self.addDislike = function() {
+		console.log(_self.newDislike);
+		if (_self.newDislike.text) {
+			_self.updatedExtraInfo.dislikes.push(_self.newDislike);
+			console.log(_self.updatedExtraInfo);
+			_self.newDislike = {};
+		}
+	}
+	_self.saveExtraInfo = function() {
+		PersonService.updateExtraInfo(wishlist._id.receiver._id, _self.updatedExtraInfo.likes, _self.updatedExtraInfo.dislikes)
+			.then(function (person) {
 				_self.extraInfo = person.extraInfo;
-			}, function(err){
+				toggleExtraInfoMode();
+			}, function (err) {
 				console.log(`ERROR while updating extra info: ${err}`);
 			});
 	}
+	_self.cancelExtraInfo = function() {
+		delete _self.updatedExtraInfo;
+		toggleExtraInfoMode();
+	}
 	
+	function toggleExtraInfoMode(){
+		_self.extraInfoEditMode = !_self.extraInfoEditMode;
+		if (_self.extraInfoEditMode) {
+			_self.updatedExtraInfo = angular.copy(_self.extraInfo);
+		}
+		console.log(`Extra info edit mode: ${_self.extraInfoEditMode}`);
+	}
+
+	// TODO: verwijder onderstaande code uit controller: hoort hier niet!
 	if (currentReceiver) {
 		_self.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
 	} else {
