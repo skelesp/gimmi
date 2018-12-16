@@ -109,7 +109,14 @@
 	function toggleExtraInfoMode(){
 		_self.extraInfoEditMode = !_self.extraInfoEditMode;
 		if (_self.extraInfoEditMode) {
-			_self.updatedExtraInfo = angular.copy(_self.extraInfo);
+			if (_self.extraInfo) {
+				_self.updatedExtraInfo = angular.copy(_self.extraInfo);
+			} else {
+				_self.updatedExtraInfo = {
+					"likes" : [],
+					"dislikes": []
+				}
+			}
 		}
 		console.log(`Extra info edit mode: ${_self.extraInfoEditMode}`);
 	}
