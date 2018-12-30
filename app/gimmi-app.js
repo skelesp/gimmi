@@ -146,9 +146,9 @@
 	.config(['cloudinaryProvider', 'cloudinaryServiceProvider', 'CONFIG', function (cloudinaryProvider, cloudinaryServiceProvider, CONFIG) {
 	/* Config for Angular SDK of Cloudinary (cl-image directive) */
 	cloudinaryProvider
-		.set("cloud_name", "hunk4smqo")
+		.set("cloud_name", CONFIG.cloudinary.cloudName)
 		.set("secure", true)
-		.set("upload_preset", "wish_images");
+		.set("upload_preset", CONFIG.cloudinary.uploadPreset);
 
 	cloudinaryServiceProvider
 		.setOption("cloudName", CONFIG.cloudinary.cloudName)
