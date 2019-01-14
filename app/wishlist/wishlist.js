@@ -69,7 +69,7 @@
 	_self.extraInfo = wishlist._id.receiver.extraInfo;
 	_self.extraInfoEditMode = false;
 	_self.toggleExtraInfoMode = toggleExtraInfoMode;
-	
+
 	_self.deleteDislike = function(index) {
 		_self.updatedExtraInfo.dislikes.splice(index, 1);
 	}
@@ -283,7 +283,7 @@
 		var now = new Date();
 		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()) );
 	}
-	//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
+	
 	function getReservationStatus (wish) {
 		var reservationStatus = "unreserved";
 		if (wish.reservation) {
@@ -293,6 +293,28 @@
 		}
 		return reservationStatus;
 	}
+
+	function openFeedbackPopup(wish) {
+		var giftFeedbackPopup = $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'app/wishlist/giftFeedbackPopup.tmpl.html',
+			controller: 'giftFeedbackPopupController',
+			controllerAs: 'giftFeedbackPopupCtrl',
+			resolve: {
+				wish: function () {
+					return wish;
+				}
+			}
+		});
+		giftFeedbackPopup.result.then(function (giftFeedback) {
+			//wishID, feedback-object needed for call
+			wishModel.addFeedback(wish._id, giftFeedback).then(function(wish) {
+				console.log(`wish (${wish._id}) giftFeedback:`, wish);
+			});
+		});
+	}
+
 	_self.reservationStatus = getReservationStatus;
 	_self.reservedByUser = reservedByUser;
 	_self.copy = copy;
@@ -300,6 +322,7 @@
 	_self.deleteWish = deleteWishVerification;
 	_self.addReservation = addReservation;
 	_self.deleteReservation = deleteReservation;
+	_self.openFeedbackPopup = openFeedbackPopup;
 }])
 .controller('editPopupCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService) {
 	var _self = this;
@@ -528,6 +551,25 @@
 	};
 
 	self.cancel = function(){
+		$uibModalInstance.dismiss('Cancel');
+	};
+}])
+.controller("giftFeedbackPopupController", ['$uibModalInstance', 'wish', function ($uibModalInstance, wish){
+	console.log(wish);
+	var feedbackPopup = this;
+	var reservationDate = wish.reservation.hideUntil ? new Date(wish.reservation.hideUntil) : new Date ();
+	feedbackPopup.wish = wish;
+	feedbackPopup.giftFeedback = {
+		satisfaction: '',
+		receivedOn: reservationDate,
+		message: '',
+		putBackOnList: false
+	}
+	feedbackPopup.ok = function () {
+		$uibModalInstance.close(feedbackPopup.giftFeedback);
+	};
+
+	feedbackPopup.cancel = function () {
 		$uibModalInstance.dismiss('Cancel');
 	};
 }])

@@ -1,0 +1,29 @@
+<!-- Template for gift feedback popup -->
+<div class="modal-header">
+    <h3 class="modal-title">Geef feedback op het cadeau van </h3>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="form-group">
+            <label for="satisfaction" class="form-control-label">Hoe blij ben je met het cadeau?</label>
+            <select class="form-control" id="satisfaction" ng-model="giftFeedbackPopupCtrl.giftFeedback.satisfaction" required>
+                <option value="Heel blij">Heel blij</option>
+                <option value="Blij">Blij</option>
+                <option value="Neutraal">Neutraal</option>
+                <option value="Niet blij">Niet blij</option>
+            </select>
+            <label for="receivedOn" class="form-control-label">Wanneer heb je het cadeau ontvangen?</label>
+            <input type="date" class="form-control" id="receivedOn" name="receivedOn" ng-model="giftFeedbackPopupCtrl.giftFeedback.receivedOn"
+                required>
+            <label for="message" class="form-control-label">Wil je nog een boodschap sturen naar ***Stijn***?</label>
+            <textarea ng-model="giftFeedbackPopupCtrl.giftFeedback.message" type="text" class="form-control" id="message"
+                aria-describedby="message" placeholder="Geef hier een boodschap in die je wilt versturen naar <Stijn>"></textarea>
+            <label for="putBackOnList" class="form-control-label">Zet deze cadeau nogmaals op je wensenlijst</label>
+            <input type="checkbox" class="form-control" id="putBackOnList" name="putBackOnList" ng-model="giftFeedbackPopupCtrl.giftFeedback.putBackOnList">
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="giftFeedbackPopupCtrl.ok()">Feedback opslaan</button>
+    <button class="btn btn-outline-danger" type="button" ng-click="giftFeedbackPopupCtrl.cancel()">Annuleer</button>
+</div>

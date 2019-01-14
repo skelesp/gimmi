@@ -187,6 +187,30 @@
 			var now = new Date();
 			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy._id)) && (wish.reservation.hideUntil > now.toISOString()));
 		}
+		/* Feedback */
+		_self.openFeedbackPopup = openFeedbackPopup;
+
+		function openFeedbackPopup(wish) {
+			var giftFeedbackPopup = $uibModal.open({
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'app/wishlist/giftFeedbackPopup.tmpl.html',
+				controller: 'giftFeedbackPopupController',
+				controllerAs: 'giftFeedbackPopupCtrl',
+				resolve: {
+					wish: function () {
+						return wish;
+					}
+				}
+			});
+			giftFeedbackPopup.result.then(function (giftFeedback) {
+				//wishID, feedback-object needed for call
+				wishModel.addFeedback(wish._id, giftFeedback).then(function (wish) {
+					console.log(`wish (${wish._id}) giftFeedback:`, wish);
+				});
+			});
+		}
+
 	}])
 	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService){
 		var _self = this;

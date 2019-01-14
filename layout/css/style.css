@@ -76,12 +76,20 @@ h6.card-title  {
 .btn-mail:hover,.btn-mail:focus,.btn-mail:active,.btn-mail.active,.open .dropdown-toggle.btn-mail{color:#fff;background-color:rgb(104, 22, 14);border-color:rgba(0,0,0,0.2)}
 .btn-mail:active,.btn-mail.active,.open .dropdown-toggle.btn-mail{background-image:none}
 .btn-mail.disabled,.btn-mail[disabled],fieldset[disabled] .btn-mail,.btn-mail.disabled:hover,.btn-mail[disabled]:hover,fieldset[disabled] .btn-mail:hover,.btn-mail.disabled:focus,.btn-mail[disabled]:focus,fieldset[disabled] .btn-mail:focus,.btn-mail.disabled:active,.btn-mail[disabled]:active,fieldset[disabled] .btn-mail:active,.btn-mail.disabled.active,.btn-mail[disabled].active,fieldset[disabled] .btn-mail.active{background-color:rgb(140, 30, 18);border-color:rgba(0,0,0,0.2)}
-
 .avatar {
   height: 30px;
   width: 30px;
 }
 /* END Custom Facebook login button*/
+
+/* Feedback action button on wish item: Add white background and make multiline*/
+.btn-feedback-action {
+  white-space: normal; /* Multiline button */
+  background-color: #ffffff /* White background */
+}
+.btn-multiline {
+  white-space: normal;
+}
 
 /* Flash messages */
 .flash-message {

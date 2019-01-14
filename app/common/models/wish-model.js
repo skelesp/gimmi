@@ -29,6 +29,17 @@ angular.module('gimmi.models.wish', [
 		});
 	}
 
+	function updateWishlist (wish) {
+		if (wishlist) {
+			var index = _.findIndex(wishlist.wishes, function (w) {
+				return w._id === wish._id;
+			});
+			var wishlistWish = angular.copy(wish);
+			wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
+			wishlist.wishes[index] = wishlistWish;
+		}
+	}
+
 	model.getWishById = function (wishID) {
 		var deferred = $q.defer();
 
@@ -67,6 +78,7 @@ angular.module('gimmi.models.wish', [
 
 		return deferred.promise;
 	}
+
 	model.createWish = function (wish, receiverID, userID, copyOf, callback){
 		wish.receiver = receiverID;
 		wish.createdBy = userID;
@@ -153,7 +165,7 @@ angular.module('gimmi.models.wish', [
 	}
 
 	model.deleteReservation = function(wishID) {
-		$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
+	$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
 			if (wishlist) {
 				var index = _.findIndex(wishlist.wishes, function (w) {
 					return w._id === wishID;
@@ -162,6 +174,16 @@ angular.module('gimmi.models.wish', [
 			}
 			console.info("Reservation deleted for ", wish._id);
 		});
+	}
+
+	model.addFeedback = function (wishID, giftFeedback) {
+		var defer = $q.defer();
+		$http.post(URLS.WISH + "/" + wishID + "/feedback", giftFeedback).success(function (wish) {
+			updateWishlist(wish);
+			console.info("Gift feedback added to", wish._id);
+			defer.resolve(wish);
+		});
+		return defer.promise;
 	}
 
 }])
