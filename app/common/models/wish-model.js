@@ -165,7 +165,7 @@ angular.module('gimmi.models.wish', [
 	}
 
 	model.deleteReservation = function(wishID) {
-	$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
+		$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
 			if (wishlist) {
 				var index = _.findIndex(wishlist.wishes, function (w) {
 					return w._id === wishID;
@@ -181,6 +181,20 @@ angular.module('gimmi.models.wish', [
 		$http.post(URLS.WISH + "/" + wishID + "/feedback", giftFeedback).success(function (wish) {
 			updateWishlist(wish);
 			console.info("Gift feedback added to", wish._id);
+			defer.resolve(wish);
+		});
+		return defer.promise;
+	}
+
+	model.close = function (wishID, closureInfo) {
+		var defer = $q.defer();
+		// Zet de closed date op "nu"
+		closureInfo.closedOn = new Date();
+		
+		// REST API call om de closure toe te voegen
+		$http.post(URLS.WISH + "/" + wishID + "/closure", closureInfo).success(function (wish) {
+			updateWishlist(wish);
+			console.info("Closure added to", wish._id);
 			defer.resolve(wish);
 		});
 		return defer.promise;

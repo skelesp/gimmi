@@ -286,10 +286,12 @@
 	
 	function getReservationStatus (wish) {
 		var reservationStatus = "unreserved";
-		if (wish.reservation) {
+		if (wish.reservation && !wish.closure) {
 			if (!isIncognitoReservation(wish)) {
 				reservationStatus = "reserved";
 			}
+		} else if (wish.closure) {
+			reservationStatus = "fulfilled";
 		}
 		return reservationStatus;
 	}
@@ -310,7 +312,13 @@
 		giftFeedbackPopup.result.then(function (giftFeedback) {
 			//wishID, feedback-object needed for call
 			wishModel.addFeedback(wish._id, giftFeedback).then(function(wish) {
-				console.log(`wish (${wish._id}) giftFeedback:`, wish);
+				var closureInfo = {
+					closedBy: UserService.getCurrentUser()._id,
+					reason: "Cadeau ontvangen"
+				};
+				wishModel.close(wish._id, closureInfo).then(function (wish) {
+					console.log(`Wish ${wish._id} is closed`)
+				});
 			});
 		});
 	}

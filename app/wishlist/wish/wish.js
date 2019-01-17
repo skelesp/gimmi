@@ -60,10 +60,18 @@
 		//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
 		_self.reservationStatus = function (wish) {
 			var reservationStatus = "unreserved";
-			if (wish.reservation) {
-				reservationStatus = "reserved";
+			if (wish.reservation && !wish.closure) {
+				if (!isIncognitoReservation(wish)) {
+					reservationStatus = "reserved";
+				}
+			} else if (wish.closure) {
+				reservationStatus = "fulfilled";
 			}
 			return reservationStatus;
+		}
+		function isIncognitoReservation(wish) {
+			var now = new Date();
+			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()));
 		}
 		_self.addReservation = function (wish, userID, reason) {
 			/*var reservation = {
@@ -206,7 +214,13 @@
 			giftFeedbackPopup.result.then(function (giftFeedback) {
 				//wishID, feedback-object needed for call
 				wishModel.addFeedback(wish._id, giftFeedback).then(function (wish) {
-					console.log(`wish (${wish._id}) giftFeedback:`, wish);
+					var closureInfo = {
+						closedBy: UserService.getCurrentUser()._id,
+						reason: "Cadeau ontvangen"
+					};
+					wishModel.close(wish._id, closureInfo).then(function (wish) {
+						console.log(`Wish ${wish._id} is closed`)
+					});
 				});
 			});
 		}

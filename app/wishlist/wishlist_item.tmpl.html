@@ -6,7 +6,7 @@
       <cl-transformation fetch-format="auto" />
     </cl-image> 
     <div class="card-img-overlay p-1 text-center h6" 
-         ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) === 'reserved'}"
+         ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) !== 'unreserved'}"
          ng-click="wishCtrl.goToWishDetail(wish)">
         <span class="w-75 badge badge-pill badge-warning text-center"
               ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">
@@ -15,6 +15,9 @@
         <span class="w-75 badge badge-pill badge-info text-center" 
               ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">
               Je reservatie <i class="fa fa-ban ml-2 text-warning" aria-hidden="true" uib-tooltip="Annuleer je reservatie" tooltip-placement="bottom-right" tooltip-class="customTooltip" ng-click="wishCtrl.deleteReservation(wish)"></i>
+        </span>
+        <span class="w-75 badge badge-pill badge-success text-center" ng-if="wishCtrl.reservationStatus(wish) === 'fulfilled'">
+          Ontvangen
         </span>
         <button class="btn btn-outline-danger btn-feedback-action text-center mt-1" ng-click="wishCtrl.openFeedbackPopup(wish)"
               ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishlistCtrl.userIsReceiver"
