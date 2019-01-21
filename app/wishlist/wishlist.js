@@ -159,6 +159,7 @@
 	}
 
 	function copy(wish){
+		console.log("Wens " + wish._id + " kopiëren...");
 		var userID = UserService.getCurrentUser()._id;
 		var newWish = {};
 		newWish.title = wish.title;
@@ -319,6 +320,10 @@
 				wishModel.close(wish._id, closureInfo).then(function (wish) {
 					console.log(`Wish ${wish._id} is closed`)
 				});
+				console.log(`giftFeedback.putBackOnList = ${giftFeedback.putBackOnList}`);
+				if (giftFeedback.putBackOnList) {
+					_self.copy(wish);
+				}
 			});
 		});
 	}

@@ -108,6 +108,7 @@
 			delete _self.wish.reservation;
 		};
 		_self.copy = function (wish) {
+			console.log("Wens kopiëren");
 			var userID = UserService.getCurrentUser()._id;
 			var newWish = {};
 			newWish.title = wish.title;
@@ -221,6 +222,9 @@
 					wishModel.close(wish._id, closureInfo).then(function (wish) {
 						console.log(`Wish ${wish._id} is closed`)
 					});
+					if (giftFeedback.putBackOnList) {
+						_self.copy(wish);
+					}
 				});
 			});
 		}
