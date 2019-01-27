@@ -220,7 +220,7 @@
 	});
 
 	//Flash message config
-	FlashProvider.setTimeout(2000);
+	FlashProvider.setTimeout(4000);
 	FlashProvider.setShowClose(true);
 	FlashProvider.setTemplatePreset('transclude');
 }])
