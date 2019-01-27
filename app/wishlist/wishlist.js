@@ -57,8 +57,8 @@
 		})
 	;
 })
-.controller('wishlistCtrl', ['UserService', 'PersonService', 'wishlist', 'currentReceiver',
-	function wishlistCtrl(UserService, PersonService, wishlist, currentReceiver){
+.controller('wishlistCtrl', ['UserService', 'PersonService', 'receiverModel', '$uibModal', 'wishlist', 'currentReceiver', 
+		function wishlistCtrl(UserService, PersonService, receiverModel, $uibModal, wishlist, currentReceiver){
 	var _self = this;
 
 	_self.currentUserID = UserService.getCurrentUser().id;
@@ -70,6 +70,38 @@
 	_self.extraInfoEditMode = false;
 	_self.toggleExtraInfoMode = toggleExtraInfoMode;
 
+	/* Received wishes */
+	_self.showReceivedWishes = function showReceivedWishes() {
+		$uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'app/wishlist/receivedWishesPopup.tmpl.html',
+			controller: 'receivedWishesPopupController',
+			controllerAs: 'receivedWishesPopupCtrl',
+			resolve: {
+				receivedWishes: ['wishModel', function(wishModel) {
+					return wishModel.getWishlist(currentReceiver._id).then(function(wishlist) {
+						var receivedWishes = [];
+						wishlist.wishes.forEach(function(wish){
+							if (getReservationStatus(wish) === 'fulfilled') {
+								receivedWishes.push(wish);
+							};
+						});
+						return receivedWishes;
+					});
+				}],
+				receiver: function(){
+					return currentReceiver;
+				}
+			}
+		});
+	};
+	_self.filterOpenWish = function(wish){
+		if (getReservationStatus(wish) !== 'fulfilled') {
+			return true;	
+		};
+		return false;
+	}
 	_self.deleteDislike = function(index) {
 		_self.updatedExtraInfo.dislikes.splice(index, 1);
 	}
@@ -116,6 +148,28 @@
 		}
 	}
 
+	function getReservationStatus(wish) {
+		var reservationStatus = "unreserved";
+		if (wish.reservation && !wish.closure) {
+			if (!isIncognitoReservation(wish)) {
+				reservationStatus = "reserved";
+			}
+		} else if (wish.closure) {
+			reservationStatus = "fulfilled";
+		}
+		return reservationStatus;
+	}
+	function isIncognitoReservation(wish) {
+		var now = new Date();
+		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()));
+	}
+	function reservedByUser(reservatorID) {
+		if (UserService.getCurrentUser()._id === reservatorID) {
+			return true;
+		} else {
+			return false;
+		}
+	};
 	// TODO: verwijder onderstaande code uit controller: hoort hier niet!
 	if (currentReceiver) {
 		_self.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
@@ -555,7 +609,7 @@
 		self.showCopyTooltip = true;
 	}
 }])
-.controller("invitationPopupCtrl", ['$uibModalInstance', function ($uibModalInstance){
+.controller('invitationPopupCtrl', ['$uibModalInstance', function ($uibModalInstance){
 	var self = this;
 
 	self.mailTo;
@@ -567,7 +621,7 @@
 		$uibModalInstance.dismiss('Cancel');
 	};
 }])
-.controller("giftFeedbackPopupController", ['$uibModalInstance', 'wish', function ($uibModalInstance, wish){
+.controller('giftFeedbackPopupController', ['$uibModalInstance', 'wish', function ($uibModalInstance, wish){
 	console.log(wish);
 	var feedbackPopup = this;
 	var reservationDate = wish.reservation.hideUntil ? new Date(wish.reservation.hideUntil) : new Date ();
@@ -586,4 +640,12 @@
 		$uibModalInstance.dismiss('Cancel');
 	};
 }])
-;
+.controller('receivedWishesPopupController', ['$uibModalInstance', 'receivedWishes', 'receiver', function ($uibModalInstance, receivedWishes, receiver) {
+	var _self = this;
+		console.log(receivedWishes);
+	_self.wishes = receivedWishes;
+	_self.receiver = receiver;
+	_self.cancel = function () {
+		$uibModalInstance.dismiss('cancel');
+	}
+}]);
