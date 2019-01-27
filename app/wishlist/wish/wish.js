@@ -71,7 +71,7 @@
 		}
 		function isIncognitoReservation(wish) {
 			var now = new Date();
-			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()));
+			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.handoverDate > now.toISOString()));
 		}
 		_self.addReservation = function (wish, userID, reason) {
 			/*var reservation = {
@@ -194,7 +194,7 @@
 		};
 		_self.isIncognitoReservation = function (wish) {
 			var now = new Date();
-			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy._id)) && (wish.reservation.hideUntil > now.toISOString()));
+			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy._id)) && (wish.reservation.handoverDate > now.toISOString()));
 		}
 		/* Feedback */
 		_self.openFeedbackPopup = openFeedbackPopup;

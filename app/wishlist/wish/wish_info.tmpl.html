@@ -84,9 +84,9 @@
   <div class="modal-body" id="modal-body" style="color:#000000">
     <form name="wishReservationForm" class="create-form" role="form" novalidate>
       <div class="form-group">
-        <label for="hideUntil" class="form-control-label">Wanneer geef je het cadeau aan {{wishReservationPopupCtrl.receiverName}}?</label>
-        <input type="date" class="form-control" id="hideUntil" name="hideUntil" ng-model="wishReservationPopupCtrl.reservation.hideUntil" required>
-        <small id="hideUntilHelp" class="form-text text-muted">Je reservatie blijft onzichtbaar voor {{wishReservationPopupCtrl.receiverName}} tot na deze datum. Zo blijft het een verrassing!</small>
+        <label for="handoverDate" class="form-control-label">Wanneer geef je het cadeau aan {{wishReservationPopupCtrl.receiverName}}?</label>
+        <input type="date" class="form-control" id="handoverDate" name="handoverDate" ng-model="wishReservationPopupCtrl.reservation.handoverDate" required>
+        <small id="handoverDateHelp" class="form-text text-muted">Je reservatie blijft onzichtbaar voor {{wishReservationPopupCtrl.receiverName}} tot na deze datum. Zo blijft het een verrassing!</small>
       </div>
       <div class="form-group">
         <label for="reservationReason" class="form-control-label">Voor welke gelegenheid wil je deze cadeau geven?</label>

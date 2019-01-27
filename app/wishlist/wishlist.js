@@ -161,7 +161,7 @@
 	}
 	function isIncognitoReservation(wish) {
 		var now = new Date();
-		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()));
+		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.handoverDate > now.toISOString()));
 	}
 	function reservedByUser(reservatorID) {
 		if (UserService.getCurrentUser()._id === reservatorID) {
@@ -336,7 +336,7 @@
 
 	function isIncognitoReservation(wish){
 		var now = new Date();
-		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()) );
+		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.handoverDate > now.toISOString()) );
 	}
 	
 	function getReservationStatus (wish) {
@@ -435,7 +435,7 @@
 	var reservation = {
 		amount: 1, 
 		reason: '', 
-		hideUntil: new Date()
+		handoverDate: new Date()
 	};
 	_self.reservation = reservation;
 	_self.wishTitle = wish.title;
@@ -624,7 +624,7 @@
 .controller('giftFeedbackPopupController', ['$uibModalInstance', 'wish', function ($uibModalInstance, wish){
 	console.log(wish);
 	var feedbackPopup = this;
-	var reservationDate = wish.reservation.hideUntil ? new Date(wish.reservation.hideUntil) : new Date ();
+	var reservationDate = wish.reservation.handoverDate ? new Date(wish.reservation.handoverDate) : new Date ();
 	feedbackPopup.wish = wish;
 	feedbackPopup.giftFeedback = {
 		satisfaction: '',
