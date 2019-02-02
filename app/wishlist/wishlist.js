@@ -6,7 +6,8 @@
 	'gimmi.authentication',
 	'wishlist.wish',
 	'gcse',
-	'ngclipboard'
+	'ngclipboard',
+	'gimmi.person'
 ])
 .config(function($stateProvider){
 	$stateProvider
@@ -361,7 +362,13 @@
 			resolve: {
 				wish: function () {
 					return wish;
-				}
+				},
+				reservator: ['PersonService', function(PersonService){
+					if (wish.reservation) {
+						return PersonService.getPersonFromID(wish.reservation.reservedBy);
+					}
+					return null;
+				}]
 			}
 		});
 		giftFeedbackPopup.result.then(function (giftFeedback) {
@@ -621,10 +628,11 @@
 		$uibModalInstance.dismiss('Cancel');
 	};
 }])
-.controller('giftFeedbackPopupController', ['$uibModalInstance', 'wish', function ($uibModalInstance, wish){
+.controller('giftFeedbackPopupController', ['$uibModalInstance', 'reservator', 'wish', function ($uibModalInstance, reservator, wish){
 	console.log(wish);
 	var feedbackPopup = this;
 	var reservationDate = wish.reservation.handoverDate ? new Date(wish.reservation.handoverDate) : new Date ();
+	feedbackPopup.reservator = reservator;
 	feedbackPopup.wish = wish;
 	feedbackPopup.giftFeedback = {
 		satisfaction: '',

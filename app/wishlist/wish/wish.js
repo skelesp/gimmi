@@ -3,6 +3,7 @@
 	'gimmi.models.wish',
 	'wishlist.wish.create',
 	'wishlist.wish.edit',
+	'gimmi.person'
 ])
 	.config(function($stateProvider){
 
@@ -209,7 +210,13 @@
 				resolve: {
 					wish: function () {
 						return wish;
-					}
+					},
+					reservator: ['PersonService', function (PersonService) {
+						if (wish.reservation) {
+							return PersonService.getPersonFromID(wish.reservation.reservedBy);
+						}
+						return null;
+					}]
 				}
 			});
 			giftFeedbackPopup.result.then(function (giftFeedback) {

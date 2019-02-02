@@ -1,6 +1,6 @@
 <!-- Template for gift feedback popup -->
 <div class="modal-header">
-    <h3 class="modal-title">Geef feedback op het cadeau van </h3>
+    <h3 class="modal-title">Geef feedback op het cadeau van {{giftFeedbackPopupCtrl.reservator.fullName}}</h3>
 </div>
 <div class="modal-body">
     <form>
@@ -15,9 +15,9 @@
             <label for="receivedOn" class="form-control-label">Wanneer heb je het cadeau ontvangen?</label>
             <input type="date" class="form-control" id="receivedOn" name="receivedOn" ng-model="giftFeedbackPopupCtrl.giftFeedback.receivedOn"
                 required>
-            <label for="message" class="form-control-label">Wil je nog een boodschap sturen naar ***Stijn***?</label>
+            <label for="message" class="form-control-label">Wil je nog een boodschap sturen naar {{giftFeedbackPopupCtrl.reservator.fullName}}?</label>
             <textarea ng-model="giftFeedbackPopupCtrl.giftFeedback.message" type="text" class="form-control" id="message"
-                aria-describedby="message" placeholder="Geef hier een boodschap in die je wilt versturen naar <Stijn>"></textarea>
+                aria-describedby="message" placeholder="Geef hier een boodschap in die je wilt versturen naar {{giftFeedbackPopupCtrl.reservator.firstName}}"></textarea>
             <label for="putBackOnList" class="form-control-label">Zet deze cadeau nogmaals op je wensenlijst</label>
             <input type="checkbox" class="form-control" id="putBackOnList" name="putBackOnList" ng-model="giftFeedbackPopupCtrl.giftFeedback.putBackOnList">
         </div>
