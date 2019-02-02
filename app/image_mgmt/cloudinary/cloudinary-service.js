@@ -21,7 +21,7 @@ angular.module('cloudinaryModule', [
         widgetOptions[key] = value;
         return _self;
     }
-    _self.$get = ['$http', function($http){
+    _self.$get = ['$http', 'CONFIG', function($http, CONFIG){
         var clsrv = {};
         
         /** Get a signature for a signed upload to Cloudinary */
@@ -46,6 +46,26 @@ angular.module('cloudinaryModule', [
             }
             widgetOptions.uploadSignature = clsrv.getSignature;
             return cloudinary.createUploadWidget(widgetOptions, callback);
+        }
+
+        /**
+         * Upload a cloudinary image
+         * @function uploadImage
+         * @param {String} publicId The wanted publicId of the image (best practice: equal to wish ID)
+         * @param {String} image A url or image string
+         * @param {function} callback A callback function with arguments error and results to handle events.
+         * @return {Image}
+         */
+        clsrv.uploadImage = function(publicId, image, callback) {
+            var body = {
+                public_id: publicId,
+                image: image
+            }
+            $http.post(CONFIG.apiUrl + '/api/images', body).then( function(image) {
+                if (callback) {
+                    callback(image);
+                }
+            });
         }
 
         /**
@@ -80,6 +100,15 @@ angular.module('cloudinaryModule', [
                 .then(() => {
                     callback();
                 });
+        }
+
+        /** 
+         * Generate a cloudinary URL based on public_id
+         * @param {String} public_id
+         * @param {String} version
+         */
+        clsrv.generateCloudinaryUrl = function(public_id, version) {
+            return `https://res.cloudinary.com/${CONFIG.cloudinary.cloudName}/image/upload/v${version}/${public_id}`
         }
 
         return clsrv;
