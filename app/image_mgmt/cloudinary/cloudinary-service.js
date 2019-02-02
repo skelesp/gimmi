@@ -54,7 +54,8 @@ angular.module('cloudinaryModule', [
          * @param {String} publicId The wanted publicId of the image (best practice: equal to wish ID)
          * @param {String} image A url or image string
          * @param {function} callback A callback function with arguments error and results to handle events.
-         * @return {Image}
+         * @return {Image} Return an image if the upload succeeded
+         * @return {Error} Return an image if the upload failed
          */
         clsrv.uploadImage = function(publicId, image, callback) {
             var body = {
@@ -63,8 +64,11 @@ angular.module('cloudinaryModule', [
             }
             $http.post(CONFIG.apiUrl + '/api/images', body).then( function(image) {
                 if (callback) {
-                    callback(image);
+                    callback(null, image);
                 }
+            },
+            function(error){
+                callback(error);
             });
         }
 

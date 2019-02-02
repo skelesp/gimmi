@@ -104,8 +104,33 @@ angular.module('gimmi.models.wish', [
 				var message = "De wens '" + createdWish.title + "' werd gekopieerd naar je eigen lijst.";
 				var flashID = Flash.create('success', message);
 			}
-			if (callback) {
-				callback(null, wish);
+			if (createdWish.copyOf) { // if wish is a copy, then the image must be copied too (but wishID is needed, so this must be done after wish create)
+				// Generate a url to the original image
+				var imageUrl = cloudinaryService.generateCloudinaryUrl(createdWish.image.public_id, createdWish.image.version);
+				// Upload the original image to cloudinary with publicID of the new wish
+				cloudinaryService.uploadImage(createdWish._id, imageUrl, function(error, result){
+					// Handle errors of image upload
+					if (error) {
+						return console.log(error);
+					}
+					// If image is uploaded: update the new wish
+					if (result) {
+						var image = result.data;
+						createdWish.image = {
+							public_id: image.public_id,
+							version: image.version
+						};
+						model.updateWish(createdWish).then(function(wish){
+							if (callback) {
+								callback(null, wish);
+							}
+						});
+					}
+				});
+			} else {
+				if (callback) {
+					callback(null, wish);
+				}
 			}
 		});
 	};
@@ -201,6 +226,5 @@ angular.module('gimmi.models.wish', [
 		});
 		return defer.promise;
 	}
-
 }])
 ;
