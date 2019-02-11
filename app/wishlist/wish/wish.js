@@ -213,7 +213,7 @@
 					},
 					reservator: ['PersonService', function (PersonService) {
 						if (wish.reservation) {
-							return PersonService.getPersonFromID(wish.reservation.reservedBy);
+							return PersonService.getNameById(wish.reservation.reservedBy);
 						}
 						return null;
 					}]
