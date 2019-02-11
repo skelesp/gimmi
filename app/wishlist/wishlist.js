@@ -629,21 +629,53 @@
 	};
 }])
 .controller('giftFeedbackPopupController', ['$uibModalInstance', 'reservator', 'wish', function ($uibModalInstance, reservator, wish){
-	console.log(wish);
 	var feedbackPopup = this;
+	/* Set popup properties */
 	var reservationDate = wish.reservation.handoverDate ? new Date(wish.reservation.handoverDate) : new Date ();
 	feedbackPopup.reservator = reservator;
 	feedbackPopup.wish = wish;
+	/* Set map to map rate to satisfaction value */
+	var satisfactionRatingMap = new Map();
+	satisfactionRatingMap.set(0, "...");
+	satisfactionRatingMap.set(1, "Helemaal niet blij");
+	satisfactionRatingMap.set(2, "Niet blij");
+	satisfactionRatingMap.set(3, "Neutraal");
+	satisfactionRatingMap.set(4, "Blij");
+	satisfactionRatingMap.set(5, "Heel blij");
+	/* Set options for satisfaction rating element */
+	feedbackPopup.satisfactionRating = {
+		isReadonly: false,
+		max: 5,
+		titles: Array.from(satisfactionRatingMap.values()),
+		hoveringOver: function(value) {
+			feedbackPopup.giftFeedback.hoverSatisfaction = value;
+		},
+		leaveHover: function(){
+			delete feedbackPopup.giftFeedback.hoverSatisfaction;
+		},
+		enableReset: false
+	}
+	/* Set giftFeedback object */
 	feedbackPopup.giftFeedback = {
-		satisfaction: '',
+		satisfaction: 0,
 		receivedOn: reservationDate,
 		message: '',
 		putBackOnList: false
 	}
+	/* Convert rating to satisfaction value */
+	feedbackPopup.showSatisfactionText = mapRatingOnSatisfaction;
+	
+	function mapRatingOnSatisfaction () {
+		var rating = feedbackPopup.giftFeedback.hoverSatisfaction ? feedbackPopup.giftFeedback.hoverSatisfaction : feedbackPopup.giftFeedback.satisfaction;
+		/* Return satisfaction value (text) */
+		return satisfactionRatingMap.get(rating);
+	}
+	/* Save changes in popup */
 	feedbackPopup.ok = function () {
+		feedbackPopup.giftFeedback.satisfaction = mapRatingOnSatisfaction();
 		$uibModalInstance.close(feedbackPopup.giftFeedback);
 	};
-
+	/* Cancel popup and discard changes */
 	feedbackPopup.cancel = function () {
 		$uibModalInstance.dismiss('Cancel');
 	};
