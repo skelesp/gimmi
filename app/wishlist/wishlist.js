@@ -4,6 +4,7 @@
 	'wishlist.receiver',
 	'gimmi.config',
 	'gimmi.authentication',
+	'gimmi.communication',
 	'wishlist.wish',
 	'gcse',
 	'ngclipboard',
@@ -178,7 +179,8 @@
 		_self.userIsReceiver = false;
 	}
 }])
-.controller('wishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function ($state, $stateParams, $uibModal, wishModel, receiverModel, UserService) {
+.controller('wishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', 'PersonService','CommunicationService', 
+		function ($state, $stateParams, $uibModal, wishModel, receiverModel, UserService, PersonService, CommunicationService) {
 	var _self = this;
 	/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
 
@@ -371,7 +373,9 @@
 				}]
 			}
 		});
-		giftFeedbackPopup.result.then(function (giftFeedback) {
+		giftFeedbackPopup.result.then(function (result) {
+			var giftFeedback = result.giftFeedback;
+			var reservator = result.reservator;
 			//wishID, feedback-object needed for call
 			wishModel.addFeedback(wish._id, giftFeedback).then(function(wish) {
 				var closureInfo = {
@@ -384,6 +388,28 @@
 				console.log(`giftFeedback.putBackOnList = ${giftFeedback.putBackOnList}`);
 				if (giftFeedback.putBackOnList) {
 					_self.copy(wish);
+				}
+				if (giftFeedback.message) {
+					PersonService.getEmailById(reservator._id).then(function(email){
+						PersonService.getNameById(wish.receiver).then(function(person){
+							reservator.email = email;
+							var receiver = person;
+							var mail = {
+								to: reservator.email,
+								subject: `[GIMMI] ${receiver.fullName} bedankt je voor je cadeau!!`,
+								html: `${reservator.firstName}<br/><br/>
+								Je hebt onlangs op Gimmi het cadeau '${wish.title}' gereserveerd voor ${receiver.fullName}. <br/>
+								Onlangs heb je dit cadeau afgegeven en daarnet heeft ${receiver.firstName} je een boodschap nagelaten:
+								<br/><br/>
+								<em>"${giftFeedback.message}"</em>
+								<br/><br/>
+								Bedankt om Gimmi te gebruiken en hopelijk tot snel voor een nieuwe succesvolle cadeauzoektocht!`
+							}
+							console.log("Verstuur een mail:", mail);
+							console.log(wish);
+							CommunicationService.sendMail(mail);
+						});
+					});
 				}
 			});
 		});
@@ -673,7 +699,9 @@
 	/* Save changes in popup */
 	feedbackPopup.ok = function () {
 		feedbackPopup.giftFeedback.satisfaction = mapRatingOnSatisfaction();
-		$uibModalInstance.close(feedbackPopup.giftFeedback);
+		$uibModalInstance.close({
+			giftFeedback: feedbackPopup.giftFeedback, reservator: feedbackPopup.reservator
+		});
 	};
 	/* Cancel popup and discard changes */
 	feedbackPopup.cancel = function () {

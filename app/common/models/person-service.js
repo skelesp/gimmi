@@ -101,6 +101,21 @@ angular.module('gimmi.person', [
         }
         return deferred.promise;
       }
+      function getEmailById (id) {
+        var deferred = $q.defer();
+        if (id) {
+          $http.get(CONFIG.apiUrl + '/api/people/' + id + '/email')
+            .success(function (email) {
+              deferred.resolve(email);
+            })
+            .error(function (data) {
+              deferred.reject("No person found", data);
+            });
+        } else {
+          deferred.reject("No id provided");
+        }
+        return deferred.promise;
+      }
       function updatePersonDetails (person){
         var deferred = $q.defer();
         if (person) {
@@ -240,6 +255,7 @@ angular.module('gimmi.person', [
         validatePasswordResetToken: validatePasswordResetToken,
         resetPassword: resetPassword,
         deleteFacebookAccount: deleteFacebookAccount,
-        updateExtraInfo: updateExtraInfo
+        updateExtraInfo: updateExtraInfo,
+        getEmailById: getEmailById
       });
     }]);
