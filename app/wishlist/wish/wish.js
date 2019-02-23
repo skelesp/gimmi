@@ -3,7 +3,8 @@
 	'gimmi.models.wish',
 	'wishlist.wish.create',
 	'wishlist.wish.edit',
-	'gimmi.person'
+	'gimmi.person',
+	'gimmi.communication'
 ])
 	.config(function($stateProvider){
 
@@ -25,7 +26,7 @@
 			})
 		;
 	})
-	.controller('wishInfoCtrl', ['$stateParams', '$uibModal', '$state', 'wishModel', 'receiverModel', 'UserService', 'wish', function ($stateParams, $uibModal, $state, wishModel, receiverModel, UserService, wish){
+	.controller('wishInfoCtrl', ['$stateParams', '$uibModal', '$state', 'wishModel', 'receiverModel', 'UserService', 'PersonService', 'CommunicationService', 'wish', function ($stateParams, $uibModal, $state, wishModel, receiverModel, UserService, PersonService, CommunicationService, wish){
 		var _self = this;
 		console.info("Wens geopend:", wish._id);
 		_self.wish = wish;
@@ -213,13 +214,15 @@
 					},
 					reservator: ['PersonService', function (PersonService) {
 						if (wish.reservation) {
-							return PersonService.getNameById(wish.reservation.reservedBy);
+							return PersonService.getNameById(wish.reservation.reservedBy._id);
 						}
 						return null;
 					}]
 				}
 			});
-			giftFeedbackPopup.result.then(function (giftFeedback) {
+			giftFeedbackPopup.result.then(function (result) {
+				var giftFeedback = result.giftFeedback;
+				var reservator = result.reservator;
 				//wishID, feedback-object needed for call
 				wishModel.addFeedback(wish._id, giftFeedback).then(function (wish) {
 					var closureInfo = {
@@ -229,8 +232,31 @@
 					wishModel.close(wish._id, closureInfo).then(function (wish) {
 						console.log(`Wish ${wish._id} is closed`)
 					});
+					console.log(`giftFeedback.putBackOnList = ${giftFeedback.putBackOnList}`);
 					if (giftFeedback.putBackOnList) {
 						_self.copy(wish);
+					}
+					if (giftFeedback.message) {
+						PersonService.getEmailById(reservator._id).then(function (email) {
+							PersonService.getNameById(wish.receiver).then(function (person) {
+								reservator.email = email;
+								var receiver = person;
+								var mail = {
+									to: reservator.email,
+									subject: `[GIMMI] ${receiver.fullName} bedankt je voor je cadeau!!`,
+									html: `${reservator.firstName}<br/><br/>
+								Je hebt onlangs op Gimmi het cadeau '${wish.title}' gereserveerd voor ${receiver.fullName}. <br/>
+								Onlangs heb je dit cadeau afgegeven en daarnet heeft ${receiver.firstName} je een boodschap nagelaten:
+								<br/><br/>
+								<em>"${giftFeedback.message}"</em>
+								<br/><br/>
+								Bedankt om Gimmi te gebruiken en hopelijk tot snel voor een nieuwe succesvolle cadeauzoektocht!`
+								}
+								console.log("Verstuur een mail:", mail);
+								console.log(wish);
+								CommunicationService.sendMail(mail);
+							});
+						});
 					}
 				});
 			});
