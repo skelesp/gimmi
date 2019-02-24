@@ -660,18 +660,34 @@
 	satisfactionRatingMap.set(3, "Neutraal");
 	satisfactionRatingMap.set(4, "Blij");
 	satisfactionRatingMap.set(5, "Heel blij");
+	// IE HACK: Convert the map to an Array, because IE doesn't accepts this in the satisfaction rating object as an object method on "titles"
+	if (!satisfactionRatingMap.values) {
+		//Manually add all the map values in an Array, because IE11 doesn't support map.values()
+		satisfactionRatingArray = [
+			satisfactionRatingMap.get(0), 
+			satisfactionRatingMap.get(1), 
+			satisfactionRatingMap.get(2), 
+			satisfactionRatingMap.get(3), 
+			satisfactionRatingMap.get(4), 
+			satisfactionRatingMap.get(5)];
+	} else { // Code for all other browsers than IE...
+		satisfactionRatingArray = Array.from(satisfactionRatingMap.values()); 
+	}
+	satisfactionRatingArray.shift(); // Remove the "0" - "..." entry
 	/* Set options for satisfaction rating element */
 	feedbackPopup.satisfactionRating = {
 		isReadonly: false,
 		max: 5,
-		titles: Array.from(satisfactionRatingMap.values()),
-		hoveringOver: function(value) {
-			feedbackPopup.giftFeedback.hoverSatisfaction = value;
-		},
-		leaveHover: function(){
-			delete feedbackPopup.giftFeedback.hoverSatisfaction;
-		},
+		titles: satisfactionRatingArray,
+		hoveringOver: changeSatisfactionValue,
+		leaveHover: removeHoverSatisfactionValue,
 		enableReset: false
+	}
+	function changeSatisfactionValue (value) {
+		feedbackPopup.giftFeedback.hoverSatisfaction = value;
+	}
+	function removeHoverSatisfactionValue(){
+		delete feedbackPopup.giftFeedback.hoverSatisfaction;
 	}
 	/* Set giftFeedback object */
 	feedbackPopup.giftFeedback = {
