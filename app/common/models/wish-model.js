@@ -29,6 +29,17 @@ angular.module('gimmi.models.wish', [
 		});
 	}
 
+	function updateWishlist (wish) {
+		if (wishlist) {
+			var index = _.findIndex(wishlist.wishes, function (w) {
+				return w._id === wish._id;
+			});
+			var wishlistWish = angular.copy(wish);
+			wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
+			wishlist.wishes[index] = wishlistWish;
+		}
+	}
+
 	model.getWishById = function (wishID) {
 		var deferred = $q.defer();
 
@@ -67,6 +78,7 @@ angular.module('gimmi.models.wish', [
 
 		return deferred.promise;
 	}
+
 	model.createWish = function (wish, receiverID, userID, copyOf, callback){
 		wish.receiver = receiverID;
 		wish.createdBy = userID;
@@ -92,8 +104,33 @@ angular.module('gimmi.models.wish', [
 				var message = "De wens '" + createdWish.title + "' werd gekopieerd naar je eigen lijst.";
 				var flashID = Flash.create('success', message);
 			}
-			if (callback) {
-				callback(null, wish);
+			if (createdWish.copyOf) { // if wish is a copy, then the image must be copied too (but wishID is needed, so this must be done after wish create)
+				// Generate a url to the original image
+				var imageUrl = cloudinaryService.generateCloudinaryUrl(createdWish.image.public_id, createdWish.image.version);
+				// Upload the original image to cloudinary with publicID of the new wish
+				cloudinaryService.uploadImage(createdWish._id, imageUrl, function(error, result){
+					// Handle errors of image upload
+					if (error) {
+						return console.log(error);
+					}
+					// If image is uploaded: update the new wish
+					if (result) {
+						var image = result.data;
+						createdWish.image = {
+							public_id: image.public_id,
+							version: image.version
+						};
+						model.updateWish(createdWish).then(function(wish){
+							if (callback) {
+								callback(null, wish);
+							}
+						});
+					}
+				});
+			} else {
+				if (callback) {
+					callback(null, wish);
+				}
 			}
 		});
 	};
@@ -164,5 +201,30 @@ angular.module('gimmi.models.wish', [
 		});
 	}
 
+	model.addFeedback = function (wishID, giftFeedback) {
+		var defer = $q.defer();
+		$http.post(URLS.WISH + "/" + wishID + "/feedback", giftFeedback).success(function (wish) {
+			updateWishlist(wish);
+			console.info("Gift feedback added to", wish._id);
+			defer.resolve(wish);
+		});
+		return defer.promise;
+	}
+
+	model.close = function (wishID, closureInfo) {
+		var defer = $q.defer();
+		// Zet de closed date op "nu"
+		closureInfo.closedOn = new Date();
+		
+		// REST API call om de closure toe te voegen
+		$http.post(URLS.WISH + "/" + wishID + "/closure", closureInfo).success(function (wish) {
+			updateWishlist(wish);
+			console.info("Closure added to", wish._id);
+			var message = `Cadeau '${wish.title}' is ontvangen en werd afgesloten. Je kan deze nog terugvinden bij de 'ontvangen cadeaus'`;
+			Flash.create('success', message);
+			defer.resolve(wish);
+		});
+		return defer.promise;
+	}
 }])
 ;
