@@ -221,7 +221,7 @@ angular.module('gimmi.person', [
       function updateExtraInfo(personId, likes, dislikes) {
         var deferred = $q.defer();
         if (personId) {
-          $http.put(`${CONFIG.apiUrl}/api/people/${personId}/extrainfo`, {likes, dislikes})
+          $http.put(CONFIG.apiUrl + "/api/people/" + personId + "/extrainfo", {likes: likes, dislikes: dislikes})
             .success(function (person) {
               deferred.resolve(person);
             })

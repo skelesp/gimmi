@@ -27,7 +27,7 @@ angular.module('cloudinaryModule', [
         /** Get a signature for a signed upload to Cloudinary */
         clsrv.getSignature = function (callback, params_to_sign) {
             $http.post(CONFIG.apiUrl + '/api/images/signature', params_to_sign)
-                .then((results) => {
+                .then(function(results) {
                     var signature = results.data;
                     callback(signature);
                 });
@@ -85,7 +85,7 @@ angular.module('cloudinaryModule', [
                 new_public_id: newName
             }
             $http.put(CONFIG.apiUrl + '/api/images/' + encodeURIComponent(publicId) + '/public_id', body)
-                .then((results) => {
+                .then(function(results){
                     var image = {
                         public_id: results.data.public_id,
                         version: results.data.version
@@ -101,7 +101,7 @@ angular.module('cloudinaryModule', [
          */
         clsrv.deleteImage = function(publicId, callback) {
             $http.delete(CONFIG.apiUrl + '/api/images/' + encodeURIComponent(publicId))
-                .then(() => {
+                .then(function(){
                     callback();
                 });
         }
@@ -112,7 +112,7 @@ angular.module('cloudinaryModule', [
          * @param {String} version
          */
         clsrv.generateCloudinaryUrl = function(public_id, version) {
-            return `https://res.cloudinary.com/${CONFIG.cloudinary.cloudName}/image/upload/v${version}/${public_id}`
+            return "https://res.cloudinary.com/" + CONFIG.cloudinary.cloudName + "/image/upload/v" + version + "/" + public_id
         }
 
         return clsrv;
