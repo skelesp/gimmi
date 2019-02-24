@@ -220,7 +220,7 @@ angular.module('gimmi.models.wish', [
 		$http.post(URLS.WISH + "/" + wishID + "/closure", closureInfo).success(function (wish) {
 			updateWishlist(wish);
 			console.info("Closure added to", wish._id);
-			var message = `Cadeau '${wish.title}' is ontvangen en werd afgesloten. Je kan deze nog terugvinden bij de 'ontvangen cadeaus'`;
+			var message = "Cadeau '" + wish.title + "' is ontvangen en werd afgesloten. Je kan deze nog terugvinden bij de 'ontvangen cadeaus'";
 			Flash.create('success', message);
 			defer.resolve(wish);
 		});

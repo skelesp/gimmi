@@ -112,7 +112,7 @@ angular.module('cloudinaryModule', [
          * @param {String} version
          */
         clsrv.generateCloudinaryUrl = function(public_id, version) {
-            return `https://res.cloudinary.com/${CONFIG.cloudinary.cloudName}/image/upload/v${version}/${public_id}`
+            return "https://res.cloudinary.com/" + CONFIG.cloudinary.cloudName + "/image/upload/v" + version + "/" + public_id
         }
 
         return clsrv;
