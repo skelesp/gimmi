@@ -4,9 +4,11 @@
 	'wishlist.receiver',
 	'gimmi.config',
 	'gimmi.authentication',
+	'gimmi.communication',
 	'wishlist.wish',
 	'gcse',
-	'ngclipboard'
+	'ngclipboard',
+	'gimmi.person'
 ])
 .config(function($stateProvider){
 	$stateProvider
@@ -57,8 +59,8 @@
 		})
 	;
 })
-.controller('wishlistCtrl', ['UserService', 'PersonService', 'wishlist', 'currentReceiver',
-	function wishlistCtrl(UserService, PersonService, wishlist, currentReceiver){
+.controller('wishlistCtrl', ['UserService', 'PersonService', 'receiverModel', '$uibModal', 'wishlist', 'currentReceiver', 
+		function wishlistCtrl(UserService, PersonService, receiverModel, $uibModal, wishlist, currentReceiver){
 	var _self = this;
 
 	_self.currentUserID = UserService.getCurrentUser().id;
@@ -69,7 +71,39 @@
 	_self.extraInfo = wishlist._id.receiver.extraInfo;
 	_self.extraInfoEditMode = false;
 	_self.toggleExtraInfoMode = toggleExtraInfoMode;
-	
+
+	/* Received wishes */
+	_self.showReceivedWishes = function showReceivedWishes() {
+		$uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'app/wishlist/receivedWishesPopup.tmpl.html',
+			controller: 'receivedWishesPopupController',
+			controllerAs: 'receivedWishesPopupCtrl',
+			resolve: {
+				receivedWishes: ['wishModel', function(wishModel) {
+					return wishModel.getWishlist(currentReceiver._id).then(function(wishlist) {
+						var receivedWishes = [];
+						wishlist.wishes.forEach(function(wish){
+							if (getReservationStatus(wish) === 'fulfilled') {
+								receivedWishes.push(wish);
+							};
+						});
+						return receivedWishes;
+					});
+				}],
+				receiver: function(){
+					return currentReceiver;
+				}
+			}
+		});
+	};
+	_self.filterOpenWish = function(wish){
+		if (getReservationStatus(wish) !== 'fulfilled') {
+			return true;	
+		};
+		return false;
+	}
 	_self.deleteDislike = function(index) {
 		_self.updatedExtraInfo.dislikes.splice(index, 1);
 	}
@@ -94,7 +128,7 @@
 				_self.extraInfo = person.extraInfo;
 				toggleExtraInfoMode();
 			}, function (err) {
-				console.log(`ERROR while updating extra info: ${err}`);
+				console.log("ERROR while updating extra info: " + err);
 			});
 	}
 	_self.cancelExtraInfo = function() {
@@ -116,6 +150,28 @@
 		}
 	}
 
+	function getReservationStatus(wish) {
+		var reservationStatus = "unreserved";
+		if (wish.reservation && !wish.closure) {
+			if (!isIncognitoReservation(wish)) {
+				reservationStatus = "reserved";
+			}
+		} else if (wish.closure) {
+			reservationStatus = "fulfilled";
+		}
+		return reservationStatus;
+	}
+	function isIncognitoReservation(wish) {
+		var now = new Date();
+		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.handoverDate > now.toISOString()));
+	}
+	function reservedByUser(reservatorID) {
+		if (UserService.getCurrentUser()._id === reservatorID) {
+			return true;
+		} else {
+			return false;
+		}
+	};
 	// TODO: verwijder onderstaande code uit controller: hoort hier niet!
 	if (currentReceiver) {
 		_self.userIsReceiver = UserService.userIsReceiver(currentReceiver._id);
@@ -123,7 +179,8 @@
 		_self.userIsReceiver = false;
 	}
 }])
-.controller('wishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', function ($state, $stateParams, $uibModal, wishModel, receiverModel, UserService) {
+.controller('wishCtrl', ['$state', '$stateParams', '$uibModal', 'wishModel', 'receiverModel', 'UserService', 'PersonService','CommunicationService', 
+		function ($state, $stateParams, $uibModal, wishModel, receiverModel, UserService, PersonService, CommunicationService) {
 	var _self = this;
 	/* TODO: CreatorID en ReceiverID ophalen bij initialiseren van de controller */
 
@@ -159,6 +216,7 @@
 	}
 
 	function copy(wish){
+		console.log("Wens " + wish._id + " kopiëren...");
 		var userID = UserService.getCurrentUser()._id;
 		var newWish = {};
 		newWish.title = wish.title;
@@ -281,18 +339,74 @@
 
 	function isIncognitoReservation(wish){
 		var now = new Date();
-		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.hideUntil > now.toISOString()) );
+		return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.handoverDate > now.toISOString()) );
 	}
-	//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
+	
 	function getReservationStatus (wish) {
 		var reservationStatus = "unreserved";
-		if (wish.reservation) {
+		if (wish.reservation && !wish.closure) {
 			if (!isIncognitoReservation(wish)) {
 				reservationStatus = "reserved";
 			}
+		} else if (wish.closure) {
+			reservationStatus = "fulfilled";
 		}
 		return reservationStatus;
 	}
+
+	function openFeedbackPopup(wish) {
+		var giftFeedbackPopup = $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'app/wishlist/giftFeedbackPopup.tmpl.html',
+			controller: 'giftFeedbackPopupController',
+			controllerAs: 'giftFeedbackPopupCtrl',
+			resolve: {
+				wish: function () {
+					return wish;
+				},
+				reservator: ['PersonService', function(PersonService){
+					if (wish.reservation) {
+						return PersonService.getNameById(wish.reservation.reservedBy);
+					}
+					return null;
+				}]
+			}
+		});
+		giftFeedbackPopup.result.then(function (result) {
+			var giftFeedback = result.giftFeedback;
+			var reservator = result.reservator;
+			//wishID, feedback-object needed for call
+			wishModel.addFeedback(wish._id, giftFeedback).then(function(wish) {
+				var closureInfo = {
+					closedBy: UserService.getCurrentUser()._id,
+					reason: "Cadeau ontvangen"
+				};
+				wishModel.close(wish._id, closureInfo).then(function (wish) {
+					console.log("Wish " + wish._id + " is closed");
+				});
+				if (giftFeedback.putBackOnList) {
+					_self.copy(wish);
+				}
+				if (giftFeedback.message) {
+					PersonService.getEmailById(reservator._id).then(function(email){
+						PersonService.getNameById(wish.receiver).then(function(person){
+							reservator.email = email;
+							var receiver = person;
+							var mail = {
+								to: reservator.email,
+								subject: "[GIMMI] " + receiver.fullName + " bedankt je voor je cadeau!!",
+								html: reservator.firstName + "<br/><br/>Je hebt onlangs op Gimmi het cadeau '" + wish.title + "' gereserveerd voor " + receiver.fullName + ". <br/>Onlangs heb je dit cadeau afgegeven en daarnet heeft " + receiver.firstName + " je een boodschap nagelaten:<br/><br/><em>" + giftFeedback.message + "</em><br/><br/>Bedankt om Gimmi te gebruiken en hopelijk tot snel voor een nieuwe succesvolle cadeauzoektocht!"
+							}
+							console.log("Verstuur een mail:", mail);
+							CommunicationService.sendMail(mail);
+						});
+					});
+				}
+			});
+		});
+	}
+
 	_self.reservationStatus = getReservationStatus;
 	_self.reservedByUser = reservedByUser;
 	_self.copy = copy;
@@ -300,6 +414,7 @@
 	_self.deleteWish = deleteWishVerification;
 	_self.addReservation = addReservation;
 	_self.deleteReservation = deleteReservation;
+	_self.openFeedbackPopup = openFeedbackPopup;
 }])
 .controller('editPopupCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService) {
 	var _self = this;
@@ -345,7 +460,7 @@
 	var reservation = {
 		amount: 1, 
 		reason: '', 
-		hideUntil: new Date()
+		handoverDate: new Date()
 	};
 	_self.reservation = reservation;
 	_self.wishTitle = wish.title;
@@ -519,7 +634,7 @@
 		self.showCopyTooltip = true;
 	}
 }])
-.controller("invitationPopupCtrl", ['$uibModalInstance', function ($uibModalInstance){
+.controller('invitationPopupCtrl', ['$uibModalInstance', function ($uibModalInstance){
 	var self = this;
 
 	self.mailTo;
@@ -531,4 +646,82 @@
 		$uibModalInstance.dismiss('Cancel');
 	};
 }])
-;
+.controller('giftFeedbackPopupController', ['$uibModalInstance', 'reservator', 'wish', function ($uibModalInstance, reservator, wish){
+	var feedbackPopup = this;
+	/* Set popup properties */
+	var reservationDate = wish.reservation.handoverDate ? new Date(wish.reservation.handoverDate) : new Date ();
+	feedbackPopup.reservator = reservator;
+	feedbackPopup.wish = wish;
+	/* Set map to map rate to satisfaction value */
+	var satisfactionRatingMap = new Map();
+	satisfactionRatingMap.set(0, "...");
+	satisfactionRatingMap.set(1, "Helemaal niet blij");
+	satisfactionRatingMap.set(2, "Niet blij");
+	satisfactionRatingMap.set(3, "Neutraal");
+	satisfactionRatingMap.set(4, "Blij");
+	satisfactionRatingMap.set(5, "Heel blij");
+	// IE HACK: Convert the map to an Array, because IE doesn't accepts this in the satisfaction rating object as an object method on "titles"
+	if (!satisfactionRatingMap.values) {
+		//Manually add all the map values in an Array, because IE11 doesn't support map.values()
+		satisfactionRatingArray = [
+			satisfactionRatingMap.get(0), 
+			satisfactionRatingMap.get(1), 
+			satisfactionRatingMap.get(2), 
+			satisfactionRatingMap.get(3), 
+			satisfactionRatingMap.get(4), 
+			satisfactionRatingMap.get(5)];
+	} else { // Code for all other browsers than IE...
+		satisfactionRatingArray = Array.from(satisfactionRatingMap.values()); 
+	}
+	satisfactionRatingArray.shift(); // Remove the "0" - "..." entry
+	/* Set options for satisfaction rating element */
+	feedbackPopup.satisfactionRating = {
+		isReadonly: false,
+		max: 5,
+		titles: satisfactionRatingArray,
+		hoveringOver: changeSatisfactionValue,
+		leaveHover: removeHoverSatisfactionValue,
+		enableReset: false
+	}
+	function changeSatisfactionValue (value) {
+		feedbackPopup.giftFeedback.hoverSatisfaction = value;
+	}
+	function removeHoverSatisfactionValue(){
+		delete feedbackPopup.giftFeedback.hoverSatisfaction;
+	}
+	/* Set giftFeedback object */
+	feedbackPopup.giftFeedback = {
+		satisfaction: 0,
+		receivedOn: reservationDate,
+		message: '',
+		putBackOnList: false
+	}
+	/* Convert rating to satisfaction value */
+	feedbackPopup.showSatisfactionText = mapRatingOnSatisfaction;
+	
+	function mapRatingOnSatisfaction () {
+		var rating = feedbackPopup.giftFeedback.hoverSatisfaction ? feedbackPopup.giftFeedback.hoverSatisfaction : feedbackPopup.giftFeedback.satisfaction;
+		/* Return satisfaction value (text) */
+		return satisfactionRatingMap.get(rating);
+	}
+	/* Save changes in popup */
+	feedbackPopup.ok = function () {
+		feedbackPopup.giftFeedback.satisfaction = mapRatingOnSatisfaction();
+		$uibModalInstance.close({
+			giftFeedback: feedbackPopup.giftFeedback, reservator: feedbackPopup.reservator
+		});
+	};
+	/* Cancel popup and discard changes */
+	feedbackPopup.cancel = function () {
+		$uibModalInstance.dismiss('Cancel');
+	};
+}])
+.controller('receivedWishesPopupController', ['$uibModalInstance', 'receivedWishes', 'receiver', function ($uibModalInstance, receivedWishes, receiver) {
+	var _self = this;
+		console.log(receivedWishes);
+	_self.wishes = receivedWishes;
+	_self.receiver = receiver;
+	_self.cancel = function () {
+		$uibModalInstance.dismiss('cancel');
+	}
+}]);

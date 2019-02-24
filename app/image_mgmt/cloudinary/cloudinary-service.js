@@ -21,13 +21,13 @@ angular.module('cloudinaryModule', [
         widgetOptions[key] = value;
         return _self;
     }
-    _self.$get = ['$http', function($http){
+    _self.$get = ['$http', 'CONFIG', function($http, CONFIG){
         var clsrv = {};
         
         /** Get a signature for a signed upload to Cloudinary */
         clsrv.getSignature = function (callback, params_to_sign) {
             $http.post(CONFIG.apiUrl + '/api/images/signature', params_to_sign)
-                .then((results) => {
+                .then(function(results) {
                     var signature = results.data;
                     callback(signature);
                 });
@@ -49,6 +49,30 @@ angular.module('cloudinaryModule', [
         }
 
         /**
+         * Upload a cloudinary image
+         * @function uploadImage
+         * @param {String} publicId The wanted publicId of the image (best practice: equal to wish ID)
+         * @param {String} image A url or image string
+         * @param {function} callback A callback function with arguments error and results to handle events.
+         * @return {Image} Return an image if the upload succeeded
+         * @return {Error} Return an image if the upload failed
+         */
+        clsrv.uploadImage = function(publicId, image, callback) {
+            var body = {
+                public_id: publicId,
+                image: image
+            }
+            $http.post(CONFIG.apiUrl + '/api/images', body).then( function(image) {
+                if (callback) {
+                    callback(null, image);
+                }
+            },
+            function(error){
+                callback(error);
+            });
+        }
+
+        /**
          * Rename a cloudinary image
          * @function renameImage
          * @param {String} publicId The current publicId of the image
@@ -61,7 +85,7 @@ angular.module('cloudinaryModule', [
                 new_public_id: newName
             }
             $http.put(CONFIG.apiUrl + '/api/images/' + encodeURIComponent(publicId) + '/public_id', body)
-                .then((results) => {
+                .then(function(results){
                     var image = {
                         public_id: results.data.public_id,
                         version: results.data.version
@@ -77,9 +101,18 @@ angular.module('cloudinaryModule', [
          */
         clsrv.deleteImage = function(publicId, callback) {
             $http.delete(CONFIG.apiUrl + '/api/images/' + encodeURIComponent(publicId))
-                .then(() => {
+                .then(function(){
                     callback();
                 });
+        }
+
+        /** 
+         * Generate a cloudinary URL based on public_id
+         * @param {String} public_id
+         * @param {String} version
+         */
+        clsrv.generateCloudinaryUrl = function(public_id, version) {
+            return "https://res.cloudinary.com/" + CONFIG.cloudinary.cloudName + "/image/upload/v" + version + "/" + public_id
         }
 
         return clsrv;

@@ -3,6 +3,8 @@
 	'gimmi.models.wish',
 	'wishlist.wish.create',
 	'wishlist.wish.edit',
+	'gimmi.person',
+	'gimmi.communication'
 ])
 	.config(function($stateProvider){
 
@@ -24,7 +26,7 @@
 			})
 		;
 	})
-	.controller('wishInfoCtrl', ['$stateParams', '$uibModal', '$state', 'wishModel', 'receiverModel', 'UserService', 'wish', function ($stateParams, $uibModal, $state, wishModel, receiverModel, UserService, wish){
+	.controller('wishInfoCtrl', ['$stateParams', '$uibModal', '$state', 'wishModel', 'receiverModel', 'UserService', 'PersonService', 'CommunicationService', 'wish', function ($stateParams, $uibModal, $state, wishModel, receiverModel, UserService, PersonService, CommunicationService, wish){
 		var _self = this;
 		console.info("Wens geopend:", wish._id);
 		_self.wish = wish;
@@ -60,10 +62,18 @@
 		//TODO: Zou al in de DB call uit Mongo moeten meegegeven worden in het object
 		_self.reservationStatus = function (wish) {
 			var reservationStatus = "unreserved";
-			if (wish.reservation) {
-				reservationStatus = "reserved";
+			if (wish.reservation && !wish.closure) {
+				if (!isIncognitoReservation(wish)) {
+					reservationStatus = "reserved";
+				}
+			} else if (wish.closure) {
+				reservationStatus = "fulfilled";
 			}
 			return reservationStatus;
+		}
+		function isIncognitoReservation(wish) {
+			var now = new Date();
+			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy)) && (wish.reservation.handoverDate > now.toISOString()));
 		}
 		_self.addReservation = function (wish, userID, reason) {
 			/*var reservation = {
@@ -100,6 +110,7 @@
 			delete _self.wish.reservation;
 		};
 		_self.copy = function (wish) {
+			console.log("Wens kopiëren");
 			var userID = UserService.getCurrentUser()._id;
 			var newWish = {};
 			newWish.title = wish.title;
@@ -185,8 +196,64 @@
 		};
 		_self.isIncognitoReservation = function (wish) {
 			var now = new Date();
-			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy._id)) && (wish.reservation.hideUntil > now.toISOString()));
+			return (UserService.userIsReceiver(receiverModel.getCurrentReceiver()._id) && (!reservedByUser(wish.reservation.reservedBy._id)) && (wish.reservation.handoverDate > now.toISOString()));
 		}
+		/* Feedback */
+		_self.openFeedbackPopup = openFeedbackPopup;
+
+		function openFeedbackPopup(wish) {
+			var giftFeedbackPopup = $uibModal.open({
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'app/wishlist/giftFeedbackPopup.tmpl.html',
+				controller: 'giftFeedbackPopupController',
+				controllerAs: 'giftFeedbackPopupCtrl',
+				resolve: {
+					wish: function () {
+						return wish;
+					},
+					reservator: ['PersonService', function (PersonService) {
+						if (wish.reservation) {
+							return PersonService.getNameById(wish.reservation.reservedBy._id);
+						}
+						return null;
+					}]
+				}
+			});
+			giftFeedbackPopup.result.then(function (result) {
+				var giftFeedback = result.giftFeedback;
+				var reservator = result.reservator;
+				//wishID, feedback-object needed for call
+				wishModel.addFeedback(wish._id, giftFeedback).then(function (wish) {
+					var closureInfo = {
+						closedBy: UserService.getCurrentUser()._id,
+						reason: "Cadeau ontvangen"
+					};
+					wishModel.close(wish._id, closureInfo).then(function (wish) {
+						console.log("Wish " + wish._id +" is closed");
+					});
+					if (giftFeedback.putBackOnList) {
+						_self.copy(wish);
+					}
+					if (giftFeedback.message) {
+						PersonService.getEmailById(reservator._id).then(function (email) {
+							PersonService.getNameById(wish.receiver).then(function (person) {
+								reservator.email = email;
+								var receiver = person;
+								var mail = {
+									to: reservator.email,
+									subject: "[GIMMI] " + receiver.fullName + " bedankt je voor je cadeau!!",
+									html: reservator.firstName + "<br/><br/>Je hebt onlangs op Gimmi het cadeau '" + wish.title+ "' gereserveerd voor " + receiver.fullName + ". <br/>Onlangs heb je dit cadeau afgegeven en daarnet heeft " + receiver.firstName + " je een boodschap nagelaten:<br/><br/><em>" + giftFeedback.message + "</em><br/><br/>Bedankt om Gimmi te gebruiken en hopelijk tot snel voor een nieuwe succesvolle cadeauzoektocht!"
+								}
+								console.log("Verstuur een mail:", mail);
+								CommunicationService.sendMail(mail);
+							});
+						});
+					}
+				});
+			});
+		}
+
 	}])
 	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService){
 		var _self = this;
