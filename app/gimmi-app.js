@@ -174,7 +174,7 @@
 					}
 				},
 				'content@': {
-					templateUrl: 'app/intro.tmpl.html',
+					templateUrl: 'app/landingPage.tmpl.html',
 					controller: 'landingPageCtrl',
 					controllerAs: 'lp'
 				},

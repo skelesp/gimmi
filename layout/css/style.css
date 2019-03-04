@@ -118,10 +118,9 @@ h6.card-title  {
 
 /* -- Header design -- */
 #jumbotron-landing {
-  color: #f8f8f8;
-  background: url(../img/give-hand.jpg) no-repeat center center;
-  background-size:cover;
-  filter: grayscale(100%);
+  background-color:#75bee9;
+  /* background: url(../img/give-hand.jpg) no-repeat center center;
+  background-size:cover; */
 }
 
 /* END -- Header design -- */
