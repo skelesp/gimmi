@@ -7,7 +7,6 @@
 			window.dataLayer = window.dataLayer || [];
 			function gtag() { dataLayer.push(arguments); }
 			gtag('js', new Date());
-
 			gtag('config', 'UA-132810834-1');
 		</script>
 		<!-- Meta tags -->
@@ -42,14 +41,14 @@
 
 	</head>
 	<body ng-controller="ApplicationCtrl as ApplicationCtrl">
-			<!-- PAGE -->
-			<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
-			<flash-message>
-				<div class="flash-message alert alert-{{flash.type}} alert-dismissible fade show" role="alert" ng-cloak>
-					<span>{{flash.text}}</span>
-				</div>
-			</flash-message>
-			<div class="mb-4" ui-view="content"></div>
+		<!-- PAGE -->
+		<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
+		<flash-message>
+			<div class="flash-message alert alert-{{flash.type}} alert-dismissible fade show" role="alert" ng-cloak>
+				<span>{{flash.text}}</span>
+			</div>
+		</flash-message>
+		<div class="mb-4" ui-view="content"></div>
 		
 		<!-- SCRIPTS -->
 		<!-- Polyfills-->
