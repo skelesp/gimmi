@@ -5,6 +5,10 @@
   height: 35px;
   width: 35px;
 }
+.logo-in-service-box {
+  height: 65px;
+  width: 65px;
+}
 .blockquote {
   border-left: 5px solid rgb(248, 249, 250);
 }
