@@ -179,18 +179,28 @@
 		}
 
 		function redirectAfterAuthentication(userID) {
+			// Check if there was a page the user requested before logging in
+			// This page is stored in "$rootScope.returnToState" with stateParams in "$rootScope.returnToStateParams"
 			if ($rootScope.returnToState) {
-				$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
+				if ($rootScope.returnToState === "gimmi.wishlist.send") {
+					$state.go($rootScope.returnToState, { receiverID: userID });
+				} else if ($rootScope.returnToState === "gimmi.wishlist" && !$rootScope.returnToStateParams.receiverID) {
+					$state.go($rootScope.returnToState, { receiverID: userID });
+				} else {
+					$state.go($rootScope.returnToState, $rootScope.returnToStateParams);
+				}
 				delete $rootScope.returnToState;
 				delete $rootScope.returnToStateParams;
 				delete $rootScope.attemptedEmail;
+				// Check if there was a url the user requested before logging in (eg. clicked a link in an email and wasn't logged in)
 			} else if ($rootScope.attemptedUrl) {
 				console.info("redirect to " + $rootScope.attemptedUrl)
-				$location.path($rootScope.attemptedUrl);
+				$location.path($rootScope.attemptedUrl); // go to the url
 				delete $rootScope.attemptedUrl;
 				delete $rootScope.attemptedEmail;
+				// If the logged in user hasn't requested a specific page before logging in, he/she will be directed to the "user dashboard"
 			} else {
-				$state.go('gimmi.wishlist', { receiverID: userID });
+				$state.go('gimmi.userdashboard', { userID: userID });
 			}
 		}
 
