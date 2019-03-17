@@ -25,7 +25,9 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-md-8 col-lg-7">
-                            <button class="btn btn-lg btn-warning mt-2 font-weight-bold btn-multiline shadow" ng-click="lp.toRegistration()"> Start nu met Gimmi en ontdek het zelf!</button>
+                            <button ng-hide="ApplicationCtrl.currentUser._id" class="btn btn-lg btn-warning mt-2 font-weight-bold btn-multiline shadow" ng-click="lp.toRegistration()"> Start nu met Gimmi en ontdek het zelf!</button>
+                            <button ng-show="ApplicationCtrl.currentUser._id" class="btn btn-lg btn-warning mt-2 font-weight-bold btn-multiline shadow"
+                                ng-click="lp.toUserDashboard(ApplicationCtrl.currentUser._id)"> Ga naar je overzichtspagina, {{ApplicationCtrl.currentUser.firstName}}!</button>
                         </div>
                     </div>
                 </div>
@@ -33,7 +35,7 @@
         </div>
     </div>
     <!-- Kleine schermen -->
-    <div class="jumbotron d-block d-md-none" id="jumbotron-landing">
+    <div class="jumbotron d-block d-md-none jumbotron-gimmi-blue">
         <div class="container">
             <div class="row">
                 <div class="col-8">
@@ -51,8 +53,11 @@
                     </ul>
                 </div>
                 <div class="col-12">
-                    <button class="btn btn-lg btn-warning mt-2 font-weight-bold btn-multiline shadow"
+                    <button ng-hide="ApplicationCtrl.currentUser._id" class="btn btn-lg btn-warning mt-2 font-weight-bold btn-multiline shadow"
                         ng-click="lp.toRegistration()"> Start nu met Gimmi en ontdek het zelf!</button>
+                    <button ng-show="ApplicationCtrl.currentUser._id" class="btn btn-lg btn-warning mt-2 font-weight-bold btn-multiline shadow"
+                        ng-click="lp.toUserDashboard(ApplicationCtrl.currentUser._id)"> Ga naar je overzichtspagina,
+                        {{ApplicationCtrl.currentUser.firstName}}!</button>
                 </div>
             </div>
         </div>

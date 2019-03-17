@@ -10,4 +10,7 @@ angular.module('landingPage', [])
         self.sendWishlist = function (userID) {
             $state.go('gimmi.wishlist.send', { receiverID: userID });
         };
+        self.toUserDashboard = function (userID) {
+            $state.go('gimmi.userdashboard', { userID: userID });
+        };
     }]);
