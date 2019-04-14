@@ -26,7 +26,7 @@ angular.module('userdashboard', [
     self.wishCount = function() {
         var count = 0;
         wishlist.wishes.forEach(wish => {
-            if (!wish.closure) {
+            if (wish.state === "Open" || wish.state === "Reserved") {
                 count++;
             }
         });
