@@ -35,7 +35,10 @@ angular.module('gimmi.models.wish', [
 				return w._id === wish._id;
 			});
 			var wishlistWish = angular.copy(wish);
-			wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
+			// TEMP FIX until #906 is implemented
+			if (wish.reservation) {
+				wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
+			} // END TEMP FIX
 			wishlist.wishes[index] = wishlistWish;
 		}
 	}
@@ -142,17 +145,7 @@ angular.module('gimmi.models.wish', [
 			wish.image = CONFIG.defaultImage;
 		}
 		$http.put(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
-			if (wishlist) {
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wish._id;
-				});
-				// TEMP FIX until #906 is implemented
-				if (wish.reservation) {
-					wish.reservation.reservedBy = wish.reservation.reservedBy._id
-				}
-				// END TEMP FIX
-				wishlist.wishes[index] = wish;
-			}
+			updateWishlist(wish);
 			defer.resolve(wish);
 			console.info("wish updated", wish);
 		});
@@ -175,14 +168,7 @@ angular.module('gimmi.models.wish', [
 	model.addReservation = function(wishID, reservation) {
 		var defer = $q.defer();
 		$http.post(URLS.WISH+"/"+wishID+"/reservation", reservation).success(function(wish){
-			if (wishlist) {
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wishID;
-				});
-				var wishlistWish = angular.copy(wish);
-				wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
-				wishlist.wishes[index] = wishlistWish;
-			}
+			updateWishlist(wish);
 			console.info("Reservation added to", wish._id);
 			defer.resolve(wish);
 		});
@@ -192,10 +178,7 @@ angular.module('gimmi.models.wish', [
 	model.deleteReservation = function(wishID) {
 		$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
 			if (wishlist) {
-				var index = _.findIndex(wishlist.wishes, function (w) {
-					return w._id === wishID;
-				});
-				wishlist.wishes[index] = wish;
+				updateWishlist(wish);
 			}
 			console.info("Reservation deleted for ", wish._id);
 		});
