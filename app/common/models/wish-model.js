@@ -39,10 +39,23 @@ angular.module('gimmi.models.wish', [
 			if (wish.reservation) {
 				wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
 			} // END TEMP FIX
-			wishlist.wishes[index] = wishlistWish;
+			wishlist.wishes[index] = setWishStatus(wishlistWish);
 		}
 	}
 
+	function setWishStatus (wish) { //TODO: #1660
+		var now = new Date();
+		if (wish.closure) {
+			wish.state = "Closed";
+		} else if (wish.reservation && wish.reservation.handoverDate < now.toISOString()) {
+			wish.state = "Received"	;
+		} else if (wish.reservation && !wish.closure) {
+			wish.state = "Reserved";
+		} else {
+			wish.state = "Open";
+		}
+		return wish;
+	}
 	model.getWishById = function (wishID) {
 		var deferred = $q.defer();
 
@@ -61,6 +74,9 @@ angular.module('gimmi.models.wish', [
 		} else {
 			$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
 				wishlist = result.data[0];
+				wishlist.wishes.forEach((wish, index, wishes) => {
+					wishes[index] = setWishStatus(wish);
+				});
 				deferred.resolve(wishlist);
 			});
 		}
