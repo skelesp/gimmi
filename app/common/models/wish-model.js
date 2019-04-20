@@ -39,28 +39,17 @@ angular.module('gimmi.models.wish', [
 			if (wish.reservation) {
 				wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
 			} // END TEMP FIX
-			wishlist.wishes[index] = setWishStatus(wishlistWish);
+			getWishStatus(wishlistWish).then(function(wish){
+				wishlist.wishes[index] = wish;
+			});
 		}
 	}
 
-	function setWishStatus (wish) { //TODO: #1660
-		var now = new Date();
-		if (wish.closure) {
-			wish.state = "Closed";
-		} else if (wish.reservation && wish.reservation.handoverDate < now.toISOString()) {
-			wish.state = "Received"	;
-		} else if (wish.reservation && !wish.closure) {
-			wish.state = "Reserved";
-		} else {
-			wish.state = "Open";
-		}
-		return wish;
-	}
 	function getWishStatus(wish) { //#1660: use new GET wish/:id/state route in API
 		var deferred = $q.defer();
 
-		$http.get(URLS.WISH + "/" + wish._id + "/state").then(function (state) {
-			wish.state = state;
+		$http.get(URLS.WISH + "/" + wish._id + "/state").then(function (result) {
+			wish.state = result.data;
 			deferred.resolve(wish);
 		});
 
@@ -85,7 +74,9 @@ angular.module('gimmi.models.wish', [
 			$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
 				wishlist = result.data[0];
 				wishlist.wishes.forEach((wish, index, wishes) => {
-					wishes[index] = setWishStatus(wish);
+					getWishStatus(wish).then(function (wish) {
+						wishlist.wishes[index] = wish;
+					});
 				});
 				deferred.resolve(wishlist);
 			});
