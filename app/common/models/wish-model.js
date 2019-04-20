@@ -56,6 +56,16 @@ angular.module('gimmi.models.wish', [
 		}
 		return wish;
 	}
+	function getWishStatus(wish) { //#1660: use new GET wish/:id/state route in API
+		var deferred = $q.defer();
+
+		$http.get(URLS.WISH + "/" + wish._id + "/state").then(function (state) {
+			wish.state = state;
+			deferred.resolve(wish);
+		});
+
+		return deferred.promise;
+	}
 	model.getWishById = function (wishID) {
 		var deferred = $q.defer();
 
