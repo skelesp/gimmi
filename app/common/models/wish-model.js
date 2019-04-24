@@ -67,21 +67,26 @@ angular.module('gimmi.models.wish', [
 
 	model.getWishlist = function(receiverID) {
 		var deferred = $q.defer();
-
 		if (wishlist && wishlist._id.receiver._id === receiverID) {
 			deferred.resolve(wishlist);
 		} else {
 			$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
-				wishlist = result.data[0];
-				wishlist.wishes.forEach((wish, index, wishes) => {
-					getWishStatus(wish).then(function (wish) {
-						wishlist.wishes[index] = wish;
+				var wishlist = result.data[0];
+				// Get the state of all wishes in the wishlist
+				var wishPromises = wishlist.wishes.map((wish) => {
+					return getWishStatus(wish).then(function (wish) {
+						return wish;
 					});
 				});
-				deferred.resolve(wishlist);
+				// Wait for all wish promises in map() above before resolving the getWishlist promise
+				// https://stackoverflow.com/questions/39452083/using-promise-function-inside-javascript-array-map
+				$q.all(wishPromises).then(function (wishlistResult) { 
+					wishlist.wishes = wishlistResult; 
+					deferred.resolve(wishlist);
+				});
 			});
 		}
-
+		
 		return deferred.promise;
 	};
 
