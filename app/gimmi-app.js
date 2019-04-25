@@ -15,7 +15,8 @@
 	'gimmi.reporting',
 	'gimmi.config',
 	'cloudinary',
-	'cloudinaryModule'
+	'cloudinaryModule',
+	'userdashboard'
 ])
 .run(['$rootScope', '$window', '$state', '$stateParams', '$location', '$uibModalStack', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, $uibModalStack, Flash, config, UserService) {
 
@@ -143,7 +144,7 @@
 	}(document));
 
 }])
-	.config(['cloudinaryProvider', 'cloudinaryServiceProvider', 'CONFIG', function (cloudinaryProvider, cloudinaryServiceProvider, CONFIG) {
+.config(['cloudinaryProvider', 'cloudinaryServiceProvider', 'CONFIG', function (cloudinaryProvider, cloudinaryServiceProvider, CONFIG) {
 	/* Config for Angular SDK of Cloudinary (cl-image directive) */
 	cloudinaryProvider
 		.set("cloud_name", CONFIG.cloudinary.cloudName)

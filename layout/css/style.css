@@ -121,7 +121,7 @@ h6.card-title  {
 }
 
 /* -- Header design -- */
-#jumbotron-landing {
+.jumbotron-gimmi-blue {
   background-color:#75bee9;
   /* background: url(../img/give-hand.jpg) no-repeat center center;
   background-size:cover; */
@@ -133,7 +133,7 @@ h6.card-title  {
 .blurredCardOverlay {
   background-color: rgba(250, 243, 243, 0.83)
 }
-.blurredCardOverlay a, p {
+.blurredCardOverlay a,.blurredCardOverlay p {
   color: rgb(87, 87, 87);
 }
 /* END -- Create card style addons --*/
