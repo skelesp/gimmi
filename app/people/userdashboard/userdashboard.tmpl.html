@@ -11,9 +11,10 @@
             <div class="card border border-info text-center">
                 <h5 class="card-header border-bottom border-info bg-info text-white">Wensenlijst</h5>
                 <div class="card-body">
-                    <h6 class="card-text">Je hebt momenteel</h6>
-                    <h2 class="card-title">{{userDashboardCtrl.wishCount()}} wensen</h2>
-                    <h6 class="card-text">op je wensenlijst</h6>
+                    <h5 class="card-text">Je hebt momenteel</h5>
+                    <h4 class="card-title">{{userDashboardCtrl.counts.openWishCount}} open, {{userDashboardCtrl.counts.reservedWishCount}} gereserveerde, </h4>
+                    <h4 class="card-title">{{userDashboardCtrl.counts.receivedWishCount}} ontvangen, {{userDashboardCtrl.counts.closedWishCount}} afgesloten</h4>
+                    <h5 class="card-text">wensen op je wensenlijst</h5>
                 </div>
                 <div class="card-footer border-top-0 bg-transparent">
                     <button ng-click="userDashboardCtrl.toWishlist()" class="btn btn-warning mb-1"><i class="fa fa-list-alt mr-2" aria-hidden="true"></i>Beheer je wensen</button>

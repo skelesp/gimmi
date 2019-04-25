@@ -22,16 +22,32 @@ angular.module('userdashboard', [
 }])
     .controller('userDashboardController', ['$state', 'Flash', 'user', 'wishlist', function ($state, Flash, user, wishlist) {
     var self = this;
-    self.user = user;
-    self.wishCount = function() {
-        var count = 0;
-        wishlist.wishes.forEach(wish => {
-            if (wish.state === "Open" || wish.state === "Reserved") {
-                count++;
-            }
-        });
-        return count;
+    var openCount = 0; var reservedCount = 0; var receivedCount = 0; var closedCount = 0;
+    wishlist.wishes.forEach(wish => {
+        switch (wish.state) {
+            case "Open":
+                openCount++;
+                break;
+            case "Reserved":
+                reservedCount++;
+                break;
+            case "Received":
+                receivedCount++;
+                break;
+            case "Closed":
+                closedCount++;
+                break;
+        }
+    });
+    self.counts = {
+        openWishCount : openCount,
+        reservedWishCount : reservedCount,
+        receivedWishCount : receivedCount,
+        closedWishCount : closedCount
     }
+    
+    self.user = user;
+   
     self.toWishlist = function () {
         $state.go('gimmi.wishlist', { receiverID: self.user._id });
     };
