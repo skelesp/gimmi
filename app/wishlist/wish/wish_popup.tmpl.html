@@ -1,0 +1,67 @@
+<!-- Template for wish popup -->
+<div class="modal-header">
+    <h3 class="modal-title">Voeg een wens toe</h3>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+        ng-click="wishPopup.cancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form>
+        <div class="form-group">
+        
+            <cl-image class="img-thumbnail" public-id="{{wishPopup.wish.image.public_id}}"
+                version="{{wishPopup.wish.image.version}}">
+                <cl-transformation fetch-format="auto" />
+            </cl-image>
+            <button class="btn btn-danger" type="button" cl-upload public-id="{{wishPopup.wish._id}}_temp"
+                image-result="wishPopup.wish.image" on-cancel="wishPopup.goToTitle()">
+                Wijzig de afbeelding</button>
+        </div>
+        <div class="form-group">
+            <label for="wishTitle" class="form-control-label">Titel</label>
+            <input type="text" class="form-control" id="wishTitle" ng-model="wishPopup.wish.title"
+                placeholder="Titel" required />
+        </div>
+        <div class="form-group">
+            <label for="wishPrice" class="form-control-label">Prijs</label>
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">€</div>
+                </div>
+                <input type="number" class="form-control" name="inputPrice" id="WishPrice"
+                    placeholder="Prijs in € (enkel getal ingeven)" ng-model="wishPopup.wish.price" />
+                <span ng-show="wishEditForm.inputPrice.$error.number">
+                    Enkel getallen toegelaten!
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="wishUrl" class="form-control-label">Website</label>
+            <input type="text" class="form-control" id="WishUrl" ng-model="wishPopup.wish.url"
+                placeholder="Link naar externe website" />
+        </div>
+        <div class="form-group">
+            <label for="wishDescription" class="form-control-label">Beschrijving</label>
+            <textarea class="form-control" rows="3" id="wishDescription" ng-model="wishPopup.wish.description"
+                placeholder="Geef een korte beschrijving van je wens">
+            </textarea>
+        </div>
+        <div class="form-group">
+            <label for="wishColor" class="form-control-label">Kleur</label>
+            <input type="text" class="form-control" id="wishColor" ng-model="wishPopup.wish.color"
+                placeholder="Gewenste kleur" />
+        </div>
+        <div class="form-group">
+            <label for="wishSize" class="form-control-label">Grootte/Maat</label>
+            <input type="text" class="form-control" id="WishSize" ng-model="wishPopup.wish.size"
+                placeholder="Gewenste maat" />
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" ng-click="wishPopup.ok()"
+        aria-describedby="saveHelpText">Wens opslaan</button>
+    <button class="btn btn-outline-danger" type="button" ng-click="wishPopup.cancel()">Annuleer</button>
+</div>
