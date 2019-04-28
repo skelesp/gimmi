@@ -71,7 +71,7 @@ angular.module('gimmi.models.wish', [
 			deferred.resolve(wishlist);
 		} else {
 			$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
-				var wishlist = result.data[0];
+				wishlist = result.data[0];
 				// Get the state of all wishes in the wishlist
 				var wishPromises = wishlist.wishes.map((wish) => {
 					return getWishStatus(wish).then(function (wish) {
