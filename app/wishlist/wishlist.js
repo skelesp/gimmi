@@ -492,7 +492,7 @@
 	function ($stateParams, $uibModal, $window, CONFIG, wishModel, cloudinaryService, user){
 	/* Initialize variables */
 	var _self = this;
-	_self.defaultImage = CONFIG.defaultImage;
+	_self.wishCardImage = CONFIG.defaultImage;
 	_self.openAddWishPopup = function () {
 		var createWishPopup = $uibModal.open({
 			ariaLabelledBy: 'modal-title',
