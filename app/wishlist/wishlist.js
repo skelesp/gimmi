@@ -514,12 +514,6 @@
 			createWish(newWish);
 		});
 	}
-	_self.goToPrice = function(){
-		$window.document.getElementById('newWishPrice').focus();
-	}
-	_self.goToTitle = function () {
-		$window.document.getElementById('newWishTitle').focus();
-	}
 
 	function createWish(newWish) {
 		var receiverID = $stateParams.receiverID;
