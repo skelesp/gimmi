@@ -8,9 +8,8 @@
 </div>
 
 <div class="modal-body">
-    <form>
+    <form name="wishPopupForm">
         <div class="form-group">
-        
             <cl-image class="img-thumbnail" public-id="{{wishPopup.wish.image.public_id}}"
                 version="{{wishPopup.wish.image.version}}">
                 <cl-transformation fetch-format="auto" />
@@ -19,9 +18,9 @@
                 image-result="wishPopup.wish.image" on-cancel="wishPopup.goToTitle()">
                 Wijzig de afbeelding</button>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label for="wishTitle" class="form-control-label">Titel</label>
-            <input type="text" class="form-control" id="wishTitle" ng-model="wishPopup.wish.title"
+            <input type="text" class="form-control" name="wishTitle" id="wishTitle" ng-model="wishPopup.wish.title"
                 placeholder="Titel" required />
         </div>
         <div class="form-group">
@@ -61,7 +60,13 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-danger" type="button" ng-click="wishPopup.ok()"
+    <ng-messages for="wishPopupForm.wishTitle.$error">
+        <ng-message when="required" ng-show="wishPopupForm.wishTitle.$invalid"
+            class="text-danger">
+            Titel moet ingevuld zijn!
+        </ng-message>
+    </ng-messages>
+    <button class="btn btn-danger" type="button" ng-click="wishPopup.ok()" ng-disabled="!wishPopupForm.$valid"
         aria-describedby="saveHelpText">Wens opslaan</button>
     <button class="btn btn-outline-danger" type="button" ng-click="wishPopup.cancel()">Annuleer</button>
 </div>

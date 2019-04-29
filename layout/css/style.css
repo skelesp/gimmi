@@ -195,6 +195,17 @@ h6.card-title  {
   }
 }
 
+/* Show asterix on required fields */
+.form-group.required .form-control-label:after { 
+   content:" *";
+   color:red;
+}
+/* Show disallowed sign on all disabled buttons */
+button[type="button"]:disabled {
+  cursor: not-allowed;
+}
+
+
 /* Fix for modal in bootstrap 4 (with angularUI)*/
 .fade.in {
     opacity: 1;
