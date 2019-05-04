@@ -46,7 +46,11 @@
 					wish: function () {
 						var originalWish = angular.copy(wish);
 						return originalWish;
-					}
+					},
+					user: ['UserService', function (UserService) {
+						return UserService.getCurrentUser();
+					}]
+
 				}
 			});
 
@@ -254,10 +258,11 @@
 		}
 
 	}])
-	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService){
+	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', 'user', function ($window, $uibModalInstance, wish, cloudinaryService, user){
 		var _self = this;
 		var currentImage = wish.image;
 		_self.wish = wish;
+		_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, "_temp");
 		_self.ok = function () {
 			if (_self.wish.image !== currentImage) {
 				cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
