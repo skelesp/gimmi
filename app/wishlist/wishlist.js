@@ -673,10 +673,11 @@
 		$uibModalInstance.dismiss('cancel');
 	}
 }])
-.controller('wishPopupCtrl', ['$uibModalInstance', 'cloudinaryService', 'CONFIG', function ($uibModalInstance, cloudinaryService, CONFIG){
+.controller('wishPopupCtrl', ['$uibModalInstance', 'cloudinaryService', 'CONFIG', 'user', function ($uibModalInstance, cloudinaryService, CONFIG, user){
 	var _self = this;
 	console.log("Wish popup is opened");
 	_self.wish = {image: CONFIG.defaultImage};
+	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, "_temp");
 	_self.cancel = function () {
 		// Delete temporary cloudinary image on cancel in wish create popup
 		// Check for "_temp" on end of name to make sure that only temporary images are deleted (eg. edit flow will use this popup too)

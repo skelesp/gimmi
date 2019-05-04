@@ -1,7 +1,7 @@
 angular.module('gimmi.models.wish', [
 	'gimmi.config'
 ])
-	.service('wishModel', ['$http', '$q', '$uibModal', 'CONFIG', 'Flash', 'cloudinaryService', function ($http, $q, $uibModal, CONFIG, Flash, cloudinaryService){
+	.service('wishModel', ['$http', '$q', '$uibModal', 'CONFIG', 'Flash', 'cloudinaryService', 'UserService', function ($http, $q, $uibModal, CONFIG, Flash, cloudinaryService, UserService){
 	var model = this,
 		URLS = {
 			WISHLIST: CONFIG.apiUrl + '/api/wishlist',
@@ -179,6 +179,9 @@ angular.module('gimmi.models.wish', [
 			controller: 'wishPopupCtrl',
 			controllerAs: 'wishPopup',
 			resolve: {
+				user: ['UserService', function (UserService) {
+					return UserService.getCurrentUser();
+				}]
 				/* TODO om dezelfde popup bij update te gebruiken zal deze resolve gebruikt moeten worden... */
 				/* wish: function () {
 					var originalWish = angular.copy(wish);
