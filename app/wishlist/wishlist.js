@@ -10,7 +10,7 @@
 	'ngclipboard',
 	'gimmi.person'
 ])
-.config(function($stateProvider){
+.config(['$stateProvider', function($stateProvider){
 	$stateProvider
 		.state('gimmi.wishlist', {
 			url: 'wishlist/:receiverID',
@@ -63,7 +63,7 @@
 			authenticate: true
 		})
 	;
-})
+}])
 .controller('wishlistCtrl', ['UserService', 'PersonService', 'receiverModel', '$uibModal', 'wishlist', 'currentReceiver', 
 		function wishlistCtrl(UserService, PersonService, receiverModel, $uibModal, wishlist, currentReceiver){
 	var _self = this;
@@ -448,7 +448,7 @@
 		$window.document.getElementById('EditWishTitle').focus();
 	};
 }])
-.controller('copyWarningPopupCtrl', function ($window, $uibModalInstance, wish) {
+.controller('copyWarningPopupCtrl', ['$window', '$uibModalInstance', 'wish', function ($window, $uibModalInstance, wish) {
 	var _self = this;
 
 	_self.title = wish.title;
@@ -458,8 +458,8 @@
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	};
-})
-.controller('wishReservationPopupCtrl', function($uibModalInstance, wish, receiver) {
+}])
+.controller('wishReservationPopupCtrl', ['$uibModalInstance', 'wish', 'receiver', function($uibModalInstance, wish, receiver) {
 	var _self = this;
 	// Define default values
 	var reservation = {
@@ -476,8 +476,8 @@
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	};
-})
-.controller('deletePopupCtrl', function ($uibModalInstance, wish){
+}])
+.controller('deletePopupCtrl', ['$uibModalInstance', 'wish', function ($uibModalInstance, wish){
 	var _self = this;
 	_self.wishTitle = wish.title;
 	_self.ok = function () {
@@ -487,7 +487,7 @@
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	};
-})
+}])
 .controller('createWishCtrl', ['$stateParams', '$uibModal', '$window', 'CONFIG', 'wishModel', 'cloudinaryService', 'user',
 	function ($stateParams, $uibModal, $window, CONFIG, wishModel, cloudinaryService, user){
 	/* Initialize variables */
