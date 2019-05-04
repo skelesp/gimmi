@@ -2,7 +2,7 @@ angular.module('cloudinaryModule', [
     'cloudinary',
     'gimmi.config'
 ])
-    .provider('cloudinaryService', ['CONFIG', function(CONFIG){
+.provider('cloudinaryService', ['CONFIG', function(CONFIG){
     var _self = this;
     /** Set default options for Cloudinary upload widget.
      * All options can be found at: https://cloudinary.com/documentation/upload_widget#cloudinary_openuploadwidget_options_resultcallback
@@ -113,6 +113,16 @@ angular.module('cloudinaryModule', [
          */
         clsrv.generateCloudinaryUrl = function(public_id, version) {
             return "https://res.cloudinary.com/" + CONFIG.cloudinary.cloudName + "/image/upload/v" + version + "/" + public_id
+        }
+
+        /**
+         * Generate a random public id
+         * @param {String} prefix A string to attach before the random number
+         * @param {String} postfix A string to attach after the random number
+         */
+        clsrv.generateRandomPublicID = function (prefix, postfix){
+            var randomNumber = Math.floor((Math.random() * 1000000) + 1);
+            return `${prefix}-${randomNumber}${postfix}`
         }
 
         return clsrv;
