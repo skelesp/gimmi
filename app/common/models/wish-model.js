@@ -118,6 +118,7 @@ angular.module('gimmi.models.wish', [
 		
 		$http.post(URLS.WISH, wish).success(function(createdWish){
 			wish = createdWish;
+			// Put wish on current wishlist
 			if (wishlist._id.receiver._id === receiverID) {
 				wishlist.wishes.push(createdWish);
 				wishlist.count++;
@@ -129,7 +130,8 @@ angular.module('gimmi.models.wish', [
 				var message = "De wens '" + createdWish.title + "' werd gekopieerd naar je eigen lijst.";
 				var flashID = Flash.create('success', message);
 			}
-			if (createdWish.copyOf) { // if wish is a copy, then the image must be copied too (but wishID is needed, so this must be done after wish create)
+			// if wish is a copy, then the image must be copied too (but wishID is needed, so this must be done after wish create)
+			if (createdWish.copyOf && createdWish.image) { 
 				// Generate a url to the original image
 				var imageUrl = cloudinaryService.generateCloudinaryUrl(createdWish.image.public_id, createdWish.image.version);
 				// Upload the original image to cloudinary with publicID of the new wish
@@ -151,6 +153,15 @@ angular.module('gimmi.models.wish', [
 							}
 						});
 					}
+				});
+			} else if (createdWish.image && createdWish.image.public_id.slice(-5) === "_temp") {
+				// Rename temporary image.public_id to wish_id
+				cloudinaryService.renameImage(createdWish.image.public_id, createdWish._id, function (image) {
+					// Update wish with renamed image
+					wish.image = image;
+					model.updateWish(wish).then(function (wish) {
+						console.info(`Wish ${wish._id} is created and temp cloudinary image is renamed`);
+					});
 				});
 			} else {
 				if (callback) {

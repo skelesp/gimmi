@@ -496,29 +496,11 @@
 	_self.openAddWishPopup = function () {
 		var createWishPopup = wishModel.openWishPopup();
 		createWishPopup.result.then(function (newWish) {
-			createWish(newWish);
+			var receiverID = $stateParams.receiverID;
+			var userID = user._id;
+			wishModel.createWish(wish, receiverID, userID, null, null);
 		});
-	}
-
-	function createWish(newWish) {
-		var receiverID = $stateParams.receiverID;
-		var userID = user._id;
-		var wish = newWish;
-		if (!wish.image) {
-			wish.image = '';
-		}
-		// Create wish with image with random id
-		wishModel.createWish(wish, receiverID, userID, null, function(error, wish){
-			// Rename temporary image to wish_id
-			cloudinaryService.renameImage(newWish.image.public_id, wish._id, function(image){
-				// Update wish with renamed image
-				wish.image = image;
-				wishModel.updateWish(wish).then(function(wish){
-					console.info(`Wish ${wish._id} is created and temp cloudinary image is renamed`);
-				});
-			});
-		});
-	}
+	};
 }])
 .controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
 	var self = this;
@@ -697,7 +679,8 @@
 	_self.wish = {image: CONFIG.defaultImage};
 	_self.cancel = function () {
 		// Delete temporary cloudinary image on cancel in wish create popup
-		// Check for "_temp" on end of name to make sure that only temporary images are deleting (eg. edit flow will use this popup too)
+		// Check for "_temp" on end of name to make sure that only temporary images are deleted (eg. edit flow will use this popup too)
+		// This code should stay in popupCtrl, because on reuse of this popup you want this code to work on every popup implementation.
 		if (_self.wish && _self.wish.image && _self.wish.image.public_id.slice(-5) === "_temp") {
 			cloudinaryService.deleteImage(_self.wish.image.public_id, function () {
 				console.info("Temporary image on cloudinary deleted");
