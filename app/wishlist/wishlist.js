@@ -276,7 +276,10 @@
 				wish: function () {
 					var originalWish = angular.copy(wish);
 					return originalWish;
-				}
+				},
+				user: ['UserService', function (UserService) {
+					return UserService.getCurrentUser();
+				}]
 			}
 		});
 
@@ -421,10 +424,11 @@
 	_self.deleteReservation = deleteReservation;
 	_self.openFeedbackPopup = openFeedbackPopup;
 }])
-.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService) {
+	.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'cloudinaryService', 'wish', 'user', function ($window, $uibModalInstance, cloudinaryService, wish, user) {
 	var _self = this;
 	var currentImage = wish.image;
 	_self.wish = wish;
+	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, "_temp");
 	_self.ok = function () {
 		if (_self.wish.image !== currentImage) {
 			cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
