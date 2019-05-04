@@ -488,28 +488,13 @@
 		$uibModalInstance.dismiss('cancel');
 	};
 }])
-.controller('createWishCtrl', ['$stateParams', '$uibModal', '$window', 'CONFIG', 'wishModel', 'cloudinaryService', 'user',
-	function ($stateParams, $uibModal, $window, CONFIG, wishModel, cloudinaryService, user){
+.controller('createWishCtrl', ['$stateParams', 'CONFIG', 'wishModel', 'cloudinaryService', 'user',
+	function ($stateParams, CONFIG, wishModel, cloudinaryService, user){
 	/* Initialize variables */
 	var _self = this;
 	_self.wishCardImage = CONFIG.defaultImage;
 	_self.openAddWishPopup = function () {
-		var createWishPopup = $uibModal.open({
-			ariaLabelledBy: 'modal-title',
-			ariaDescribedBy: 'modal-body',
-			templateUrl: 'app/wishlist/wish/wish_popup.tmpl.html',
-			size: 'lg',
-			controller: 'wishPopupCtrl',
-			controllerAs: 'wishPopup',
-			resolve: {
-				/* TODO om dezelfde popup bij update te gebruiken zal deze resolve gebruikt moeten worden... */
-				/* wish: function () {
-					var originalWish = angular.copy(wish);
-					return originalWish;
-				} */
-			}
-		});
-
+		var createWishPopup = wishModel.openWishPopup();
 		createWishPopup.result.then(function (newWish) {
 			createWish(newWish);
 		});

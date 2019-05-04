@@ -1,7 +1,7 @@
 angular.module('gimmi.models.wish', [
 	'gimmi.config'
 ])
-	.service('wishModel', ['$http', '$q', 'CONFIG', 'Flash', 'cloudinaryService', function($http, $q, CONFIG, Flash, cloudinaryService){
+	.service('wishModel', ['$http', '$q', '$uibModal', 'CONFIG', 'Flash', 'cloudinaryService', function ($http, $q, $uibModal, CONFIG, Flash, cloudinaryService){
 	var model = this,
 		URLS = {
 			WISHLIST: CONFIG.apiUrl + '/api/wishlist',
@@ -156,6 +156,23 @@ angular.module('gimmi.models.wish', [
 				if (callback) {
 					callback(null, wish);
 				}
+			}
+		});
+	};
+	model.openWishPopup = function (wish){
+		return $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'app/wishlist/wish/wish_popup.tmpl.html',
+			size: 'lg',
+			controller: 'wishPopupCtrl',
+			controllerAs: 'wishPopup',
+			resolve: {
+				/* TODO om dezelfde popup bij update te gebruiken zal deze resolve gebruikt moeten worden... */
+				/* wish: function () {
+					var originalWish = angular.copy(wish);
+					return originalWish;
+				} */
 			}
 		});
 	};
