@@ -1,66 +1,18 @@
 <!-- Create wish card -->
 <div class="card border border-danger shadow">
 	<!-- Image header of create wish card -->
-	<div class="position-relative">
-		<cl-image class="card-img-top rounded img-fluid my-3" alt="Afbeelding van wens" ng-if="createWishCtrl.newWish.image.public_id" public-id="{{createWishCtrl.newWish.image.public_id}}" version="{{createWishCtrl.newWish.image.version}}"
+	<!-- https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4 -->
+	<div class="position-relative pt-2 pb-md-3 pb-5">
+		<cl-image class="card-img-top rounded img-fluid" alt="Standaard wensafbeelding" public-id="{{createWishCtrl.wishCardImage.public_id}}" version="{{createWishCtrl.wishCardImage.version}}"
 		 class="thumbnail inline">
 			<cl-transformation fetch-format="auto" />
 		</cl-image>
-		<cl-image class="card-img-top rounded img-fluid my-3" alt="Standaard wensafbeelding" ng-if="!createWishCtrl.newWish.image.public_id" public-id="{{createWishCtrl.defaultImage.public_id}}" version="{{createWishCtrl.defaultImage.version}}"
-		 class="thumbnail inline">
-			<cl-transformation fetch-format="auto" />
-		</cl-image>
-		<div class="card-img-overlay pt-4 blurredCardOverlay">
-			<p ng-hide="createWishCtrl.newWish.title" class="text-center pt-3">
-				<i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+		<span class="card-img-overlay blurredCardOverlay pointer" ng-click="createWishCtrl.openAddWishPopup()">
+			<p class="text-center">
+				<i class="fa fa-plus fa-5x" aria-hidden="true"></i>
 				<br/>
-				<span class="h6 font-weight-bold">Voeg een wens toe</span>
+				<span class="h3 font-weight-bold">Voeg wens toe</span>
 			</p>
-		</div>
+		</span>
 	</div>
-	<!-- Create wish form -->
-	<form name="wishCreateForm" class="m-2" role="form" novalidate="">
-		<!-- Input wish title -->
-		<div class="form-group">
-			<input  type="text" class="form-control form-control-sm" id="newWishTitle" ng-model="createWishCtrl.newWish.title" 
-					placeholder="Titel" required="" ng-keyup="$event.keyCode == 13 && createWishCtrl.goToPrice()">
-		</div>
-		<!-- Input wish price -->
-		<div class="form-group">
-			<div class="input-group mb-2">
-				<div class="input-group-prepend">
-					<div class="input-group-text">€</div>
-				</div>
-				<input type="number" class="form-control form-control-sm" name="inputPrice" id="newWishPrice" placeholder="Prijs in €" 
-					ng-model="createWishCtrl.newWish.price" ng-keyup="$event.keyCode == 13 && createWishCtrl.openImageSearch()">
-			</div>
-		</div>
-		<!-- Input wish URL -->
-		<div class="form-group">
-			<input type="hidden" class="form-control form-control-sm" name="inputUrl" id="newWishUrl" ng-model="createWishCtrl.newWish.url"
-			 placeholder="Link naar website met info over de wens">
-		</div>
-		<!-- 
-		<div class="form-group">
-			<input type="hidden" class="form-control form-control-sm" id="newWishImage" ng-model="createWishCtrl.newWish.image" placeholder="Zoek een afbeelding">
-		</div> -->
-		<!-- Reset button -->
-		<button type="button" class="btn btn-default btn-sm float-left mb-1 mr-1" ng-show="createWishCtrl.newWish.title !== '' || createWishCtrl.newWish.price !== ''"
-		 ng-click="createWishCtrl.cancel();">
-			Annuleer</button>
-		<!-- Afbeelding button -->
-		<button class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" type="button" id="searchImageBtn"
-				ng-show="!createWishCtrl.newWish.image.public_id && createWishCtrl.newWish.title !== ''"
-				cl-upload 
-				 image-result="createWishCtrl.newWish.image" 
-				 on-cancel="createWishCtrl.goToTitle()">
-		<i class="fa fa-image mr-1" aria-hidden="true"></i> Afbeelding</button>
-		<!-- Toevoegen button -->
-		<button type="button" class="btn btn-danger btn-sm float-md-left float-lg-right mb-1" 
-				ng-show="createWishCtrl.newWish.image.public_id"
-				ng-click="createWishCtrl.createWish(createWishCtrl.currentReceiverID, ApplicationCtrl.currentUser._id)" 
-				ng-disabled="wishCreateForm.$invalid" disabled="disabled">
-    	Toevoegen</button>
-	</form>
 </div>
-

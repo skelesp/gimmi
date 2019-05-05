@@ -9,6 +9,10 @@
   height: 65px;
   width: 65px;
 }
+.wish-image-size-in-popup{
+  height: 380px;
+  width: 380px;
+}
 .blockquote {
   border-left: 5px solid rgb(248, 249, 250);
 }
@@ -194,6 +198,17 @@ h6.card-title  {
           column-count: 6;
   }
 }
+
+/* Show asterix on required fields */
+.form-group.required .form-control-label:after { 
+   content:" *";
+   color:red;
+}
+/* Show disallowed sign on all disabled buttons */
+button[type="button"]:disabled {
+  cursor: not-allowed;
+}
+
 
 /* Fix for modal in bootstrap 4 (with angularUI)*/
 .fade.in {

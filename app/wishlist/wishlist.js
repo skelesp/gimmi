@@ -10,7 +10,7 @@
 	'ngclipboard',
 	'gimmi.person'
 ])
-.config(function($stateProvider){
+.config(['$stateProvider', function($stateProvider){
 	$stateProvider
 		.state('gimmi.wishlist', {
 			url: 'wishlist/:receiverID',
@@ -42,7 +42,12 @@
 				},
 				'wish_create@gimmi.wishlist': {
 					templateUrl: 'app/wishlist/wish/create/wish-create.tmpl.html',
-					controller: 'createWishCtrl as createWishCtrl'
+					controller: 'createWishCtrl as createWishCtrl',
+					resolve: {
+						user: ['UserService', function(UserService){
+							return UserService.getCurrentUser();
+						}]
+					}
 				}
 			},
 			authenticate: true
@@ -58,7 +63,7 @@
 			authenticate: true
 		})
 	;
-})
+}])
 .controller('wishlistCtrl', ['UserService', 'PersonService', 'receiverModel', '$uibModal', 'wishlist', 'currentReceiver', 
 		function wishlistCtrl(UserService, PersonService, receiverModel, $uibModal, wishlist, currentReceiver){
 	var _self = this;
@@ -271,7 +276,10 @@
 				wish: function () {
 					var originalWish = angular.copy(wish);
 					return originalWish;
-				}
+				},
+				user: ['UserService', function (UserService) {
+					return UserService.getCurrentUser();
+				}]
 			}
 		});
 
@@ -416,10 +424,11 @@
 	_self.deleteReservation = deleteReservation;
 	_self.openFeedbackPopup = openFeedbackPopup;
 }])
-.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService) {
+	.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'cloudinaryService', 'CONFIG', 'wish', 'user', function ($window, $uibModalInstance, cloudinaryService, CONFIG, wish, user) {
 	var _self = this;
 	var currentImage = wish.image;
 	_self.wish = wish;
+	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, CONFIG.temporaryImagePostfix);
 	_self.ok = function () {
 		if (_self.wish.image !== currentImage) {
 			cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
@@ -443,7 +452,7 @@
 		$window.document.getElementById('EditWishTitle').focus();
 	};
 }])
-.controller('copyWarningPopupCtrl', function ($window, $uibModalInstance, wish) {
+.controller('copyWarningPopupCtrl', ['$window', '$uibModalInstance', 'wish', function ($window, $uibModalInstance, wish) {
 	var _self = this;
 
 	_self.title = wish.title;
@@ -453,8 +462,8 @@
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	};
-})
-.controller('wishReservationPopupCtrl', function($uibModalInstance, wish, receiver) {
+}])
+.controller('wishReservationPopupCtrl', ['$uibModalInstance', 'wish', 'receiver', function($uibModalInstance, wish, receiver) {
 	var _self = this;
 	// Define default values
 	var reservation = {
@@ -471,8 +480,8 @@
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	};
-})
-.controller('deletePopupCtrl', function ($uibModalInstance, wish){
+}])
+.controller('deletePopupCtrl', ['$uibModalInstance', 'wish', function ($uibModalInstance, wish){
 	var _self = this;
 	_self.wishTitle = wish.title;
 	_self.ok = function () {
@@ -482,77 +491,20 @@
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	};
-})
-.controller('createWishCtrl', ['$state', '$stateParams', '$uibModal', '$window', '$timeout', 'CONFIG', 'wishModel', 'receiverModel', 'UserService', 'cloudinaryService',
-	function ($state, $stateParams, $uibModal, $window, $timeout, CONFIG, wishModel, receiverModel, UserService, cloudinaryService){
+}])
+.controller('createWishCtrl', ['$stateParams', 'CONFIG', 'wishModel', 'cloudinaryService', 'user',
+	function ($stateParams, CONFIG, wishModel, cloudinaryService, user){
 	/* Initialize variables */
 	var _self = this;
-	var defaultWish = {
-		title: '',
-		price: '',
-		url: '',
-		image: {}
+	_self.wishCardImage = CONFIG.defaultImage;
+	_self.openAddWishPopup = function () {
+		var createWishPopup = wishModel.openWishPopup();
+		createWishPopup.result.then(function (newWish) {
+			var receiverID = $stateParams.receiverID;
+			var userID = user._id;
+			wishModel.createWish(wish, receiverID, userID, null, null);
+		});
 	};
-	
-	/* Available in view */
-	_self.newWish = angular.copy(defaultWish);
-	_self.noImages = true;
-	_self.defaultImage = CONFIG.defaultImage;
-	_self.cancel = cancel;
-	_self.createWish = createWish;
-	_self.currentReceiverID = receiverModel.getCurrentReceiver()._id;
-	_self.currentUserID = UserService.getCurrentUser()._id;
-	
-	/* Functions in createWishCtrl */
-	function cancel() {
-		cloudinaryService.deleteImage(_self.newWish.image.public_id, function(){
-			resetForm();
-			returnToWishes();
-		});
-	}
-	function returnToWishes(){
-		$state.go('gimmi.wishlist', {receiverID: $stateParams.receiverID })
-	}
-
-	function createWish(receiverID, userID) {
-		var wish = _self.newWish;
-		if (!wish.image) {
-			wish.image = '';
-		}
-		// Create wish with image with random id
-		wishModel.createWish(wish, receiverID, userID, null, function(error, wish){
-			// Rename temporary image to wish_id
-			cloudinaryService.renameImage(_self.newWish.image.public_id, wish._id, function(image){
-				// Update wish with renamed image
-				wish.image = image;
-				wishModel.updateWish(wish).then(function(wish){
-					// Reset the form
-					resetForm();
-					returnToWishes();
-				});
-			});
-		});
-	}
-
-	function resetForm() {
-
-		_self.newWish = angular.copy(defaultWish);
-		_self.googleImages = [];
-	}
-
-	resetForm();
-
-	_self.goToPrice = function(){
-		$window.document.getElementById('newWishPrice').focus();
-	}
-	_self.goToTitle = function () {
-		$window.document.getElementById('newWishTitle').focus();
-	}
-	_self.openImageSearch = function () {
-		$timeout(function () {
-			angular.element('#searchImageBtn').triggerHandler('click');
-		});
-	}
 }])
 .controller('sendWishlistController', ['$rootScope', '$state', '$stateParams', '$uibModal', '$templateCache', 'CONFIG', 'UserService', 'receiverModel', 'Flash', 'CommunicationService', function ($rootScope, $state, $stateParams, $uibModal, $templateCache, CONFIG, UserService, receiverModel, Flash, CommunicationService){
 	var self = this;
@@ -718,10 +670,32 @@
 }])
 .controller('receivedWishesPopupController', ['$uibModalInstance', 'receivedWishes', 'receiver', function ($uibModalInstance, receivedWishes, receiver) {
 	var _self = this;
-		console.log(receivedWishes);
+		
 	_self.wishes = receivedWishes;
 	_self.receiver = receiver;
 	_self.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
+	}
+}])
+.controller('wishPopupCtrl', ['$uibModalInstance', 'cloudinaryService', 'CONFIG', 'user', function ($uibModalInstance, cloudinaryService, CONFIG, user){
+	var _self = this;
+	console.log("Wish popup is opened");
+	_self.wish = {image: CONFIG.defaultImage};
+	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, CONFIG.temporaryImagePostfix);
+	_self.cancel = function () {
+		// Delete temporary cloudinary image on cancel in wish create popup
+		// Check for CONFIG.temporaryImagePostfix on end of name to make sure that only temporary images are deleted (eg. edit flow will use this popup too)
+		// This code should stay in popupCtrl, because on reuse of this popup you want this code to work on every popup implementation.
+		if (_self.wish && _self.wish.image && _self.wish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
+			cloudinaryService.deleteImage(_self.wish.image.public_id, function () {
+				console.info("Temporary image on cloudinary deleted");
+				$uibModalInstance.dismiss('cancel');
+			});
+		} else {
+			$uibModalInstance.dismiss('cancel');
+		}
+	}
+	_self.ok = function (){
+		$uibModalInstance.close(_self.wish);
 	}
 }]);

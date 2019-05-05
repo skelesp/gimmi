@@ -20,7 +20,7 @@ angular.module('userdashboard', [
         }
     });
 }])
-    .controller('userDashboardController', ['$state', 'Flash', 'user', 'wishlist', function ($state, Flash, user, wishlist) {
+.controller('userDashboardController', ['$state', '$stateParams', 'Flash', 'wishModel', 'user', 'wishlist', function ($state, $stateParams, Flash, wishModel, user, wishlist) {
     var self = this;
     var openCount = 0; var reservedCount = 0; var receivedCount = 0; var closedCount = 0;
     wishlist.wishes.forEach(wish => {
@@ -57,12 +57,17 @@ angular.module('userdashboard', [
     self.startNewGiftSearch = function () {
         showNotSupportedMessage();
     };
-    self.addWish = function () {
-        showNotSupportedMessage();
-    };
     self.toUserDashboard = function () {
         $state.go('gimmi.userdashboard', { userID: self.user._id });
     };
+    self.openAddWishPopup = function () {
+        var createWishPopup = wishModel.openWishPopup();
+        createWishPopup.result.then(function (newWish) {
+            var userID = $stateParams.userID;
+            var receiverID = userID;
+            wishModel.createWish(newWish, receiverID, userID, null, null);
+        });
+    }
     function showNotSupportedMessage(){
         Flash.create('danger', 'Deze functie wordt nog niet ondersteund.');
     };

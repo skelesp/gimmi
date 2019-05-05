@@ -1,10 +1,10 @@
 ﻿angular.module('wishlist.wish', [
 	'gimmi.models.wishlist',
 	'gimmi.models.wish',
-	'wishlist.wish.create',
 	'wishlist.wish.edit',
 	'gimmi.person',
-	'gimmi.communication'
+	'gimmi.communication',
+	'gimmi.config'
 ])
 	.config(function($stateProvider){
 
@@ -47,7 +47,11 @@
 					wish: function () {
 						var originalWish = angular.copy(wish);
 						return originalWish;
-					}
+					},
+					user: ['UserService', function (UserService) {
+						return UserService.getCurrentUser();
+					}]
+
 				}
 			});
 
@@ -255,10 +259,11 @@
 		}
 
 	}])
-	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService){
+	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', 'CONFIG', 'user', function ($window, $uibModalInstance, wish, cloudinaryService, CONFIG, user){
 		var _self = this;
 		var currentImage = wish.image;
 		_self.wish = wish;
+		_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, CONFIG.temporaryImagePostfix);
 		_self.ok = function () {
 			if (_self.wish.image !== currentImage) {
 				cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
