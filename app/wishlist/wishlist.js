@@ -424,7 +424,7 @@
 	_self.deleteReservation = deleteReservation;
 	_self.openFeedbackPopup = openFeedbackPopup;
 }])
-	.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'cloudinaryService', 'CONFIG', 'wish', 'user', function ($window, $uibModalInstance, cloudinaryService, CONFIG, wish, user) {
+.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'cloudinaryService', 'CONFIG', 'wish', 'user', function ($window, $uibModalInstance, cloudinaryService, CONFIG, wish, user) {
 	var _self = this;
 	var currentImage = wish.image;
 	_self.wish = wish;
@@ -492,8 +492,8 @@
 		$uibModalInstance.dismiss('cancel');
 	};
 }])
-.controller('createWishCtrl', ['$stateParams', 'CONFIG', 'wishModel', 'cloudinaryService', 'user',
-	function ($stateParams, CONFIG, wishModel, cloudinaryService, user){
+.controller('createWishCtrl', ['$stateParams', 'CONFIG', 'wishModel', 'user',
+	function ($stateParams, CONFIG, wishModel, user){
 	/* Initialize variables */
 	var _self = this;
 	_self.wishCardImage = CONFIG.defaultImage;
@@ -502,7 +502,7 @@
 		createWishPopup.result.then(function (newWish) {
 			var receiverID = $stateParams.receiverID;
 			var userID = user._id;
-			wishModel.createWish(wish, receiverID, userID, null, null);
+			wishModel.createWish(newWish, receiverID, userID, null, null);
 		});
 	};
 }])
