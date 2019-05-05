@@ -34,31 +34,11 @@
 		_self.receiverID = wish.receiver;
 		
 		_self.editWishDetails = function(wish){
-			//Create a popup instance for wish details edit
-			var editDetailsPopup = $uibModal.open({
-				ariaLabelledBy: 'modal-title',
-				ariaDescribedBy: 'modal-body',
-				templateUrl: 'app/wishlist/wish/wish_detail_edit-modal.html',
-				size: 'lg',
-				controller: 'wishDetailsEditCtrl',
-				controllerAs: 'wishDetailsEditCtrl',
-				resolve: {
-					wish: function () {
-						var originalWish = angular.copy(wish);
-						return originalWish;
-					},
-					user: ['UserService', function (UserService) {
-						return UserService.getCurrentUser();
-					}]
-
-				}
-			});
-
-			editDetailsPopup.result.then(function (wish) {
-				//TODO: updateWish zou een promise moeten worden
-				wishModel.updateWish(wish).then(function(wish){
-					_self.wish = wish;
-				});
+			console.info("Wish in edit mode");
+			var wishEditPopup = wishModel.openWishPopup(wish);
+			wishEditPopup.result.then(function (updatedWish) {
+				wishModel.updateWish(updatedWish);
+				_self.wish = updatedWish;
 				console.info("wish " + wish._id + "is updated");
 			});
 		}

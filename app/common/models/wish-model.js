@@ -181,27 +181,39 @@ angular.module('gimmi.models.wish', [
 			resolve: {
 				user: ['UserService', function (UserService) {
 					return UserService.getCurrentUser();
-				}]
-				/* TODO om dezelfde popup bij update te gebruiken zal deze resolve gebruikt moeten worden... */
-				/* wish: function () {
+				}],
+				wish: function () {
 					var originalWish = angular.copy(wish);
 					return originalWish;
-				} */
+				}
 			}
 		});
 	};
 
 	model.updateWish = function(wish) {
-		var convertedWish = convertUndefinedToNovalue(wish);
+		wish = convertUndefinedToNovalue(wish);
 		var defer = $q.defer();
 		if (!wish.image){
 			wish.image = CONFIG.defaultImage;
 		}
-		$http.put(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
-			updateWishlist(wish);
-			defer.resolve(wish);
-			console.info("wish updated", wish);
-		});
+		if (wish.image && wish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
+			// Rename temporary image.public_id to wish_id
+			cloudinaryService.renameImage(wish.image.public_id, wish._id, function (image) {
+				// Update wish with renamed image
+				wish.image = image;
+				$http.put(URLS.WISH + "/" + wish._id, wish).success(function (wish) {
+					updateWishlist(wish);
+					defer.resolve(wish);
+					console.info("wish updated", wish);
+				});
+			});
+		} else {
+			$http.put(URLS.WISH + "/" + wish._id, wish).success(function (wish) {
+				updateWishlist(wish);
+				defer.resolve(wish);
+				console.info("wish updated", wish);
+			});
+		}
 		return defer.promise;
 	}
 	

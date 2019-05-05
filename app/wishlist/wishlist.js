@@ -265,26 +265,9 @@
 
 	function edit(wish){
 		console.info("Wish in edit mode");
-		var editPopup = $uibModal.open({
-			ariaLabelledBy: 'modal-title',
-			ariaDescribedBy: 'modal-body',
-			templateUrl: 'editWish.html',
-			size: 'md',
-			controller: 'editPopupCtrl',
-			controllerAs: 'editPopupCtrl',
-			resolve: {
-				wish: function () {
-					var originalWish = angular.copy(wish);
-					return originalWish;
-				},
-				user: ['UserService', function (UserService) {
-					return UserService.getCurrentUser();
-				}]
-			}
-		});
-
-		editPopup.result.then(function(wish) {
-			wishModel.updateWish(wish);
+		var wishEditPopup = wishModel.openWishPopup(wish);
+		wishEditPopup.result.then(function (updatedWish) {
+			wishModel.updateWish(updatedWish);
 			console.info(wish.title + " is gewijzigd.");
 		});
 	}
@@ -423,34 +406,6 @@
 	_self.addReservation = addReservation;
 	_self.deleteReservation = deleteReservation;
 	_self.openFeedbackPopup = openFeedbackPopup;
-}])
-.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'cloudinaryService', 'CONFIG', 'wish', 'user', function ($window, $uibModalInstance, cloudinaryService, CONFIG, wish, user) {
-	var _self = this;
-	var currentImage = wish.image;
-	_self.wish = wish;
-	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, CONFIG.temporaryImagePostfix);
-	_self.ok = function () {
-		if (_self.wish.image !== currentImage) {
-			cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
-				wish.image = image;
-				$uibModalInstance.close(wish);
-			});
-		} else {
-			$uibModalInstance.close(wish);
-		}
-	};
-	_self.cancel = function () {
-		if (_self.wish.image !== currentImage) {
-			cloudinaryService.deleteImage(_self.wish.image.public_id, function () {
-				$uibModalInstance.dismiss('cancel');
-			});
-		} else {
-			$uibModalInstance.dismiss('cancel');
-		}
-	};
-	_self.goToTitle = function(){
-		$window.document.getElementById('EditWishTitle').focus();
-	};
 }])
 .controller('copyWarningPopupCtrl', ['$window', '$uibModalInstance', 'wish', function ($window, $uibModalInstance, wish) {
 	var _self = this;
@@ -677,10 +632,14 @@
 		$uibModalInstance.dismiss('cancel');
 	}
 }])
-.controller('wishPopupCtrl', ['$uibModalInstance', 'cloudinaryService', 'CONFIG', 'user', function ($uibModalInstance, cloudinaryService, CONFIG, user){
+.controller('wishPopupCtrl', ['$uibModalInstance', 'cloudinaryService', 'CONFIG', 'user', 'wish', function ($uibModalInstance, cloudinaryService, CONFIG, user, wish){
 	var _self = this;
 	console.log("Wish popup is opened");
-	_self.wish = {image: CONFIG.defaultImage};
+	if (wish) {
+		_self.wish = wish;
+	} else {
+		_self.wish = { image: CONFIG.defaultImage };
+	}
 	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, CONFIG.temporaryImagePostfix);
 	_self.cancel = function () {
 		// Delete temporary cloudinary image on cancel in wish create popup
