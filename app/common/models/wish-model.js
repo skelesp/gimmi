@@ -154,7 +154,7 @@ angular.module('gimmi.models.wish', [
 						});
 					}
 				});
-			} else if (createdWish.image && createdWish.image.public_id.slice(-5) === "_temp") {
+			} else if (createdWish.image && createdWish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
 				// Rename temporary image.public_id to wish_id
 				cloudinaryService.renameImage(createdWish.image.public_id, createdWish._id, function (image) {
 					// Update wish with renamed image

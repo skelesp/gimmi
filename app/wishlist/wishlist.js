@@ -424,11 +424,11 @@
 	_self.deleteReservation = deleteReservation;
 	_self.openFeedbackPopup = openFeedbackPopup;
 }])
-	.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'cloudinaryService', 'wish', 'user', function ($window, $uibModalInstance, cloudinaryService, wish, user) {
+	.controller('editPopupCtrl', ['$window', '$uibModalInstance', 'cloudinaryService', 'CONFIG', 'wish', 'user', function ($window, $uibModalInstance, cloudinaryService, CONFIG, wish, user) {
 	var _self = this;
 	var currentImage = wish.image;
 	_self.wish = wish;
-	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, "_temp");
+	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, CONFIG.temporaryImagePostfix);
 	_self.ok = function () {
 		if (_self.wish.image !== currentImage) {
 			cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
@@ -681,12 +681,12 @@
 	var _self = this;
 	console.log("Wish popup is opened");
 	_self.wish = {image: CONFIG.defaultImage};
-	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, "_temp");
+	_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, CONFIG.temporaryImagePostfix);
 	_self.cancel = function () {
 		// Delete temporary cloudinary image on cancel in wish create popup
-		// Check for "_temp" on end of name to make sure that only temporary images are deleted (eg. edit flow will use this popup too)
+		// Check for CONFIG.temporaryImagePostfix on end of name to make sure that only temporary images are deleted (eg. edit flow will use this popup too)
 		// This code should stay in popupCtrl, because on reuse of this popup you want this code to work on every popup implementation.
-		if (_self.wish && _self.wish.image && _self.wish.image.public_id.slice(-5) === "_temp") {
+		if (_self.wish && _self.wish.image && _self.wish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
 			cloudinaryService.deleteImage(_self.wish.image.public_id, function () {
 				console.info("Temporary image on cloudinary deleted");
 				$uibModalInstance.dismiss('cancel');
