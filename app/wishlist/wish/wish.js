@@ -1,7 +1,6 @@
 ﻿angular.module('wishlist.wish', [
 	'gimmi.models.wishlist',
 	'gimmi.models.wish',
-	'wishlist.wish.edit',
 	'gimmi.person',
 	'gimmi.communication',
 	'gimmi.config'
