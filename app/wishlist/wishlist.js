@@ -290,7 +290,6 @@
 
 		deletePopup.result.then(function (wish) {
 			wishModel.deleteWish(wish);
-			console.info(wish._id + " is verwijderd.")
 		});
 	}
 

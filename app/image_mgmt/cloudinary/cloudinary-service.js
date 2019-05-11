@@ -102,8 +102,13 @@ angular.module('cloudinaryModule', [
          * @param {String} publicId The current publicId of the image
          */
         clsrv.deleteImage = function(publicId, callback) {
+            if (publicId === CONFIG.defaultImage.public_id) {
+                console.info("Wish with default image --> image not deleted");
+                return callback();
+            }
             $http.delete(CONFIG.apiUrl + '/api/images/' + encodeURIComponent(publicId))
                 .then(function(){
+                    console.info("Wish with image --> image deleted");
                     callback();
                 });
         }

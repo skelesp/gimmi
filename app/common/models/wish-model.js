@@ -231,7 +231,7 @@ angular.module('gimmi.models.wish', [
 				});
 			}
 			cloudinaryService.deleteImage(wish.image.public_id, function () {
-				console.info("wish and image deleted: " + wish._id);
+				console.info("wish deleted: " + wish._id);
 			});
 		});
 	}
