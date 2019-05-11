@@ -236,34 +236,5 @@
 				});
 			});
 		}
-
-	}])
-	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', 'CONFIG', 'user', function ($window, $uibModalInstance, wish, cloudinaryService, CONFIG, user){
-		var _self = this;
-		var currentImage = wish.image;
-		_self.wish = wish;
-		_self.temporaryPublicID = cloudinaryService.generateRandomPublicID(user._id, CONFIG.temporaryImagePostfix);
-		_self.ok = function () {
-			if (_self.wish.image !== currentImage) {
-				cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
-					wish.image = image;
-					$uibModalInstance.close(wish);
-				});
-			} else {
-				$uibModalInstance.close(wish);
-			}
-		};
-		_self.cancel = function () {
-			if (_self.wish.image !== currentImage) {
-				cloudinaryService.deleteImage(_self.wish.image.public_id, function() {
-					$uibModalInstance.dismiss('cancel');
-				});
-			} else {
-				$uibModalInstance.dismiss('cancel');
-			}
-		};
-		_self.goToTitle = function() {
-			$window.document.getElementById('DetailWishTitle').focus();
-		}
 	}])
 ;
