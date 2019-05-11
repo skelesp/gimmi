@@ -156,11 +156,12 @@ angular.module('gimmi.models.wish', [
 				});
 			} else if (createdWish.image && createdWish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
 				// Rename temporary image.public_id to wish_id
-				cloudinaryService.renameImage(createdWish.image.public_id, createdWish._id, function (image) {
-					// Update wish with renamed image
-					wish.image = image;
-					model.updateWish(wish).then(function (wish) {
-						console.info(`Wish ${wish._id} is created and temp cloudinary image is renamed`);
+				cloudinaryService.renameImage(createdWish.image.public_id, createdWish._id)
+					.then(function (image) {
+						// Update wish with renamed image
+						wish.image = image;
+						model.updateWish(wish).then(function (wish) {
+							console.info(`Wish ${wish._id} is created and temp cloudinary image is renamed`);
 					});
 				});
 			} else {
@@ -181,27 +182,43 @@ angular.module('gimmi.models.wish', [
 			resolve: {
 				user: ['UserService', function (UserService) {
 					return UserService.getCurrentUser();
-				}]
-				/* TODO om dezelfde popup bij update te gebruiken zal deze resolve gebruikt moeten worden... */
-				/* wish: function () {
+				}],
+				wish: function () {
 					var originalWish = angular.copy(wish);
 					return originalWish;
-				} */
+				}
 			}
 		});
 	};
 
 	model.updateWish = function(wish) {
-		var convertedWish = convertUndefinedToNovalue(wish);
+		wish = convertUndefinedToNovalue(wish);
 		var defer = $q.defer();
+		// If no image is selected: set default image
 		if (!wish.image){
 			wish.image = CONFIG.defaultImage;
 		}
-		$http.put(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
-			updateWishlist(wish);
-			defer.resolve(wish);
-			console.info("wish updated", wish);
-		});
+		// Check if image is a temporary image and rename to wishID
+		var renamedImagePromise = null;
+		if (wish.image && wish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
+			// Rename temporary image.public_id to wish_id
+			renamedImagePromise = cloudinaryService.renameImage(wish.image.public_id, wish._id).then( function (image) {
+				// Update wish with renamed image
+				wish.image = image;
+				return wish;
+			});
+		}
+		// Wait until renameImagePromise is resolved and send updated wish to server
+		$q.all([renamedImagePromise]).then(function(wishWithRenamedImage){
+			if (wishWithRenamedImage[0]) { // $q.all returns an array, wish is in "wishWithRenamedImage[0]"
+				wish = wishWithRenamedImage[0];
+			}
+			$http.put(URLS.WISH + "/" + wish._id, wish).success(function (wish) {
+				updateWishlist(wish);
+				defer.resolve(wish);
+				console.info("wish updated", wish);
+			});
+		})
 		return defer.promise;
 	}
 	
