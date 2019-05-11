@@ -21,7 +21,7 @@ angular.module('cloudinaryModule', [
         widgetOptions[key] = value;
         return _self;
     }
-    _self.$get = ['$http', 'CONFIG', function($http, CONFIG){
+    _self.$get = ['$http', '$q', 'CONFIG', function($http, $q, CONFIG){
         var clsrv = {};
         
         /** Get a signature for a signed upload to Cloudinary */
@@ -80,7 +80,8 @@ angular.module('cloudinaryModule', [
          * @param {function} callback A callback function with arguments error and results to handle events.
          * @return {Image}
          */
-        clsrv.renameImage = function(publicId, newName, callback) {
+        clsrv.renameImage = function(publicId, newName) {
+            var deferred = $q.defer();
             var body = {
                 new_public_id: newName
             }
@@ -90,8 +91,9 @@ angular.module('cloudinaryModule', [
                         public_id: results.data.public_id,
                         version: results.data.version
                     }
-                    callback(image);
+                    deferred.resolve(image);
                 });
+            return deferred.promise;
         }
 
         /**
