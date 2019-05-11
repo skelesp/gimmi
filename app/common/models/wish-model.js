@@ -156,11 +156,12 @@ angular.module('gimmi.models.wish', [
 				});
 			} else if (createdWish.image && createdWish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
 				// Rename temporary image.public_id to wish_id
-				cloudinaryService.renameImage(createdWish.image.public_id, createdWish._id, function (image) {
-					// Update wish with renamed image
-					wish.image = image;
-					model.updateWish(wish).then(function (wish) {
-						console.info(`Wish ${wish._id} is created and temp cloudinary image is renamed`);
+				cloudinaryService.renameImage(createdWish.image.public_id, createdWish._id)
+					.then(function (image) {
+						// Update wish with renamed image
+						wish.image = image;
+						model.updateWish(wish).then(function (wish) {
+							console.info(`Wish ${wish._id} is created and temp cloudinary image is renamed`);
 					});
 				});
 			} else {
@@ -193,27 +194,31 @@ angular.module('gimmi.models.wish', [
 	model.updateWish = function(wish) {
 		wish = convertUndefinedToNovalue(wish);
 		var defer = $q.defer();
+		// If no image is selected: set default image
 		if (!wish.image){
 			wish.image = CONFIG.defaultImage;
 		}
+		// Check if image is a temporary image and rename to wishID
+		var renamedImagePromise = null;
 		if (wish.image && wish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
 			// Rename temporary image.public_id to wish_id
-			cloudinaryService.renameImage(wish.image.public_id, wish._id, function (image) {
+			renamedImagePromise = cloudinaryService.renameImage(wish.image.public_id, wish._id).then( function (image) {
 				// Update wish with renamed image
 				wish.image = image;
-				$http.put(URLS.WISH + "/" + wish._id, wish).success(function (wish) {
-					updateWishlist(wish);
-					defer.resolve(wish);
-					console.info("wish updated", wish);
-				});
+				return wish;
 			});
-		} else {
+		}
+		// Wait until renameImagePromise is resolved and send updated wish to server
+		$q.all([renamedImagePromise]).then(function(wishWithRenamedImage){
+			if (wishWithRenamedImage[0]) { // $q.all returns an array, wish is in "wishWithRenamedImage[0]"
+				wish = wishWithRenamedImage[0];
+			}
 			$http.put(URLS.WISH + "/" + wish._id, wish).success(function (wish) {
 				updateWishlist(wish);
 				defer.resolve(wish);
 				console.info("wish updated", wish);
 			});
-		}
+		})
 		return defer.promise;
 	}
 	
