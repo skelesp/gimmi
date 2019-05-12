@@ -193,8 +193,8 @@ angular.module('gimmi.models.wish', [
 	};
 
 	model.updateWish = function(wish) {
+		// Convert undefined values to string (or they aren't sent in the HTTP request)
 		wish = convertUndefinedToNovalue(wish);
-		var defer = $q.defer();
 		// If no image is selected: set default image
 		if (!wish.image){
 			wish.image = CONFIG.defaultImage;
@@ -203,24 +203,24 @@ angular.module('gimmi.models.wish', [
 		var renamedImagePromise = null;
 		if (wish.image && wish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
 			// Rename temporary image.public_id to wish_id
-			renamedImagePromise = cloudinaryService.renameImage(wish.image.public_id, wish._id).then( function (image) {
-				// Update wish with renamed image
-				wish.image = image;
-				return wish;
+			renamedImagePromise = cloudinaryService.renameImage(wish.image.public_id, wish._id)
+				.then( function (image) {
+					// Update wish with renamed image
+					wish.image = image;
+					return wish;
 			});
 		}
 		// Wait until renameImagePromise is resolved and send updated wish to server
-		$q.all([renamedImagePromise]).then(function(wishWithRenamedImage){
-			if (wishWithRenamedImage[0]) { // $q.all returns an array, wish is in "wishWithRenamedImage[0]"
-				wish = wishWithRenamedImage[0];
-			}
-			$http.put(URLS.WISH + "/" + wish._id, wish).success(function (wish) {
-				updateWishlist(wish);
-				defer.resolve(wish);
-				console.info("wish updated", wish);
-			});
-		})
-		return defer.promise;
+		return $q.when(renamedImagePromise).then(function(wishWithRenamedImage){
+			var wishToServer = wishWithRenamedImage || wish;
+			return $http.put(URLS.WISH + "/" + wish._id, wishToServer)
+				.then(function (result) {
+					var wish = result.data;
+					updateWishlist(wish);
+					console.info("wish updated", wish);
+					return wish;
+				});
+		});
 	}
 	
 	model.deleteWish = function(wish) {
