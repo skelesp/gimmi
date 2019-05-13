@@ -25,7 +25,8 @@
 	/*******************/
 	/* EVENT LISTENERS */
 	/*******************/
-	var debugUIrouter = true;
+	// Debugger code to trace uirouter logic (default: false)
+	var debugUIrouter = false;
 	if (debugUIrouter) { // Set true to debug uirouter
 		// Print all route changes
 		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -78,8 +79,9 @@
 	});
 
 	// Prevent browser-back to change page when modal is openend
+	// BUG #1667: Deze code blokkeert ook het wijzigen van de url vanuit een popup (state wisselen lukt wel)
 	// Source: https://stackoverflow.com/questions/23762323/is-there-a-way-to-automatically-close-angular-ui-bootstrap-modal-when-route-chan/23766070#23766070
-	$rootScope.$on('$locationChangeStart', function ($event) {
+	$rootScope.$on('$locationChangeStart', function ($event, newUrl, oldUrl) {
 		var openedModal = $uibModalStack.getTop();
 		if (openedModal) {
 			if (!!$event.preventDefault) {
