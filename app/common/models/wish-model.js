@@ -177,7 +177,7 @@ angular.module('gimmi.models.wish', [
 			ariaDescribedBy: 'modal-body',
 			templateUrl: 'app/wishlist/wish/wish_popup.tmpl.html',
 			size: 'lg',
-			backdrop: 'static',
+			backdrop: 'static', //Is ook een globale config van uibModal
 			controller: 'wishPopupCtrl',
 			controllerAs: 'wishPopup',
 			resolve: {

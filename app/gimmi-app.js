@@ -186,7 +186,7 @@
 		//https://cloudinary.com/documentation/upload_widget#localization
 		.setOption("text", CONFIG.cloudinary.text);
 }])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$uibTooltipProvider', '$compileProvider', 'FlashProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $compileProvider, FlashProvider){
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$uibTooltipProvider', '$uibModalProvider', '$compileProvider', 'FlashProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $uibTooltipProvider, $uibModalProvider, $compileProvider, FlashProvider){
 	$stateProvider
 		.state('gimmi', {
 			url: '/',
@@ -245,6 +245,10 @@
 		'placement' : 'bottom-left',
 		'popupCloseDelay' : '10' 
 	});
+	
+	$uibModalProvider.options = {
+		'backdrop': 'static' // Vermijd dat een modal sluit als je er naast klikt ("op de backdrop")
+	};
 
 	//Flash message config
 	FlashProvider.setTimeout(4000);
