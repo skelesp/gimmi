@@ -21,9 +21,34 @@
 .run(['$rootScope', '$window', '$state', '$stateParams', '$location', '$uibModalStack', 'Flash', 'CONFIG', 'UserService', function ($rootScope, $window, $state, $stateParams, $location, $uibModalStack, Flash, config, UserService) {
 
 	console.info('Start running app');
+	
 	/*******************/
 	/* EVENT LISTENERS */
 	/*******************/
+	// Debugger code to trace uirouter logic (default: false)
+	var debugUIrouter = false;
+	if (debugUIrouter) { // Set true to debug uirouter
+		// Print all route changes
+		$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+			console.log('$stateChangeStart from ' + fromState.name + '- fired when the transition begins. fromState,fromParams : \n', fromState, fromParams);
+			console.log('$stateChangeStart to ' + toState.name + '- fired when the transition begins. toState,toParams : \n', toState, toParams);
+		});
+		$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+			console.log('$stateChangeError - fired when an error occurs during transition.');
+			console.log(arguments);
+		});
+		$rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+			console.log('$stateChangeSuccess to ' + toState.name + '- fired once the state transition is complete.');
+		});
+		/* $rootScope.$on('$viewContentLoading', function (event, viewConfig) {
+			console.log('$viewContentLoading - view begins loading - dom not rendered', viewConfig);
+		}); */
+		$rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
+			console.log('$stateNotFound ' + unfoundState.to + '  - fired when a state cannot be found by its name.');
+			console.log(unfoundState, fromState, fromParams);
+		});
+	}
+
 	//Listen on state changes and check authentication	
 	$rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 		if (toState.authenticate && !UserService.isLoggedIn()) {
@@ -54,8 +79,9 @@
 	});
 
 	// Prevent browser-back to change page when modal is openend
+	// BUG #1667: Deze code blokkeert ook het wijzigen van de url vanuit een popup (state wisselen lukt wel)
 	// Source: https://stackoverflow.com/questions/23762323/is-there-a-way-to-automatically-close-angular-ui-bootstrap-modal-when-route-chan/23766070#23766070
-	$rootScope.$on('$locationChangeStart', function ($event) {
+	$rootScope.$on('$locationChangeStart', function ($event, newUrl, oldUrl) {
 		var openedModal = $uibModalStack.getTop();
 		if (openedModal) {
 			if (!!$event.preventDefault) {
