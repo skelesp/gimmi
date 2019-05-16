@@ -25,7 +25,7 @@
 			<div class="row" ng-hide="wishlistCtrl.extraInfoEditMode">
 				<div class="col-10 col-md-auto" ng-show="wishlistCtrl.extraInfo.likes.length">
 					<div class="h6">
-						Waarmee kan je Stijn een plezier doen?
+						Waarmee kan je {{wishlistCtrl.currentReceiver.firstName}} een plezier doen?
 					</div>
 					<div class="font-sm">
 						<ul>
@@ -43,7 +43,7 @@
 					<i class="fa fa-pencil fa-flip-horizontal" aria-hidden="true" ng-click="wishlistCtrl.toggleExtraInfoMode()"></i>
 				</div>
 				<div class="col-10 col-md-auto" ng-show="wishlistCtrl.extraInfo.likes.length">
-					<div class="h6">Wat krijgt Stijn liever niet?</div>
+					<div class="h6">Wat krijgt {{wishlistCtrl.currentReceiver.firstName}} liever niet?</div>
 					<div class="font-sm">
 						<ul>
 							<li ng-repeat="dislike in wishlistCtrl.extraInfo.dislikes">
@@ -124,12 +124,12 @@
 	<!-- Lijst van wensen -->
 	<blockquote class="blockquote pl-3 ">
 		<div class="row">
-			<div class="col col-2">
+			<div class="col col-sm-12 col-md-2">
 				<h3>Wensenlijst</h3>
 			</div>
 			<!-- Ontvangen cadeaus knop -->
-			<div class="col">
-				<a href="" class="badge badge-light" ng-click="wishlistCtrl.showReceivedWishes()">Bekijk welke cadeaus Stijn al ontvangen heeft</a>
+			<div class="col col-sm-6">
+				<a href="" class="badge badge-light" ng-click="wishlistCtrl.showReceivedWishes()">Ontvangen cadeaus</a>
 			</div>
 		</div>
 	</blockquote>

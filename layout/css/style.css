@@ -5,6 +5,14 @@
   height: 35px;
   width: 35px;
 }
+.logo-in-service-box {
+  height: 65px;
+  width: 65px;
+}
+.wish-image-size-in-popup{
+  height: 380px;
+  width: 380px;
+}
 .blockquote {
   border-left: 5px solid rgb(248, 249, 250);
 }
@@ -117,11 +125,10 @@ h6.card-title  {
 }
 
 /* -- Header design -- */
-#jumbotron-landing {
-  color: #f8f8f8;
-  background: url(../img/give-hand.jpg) no-repeat center center;
-  background-size:cover;
-  filter: grayscale(100%);
+.jumbotron-gimmi-blue {
+  background-color:#75bee9;
+  /* background: url(../img/give-hand.jpg) no-repeat center center;
+  background-size:cover; */
 }
 
 /* END -- Header design -- */
@@ -130,7 +137,7 @@ h6.card-title  {
 .blurredCardOverlay {
   background-color: rgba(250, 243, 243, 0.83)
 }
-.blurredCardOverlay a, p {
+.blurredCardOverlay a,.blurredCardOverlay p {
   color: rgb(87, 87, 87);
 }
 /* END -- Create card style addons --*/
@@ -191,6 +198,17 @@ h6.card-title  {
           column-count: 6;
   }
 }
+
+/* Show asterix on required fields */
+.form-group.required .form-control-label:after { 
+   content:" *";
+   color:red;
+}
+/* Show disallowed sign on all disabled buttons */
+button[type="button"]:disabled {
+  cursor: not-allowed;
+}
+
 
 /* Fix for modal in bootstrap 4 (with angularUI)*/
 .fade.in {

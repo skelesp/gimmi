@@ -1,10 +1,9 @@
 ﻿angular.module('wishlist.wish', [
 	'gimmi.models.wishlist',
 	'gimmi.models.wish',
-	'wishlist.wish.create',
-	'wishlist.wish.edit',
 	'gimmi.person',
-	'gimmi.communication'
+	'gimmi.communication',
+	'gimmi.config'
 ])
 	.config(function($stateProvider){
 
@@ -35,27 +34,11 @@
 		_self.receiverID = wish.receiver;
 		
 		_self.editWishDetails = function(wish){
-			//Create a popup instance for wish details edit
-			var editDetailsPopup = $uibModal.open({
-				ariaLabelledBy: 'modal-title',
-				ariaDescribedBy: 'modal-body',
-				templateUrl: 'app/wishlist/wish/wish_detail_edit-modal.html',
-				size: 'lg',
-				controller: 'wishDetailsEditCtrl',
-				controllerAs: 'wishDetailsEditCtrl',
-				resolve: {
-					wish: function () {
-						var originalWish = angular.copy(wish);
-						return originalWish;
-					}
-				}
-			});
-
-			editDetailsPopup.result.then(function (wish) {
-				//TODO: updateWish zou een promise moeten worden
-				wishModel.updateWish(wish).then(function(wish){
-					_self.wish = wish;
-				});
+			console.info("Wish in edit mode");
+			var wishEditPopup = wishModel.openWishPopup(wish);
+			wishEditPopup.result.then(function (updatedWish) {
+				wishModel.updateWish(updatedWish);
+				_self.wish = updatedWish;
 				console.info("wish " + wish._id + "is updated");
 			});
 		}
@@ -252,34 +235,6 @@
 					}
 				});
 			});
-		}
-
-	}])
-	.controller('wishDetailsEditCtrl', ['$window', '$uibModalInstance', 'wish', 'cloudinaryService', function ($window, $uibModalInstance, wish, cloudinaryService){
-		var _self = this;
-		var currentImage = wish.image;
-		_self.wish = wish;
-		_self.ok = function () {
-			if (_self.wish.image !== currentImage) {
-				cloudinaryService.renameImage(_self.wish.image.public_id, _self.wish._id, function (image) {
-					wish.image = image;
-					$uibModalInstance.close(wish);
-				});
-			} else {
-				$uibModalInstance.close(wish);
-			}
-		};
-		_self.cancel = function () {
-			if (_self.wish.image !== currentImage) {
-				cloudinaryService.deleteImage(_self.wish.image.public_id, function() {
-					$uibModalInstance.dismiss('cancel');
-				});
-			} else {
-				$uibModalInstance.dismiss('cancel');
-			}
-		};
-		_self.goToTitle = function() {
-			$window.document.getElementById('DetailWishTitle').focus();
 		}
 	}])
 ;

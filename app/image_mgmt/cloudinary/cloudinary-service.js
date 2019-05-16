@@ -2,7 +2,7 @@ angular.module('cloudinaryModule', [
     'cloudinary',
     'gimmi.config'
 ])
-    .provider('cloudinaryService', ['CONFIG', function(CONFIG){
+.provider('cloudinaryService', ['CONFIG', function(CONFIG){
     var _self = this;
     /** Set default options for Cloudinary upload widget.
      * All options can be found at: https://cloudinary.com/documentation/upload_widget#cloudinary_openuploadwidget_options_resultcallback
@@ -21,7 +21,7 @@ angular.module('cloudinaryModule', [
         widgetOptions[key] = value;
         return _self;
     }
-    _self.$get = ['$http', 'CONFIG', function($http, CONFIG){
+    _self.$get = ['$http', '$q', 'CONFIG', function($http, $q, CONFIG){
         var clsrv = {};
         
         /** Get a signature for a signed upload to Cloudinary */
@@ -80,7 +80,8 @@ angular.module('cloudinaryModule', [
          * @param {function} callback A callback function with arguments error and results to handle events.
          * @return {Image}
          */
-        clsrv.renameImage = function(publicId, newName, callback) {
+        clsrv.renameImage = function(publicId, newName) {
+            var deferred = $q.defer();
             var body = {
                 new_public_id: newName
             }
@@ -90,8 +91,9 @@ angular.module('cloudinaryModule', [
                         public_id: results.data.public_id,
                         version: results.data.version
                     }
-                    callback(image);
+                    deferred.resolve(image);
                 });
+            return deferred.promise;
         }
 
         /**
@@ -100,8 +102,13 @@ angular.module('cloudinaryModule', [
          * @param {String} publicId The current publicId of the image
          */
         clsrv.deleteImage = function(publicId, callback) {
+            if (publicId === CONFIG.defaultImage.public_id) {
+                console.info("Wish with default image --> image not deleted");
+                return callback();
+            }
             $http.delete(CONFIG.apiUrl + '/api/images/' + encodeURIComponent(publicId))
                 .then(function(){
+                    console.info("Wish with image --> image deleted");
                     callback();
                 });
         }
@@ -113,6 +120,16 @@ angular.module('cloudinaryModule', [
          */
         clsrv.generateCloudinaryUrl = function(public_id, version) {
             return "https://res.cloudinary.com/" + CONFIG.cloudinary.cloudName + "/image/upload/v" + version + "/" + public_id
+        }
+
+        /**
+         * Generate a random public id
+         * @param {String} prefix A string to attach before the random number
+         * @param {String} postfix A string to attach after the random number
+         */
+        clsrv.generateRandomPublicID = function (prefix, postfix){
+            var randomNumber = Math.floor((Math.random() * 1000000) + 1);
+            return `${prefix}-${randomNumber}${postfix}`
         }
 
         return clsrv;

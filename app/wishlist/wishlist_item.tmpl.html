@@ -42,51 +42,6 @@
   </div>
 </div>
 
-<!-- Template for edit wish popup -->
-<script type="text/ng-template" id="editWish.html">
-  <div class="modal-header">
-    <h3 class="modal-title">Wijzig {{::editPopupCtrl.wish.title}}</h3>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="editPopupCtrl.cancel()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <small id="editHelp" class="form-text text-muted mb-2">Wijzig hieronder de basisgegevens van de wens. Door op de afbeelding te klikken kan je deze ook wijzigen.</small>
-    <form name="wishEditForm" class="p-2" role="form">
-      <div class="form-group">
-        <cl-image class="img-fluid" public-id="{{editPopupCtrl.wish.image.public_id}}" version="{{editPopupCtrl.wish.image.version}}">
-          <cl-transformation fetch-format="auto" />
-        </cl-image>
-        <button class="btn btn-danger" type="button"
-                cl-upload 
-                 public-id="{{editPopupCtrl.wish._id}}_temp"
-                 image-result="editPopupCtrl.wish.image" 
-                 on-cancel="editPopupCtrl.goToTitle()">
-        Wijzig de afbeelding</button>    
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" id="EditWishTitle" ng-model="editPopupCtrl.wish.title" placeholder="Titel" required/>
-      </div>
-      <div class="form-group">
-        <div class="input-group mb-2">
-          <div class="input-group-prepend">
-            <div class="input-group-text">€</div>
-          </div>
-          <input type="number" class="form-control" name="inputPrice" id="WishPrice" placeholder="Prijs in € (enkel getal ingeven)" ng-model="editPopupCtrl.wish.price" />
-          <span ng-show="wishEditForm.inputPrice.$error.number">Enkel getallen toegelaten!</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" name="inputUrl" id="WishUrl" placeholder="Website met meer info over deze wens" ng-model="editPopupCtrl.wish.url" />
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-danger" type="button" ng-click="editPopupCtrl.ok()">Opslaan</button>
-    <button class="btn btn-danger" type="button" ng-click="editPopupCtrl.cancel()">Annuleer</button>
-  </div>
-</script>
-
 <!-- Template for delete wish popup -->
 <script type="text/ng-template" id="deleteVerification.html">
 

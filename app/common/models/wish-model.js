@@ -1,7 +1,7 @@
 angular.module('gimmi.models.wish', [
 	'gimmi.config'
 ])
-	.service('wishModel', ['$http', '$q', 'CONFIG', 'Flash', 'cloudinaryService', function($http, $q, CONFIG, Flash, cloudinaryService){
+	.service('wishModel', ['$http', '$q', '$uibModal', 'CONFIG', 'Flash', 'cloudinaryService', 'UserService', function ($http, $q, $uibModal, CONFIG, Flash, cloudinaryService, UserService){
 	var model = this,
 		URLS = {
 			WISHLIST: CONFIG.apiUrl + '/api/wishlist',
@@ -35,11 +35,26 @@ angular.module('gimmi.models.wish', [
 				return w._id === wish._id;
 			});
 			var wishlistWish = angular.copy(wish);
-			wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
-			wishlist.wishes[index] = wishlistWish;
+			// TEMP FIX until #906 is implemented
+			if (wish.reservation) {
+				wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
+			} // END TEMP FIX
+			getWishStatus(wishlistWish).then(function(wish){
+				wishlist.wishes[index] = wish;
+			});
 		}
 	}
 
+	function getWishStatus(wish) { //#1660: use new GET wish/:id/state route in API
+		var deferred = $q.defer();
+
+		$http.get(URLS.WISH + "/" + wish._id + "/state").then(function (result) {
+			wish.state = result.data;
+			deferred.resolve(wish);
+		});
+
+		return deferred.promise;
+	}
 	model.getWishById = function (wishID) {
 		var deferred = $q.defer();
 
@@ -52,16 +67,26 @@ angular.module('gimmi.models.wish', [
 
 	model.getWishlist = function(receiverID) {
 		var deferred = $q.defer();
-
 		if (wishlist && wishlist._id.receiver._id === receiverID) {
 			deferred.resolve(wishlist);
 		} else {
 			$http.get(URLS.WISHLIST+"/"+receiverID).then(function(result){
 				wishlist = result.data[0];
-				deferred.resolve(wishlist);
+				// Get the state of all wishes in the wishlist
+				var wishPromises = wishlist.wishes.map((wish) => {
+					return getWishStatus(wish).then(function (wish) {
+						return wish;
+					});
+				});
+				// Wait for all wish promises in map() above before resolving the getWishlist promise
+				// https://stackoverflow.com/questions/39452083/using-promise-function-inside-javascript-array-map
+				$q.all(wishPromises).then(function (wishlistResult) { 
+					wishlist.wishes = wishlistResult; 
+					deferred.resolve(wishlist);
+				});
 			});
 		}
-
+		
 		return deferred.promise;
 	};
 
@@ -93,6 +118,7 @@ angular.module('gimmi.models.wish', [
 		
 		$http.post(URLS.WISH, wish).success(function(createdWish){
 			wish = createdWish;
+			// Put wish on current wishlist
 			if (wishlist._id.receiver._id === receiverID) {
 				wishlist.wishes.push(createdWish);
 				wishlist.count++;
@@ -104,7 +130,8 @@ angular.module('gimmi.models.wish', [
 				var message = "De wens '" + createdWish.title + "' werd gekopieerd naar je eigen lijst.";
 				var flashID = Flash.create('success', message);
 			}
-			if (createdWish.copyOf) { // if wish is a copy, then the image must be copied too (but wishID is needed, so this must be done after wish create)
+			// if wish is a copy, then the image must be copied too (but wishID is needed, so this must be done after wish create)
+			if (createdWish.copyOf && createdWish.image) { 
 				// Generate a url to the original image
 				var imageUrl = cloudinaryService.generateCloudinaryUrl(createdWish.image.public_id, createdWish.image.version);
 				// Upload the original image to cloudinary with publicID of the new wish
@@ -127,6 +154,16 @@ angular.module('gimmi.models.wish', [
 						});
 					}
 				});
+			} else if (createdWish.image && createdWish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
+				// Rename temporary image.public_id to wish_id
+				cloudinaryService.renameImage(createdWish.image.public_id, createdWish._id)
+					.then(function (image) {
+						// Update wish with renamed image
+						wish.image = image;
+						model.updateWish(wish).then(function (wish) {
+							console.info(`Wish ${wish._id} is created and temp cloudinary image is renamed`);
+					});
+				});
 			} else {
 				if (callback) {
 					callback(null, wish);
@@ -134,29 +171,56 @@ angular.module('gimmi.models.wish', [
 			}
 		});
 	};
+	model.openWishPopup = function (wish){
+		return $uibModal.open({
+			ariaLabelledBy: 'modal-title',
+			ariaDescribedBy: 'modal-body',
+			templateUrl: 'app/wishlist/wish/wish_popup.tmpl.html',
+			size: 'lg',
+			backdrop: 'static', //Is ook een globale config van uibModal
+			controller: 'wishPopupCtrl',
+			controllerAs: 'wishPopup',
+			resolve: {
+				user: ['UserService', function (UserService) {
+					return UserService.getCurrentUser();
+				}],
+				wish: function () {
+					var originalWish = angular.copy(wish);
+					return originalWish;
+				}
+			}
+		});
+	};
 
 	model.updateWish = function(wish) {
-		var convertedWish = convertUndefinedToNovalue(wish);
-		var defer = $q.defer();
+		// Convert undefined values to string (or they aren't sent in the HTTP request)
+		wish = convertUndefinedToNovalue(wish);
+		// If no image is selected: set default image
 		if (!wish.image){
 			wish.image = CONFIG.defaultImage;
 		}
-		$http.put(URLS.WISH+"/"+wish._id, convertedWish).success(function(wish){
-			if (wishlist) {
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wish._id;
+		// Check if image is a temporary image and rename to wishID
+		var renamedImagePromise = null;
+		if (wish.image && wish.image.public_id.slice(-CONFIG.temporaryImagePostfix.length) === CONFIG.temporaryImagePostfix) {
+			// Rename temporary image.public_id to wish_id
+			renamedImagePromise = cloudinaryService.renameImage(wish.image.public_id, wish._id)
+				.then( function (image) {
+					// Update wish with renamed image
+					wish.image = image;
+					return wish;
+			});
+		}
+		// Wait until renameImagePromise is resolved and send updated wish to server
+		return $q.when(renamedImagePromise).then(function(wishWithRenamedImage){
+			var wishToServer = wishWithRenamedImage || wish;
+			return $http.put(URLS.WISH + "/" + wish._id, wishToServer)
+				.then(function (result) {
+					var wish = result.data;
+					updateWishlist(wish);
+					console.info("wish updated", wish);
+					return wish;
 				});
-				// TEMP FIX until #906 is implemented
-				if (wish.reservation) {
-					wish.reservation.reservedBy = wish.reservation.reservedBy._id
-				}
-				// END TEMP FIX
-				wishlist.wishes[index] = wish;
-			}
-			defer.resolve(wish);
-			console.info("wish updated", wish);
 		});
-		return defer.promise;
 	}
 	
 	model.deleteWish = function(wish) {
@@ -167,7 +231,7 @@ angular.module('gimmi.models.wish', [
 				});
 			}
 			cloudinaryService.deleteImage(wish.image.public_id, function () {
-				console.info("wish and image deleted: " + wish._id);
+				console.info("wish deleted: " + wish._id);
 			});
 		});
 	}
@@ -175,14 +239,7 @@ angular.module('gimmi.models.wish', [
 	model.addReservation = function(wishID, reservation) {
 		var defer = $q.defer();
 		$http.post(URLS.WISH+"/"+wishID+"/reservation", reservation).success(function(wish){
-			if (wishlist) {
-				var index = _.findIndex(wishlist.wishes, function(w){
-					return w._id === wishID;
-				});
-				var wishlistWish = angular.copy(wish);
-				wishlistWish.reservation.reservedBy = wishlistWish.reservation.reservedBy._id;
-				wishlist.wishes[index] = wishlistWish;
-			}
+			updateWishlist(wish);
 			console.info("Reservation added to", wish._id);
 			defer.resolve(wish);
 		});
@@ -192,10 +249,7 @@ angular.module('gimmi.models.wish', [
 	model.deleteReservation = function(wishID) {
 		$http.delete(URLS.WISH+"/"+wishID+"/reservation/").success(function(wish){
 			if (wishlist) {
-				var index = _.findIndex(wishlist.wishes, function (w) {
-					return w._id === wishID;
-				});
-				wishlist.wishes[index] = wish;
+				updateWishlist(wish);
 			}
 			console.info("Reservation deleted for ", wish._id);
 		});

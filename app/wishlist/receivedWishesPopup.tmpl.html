@@ -18,15 +18,16 @@
                     </cl-image>
                 </div>
                 <div class="card-block p-1">
-                    <a class="wishCardTitle text-dark text-capitalize pointer" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }"
-                        ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</a>
+                    <p class="wishCardTitle text-dark text-capitalize">{{wish.title}}</p>
+                    <!-- <a class="wishCardTitle text-dark text-capitalize pointer" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }"
+                        ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</a> -->
                     <p class="card-text mx-auto my-1 text-left font-weight-bold" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }">{{wish.price
                         | currency : "€" : 2}}</p>
                 </div>
-                <div class="card-footer text-muted p-1">
+                <!-- <div class="card-footer text-muted p-1">
                     <button class="btn btn-light mx-1 p-1 text-muted" ui-sref="gimmi.wishlist.wish({wishID: wish._id})"><i class="fa fa-info"
                             aria-hidden="true" uib-tooltip="Bekijk de details" tooltip-class="customTooltip" tooltip-placement="top-left"></i></button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

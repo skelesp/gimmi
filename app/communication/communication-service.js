@@ -27,10 +27,3 @@ angular.module('gimmi.communication', [
         });
     }]);
 })();
-
-/* Send mail in controllers
-CommunicationService.sendMail("stijn.beeckmans@gmail.com", "Test mail vanuit Angular", "Text", "<h1>HTML</h1>")
-    .then(function (data) {
-        console.log("Email sent: %s", data)
-    }); 
-*/

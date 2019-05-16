@@ -1,0 +1,78 @@
+<div class="container-fluid m-3">
+    <div class="row border-bottom mt-2 mb-4">
+        <div class="col">
+            <h3 class="display-4">{{userDashboardCtrl.user.firstName}} <br />
+                <span class="lead">Hieronder vind je alle informatie over je gebruik van Gimmi.</span>
+            </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 card-deck">
+            <div class="card border border-info text-center">
+                <h5 class="card-header border-bottom border-info bg-info text-white">Wensenlijst</h5>
+                <div class="card-body">
+                    <h5 class="card-text">Je hebt momenteel</h5>
+                    <h4 class="card-title">{{userDashboardCtrl.counts.openWishCount}} open</h4>
+                    <h4 class="card-title">{{userDashboardCtrl.counts.closedWishCount + userDashboardCtrl.counts.receivedWishCount}} ontvangen</h4>
+                    <h5 class="card-text">wensen op je wensenlijst</h5>
+                </div>
+                <div class="card-footer border-top-0 bg-transparent">
+                    <button ng-click="userDashboardCtrl.toWishlist()" class="btn btn-warning mb-1"><i class="fa fa-list-alt mr-2" aria-hidden="true"></i>Beheer je wensen</button>
+                    <button ng-click="userDashboardCtrl.openAddWishPopup()" class="btn btn-warning mb-1"><i class="fa fa-plus mr-2" aria-hidden="true"></i>Voeg nieuwe wens toe</button>
+                </div>
+            </div>
+            <div class="card border border-info text-center">
+                <h5 class="card-header border-bottom border-info bg-info text-white">Cadeauzoektochten</h5>
+                <div class="card-body">
+                    <h6 class="card-text">Je zoekt momenteel voor</h6>
+                    <h2 class="card-title">0 personen</h2>
+                    <h6 class="card-text">een cadeau via Gimmi</h6>
+                </div>
+                <div class="card-footer border-top-0 bg-transparent">
+                    <button ng-click="userDashboardCtrl.toReservationManagement()" class="btn btn-warning mb-1 disabled"><i
+                            class="fa fa-binoculars mr-2" aria-hidden="true"></i> Beheer je cadeauzoektochten</button>
+                    <button ng-click="userDashboardCtrl.startNewGiftSearch()" class="btn btn-warning mb-1 disabled"><i
+                            class="fa fa-search-plus mr-2" aria-hidden="true"></i> Start een nieuwe zoektocht</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row mt-3">
+        <h4>Voor anderen</h4>
+        <div class="col-12 card-deck">
+            <div class="card border border-info text-center">
+                <h5 class="card-header border-bottom border-info bg-info text-white">Cadeauzoektochten</h5>
+                <div class="card-body">
+                    <h6 class="card-text">Je zoekt voor</h6>
+                    <h2 class="card-title">5 personen</h2>
+                    <h6 class="card-text">een cadeau via Gimmi</h6>
+                </div>
+                <div class="card-footer border-top-0 bg-transparent">
+                    <button ng-click="userDashboardCtrl.startNewGiftSearch()" class="btn btn-warning disabled"><i class="fa fa-binoculars mr-2" aria-hidden="true"></i> Start een nieuwe zoektocht</button>
+                </div>
+            </div>
+            <div class="card border border-info text-center">
+                <h5 class="card-header border-bottom border-info bg-info text-white">Ontvangen cadeaus</h5>
+                <div class="card-body">
+                    <h6 class="card-text">Je ontving al</h6>
+                    <h2 class="card-title">20 cadeaus</h2>
+                    <h6 class="card-text">dankzij Gimmi</h6>
+                </div>
+                <div class="card-footer border-top-0 bg-transparent">
+                    <button ng-click="userDashboardCtrl.toWishlist()" class="btn btn-warning"><i class="fa fa-gift mr-2"
+                            aria-hidden="true"></i> Bekijk je ontvangen cadeaus</button>
+                </div>
+            </div>
+            <div class="card border border-info text-center">
+                <h5 class="card-header border-bottom border-info bg-info text-white">Gegeven cadeaus</h5>
+                <div class="card-body">
+                    <h6 class="card-text">Je maakte al</h6>
+                    <h2 class="card-title">7 personen</h2>
+                    <h6 class="card-text">gelukkig via Gimmi</h6>
+                </div>
+                <div class="card-footer border-top-0 bg-transparent">
+                    <button ng-click="userDashboardCtrl.toReservationManagement()" class="btn btn-warning disabled"><i class="fa fa-shopping-cart mr-2" aria-hidden="true"></i> Beheer je reservaties</button>
+                </div>
+            </div>
+        </div>
+    </div> -->

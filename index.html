@@ -7,14 +7,14 @@
 			window.dataLayer = window.dataLayer || [];
 			function gtag() { dataLayer.push(arguments); }
 			gtag('js', new Date());
-
 			gtag('config', 'UA-132810834-1');
 		</script>
 		<!-- Meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<!-- Stylesheets and fonts -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
 		<script src="https://use.fontawesome.com/1c59529a77.js"></script> <!-- Fontawesome 4 -->
 		<link rel="stylesheet" href="/layout/css/style.css">
@@ -41,14 +41,14 @@
 
 	</head>
 	<body ng-controller="ApplicationCtrl as ApplicationCtrl">
-			<!-- PAGE -->
-			<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
-			<flash-message>
-				<div class="flash-message alert alert-{{flash.type}} alert-dismissible fade show" role="alert" ng-cloak>
-					<span>{{flash.text}}</span>
-				</div>
-			</flash-message>
-			<div class="mb-4" ui-view="content"></div>
+		<!-- PAGE -->
+		<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
+		<flash-message>
+			<div class="flash-message alert alert-{{flash.type}} alert-dismissible fade show" role="alert" ng-cloak>
+				<span>{{flash.text}}</span>
+			</div>
+		</flash-message>
+		<div class="mb-4" ui-view="content"></div>
 		
 		<!-- SCRIPTS -->
 		<!-- Polyfills-->
@@ -130,10 +130,16 @@
 				}());
 			}
 		</script>
-		<!-- Bootstrap 4 -->
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+		<!-- Bootstrap 4.3.1 -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+			crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+			integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+			crossorigin="anonymous"></script>
 		<!-- Angular 1.x -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
@@ -166,15 +172,14 @@
 		<script src="app/common/models/wishlist-model.js"></script>
 		<script src="app/wishlist/wishlist.js"></script>
 		<script src="app/wishlist/wish/wish.js"></script>
-		<script src="app/wishlist/wish/create/wish-create.js"></script>
-		<script src="app/wishlist/wish/edit/wish-edit.js"></script>
-		<script src="app/people/receiver/receiver.js"></script>
 		<script src="app/common/models/user-service.js"></script>
 		<script src="app/common/models/person-service.js"></script>
 		<script src="app/communication/communication-service.js"></script>
+		<script src="app/people/receiver/receiver.js"></script>
 		<script src="app/people/people.js"></script>
-		<script src="app/reporting/reporting-module.js"></script>
 		<script src="app/people/passwordForgotten.ctrl.js"></script>
+		<script src="app/people/userdashboard/userdashboard-ctrl.js"></script>
+		<script src="app/reporting/reporting-module.js"></script>
 		<!-- GCSE -->
 		<script src="app/image_mgmt/gcse/gcse-directive.js"></script>
 		<script src="app/image_mgmt/gcse/gcse-service.js"></script>
