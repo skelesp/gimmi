@@ -57,25 +57,24 @@
 	<body ng-controller="ApplicationCtrl as ApplicationCtrl">
 		<!-- PAGE -->
 		<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" ui-view="navbar"></nav>
-		<div class="flash-message-container">
-			<flash-message>
-				<div class="toast fade show border border-{{flash.type}} mb-1" role="alert" id="toast" ng-cloak>
-					<div class="toast-header">
-						<span class="badge badge-pill badge-{{flash.type}} text-{{flash.type}} mr-2">.</span>
-						<strong class="mr-auto" ng-show="flash.type === 'success'">Gelukt!</strong>
-						<strong class="mr-auto" ng-show="flash.type === 'info'">Info</strong>
-						<strong class="mr-auto" ng-show="flash.type === 'danger'">Opgelet!</strong>
-						<strong class="mr-auto" ng-show="flash.type === 'warning'">Waarschuwing</strong>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="toast-body">
-						{{flash.text}}
-					</div>
+		<flash-message class="flash-message-container">
+			<div class="toast alert-dismissable fade show border border-{{flash.type}} mb-1" role="alert" id="toast" ng-cloak>
+				<div class="toast-header">
+					<span class="badge badge-pill badge-{{flash.type}} text-{{flash.type}} mr-2">.</span>
+					<strong class="mr-auto" ng-show="flash.type === 'success'">Gelukt!</strong>
+					<strong class="mr-auto" ng-show="flash.type === 'info'">Info</strong>
+					<strong class="mr-auto" ng-show="flash.type === 'danger'">Opgelet!</strong>
+					<strong class="mr-auto" ng-show="flash.type === 'warning'">Waarschuwing</strong>
+					<button type="button" class="ml-2 mb-1 close" ng-show="flash.showClose" close-flash="{{flash.id}}" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					</button>
 				</div>
-			</flash-message>
-		</div>
+				<div class="toast-body">
+					{{flash.text}}
+				</div>
+			</div>
+		</flash-message>
 		<div class="mb-4" ui-view="content"></div>
 		
 		<!-- SCRIPTS -->
