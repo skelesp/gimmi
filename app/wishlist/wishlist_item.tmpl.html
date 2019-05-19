@@ -14,17 +14,11 @@
         </span>
         <span class="w-75 badge badge-pill badge-info text-center" 
               ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">
-              Je reservatie <i class="fa fa-ban ml-2 text-warning" aria-hidden="true" uib-tooltip="Annuleer je reservatie" tooltip-placement="bottom-right" tooltip-class="customTooltip" ng-click="wishCtrl.deleteReservation(wish)"></i>
+              Je reservatie 
         </span>
         <span class="w-75 badge badge-pill badge-success text-center" ng-if="wishCtrl.reservationStatus(wish) === 'fulfilled'">
           Ontvangen
         </span>
-        <button class="btn btn-outline-danger btn-feedback-action text-center mt-1" ng-click="wishCtrl.openFeedbackPopup(wish)"
-              ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishlistCtrl.userIsReceiver"
-              uib-tooltip="Geef feedback op je cadeau"
-              tooltip-placement="bottom-right" tooltip-class="customTooltip">
-              Cadeau al ontvangen? Klik hier!
-      </button>
     </div>
   </div>
   <div class="card-block p-1 container">
@@ -40,7 +34,7 @@
       <div class="col-1">
         <div class="dropleft float-right mr-2 pointer">
           <div class="" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+            <i class="fa fa-ellipsis-h fa-2x" aria-hidden="true"></i>
           </div>
           <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenuButton">
             <button class="btn btn-outline-light btn-block border-0 text-muted text-left" href=""
@@ -77,12 +71,26 @@
         </div>
       </div>
     </div>
+    <!-- Row with "idea of" -->
     <p class="text-muted text-truncate ml-1 my-1" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
+    <!-- Row with "price" -->
     <p class="card-text mx-auto my-1 text-left font-weight-bold" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }">{{wish.price | currency : "€" : 2}}</p>
   </div>
-  <div class="card-footer text-muted p-1">
-    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Reserveer" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason', wishlistCtrl.currentReceiver)">
-      <i class="fa fa-gift" aria-hidden="true"></i>
+  <!-- Footer with call to action -->
+  <div class="card-footer border-top-0">
+    <!-- Reserveer CTA -->
+    <button class="btn btn-outline-danger btn-block" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason', wishlistCtrl.currentReceiver)">
+      <i class="fa fa-gift fa-lg mr-1" aria-hidden="true"></i> <span>Reserveer</span>
+    </button>
+    <!-- Wijzig reservatie CTA -->
+    <button class="btn btn-outline-danger btn-block" ng-click="wishCtrl.deleteReservation(wish)"
+     ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">
+      <i class="fa fa-ban fa-lg mr-1" aria-hidden="true" ></i> <span>Annuleer reservatie</span>
+    </button>
+    <!-- Feedback CTA -->
+    <button class="btn btn-outline-danger btn-block" ng-click="wishCtrl.openFeedbackPopup(wish)"
+      ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishlistCtrl.userIsReceiver">
+      <i class="fa fa-comment-o fa-lg mr-1" aria-hidden="true"></i> <span>Geef feedback</span>
     </button>
   </div>
 </div>
