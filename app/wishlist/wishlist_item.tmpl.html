@@ -1,7 +1,7 @@
 <!-- Wish item container -->
 <div class="card shadow mt-1 pb-1">
    <!-- https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4 -->
-  <div class="position-relative">
+   <div class="position-relative">
     <cl-image class="card-img-top img-fluid rounded w-100 mb-2" public-id="{{wish.image.public_id}}" version="{{wish.image.version}}" class="thumbnail inline">
       <cl-transformation fetch-format="auto" />
     </cl-image> 
@@ -71,10 +71,21 @@
         </div>
       </div>
     </div>
-    <!-- Row with "idea of" -->
-    <p class="text-muted text-truncate ml-1 my-1" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
+
     <!-- Row with "price" -->
-    <p class="card-text mx-auto my-1 text-left font-weight-bold" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }">{{wish.price | currency : "€" : 2}}</p>
+    <div class="row no-gutters"> 
+      <div class="col-10">
+        <p class="card-text font-weight-bold" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }">{{wish.price | currency : "€" : 2}}</p>
+      </div>
+    </div>
+    <!-- Row with "idea of" -->
+    <div class="row no-gutters text-right">
+      <div class="col-11">
+        <p class="text-muted text-truncate ml-1 my-1"
+          ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van
+          {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
+      </div>
+    </div>
     <!-- CTA's -->
     <div class="row no-gutters">
       <!-- Reserveer CTA -->
