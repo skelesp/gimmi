@@ -27,18 +27,63 @@
       </button>
     </div>
   </div>
-  <div class="card-block p-1">
-    <a class="wishCardTitle text-dark text-capitalize pointer" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }" ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</a>
+  <div class="card-block p-1 container">
+    <!-- Row with title en ellipsis menu -->
+    <div class="row no-gutters justify-content-between"> 
+      <!-- Title -->
+      <div class="col-10">
+        <a class="wishCardTitle text-dark text-capitalize pointer"
+          ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }"
+          ui-sref="gimmi.wishlist.wish({wishID: wish._id})">{{wish.title}}</a>
+      </div>
+      <!-- Ellipsis menu -->
+      <div class="col-1">
+        <div class="dropleft float-right mr-2 pointer">
+          <div class="" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+          </div>
+          <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenuButton">
+            <button class="btn btn-outline-light btn-block border-0 text-muted text-left" href=""
+              ng-show="wishlistCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy._id)"
+              ng-click="wishCtrl.edit(wish)">
+              <div class="row">
+                <div class="col-1"><i class="fa fa-edit" aria-hidden="true"></i></div>
+                <div class="col-9">Aanpassen</div>
+              </div>
+            </button>
+            <button class="btn btn-outline-light btn-block border-0 text-muted text-left" href="" ng-hide="wishlistCtrl.userIsReceiver"
+              ng-click="wishCtrl.copy(wish)">
+              <div class="row">
+                <div class="col-1"><i class="fa fa-clone" aria-hidden="true"></i></div>
+                <div class="col-9">Kopieer naar eigen lijst</div>
+              </div>
+            </button>
+            <a class="btn btn-outline-light btn-block border-0 text-muted text-left" href="{{wish.url}}" target="_blank"
+              ng-show="wish.url">
+              <div class="row">
+                <div class="col-1"> <i class="fa fa-globe" aria-hidden="true"></i></div>
+                <div class="col-9">Externe website</div>
+              </div>
+            </a>
+            <button class="btn btn-outline-light btn-block border-0 text-muted text-left" href=""
+              ng-show="wishlistCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy._id)"
+              ng-click="wishCtrl.deleteWish(wish)">
+              <div class="row">
+                <div class="col-1"><i class="fa fa-trash" aria-hidden="true"></i></div>
+                <div class="col-9">Verwijderen</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <p class="text-muted text-truncate ml-1 my-1" ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
     <p class="card-text mx-auto my-1 text-left font-weight-bold" ng-class="{'text-muted': wishCtrl.reservationStatus(wish) === 'reserved' }">{{wish.price | currency : "€" : 2}}</p>
   </div>
   <div class="card-footer text-muted p-1">
-    <button class="btn btn-light mx-1 p-1 text-muted" ui-sref="gimmi.wishlist.wish({wishID: wish._id})"><i class="fa fa-info" aria-hidden="true" uib-tooltip="Bekijk de details" tooltip-class="customTooltip" tooltip-placement="top-left"></i></button>
-    <a class="btn btn-light mx-1 p-1 text-muted" href="{{wish.url}}" target="_blank" ng-show="wish.url"><i class="fa fa-globe" aria-hidden="true" uib-tooltip="Ga naar website voor meer info" tooltip-class="customTooltip" tooltip-placement="top-left"></i></a>
-    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Reserveer" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason', wishlistCtrl.currentReceiver)"><i class="fa fa-cart-plus" aria-hidden="true"></i></button>
-    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Kopieer naar je eigen lijst" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-hide="wishlistCtrl.userIsReceiver" ng-click="wishCtrl.copy(wish)"><i class="fa fa-clone" aria-hidden="true"></i></button>
-    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Wijzig" tooltip-class="customTooltip" tooltip-placement="top-right" href="" ng-show="wishlistCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.edit(wish)"><i class="fa fa-edit" aria-hidden="true"></i></button>
-    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Verwijder" tooltip-class="customTooltip" tooltip-placement="top-right" href="" ng-show="wishlistCtrl.userIsReceiver || wishCtrl.userIsCreator(wish.createdBy._id)" ng-click="wishCtrl.deleteWish(wish)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+    <button class="btn btn-light mx-1 p-1 text-muted" uib-tooltip="Reserveer" tooltip-class="customTooltip" tooltip-placement="top-left" href="" ng-show="wishCtrl.reservationStatus(wish) === 'unreserved'" ng-click="wishCtrl.addReservation(wish, ApplicationCtrl.currentUser._id, 'No reason', wishlistCtrl.currentReceiver)">
+      <i class="fa fa-gift" aria-hidden="true"></i>
+    </button>
   </div>
 </div>
 
