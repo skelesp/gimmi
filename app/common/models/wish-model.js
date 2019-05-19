@@ -232,6 +232,7 @@ angular.module('gimmi.models.wish', [
 			}
 			cloudinaryService.deleteImage(wish.image.public_id, function () {
 				console.info("wish deleted: " + wish._id);
+				Flash.create("success", `Wens '${wish.title}' is verwijderd.`);
 			});
 		});
 	}

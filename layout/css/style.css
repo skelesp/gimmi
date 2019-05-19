@@ -100,9 +100,9 @@ h6.card-title  {
 }
 
 /* Flash messages */
-.flash-message {
+.flash-message-container {
   position: fixed;
-  bottom: 5px;
+  top: 5px;
   right: 15px;
   z-index: 7000;
 }
