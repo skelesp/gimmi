@@ -5,19 +5,22 @@
     <cl-image class="card-img-top img-fluid rounded w-100 mb-2" public-id="{{wish.image.public_id}}" version="{{wish.image.version}}" class="thumbnail inline">
       <cl-transformation fetch-format="auto" />
     </cl-image> 
-    <div class="card-img-overlay p-1 text-center h6" 
-         ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) !== 'unreserved'}"
+    <div class="card-img-overlay p-1 text-left h6" ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) !== 'unreserved'}"
          ng-click="wishCtrl.goToWishDetail(wish)">
-        <span class="w-75 badge badge-pill badge-warning text-center"
-              ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">
-              Gereserveerd
+        <span class="w-100 btn btn-sm btn-danger text-center btn-multiline disabled"
+              ng-if="wishCtrl.reservationStatus(wish) === 'reserved' && wish.state !== 'Received'" ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">
+              <i class="fa fa-shopping-cart mr-1" aria-hidden="true"></i> Gereserveerd
         </span>
-        <span class="w-75 badge badge-pill badge-info text-center" 
-              ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">
-              Je reservatie 
+        <span class="w-100 btn btn-warning text-center disabled" 
+              ng-if="wishCtrl.reservationStatus(wish) === 'reserved' && wish.state !== 'Received'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">
+              <i class="fa fa-star mr-1" aria-hidden="true"></i> Jouw reservatie
         </span>
-        <span class="w-75 badge badge-pill badge-success text-center" ng-if="wishCtrl.reservationStatus(wish) === 'fulfilled'">
-          Ontvangen
+        <span class="w-100 btn btn-danger text-center disabled" 
+              ng-if="wish.state === 'Received'">
+              <i class="fa fa-gift mr-1" aria-hidden="true"></i> Ontvangen
+        </span>
+        <span class="w-100 btn btn-danger text-center disabled" ng-if="wishCtrl.reservationStatus(wish) === 'fulfilled'">
+          <i class="fa fa-thumbs-up mr-1" aria-hidden="true"></i> Voldaan
         </span>
     </div>
   </div>
@@ -34,7 +37,7 @@
       <div class="col-1">
         <div class="dropleft float-right mr-2 pointer">
           <div class="" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i>
+            <i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i> <!-- Vertical ellipsis because this is more compact on mobile designs -->
           </div>
           <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenuButton">
             <button class="btn btn-outline-light btn-block border-0 text-muted text-left" href=""
@@ -81,7 +84,7 @@
     <!-- Row with "idea of" -->
     <div class="row no-gutters text-right">
       <div class="col-11">
-        <p class="text-muted text-truncate ml-1 my-1"
+        <p class="text-muted text-truncate"
           ng-hide="wishCtrl.receiverIsCreator(wish.createdBy._id, wishlistCtrl.currentReceiver._id)">Idee van
           {{wish.createdBy.firstName + " " + wish.createdBy.lastName.substring(0,1) + "."}}</p>
       </div>
