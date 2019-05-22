@@ -1,5 +1,5 @@
 <!-- Wish item container -->
-<div class="card shadow mt-1 pb-1">
+<div class="card shadow mt-1 pb-1" ng-class="{'border border-warning': wishCtrl.hover === true}" ng-mouseover="wishCtrl.hover = true" ng-mouseleave="wishCtrl.hover = false" ng-init="wishCtrl.hover = false">
    <!-- https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4 -->
    <div class="position-relative">
     <cl-image class="card-img-top img-fluid rounded w-100 mb-2" public-id="{{wish.image.public_id}}" version="{{wish.image.version}}" class="thumbnail inline">
