@@ -136,6 +136,9 @@ h6.card-title  {
 .blurredCardOverlay a,.blurredCardOverlay p {
   color: rgb(87, 87, 87);
 }
+.border-wish-card {
+  border-color: #fecbcc!important;
+}
 /* END -- Create card style addons --*/
 .card-columns-popup {
 -webkit-column-count: 2;
