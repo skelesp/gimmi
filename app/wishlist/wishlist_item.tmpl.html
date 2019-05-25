@@ -8,7 +8,12 @@
     <!-- Wish card overlay with banners -->
     <div class="card-img-overlay p-1 text-right h6" ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) !== 'unreserved'}"
          ng-click="wishCtrl.goToWishDetail(wish)">
-         <!-- Reserved banner -->
+        <!-- "Your idea" banner -->
+        <span class="w-75 badge badge-warning badge-wish-card-banner font-weight-normal text-wrap text-center badge-multiline disabled"
+              ng-if="wish.state === 'Open' || !wish.state" ng-show="wishCtrl.userIsCreator(wish.createdBy._id) && !wishlistCtrl.userIsReceiver">
+              <i class="fa fa-lightbulb-o mr-1" aria-hidden="true"></i> Jouw idee
+        </span>
+        <!-- Reserved banner -->
         <span class="w-75 badge badge-danger badge-wish-card-banner font-weight-normal text-wrap text-center badge-multiline disabled"
               ng-if="wishCtrl.reservationStatus(wish) === 'reserved' && wish.state !== 'Received'" ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">
               <i class="fa fa-shopping-cart mr-1" aria-hidden="true"></i> Gereserveerd
@@ -20,8 +25,13 @@
         </span>
         <!-- Received banner -->
         <span class="w-75 badge badge-danger badge-wish-card-banner font-weight-normal text-wrap text-center disabled" 
-              ng-if="wish.state === 'Received'">
+              ng-if="wish.state === 'Received' && !wishCtrl.reservedByUser(wish.reservation.reservedBy)">
               <i class="fa fa-gift mr-1" aria-hidden="true"></i> Ontvangen
+        </span>
+        <!-- "Your gift" banner -->
+        <span class="w-75 badge badge-warning badge-wish-card-banner font-weight-normal text-wrap text-center disabled" 
+              ng-if="wish.state === 'Received' && wishCtrl.reservedByUser(wish.reservation.reservedBy)">
+              <i class="fa fa-gift mr-1" aria-hidden="true"></i> Jouw cadeau
         </span>
         <!-- Fulfilled banner -->
         <span class="w-75 badge badge-danger badge-wish-card-banner font-weight-normal text-wrap text-center disabled" ng-if="wishCtrl.reservationStatus(wish) === 'fulfilled'">
