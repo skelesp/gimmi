@@ -6,25 +6,25 @@
       <cl-transformation fetch-format="auto" />
     </cl-image> 
     <!-- Wish card overlay with banners -->
-    <div class="card-img-overlay p-1 text-left h6" ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) !== 'unreserved'}"
+    <div class="card-img-overlay p-1 text-right h6" ng-class="{blurredCardOverlay: wishCtrl.reservationStatus(wish) !== 'unreserved'}"
          ng-click="wishCtrl.goToWishDetail(wish)">
          <!-- Reserved banner -->
-        <span class="w-100 btn btn-sm btn-danger text-center btn-multiline disabled"
+        <span class="w-75 badge badge-danger badge-wish-card-banner font-weight-normal text-wrap text-center badge-multiline disabled"
               ng-if="wishCtrl.reservationStatus(wish) === 'reserved' && wish.state !== 'Received'" ng-show="!wishCtrl.reservedByUser(wish.reservation.reservedBy)">
               <i class="fa fa-shopping-cart mr-1" aria-hidden="true"></i> Gereserveerd
         </span>
         <!-- "Your reservation" banner -->
-        <span class="w-100 btn btn-warning text-center disabled" 
+        <span class="w-75 badge badge-warning badge-wish-card-banner font-weight-normal text-wrap text-center disabled" 
               ng-if="wishCtrl.reservationStatus(wish) === 'reserved' && wish.state !== 'Received'" ng-show="wishCtrl.reservedByUser(wish.reservation.reservedBy)">
               <i class="fa fa-star mr-1" aria-hidden="true"></i> Jouw reservatie
         </span>
         <!-- Received banner -->
-        <span class="w-100 btn btn-danger text-center disabled" 
+        <span class="w-75 badge badge-danger badge-wish-card-banner font-weight-normal text-wrap text-center disabled" 
               ng-if="wish.state === 'Received'">
               <i class="fa fa-gift mr-1" aria-hidden="true"></i> Ontvangen
         </span>
         <!-- Fulfilled banner -->
-        <span class="w-100 btn btn-danger text-center disabled" ng-if="wishCtrl.reservationStatus(wish) === 'fulfilled'">
+        <span class="w-75 badge badge-danger badge-wish-card-banner font-weight-normal text-wrap text-center disabled" ng-if="wishCtrl.reservationStatus(wish) === 'fulfilled'">
           <i class="fa fa-thumbs-up mr-1" aria-hidden="true"></i> Voldaan
         </span>
     </div>
