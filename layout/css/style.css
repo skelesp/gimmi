@@ -143,6 +143,9 @@ h6.card-title  {
   opacity: .70;
   font-size: 80%;
 }
+.btn-wish-card-cta {
+  border-color: #fecbcc;
+}
 /* END -- Create card style addons --*/
 .card-columns-popup {
 -webkit-column-count: 2;
