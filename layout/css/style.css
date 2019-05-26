@@ -90,11 +90,7 @@ h6.card-title  {
 }
 /* END Custom Facebook login button*/
 
-/* Feedback action button on wish item: Add white background and make multiline*/
-.btn-feedback-action {
-  white-space: normal; /* Multiline button */
-  background-color: #ffffff /* White background */
-}
+/* Allow a button to be multiline*/
 .btn-multiline {
   white-space: normal;
 }
@@ -139,6 +135,16 @@ h6.card-title  {
 }
 .blurredCardOverlay a,.blurredCardOverlay p {
   color: rgb(87, 87, 87);
+}
+.border-wish-card {
+  border-color: #fecbcc!important;
+}
+.badge-wish-card-banner {
+  opacity: .70;
+  font-size: 80%;
+}
+.btn-wish-card-cta {
+  border-color: #fecbcc;
 }
 /* END -- Create card style addons --*/
 .card-columns-popup {
