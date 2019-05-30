@@ -14,7 +14,7 @@
             <label for="satisfaction" class="form-control-label">Hoe blij ben je met het cadeau?</label><br />
             <span uib-rating ng-model="giftFeedbackPopupCtrl.giftFeedback.satisfaction" 
                     max="giftFeedbackPopupCtrl.satisfactionRating.max" 
-                    state-on="'fa fa-thumbs-up fa-2x text-success mr-2'" 
+                    state-on="'fa fa-thumbs-o-up fa-2x text-success mr-2'" 
                     state-off="'fa fa-thumbs-o-up fa-2x text-secondary mr-2'" 
                     titles="giftFeedbackPopupCtrl.satisfactionRating.titles" on-hover="giftFeedbackPopupCtrl.satisfactionRating.hoveringOver(value)" on-leave="giftFeedbackPopupCtrl.satisfactionRating.leaveHover()" enable-reset="giftFeedbackPopupCtrl.satisfactionRating.enableReset"
                 aria-labelledby="custom-icons-1"></span> <b ng-show="giftFeedbackPopupCtrl.giftFeedback.satisfaction || giftFeedbackPopupCtrl.giftFeedback.hoverSatisfaction">({{giftFeedbackPopupCtrl.showSatisfactionText()}})</b>
