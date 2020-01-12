@@ -1,7 +1,0 @@
-<h2>Je meest bezochte lijsten</h2>
-
-<ul class="nav nav-sidebar">
-	<li ng-repeat="receiver in wishlistCtrl.receivers" ng-class="{'active': isCurrentReceiver(receiver)}">
-		<a ui-sref="gimmi.wishlist({receiverName: receiver.name})" >{{receiver.name}}</a>
-	</li>
-</ul>
