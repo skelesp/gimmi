@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User, UserService } from 'src/app/users/service/user.service';
 import { Subscription } from 'rxjs';
-import { faUserCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faSignOutAlt, faUserPlus, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 
 @Component({
@@ -15,6 +15,8 @@ export class UserMenuComponent implements OnInit, OnDestroy {
 
   userIcon = faUserCircle;
   facebookIcon = faFacebookF;
+  registerIcon = faUserPlus;
+  loginIcon = faSignInAlt;
   logoutIcon = faSignOutAlt;
 
   constructor( private userService: UserService) { }
