@@ -2,25 +2,21 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
-import { UserMenuComponent } from './navigation-bar/user-menu/user-menu.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    NavigationBarComponent, 
-    UserMenuComponent
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     NgbModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule
   ],
   exports: [
     CommonModule,
     NgbModule,
     FontAwesomeModule,
-    NavigationBarComponent,
-    UserMenuComponent
+    FormsModule
   ]
 })
 export class SharedModule { }
