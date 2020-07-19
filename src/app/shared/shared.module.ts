@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { BrandLogoComponent } from './brand-logo/brand-logo.component';
+import { BrandLogoComponent } from './components/brand-logo/brand-logo.component';
 import { RouterModule } from '@angular/router';
 import { CursorPointerDirective } from './directives/cursor-pointer.directive';
 

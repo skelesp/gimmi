@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { PeopleModule } from './people/people.module';
 
-import { NavigationBarComponent } from './shared/navigation-bar/navigation-bar.component';
+import { NavigationBarComponent } from './shared/components/navigation-bar/navigation-bar.component';
 import { UsersModule } from './users/users.module';
 
 @NgModule({
