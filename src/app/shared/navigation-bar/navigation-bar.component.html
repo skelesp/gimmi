@@ -1,9 +1,7 @@
 <nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" >
     <!-- Navigatiebar content -->
     <div class="navbar-brand">
-        <a class="logo">
-            <img src="../../../assets/logoGIMMI.png" class="d-inline-block align-top rounded logo" alt="Gimmi logo">
-        </a>
+        <gimmi-brand-logo [link]="['/test', 123]"></gimmi-brand-logo>
     </div>
     
     <div class="">
@@ -14,9 +12,7 @@
         &#9776;
     </button>
     <div class="navbar-collapse collapse justify-content-between" [ngbCollapse]="isNavbarCollapsed">
-        <div>
-            <!--placeholder to evenly space flexbox items and center links-->
-        </div>
+        <div><!--placeholder to evenly space flexbox items and center links--></div>
         
         <gimmi-user-menu></gimmi-user-menu>
     </div>
