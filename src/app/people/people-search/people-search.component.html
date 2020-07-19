@@ -1,0 +1,26 @@
+
+<ng-template #customResultTemplate let-person="result" let-term="term">
+    <img *ngIf="person.pic" [src]="person.pic" class="mr-2" style="width: 16px">
+    <fa-icon *ngIf="!person.pic" [icon]="userIcon" class="mr-2"></fa-icon>
+    <ngb-highlight [result]="person.name" [term]="term"></ngb-highlight>
+</ng-template>
+
+<form class="form-inline">
+    <div class="input-group input-group-sm">
+        <div class="input-group-prepend d-none d-sm-block">
+            <span class="input-group-text"><fa-icon [icon]="searchIcon"></fa-icon></span>
+        </div>
+        <input  id="typeahead-basic" type="text" class="form-control" placeholder="Zoek wensenlijst van..."
+                name="peopleSearchInput"
+                [ngbTypeahead]="search" 
+                [(ngModel)]="person" 
+                [editable]="false" 
+                [focusFirst]="true"
+                [inputFormatter]="inputFormatter" 
+                [resultFormatter]="resultFormatter" 
+                [resultTemplate]="customResultTemplate"
+                (selectItem)="onPersonSelect($event)" 
+        />
+    </div>
+</form>
+
