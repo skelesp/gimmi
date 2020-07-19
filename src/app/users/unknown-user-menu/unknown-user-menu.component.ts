@@ -25,6 +25,7 @@ export class UnknownUserMenuComponent implements OnInit {
 
   register() {
     let registeredUser = {
+      id: '85070820135',
       name: "Beeckmans",
       firstName: "Stijn",
       loginStrategy: "facebook",

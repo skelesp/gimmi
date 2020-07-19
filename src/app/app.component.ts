@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 @Component({
   selector: 'gimmi-root',
@@ -7,6 +6,5 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'gimmi';
-  faTwitter = faTwitter;
+  
 }

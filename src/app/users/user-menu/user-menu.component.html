@@ -6,8 +6,8 @@
         <fa-icon *ngIf="currentUser.loginStrategy !== 'facebook'" [icon]="userIcon" size="2x" class="mr-1"></fa-icon>
     </div>
     <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
-        <a ngbDropdownItem ui-sref="gimmi.wishlist({receiverID: ApplicationCtrl.currentUser._id})">Mijn wensenlijst</a>
-        <a ngbDropdownItem ui-sref="gimmi.person({personID: ApplicationCtrl.currentUser._id})">Mijn gegevens</a>
+        <a ngbDropdownItem [routerLink]="['/people', currentUser.id]">Mijn wensenlijst</a>
+        <a ngbDropdownItem [routerLink]="['/users', currentUser.id]" >Mijn gegevens</a>
         <div class="dropdown-divider"></div>
         <a ngbDropdownItem [hidden]="currentUser.loginStrategy !== 'local'" (click)="logout()" href="">
             <div class="slide-container">
