@@ -35,7 +35,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
       firstName: "Stijn",
       loginStrategy: "facebook",
       accounts: {
-        facebook: { profile_pic: "https://images.vrt.be/w1280hx/2020/07/18/e0c51250-c911-11ea-aae0-02b7b76bf47f.jpg"}
+        facebook: { profile_pic: "https://avatars3.githubusercontent.com/u/17392369?s=400&v=4"}
       }
     }
     this.userService.register(registeredUser);

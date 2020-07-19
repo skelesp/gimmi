@@ -7,19 +7,19 @@ import { SharedModule } from './shared/shared.module';
 import { PeopleModule } from './people/people.module';
 
 import { NavigationBarComponent } from './shared/navigation-bar/navigation-bar.component';
-import { UserMenuComponent } from './shared/navigation-bar/user-menu/user-menu.component';
+import { UsersModule } from './users/users.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavigationBarComponent,
-    UserMenuComponent
+    NavigationBarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    PeopleModule
+    PeopleModule,
+    UsersModule
   ],
   providers: [],
   bootstrap: [AppComponent]
