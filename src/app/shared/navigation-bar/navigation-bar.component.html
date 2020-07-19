@@ -1,19 +1,20 @@
-<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between sticky-top" >
-    <!-- Navigatiebar content -->
-    <div class="navbar-brand">
-        <gimmi-brand-logo [link]="['/test', 123]"></gimmi-brand-logo>
+<nav class="navbar navbar-expand-md sticky-top navbar-light bg-light">
+    <div class="container-fluid justify-content-between"> <!-- Extra container to be able to centralised search bar-->
+        <div class="navbar-brand">
+            <gimmi-brand-logo [link]="['/test', 123]"></gimmi-brand-logo>
+        </div>
+        <div>
+            <div class="nav-item">
+                <gimmi-people-search></gimmi-people-search>
+            </div>
+        </div>
+        <div>
+            <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed">
+                &#9776;
+            </button>
+        </div>
     </div>
-    
-    <div class="">
-        <gimmi-people-search></gimmi-people-search>
-    </div>
-    
-    <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed">
-        &#9776;
-    </button>
-    <div class="navbar-collapse collapse justify-content-between" [ngbCollapse]="isNavbarCollapsed">
-        <div><!--placeholder to evenly space flexbox items and center links--></div>
-        
+    <div class="navbar-collapse collapse" [ngbCollapse]="isNavbarCollapsed">
         <gimmi-user-menu></gimmi-user-menu>
     </div>
 </nav>

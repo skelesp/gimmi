@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime, map, distinctUntilChanged, tap } from "rxjs/operators";
-import { faMale, faFemale, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
 const people = [
   { name: "Stijn", age: "35", sex: "m", pic: 'https://avatars3.githubusercontent.com/u/17392369?s=400&v=4' },
@@ -22,6 +22,7 @@ const people = [
 export class PeopleSearchComponent implements OnInit {
   person: any;
   userIcon = faUserCircle;
+  searchIcon = faSearch;
 
   constructor() { }
 
