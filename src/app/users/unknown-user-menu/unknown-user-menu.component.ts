@@ -18,11 +18,6 @@ export class UnknownUserMenuComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  clearAttemptedEmail(): void {
-    console.warn("Not implemented yet");
-    this.menuItemClicked.emit();
-  }
-
   register() {
     let registeredUser = {
       id: '85070820135',
