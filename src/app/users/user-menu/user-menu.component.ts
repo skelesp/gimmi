@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User, UserService } from 'src/app/users/service/user.service';
 import { Subscription } from 'rxjs';
-import { faUserCircle, faSignOutAlt, faUserPlus, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 
 @Component({
@@ -15,8 +15,6 @@ export class UserMenuComponent implements OnInit, OnDestroy {
 
   userIcon = faUserCircle;
   facebookIcon = faFacebookF;
-  registerIcon = faUserPlus;
-  loginIcon = faSignInAlt;
   logoutIcon = faSignOutAlt;
 
   constructor( private userService: UserService) { }
@@ -24,31 +22,16 @@ export class UserMenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.currentUserSubscription = this.userService.currentUser.subscribe( user => {
       this.currentUser = user;
+      console.info("user changed", user);
     })
   }
 
-  clearAttemptedEmail(): void {
-    console.warn("Not implemented yet");
-  }
-
-  register() {
-    let registeredUser = {
-      name: "Beeckmans",
-      firstName: "Stijn",
-      loginStrategy: "facebook",
-      accounts: {
-        facebook: { profile_pic: "https://avatars3.githubusercontent.com/u/17392369?s=400&v=4"}
-      }
-    }
-    this.userService.register(registeredUser);
-  }
-
   logout(): void {
-    console.warn("Not implemented yet");
+    this.userService.logout();
   }
 
   logOutFacebook(): void {
-    console.warn("Not implemented yet");
+    this.userService.logout();
   }
 
   ngOnDestroy(): void {

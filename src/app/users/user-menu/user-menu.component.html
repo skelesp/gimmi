@@ -1,35 +1,23 @@
-<ul class="navbar-nav">
-    <li class="nav-item">
-        <a class="nav-link" [hidden]="currentUser" ui-sref="gimmi.login" (click)="clearAttemptedEmail()">
-            <fa-icon [icon]="loginIcon" class="mr-1"></fa-icon> Login
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" [hidden]="currentUser" ui-sref="gimmi.register_person" (click)="register()">
-            <fa-icon [icon]="registerIcon" class="mr-1"></fa-icon> Registreer
-        </a>
-    </li>
 
-    <li class="nav-item" ngbDropdown>
-
-        <a *ngIf="currentUser" ngbDropdownToggle href (click)="false" class="nav-link" >
-            <img *ngIf="currentUser.loginStrategy === 'facebook'" class="rounded-circle avatar mr-1"
-                [src]="currentUser.accounts.facebook.profile_pic">
-            <fa-icon *ngIf="currentUser.loginStrategy !== 'facebook'" [icon]="userIcon" class="mr-1"></fa-icon>
-            {{currentUser.firstName}}
+<div ngbDropdown class="d-inline-block">
+    <div ngbDropdownToggle>
+        <img *ngIf="currentUser.loginStrategy === 'facebook'" class="rounded-circle avatar mr-1"
+            [src]="currentUser.accounts.facebook.profile_pic">
+        <fa-icon *ngIf="currentUser.loginStrategy !== 'facebook'" [icon]="userIcon" size="2x" class="mr-1"></fa-icon>
+    </div>
+    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
+        <a ngbDropdownItem ui-sref="gimmi.wishlist({receiverID: ApplicationCtrl.currentUser._id})">Mijn wensenlijst</a>
+        <a ngbDropdownItem ui-sref="gimmi.person({personID: ApplicationCtrl.currentUser._id})">Mijn gegevens</a>
+        <div class="dropdown-divider"></div>
+        <a ngbDropdownItem [hidden]="currentUser.loginStrategy !== 'local'" (click)="logout()" href="">
+            <div class="slide-container">
+                <fa-icon [icon]="logoutIcon" class="mr-1"></fa-icon>Uitloggen
+            </div>
         </a>
-
-        <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
-            <a ngbDropdownItem ui-sref="gimmi.wishlist({receiverID: ApplicationCtrl.currentUser._id})">Mijn wensenlijst</a>
-            <a ngbDropdownItem ui-sref="gimmi.person({personID: ApplicationCtrl.currentUser._id})">Mijn gegevens</a>
-            <div class="dropdown-divider"></div>
-            <a ngbDropdownItem [hidden]="currentUser && currentUser.loginStrategy !== 'local'" (click)="logout()" href="">
-                <div class="slide-container"><fa-icon [icon]="logoutIcon" class="mr-1"></fa-icon>Uitloggen</div></a>
-            <a ngbDropdownItem *ngIf="currentUser && currentUser.loginStrategy === 'facebook'">
-                <div class="btn btn-social btn-sm btn-facebook"
-                (click)="logOutFacebook()">
-                <fa-icon [icon]="facebookIcon"></fa-icon> Uitloggen</div>
-            </a>
-        </div>
-    </li>
-</ul>
+        <a ngbDropdownItem *ngIf="currentUser.loginStrategy === 'facebook'">
+            <div class="btn btn-social btn-sm btn-facebook" (click)="logOutFacebook()">
+                <fa-icon [icon]="facebookIcon"></fa-icon> Uitloggen
+            </div>
+        </a>
+    </div>
+</div>

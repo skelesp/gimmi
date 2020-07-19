@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from "rxjs";
+import { Subject, BehaviorSubject } from "rxjs";
 
 export interface User {
   name: string;
@@ -12,12 +12,16 @@ export interface User {
   providedIn: 'root'
 })
 export class UserService {
-  currentUser = new Subject<User>();
+  currentUser = new BehaviorSubject<User>(null);
 
   constructor() { }
 
   register(newUser : User) {
     this.currentUser.next(newUser);
+  }
+
+  logout() {
+    this.currentUser.next(null);
   }
 
 }
