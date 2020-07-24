@@ -6,9 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { BrandLogoComponent } from './components/brand-logo/brand-logo.component';
 import { RouterModule } from '@angular/router';
 import { CursorPointerDirective } from './directives/cursor-pointer.directive';
+import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
 
 @NgModule({
-  declarations: [BrandLogoComponent, CursorPointerDirective],
+  declarations: [BrandLogoComponent, CursorPointerDirective, CustomToastComponent],
   imports: [
     CommonModule,
     NgbModule,
@@ -22,7 +23,8 @@ import { CursorPointerDirective } from './directives/cursor-pointer.directive';
     FontAwesomeModule,
     FormsModule,
     BrandLogoComponent,
-    CursorPointerDirective
+    CursorPointerDirective,
+    CustomToastComponent
   ]
 })
 export class SharedModule { }

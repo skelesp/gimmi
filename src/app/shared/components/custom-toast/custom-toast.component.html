@@ -1,0 +1,13 @@
+<div class="custom-toast border border-{{toast.type}}">
+    <div class="toast-header">
+        <span class="badge badge-pill badge-{{toast.type}} text-{{toast.type}} mr-2">.</span>
+        <strong class="mr-auto">{{toast.caption}}</strong>
+        <button type="button" class="ml-2 mb-1 close" (click)="toast.close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        {{toast.text}} {{toast.type}}
+    </div>
+</div>
