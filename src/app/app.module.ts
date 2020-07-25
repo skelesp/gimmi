@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from '@angular/core';
+import { ToastNotificationsModule } from "ngx-toast-notifications";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +10,7 @@ import { PeopleModule } from './people/people.module';
 
 import { NavigationBarComponent } from './shared/components/navigation-bar/navigation-bar.component';
 import { UsersModule } from './users/users.module';
+import { CustomToastComponent } from './shared/components/custom-toast/custom-toast.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,14 @@ import { UsersModule } from './users/users.module';
     AppRoutingModule,
     SharedModule,
     PeopleModule,
-    UsersModule
+    UsersModule,
+    BrowserAnimationsModule,
+    ToastNotificationsModule.forRoot({
+      position: "top-right",
+      component: CustomToastComponent,
+      autoClose: true,
+      duration: 4000
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
