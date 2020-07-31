@@ -2,7 +2,7 @@
 <ng-template #customResultTemplate let-person="result" let-term="term">
     <img *ngIf="person.pic" [src]="person.pic" class="mr-2" style="width: 16px">
     <fa-icon *ngIf="!person.pic" [icon]="userIcon" class="mr-2"></fa-icon>
-    <ngb-highlight [result]="person.name" [term]="term"></ngb-highlight>
+    <ngb-highlight [result]="person.fullName" [term]="term"></ngb-highlight>
 </ng-template>
 
 <form class="form-inline">
@@ -13,7 +13,7 @@
         <input  id="typeahead-basic" type="text" class="form-control" placeholder="Zoek wensenlijst van..."
                 name="peopleSearchInput"
                 [ngbTypeahead]="search" 
-                [(ngModel)]="person" 
+                [(ngModel)]="selectedPerson" 
                 [editable]="false" 
                 [focusFirst]="true"
                 [inputFormatter]="inputFormatter" 
