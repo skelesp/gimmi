@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd, RouterEvent } from '@angular/router';
 import { Observable } from 'rxjs';
-import { debounceTime, map, distinctUntilChanged, tap } from "rxjs/operators";
+import { debounceTime, map, distinctUntilChanged, tap, filter } from "rxjs/operators";
 import { faSearch, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { IPerson } from '../models/person.model';
 import { PeopleService } from '../service/people.service';
@@ -16,24 +17,22 @@ export class PeopleSearchComponent implements OnInit {
   people: IPerson[] = [];
   selectedPerson: IPerson;
 
-  constructor( private peopleService : PeopleService) { }
+  constructor( private peopleService : PeopleService, private router : Router) { }
 
   ngOnInit(): void {
-    this.peopleService.getPeople().subscribe( people => {
+    this.peopleService.retrievePeopleList().subscribe( people => {
       this.people = people; 
-      console.log('result of observable', people);
     });
   }
 
-  search = (text$: Observable<string>) => {
+  search = (text$: Observable<string>) : Observable<IPerson[]> => {
     return text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      tap((term) => console.log(`search for ${term}`)),
       map(term => term === '' ? [] : this.people
                                             .filter(person => person.fullName.toLowerCase().indexOf(term.toLowerCase()) > -1)
                                             .slice(0, 10)
-            )
+      )
     );
   }
 
@@ -45,8 +44,10 @@ export class PeopleSearchComponent implements OnInit {
     return `${person.fullName} (${person.id})`;
   }
 
-  onPersonSelect(eventPayload) {
-    console.log(eventPayload.item);
+  onPersonSelect($event) {
+    $event.preventDefault();
+    this.router.navigate(['/people', $event.item.id]);
+    this.selectedPerson = null;
   }
 
 }

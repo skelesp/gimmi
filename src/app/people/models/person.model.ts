@@ -1,15 +1,14 @@
-export interface IPersonResponse extends IPerson {
-    _id: string;
-}
-
 export interface IPerson {
     id: string;
     firstName: string;
     lastName: string;
-    fullName?: string;
+    fullName: string;
 }
 
-export class Person {
+export interface IPersonSearchResponse extends IPerson {
+    _id: string;
+}
+export class Person implements IPerson{
     constructor (
         public id: string,
         public firstName: string,
