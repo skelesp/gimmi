@@ -1,8 +1,15 @@
 
 <ng-template #customResultTemplate let-person="result" let-term="term">
-    <img *ngIf="person.pic" [src]="person.pic" class="mr-2" style="width: 16px">
-    <fa-icon *ngIf="!person.pic" [icon]="userIcon" class="mr-2"></fa-icon>
-    <ngb-highlight [result]="person.fullName" [term]="term"></ngb-highlight>
+    <div *ngIf="person">
+        <img *ngIf="person.pic" [src]="person.pic" class="mr-2" style="width: 16px">
+        <fa-icon *ngIf="!person.pic" [icon]="userIcon" class="mr-2"></fa-icon>
+        <ngb-highlight [result]="person.fullName" [term]="term"></ngb-highlight>
+    </div>
+    <div *ngIf="!person">
+        <span>Persoon niet gevonden</span><br/>
+        <b>Klik hier om hem/haar uit te nodigen</b>
+    </div>
+    
 </ng-template>
 
 <form class="form-inline">
@@ -12,17 +19,14 @@
         </div>
         <input  id="typeahead-basic" type="text" class="form-control" placeholder="Zoek wensenlijst van..."
                 name="peopleSearchInput"
-                #instance="ngbTypeahead"
                 [ngbTypeahead]="search" 
                 [(ngModel)]="selectedPerson" 
                 [editable]="false" 
-                [focusFirst]="true"
+                [focusFirst]="false"
                 [inputFormatter]="inputFormatter" 
-                [resultFormatter]="resultFormatter" 
                 [resultTemplate]="customResultTemplate"
-                (selectItem)="onPersonSelect($event)"
-                (click)="click$.next($any($event).target.value)"
-                (focus)="focus$.next($any($event).target.value)"
+                (selectItem)="onPersonSelect($event)" 
         />
     </div>
 </form>
+
