@@ -1,56 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { debounceTime, map, distinctUntilChanged, tap } from "rxjs/operators";
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd, RouterEvent } from '@angular/router';
+import { Observable, Subject, merge, Subscription } from 'rxjs';
+import { debounceTime, map, distinctUntilChanged, tap, filter, catchError } from "rxjs/operators";
 import { faSearch, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-
-const people = [
-  { name: "Stijn", age: "35", sex: "m", pic: 'https://avatars3.githubusercontent.com/u/17392369?s=400&v=4' },
-  { name: "Chloé", age: "32", sex: "v" },
-  { name: "Herman", age: "42", sex: "m" },
-  { name: "Katrien", age: "60", sex: "v" },
-  { name: "Kathleen", age: "50", sex: "v" },
-  { name: "Katleen", age: "42", sex: "v" },
-  { name: "Kato", age: "30", sex: "v" },
-  { name: "Katrijn", age: "25", sex: "v" }
-];
+import { IPerson } from '../models/person.model';
+import { PeopleService } from '../service/people.service';
+import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'gimmi-people-search',
   templateUrl: './people-search.component.html',
   styleUrls: ['./people-search.component.css']
 })
-export class PeopleSearchComponent implements OnInit {
-  person: any;
+export class PeopleSearchComponent implements OnInit, OnDestroy {  
+  // Ngbtypeahead variables
+  @ViewChild('instance', { static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
+  // Icons variables
   userIcon = faUserCircle;
   searchIcon = faSearch;
+  // Peoplelist variables
+  people: IPerson[] = [];
+  selectedPerson: IPerson;
+  private peopleSubscription: Subscription;
 
-  constructor() { }
+  constructor( private peopleService : PeopleService, private router : Router) { }
 
   ngOnInit(): void {
+    this.peopleSubscription = this.peopleService.people.subscribe( people => {
+      this.people = people; 
+    });
+    this.peopleService.retrievePeopleList();
   }
 
-  search (text$: Observable<string>) {
-    return text$.pipe(
+  search = (text$: Observable<string>) : Observable<IPerson[]> => {
+    const debouncedText$ = text$.pipe(
       debounceTime(200),
-      distinctUntilChanged(),
-      tap((term) => console.log(`search for ${term}`)),
-      map(term => term === '' ? [] : people
-                                            .filter(person => person.name.toLowerCase().indexOf(term.toLowerCase()) > -1)
-                                            .slice(0, 10)
-            )
+      distinctUntilChanged()
+    );
+    const clickWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocused$ = this.focus$;
+    
+    return merge(debouncedText$, clickWithClosedPopup$, this.focus$).pipe(
+      map(term => term === '' ? [] : this.people
+        .filter(person => person.fullName.toLowerCase().indexOf(term.toLowerCase()) > -1)
+        .slice(0, 10)
+      )
     );
   }
 
-  inputFormatter (person) {
-    return `${person.name}`;
+  inputFormatter (person: IPerson) {
+    return `${person.fullName}`;
   }
 
-  resultFormatter (person) {
-    return `${person.name} (${person.sex}, ${person.age})`;
+  resultFormatter (person: IPerson) {
+    return `${person.fullName} (${person.id})`;
   }
 
-  onPersonSelect(eventPayload) {
-    console.log(eventPayload.item);
+  onPersonSelect($event) {
+    $event.preventDefault();
+    const personId = $event.item.id;
+    this.router.navigate(['/people', personId]);
+    this.selectedPerson = null;
+  }
+
+  ngOnDestroy() {
+    this.peopleSubscription.unsubscribe();
   }
 
 }

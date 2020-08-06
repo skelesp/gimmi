@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from "@angular/common/http";
+
 import { BrandLogoComponent } from './components/brand-logo/brand-logo.component';
 import { RouterModule } from '@angular/router';
 import { CursorPointerDirective } from './directives/cursor-pointer.directive';
@@ -15,7 +17,8 @@ import { CustomToastComponent } from './components/custom-toast/custom-toast.com
     NgbModule,
     FontAwesomeModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    HttpClientModule
   ],
   exports: [
     CommonModule,
