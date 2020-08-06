@@ -12,6 +12,7 @@
         </div>
         <input  id="typeahead-basic" type="text" class="form-control" placeholder="Zoek wensenlijst van..."
                 name="peopleSearchInput"
+                #instance="ngbTypeahead"
                 [ngbTypeahead]="search" 
                 [(ngModel)]="selectedPerson" 
                 [editable]="false" 
@@ -19,7 +20,9 @@
                 [inputFormatter]="inputFormatter" 
                 [resultFormatter]="resultFormatter" 
                 [resultTemplate]="customResultTemplate"
-                (selectItem)="onPersonSelect($event)" 
+                (selectItem)="onPersonSelect($event)"
+                (click)="click$.next($any($event).target.value)"
+                (focus)="focus$.next($any($event).target.value)"
         />
     </div>
 </form>
