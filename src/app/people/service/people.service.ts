@@ -9,7 +9,8 @@ import { IPersonSearchResponse, IPerson } from '../models/person.model';
   providedIn: 'root'
 })
 export class PeopleService {
-  private people$ = new BehaviorSubject<IPerson[]>([]);
+  private _people$ : BehaviorSubject<IPerson[]> = new BehaviorSubject<IPerson[]>([]);
+  public readonly people: Observable<IPerson[]> = this._people$.asObservable();
 
   constructor( private http$: HttpClient) { }
 
@@ -25,7 +26,7 @@ export class PeopleService {
         let people: IPerson[] = [];
         peopleFromResponse.forEach(person => {
           people.push(this.convertPersonResponseToPerson(person));
-          this.people$.next(people);
+          this._people$.next(people);
         });
         return people;
       })

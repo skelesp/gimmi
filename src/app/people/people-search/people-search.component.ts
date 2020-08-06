@@ -25,7 +25,8 @@ export class PeopleSearchComponent implements OnInit {
   constructor( private peopleService : PeopleService, private router : Router) { }
 
   ngOnInit(): void {
-    this.peopleService.retrievePeopleList().subscribe( people => {
+    this.peopleService.retrievePeopleList().subscribe();
+    this.peopleService.people.subscribe( people => {
       this.people = people; 
     });
   }
