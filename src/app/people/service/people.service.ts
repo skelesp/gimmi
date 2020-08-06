@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 import { IPersonSearchResponse, IPerson } from '../models/person.model';
 
@@ -16,21 +16,25 @@ export class PeopleService {
 
   /**
    * @method @public
-   * @description Request the full list of people from the server. No filter applied!
-   * @returns An observable with an object of type IPersonSearchResponse.
+   * @description Request the full list of people from the server. No filter applied! Puts result in private people observable.
    */
-  retrievePeopleList () : Observable<IPerson[]>{
-    return this.http$.get<IPersonSearchResponse[]>('http://localhost:5000/api/people')
+  retrievePeopleList () : void {
+    this.http$.get<IPersonSearchResponse[]>('http://localhost:5000/api/people')
     .pipe(
       map( peopleFromResponse => {
         let people: IPerson[] = [];
         peopleFromResponse.forEach(person => {
           people.push(this.convertPersonResponseToPerson(person));
-          this._people$.next(people);
         });
         return people;
+      }),
+      catchError( error => {
+        return throwError(error);
       })
-    );
+    )
+    .subscribe( people => {
+      this._people$.next(people);
+    });
   }
 
   /**  

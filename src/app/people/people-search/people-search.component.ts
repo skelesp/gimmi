@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, RouterEvent } from '@angular/router';
-import { Observable, Subject, merge } from 'rxjs';
-import { debounceTime, map, distinctUntilChanged, tap, filter } from "rxjs/operators";
+import { Observable, Subject, merge, Subscription } from 'rxjs';
+import { debounceTime, map, distinctUntilChanged, tap, filter, catchError } from "rxjs/operators";
 import { faSearch, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { IPerson } from '../models/person.model';
 import { PeopleService } from '../service/people.service';
@@ -12,23 +12,26 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './people-search.component.html',
   styleUrls: ['./people-search.component.css']
 })
-export class PeopleSearchComponent implements OnInit {  
-  userIcon = faUserCircle;
-  searchIcon = faSearch;
-  people: IPerson[] = [];
-  selectedPerson: IPerson;
-
+export class PeopleSearchComponent implements OnInit, OnDestroy {  
+  // Ngbtypeahead variables
   @ViewChild('instance', { static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
+  // Icons variables
+  userIcon = faUserCircle;
+  searchIcon = faSearch;
+  // Peoplelist variables
+  people: IPerson[] = [];
+  selectedPerson: IPerson;
+  private peopleSubscription: Subscription;
 
   constructor( private peopleService : PeopleService, private router : Router) { }
 
   ngOnInit(): void {
-    this.peopleService.retrievePeopleList().subscribe();
-    this.peopleService.people.subscribe( people => {
+    this.peopleSubscription = this.peopleService.people.subscribe( people => {
       this.people = people; 
     });
+    this.peopleService.retrievePeopleList();
   }
 
   search = (text$: Observable<string>) : Observable<IPerson[]> => {
@@ -60,6 +63,10 @@ export class PeopleSearchComponent implements OnInit {
     const personId = $event.item.id;
     this.router.navigate(['/people', personId]);
     this.selectedPerson = null;
+  }
+
+  ngOnDestroy() {
+    this.peopleSubscription.unsubscribe();
   }
 
 }
