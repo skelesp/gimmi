@@ -43,10 +43,15 @@ export class PeopleSearchComponent implements OnInit, OnDestroy {
     const inputFocused$ = this.focus$;
     
     return merge(debouncedText$, clickWithClosedPopup$, this.focus$).pipe(
-      map(term => term === '' ? [] : this.people
-        .filter(person => person.fullName.toLowerCase().indexOf(term.toLowerCase()) > -1)
-        .slice(0, 10)
-      )
+      map(term => {
+        if (term !== '') {
+          let results = this.people
+            .filter(person => person.fullName.toLowerCase().indexOf(term.toLowerCase()) > -1)
+            .slice(0, 10)
+          return results.length > 0 ? results : [null]
+        }
+        return [] ;
+      })
     );
   }
 
@@ -54,14 +59,14 @@ export class PeopleSearchComponent implements OnInit, OnDestroy {
     return `${person.fullName}`;
   }
 
-  resultFormatter (person: IPerson) {
-    return `${person.fullName} (${person.id})`;
-  }
-
   onPersonSelect($event) {
     $event.preventDefault();
-    const personId = $event.item.id;
-    this.router.navigate(['/people', personId]);
+    if ($event.item) {
+      const personId = $event.item.id;
+      this.router.navigate(['/people', personId]);
+    } else {
+      console.log("Invite unknown user");
+    }
     this.selectedPerson = null;
   }
 
