@@ -56,7 +56,8 @@ export class PeopleSearchComponent implements OnInit {
 
   onPersonSelect($event) {
     $event.preventDefault();
-    this.router.navigate(['/people', $event.item.id]);
+    const personId = $event.item.id;
+    this.router.navigate(['/people', personId]);
     this.selectedPerson = null;
   }
 
