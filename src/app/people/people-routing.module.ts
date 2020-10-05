@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { InviteComponent } from './invite/invite.component';
+import { InviteComponent } from './components/invite/invite.component';
 
 
 const routes: Routes = [
   { 
-    path:"people", 
-    children: [
-      { path: "invite", component: InviteComponent}
-    ]
+    path:"invite", 
+    component: InviteComponent
   }
 ];
 
