@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, RouterEvent } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
-import { debounceTime, map, distinctUntilChanged, tap, filter, catchError } from "rxjs/operators";
+import { debounceTime, map, distinctUntilChanged, filter } from "rxjs/operators";
 import { faSearch, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { IPerson } from '../models/person.model';
-import { PeopleService } from '../service/people.service';
+import { IPerson } from '../../models/person.model';
+import { PeopleService } from '../../service/people.service';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
