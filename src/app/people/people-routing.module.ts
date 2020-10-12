@@ -5,8 +5,11 @@ import { InviteComponent } from './components/invite/invite.component';
 
 const routes: Routes = [
   { 
-    path:"invite", 
-    component: InviteComponent
+    path:"people", children: [
+      {
+        path: "invite", component: InviteComponent
+      }
+    ] 
   }
 ];
 
