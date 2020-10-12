@@ -42,13 +42,13 @@ export class PeopleSearchComponent implements OnInit, OnDestroy {
     const clickWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
     const inputFocused$ = this.focus$;
     
-    return merge(debouncedText$, clickWithClosedPopup$, this.focus$).pipe(
+    return merge(debouncedText$, clickWithClosedPopup$, inputFocused$).pipe(
       map(term => {
         if (term !== '') {
           let results = this.people
             .filter(person => person.fullName.toLowerCase().indexOf(term.toLowerCase()) > -1)
             .slice(0, 10)
-          return results.length > 0 ? results : [null]
+          return results.length > 0 ? results : [null] // [null] is needed to detect the "no results" scenario in the people search HTML, because ng-bootstrap doesn't support "noresults scenario"
         }
         return [] ;
       })

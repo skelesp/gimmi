@@ -1,1 +1,39 @@
-<p>invite works!</p>
+<div class="container">
+    <div class="alert alert-primary" role="alert">
+        We vonden nog geen lijst voor de persoon die je zocht. Vraag deze persoon om een lijst aan te maken via onderstaande
+        mogelijkheden.
+    </div>
+    <form (ngSubmit)="invitePerson()" #invitationForm="ngForm">
+        <div class="form-group">
+            <fa-icon [icon]="mailIcon" class="mr-2"></fa-icon><label for="exampleInputEmail1">Verstuur een uitnodiging naar de persoon die je zocht</label>
+            <input 
+                type="email" 
+                class="form-control" 
+                placeholder="Emailadres"
+                name="invitationEmailAddress"
+                ngModel
+                required
+                email
+                #invitationEmailAddress="ngModel">
+            <small id="emailHelp" class="form-text text-muted">Het emailadres wordt enkel gebruikt om de persoon uit te nodigen.</small>
+            <div id="emailError" class="form-text text-danger" *ngIf="!invitationEmailAddress.valid && invitationEmailAddress.touched">
+                <small *ngIf="invitationEmailAddress.errors.required">Email is een verplicht veld</small>
+                <small *ngIf="invitationEmailAddress.errors.email">Geef een geldig emailadres in (formaat: *** @ *** . **)</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                <input 
+                    type="checkbox" 
+                    class="form-check-input" 
+                    name="notifyOnRegistration"
+                    ngModel>
+                <label class="form-check-label" for="notifyOnRegistration">Hou mij op de hoogte als deze persoon zich registreert.</label>
+            </div>
+        </div>
+        <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="!invitationForm.valid">Submit</button>
+    </form>
+</div>
