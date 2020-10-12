@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
@@ -9,15 +9,18 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 })
 export class InviteComponent implements OnInit {
   mailIcon = faEnvelope;
-  @ViewChild('invitationForm') invitationForm: NgForm;
-
-  constructor() { }
-
+  invitationForm: FormGroup;
   ngOnInit(): void {
+    this.invitationForm = new FormGroup({
+      'invitationData': new FormGroup({
+        'emailaddress': new FormControl(null, [Validators.required, Validators.email]),
+        'notifyOnRegistration': new FormControl(false)
+      })
+    });
   }
 
   invitePerson() {
-    console.log(this.invitationForm);
+    console.log(this.invitationForm.value);
     this.invitationForm.reset();
   }
 }
