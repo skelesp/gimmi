@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { PeopleService } from '../../service/people.service';
 
 @Component({
   selector: 'gimmi-invite',
@@ -10,6 +11,9 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 export class InviteComponent implements OnInit {
   mailIcon = faEnvelope;
   invitationForm: FormGroup;
+
+  constructor ( private peopleService: PeopleService) {}
+
   ngOnInit(): void {
     this.invitationForm = new FormGroup({
       'invitationData': new FormGroup({
@@ -20,7 +24,7 @@ export class InviteComponent implements OnInit {
   }
 
   invitePerson() {
-    console.log(this.invitationForm.value);
+    this.peopleService.invite(this.invitationForm.value.invitationData.emailaddress);    
     this.invitationForm.reset();
   }
 }
