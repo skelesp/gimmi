@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
+import { environment } from 'src/environments/environment';
 import { IPersonSearchResponse, IPerson } from '../models/person.model';
 
 @Injectable({
@@ -19,7 +20,7 @@ export class PeopleService {
    * @description Request the full list of people from the server. No filter applied! Puts result in private people observable.
    */
   retrievePeopleList () : void {
-    this.http$.get<IPersonSearchResponse[]>('http://localhost:5000/api/people')
+    this.http$.get<IPersonSearchResponse[]>(environment.apiUrl + 'people')
     .pipe(
       map( peopleFromResponse => {
         let people: IPerson[] = [];
