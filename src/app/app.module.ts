@@ -19,7 +19,6 @@ import { CustomToastComponent } from './shared/components/custom-toast/custom-to
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     SharedModule,
     PeopleModule,
     UsersModule,
@@ -30,6 +29,7 @@ import { CustomToastComponent } from './shared/components/custom-toast/custom-to
       autoClose: true,
       duration: 4000
     }),
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
