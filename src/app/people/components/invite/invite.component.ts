@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { PeopleService, InvitePersonData } from '../../service/people.service';
+import { catchError, map, tap } from 'rxjs/operators';
+import { IPerson } from '../../models/person.model';
 
 @Component({
   selector: 'gimmi-invite',
@@ -11,13 +14,18 @@ import { PeopleService, InvitePersonData } from '../../service/people.service';
 export class InviteComponent implements OnInit {
   mailIcon = faEnvelope;
   invitationForm: FormGroup;
+  knownPerson: IPerson;
 
-  constructor ( private peopleService: PeopleService) {}
+  constructor ( private _peopleService: PeopleService) {}
 
   ngOnInit(): void {
     this.invitationForm = new FormGroup({
       'invitationData': new FormGroup({
-        'emailaddress': new FormControl(null, [Validators.required, Validators.email]),
+        'emailaddress': new FormControl(null, {
+          validators: [Validators.required, Validators.email], 
+          asyncValidators: this.emailExists.bind(this),
+          updateOn: 'blur'
+        } ),
         'notifyOnRegistration': new FormControl(false)
       })
     });
@@ -28,7 +36,16 @@ export class InviteComponent implements OnInit {
       email: this.invitationForm.value.invitationData.emailaddress,
       notifyOnRegistration: this.invitationForm.value.invitationData.notifyOnRegistration
     }
-    this.peopleService.invite(inviteInfo);    
+    this._peopleService.invite(inviteInfo);    
     this.invitationForm.reset();
+  }
+
+  emailExists(control : FormControl) : Promise<any> | Observable<any> {
+    return this._peopleService.findPersonByEmail(control.value)
+      .pipe(
+        tap(value => this.knownPerson = value),
+        map (personResult => { return {'emailExists' : true} } ),
+        catchError( error => { return of(null) })
+      );
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
@@ -38,25 +38,21 @@ export class PeopleService {
         });
         return people;
       }),
-      catchError( error => {
-        return throwError(error);
-      })
+      catchError(this.handleError)
     )
     .subscribe( people => {
       this._people$.next(people);
     });
   }
 
-  /**  
-   * @method @private
-   * @description Converts the person object received from the server to the person object used in the app. 
-   * @param personResponse The person object received from the server
-   * @returns A person object that is usable in the app
-   */
-  private convertPersonResponseToPerson (personResponse : IPersonSearchResponse) : IPerson {
-    let convertedPerson = personResponse;
-    delete convertedPerson._id;
-    return convertedPerson;
+  public findPersonByEmail (email: string): Observable<IPerson> {
+    if (email) {
+      return this.http$.get<IPersonSearchResponse>(environment.apiUrl + `people/email/${email}`)
+        .pipe(
+          map( personResult => this.convertPersonResponseToPerson(personResult) ),
+          catchError(this.handleError)
+        )
+    } else return throwError(new Error("No email provided to method findPersonByEmail"));
   }
 
   /**
@@ -80,4 +76,36 @@ export class PeopleService {
 
     this.communicationService.sendMail(mailInfo);
   }
+
+  /**  
+  * @method @private
+  * @description Converts the person object received from the server to the person object used in the app. 
+  * @param personResponse The person object received from the server
+  * @returns A person object that is usable in the app
+  */
+  private convertPersonResponseToPerson(personResponse: IPersonSearchResponse): IPerson {
+    let convertedPerson = personResponse;
+    delete convertedPerson._id;
+    return convertedPerson;
+  }
+
+  /** @method @private 
+   * @description Handle errors in the people service HTTP calls
+  */
+ private handleError (error : HttpErrorResponse) {
+   if (error.error instanceof ErrorEvent) {
+     // A client-side or network error occurred. Handle it accordingly.
+     console.error('An error occurred:', error.error.message);
+   } else {
+     // The backend returned an unsuccessful response code.
+     // The response body may contain clues as to what went wrong.
+     console.error(
+       `Gimmi API returned code ${error.status}, ` +
+       `body was: ${JSON.stringify(error.error)}`);
+   }
+   // Return an observable with a user-facing error message.
+   return throwError(
+     'Request ended with an error. Please try again.');
+ }
+
 }
