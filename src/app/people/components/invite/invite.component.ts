@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { PeopleService } from '../../service/people.service';
+import { PeopleService, InvitePersonData } from '../../service/people.service';
 
 @Component({
   selector: 'gimmi-invite',
@@ -24,7 +24,11 @@ export class InviteComponent implements OnInit {
   }
 
   invitePerson() {
-    this.peopleService.invite(this.invitationForm.value.invitationData.emailaddress);    
+    let inviteInfo: InvitePersonData = {
+      email: this.invitationForm.value.invitationData.emailaddress,
+      notifyOnRegistration: this.invitationForm.value.invitationData.notifyOnRegistration
+    }
+    this.peopleService.invite(inviteInfo);    
     this.invitationForm.reset();
   }
 }

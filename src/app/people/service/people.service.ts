@@ -5,7 +5,12 @@ import { map, catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { IPersonSearchResponse, IPerson } from '../models/person.model';
-import { CommunicationService } from 'src/app/shared/services/communication.service';
+import { CommunicationService, MailInfo } from 'src/app/shared/services/communication.service';
+
+export interface InvitePersonData {
+  email: string,
+  notifyOnRegistration: boolean | null
+}
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +21,8 @@ export class PeopleService {
 
   constructor( 
     private http$: HttpClient,
-    private communicationService: CommunicationService ) { }
+    private communicationService: CommunicationService 
+  ) { }
 
   /**
    * @method @public
@@ -58,18 +64,20 @@ export class PeopleService {
    * @description Invite someone to register in Gimmi and create a wishlist.
    * @param mailInfo The info necessary to send an email (to, cc, subject, body, ...)
    */
-  public invite (email) {
-    this.communicationService.sendMail({
-      to: email,
+  public invite (inviteInfo: InvitePersonData) {
+    let mailInfo: MailInfo = {
+      to: inviteInfo.email,
       subject: "[DEV@GIMMI] Iemand vraagt je om een wensenlijst aan te maken op Gimmi",
       html: `Beste,<br/>
       <br/>
       Mensen zijn op zoek naar een cadeau voor jou en vragen je om een wensenlijst op te maken, zodat ze het perfecte cadeau kunnen komen.<br/>
       <br/>
-      Ga snel naar <a href="${environment.rootSiteUrl}/users/register?e=${email}">de registratiepagina van gimmi.be</a> om je te registreren en je wensenlijst op te maken! Zo krijg je vanaf nu enkel nog cadeaus die je écht wilt hebben!<br/>
+      Ga snel naar <a href="${environment.rootSiteUrl}/users/register?e=${inviteInfo.email}">de registratiepagina van gimmi.be</a> om je te registreren en je wensenlijst op te maken! Zo krijg je vanaf nu enkel nog cadeaus die je écht wilt hebben!<br/>
       <br/>      
       Hopelijk tot snel, <br/>
       <strong>Gimmi.be</strong>`
-    });
+    };
+
+    this.communicationService.sendMail(mailInfo);
   }
 }
