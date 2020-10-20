@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { User, UserService } from '../../users/service/user.service';
+import { IUser, UserService } from '../../users/service/user.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -10,13 +10,13 @@ import { Subscription } from 'rxjs';
 })
 export class LandingPageBannerComponent implements OnInit {
   checkIcon = faCheckCircle;
-  currentUser: User;
+  currentUser: IUser;
   currentUserSubscription: Subscription;
 
   constructor( private userService: UserService) { }
 
   ngOnInit(): void {
-    this.currentUserSubscription = this.userService.currentUser.subscribe(user => {
+    this.currentUserSubscription = this.userService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
   }

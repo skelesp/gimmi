@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { User, UserService } from 'src/app/users/service/user.service';
+import { ILocalLoginInfo, IUser, UserService } from 'src/app/users/service/user.service';
 import { Subscription } from 'rxjs';
 import { faUserCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
@@ -10,7 +10,7 @@ import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
   styleUrls: ['./user-menu.component.css']
 })
 export class UserMenuComponent implements OnInit, OnDestroy {
-  @Input() currentUser: User;
+  @Input() currentUser: IUser;
   currentUserSubscription: Subscription;
 
   userIcon = faUserCircle;
@@ -20,7 +20,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
   constructor( private userService: UserService) { }
 
   ngOnInit(): void {
-    this.currentUserSubscription = this.userService.currentUser.subscribe( user => {
+    this.currentUserSubscription = this.userService.currentUser$.subscribe( user => {
       this.currentUser = user;
     });
   }

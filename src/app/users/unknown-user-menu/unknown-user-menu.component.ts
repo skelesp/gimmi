@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { UserService } from '../service/user.service';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { ILocalLoginInfo, UserService } from '../service/user.service';
 
 @Component({
   selector: 'gimmi-unknown-user-menu',
@@ -13,7 +14,9 @@ export class UnknownUserMenuComponent implements OnInit {
   registerIcon = faUserPlus;
   loginIcon = faSignInAlt;
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
   }
@@ -23,13 +26,20 @@ export class UnknownUserMenuComponent implements OnInit {
       id: '85070820135',
       name: "Beeckmans",
       firstName: "Stijn",
-      loginStrategy: "facebook",
-      accounts: {
-        facebook: { profile_pic: "https://avatars3.githubusercontent.com/u/17392369?s=400&v=4" }
-      }
+      loginStrategy: "local"
     }
     this.userService.register(registeredUser);
     this.menuItemClicked.emit();
+  }
+
+  login() {
+    let credentials: ILocalLoginInfo = {
+      email: "stijn.beeckmans@gmail.com",
+      password: "test"
+    };
+    this.userService.authenticate(credentials).subscribe(
+      user => console.log(user),
+      error => this.notificationService.showNotification("Login is gefaald, probeer opnieuw of registreer je.", "error"));
   }
 
 }
