@@ -55,8 +55,9 @@ export class UserService {
   
   public logout() : void {
     localStorage.removeItem("currentUser");
+    console.info(`User ${this.currentUser.id} logged out.`);
     this.currentUserSubject.next(null);
-    this.router.navigate(['users/login']);
+    this.router.navigate(['/']);
   }
   
   public register(newUser : IUser) : void {

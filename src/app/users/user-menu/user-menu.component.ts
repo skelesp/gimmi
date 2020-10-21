@@ -3,6 +3,7 @@ import { ILocalLoginInfo, IUser, UserService } from 'src/app/users/service/user.
 import { Subscription } from 'rxjs';
 import { faUserCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
+import { NotificationService } from 'src/app/shared/services/notification.service';
 
 @Component({
   selector: 'gimmi-user-menu',
@@ -17,7 +18,10 @@ export class UserMenuComponent implements OnInit, OnDestroy {
   facebookIcon = faFacebookF;
   logoutIcon = faSignOutAlt;
 
-  constructor( private userService: UserService) { }
+  constructor( 
+    private userService: UserService,
+    private notificationService: NotificationService
+    ) { }
 
   ngOnInit(): void {
     this.currentUserSubscription = this.userService.currentUser$.subscribe( user => {
@@ -27,6 +31,11 @@ export class UserMenuComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.userService.logout();
+    this.notificationService.showNotification(
+      "Je gebruiker is nu uitgelogd.",
+      "info",
+      'Uitgelogd'
+    );
   }
 
   logOutFacebook(): void {
