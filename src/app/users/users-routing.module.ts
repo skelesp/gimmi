@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
-  //users/login needed for login flow and AuthError interceptor
+  //users/login needed for login flow, AuthError interceptor, AuthGuard
 ];
 
 @NgModule({
