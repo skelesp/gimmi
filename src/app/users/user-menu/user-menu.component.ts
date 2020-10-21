@@ -30,7 +30,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.userService.logout();
+    this.userService.logout("USER_EVENT");
     this.notificationService.showNotification(
       "Je gebruiker is nu uitgelogd.",
       "info",
@@ -39,7 +39,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
   }
 
   logOutFacebook(): void {
-    this.userService.logout();
+    this.userService.logout("USER_EVENT");
   }
 
   ngOnDestroy(): void {

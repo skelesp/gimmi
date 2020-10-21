@@ -27,7 +27,7 @@ export class AuthErrorInterceptor implements HttpInterceptor {
         if ([401, 403].indexOf(err.status) !== -1){
           switch (err.status) {
             case 401:
-              this.userService.logout();
+              this.userService.logout("401_RESPONSE");
               this.notificationService.showNotification(
                 "Voor het uitvoeren van deze actie moet u ingelogd zijn.",
                 "error",

@@ -20,6 +20,8 @@ export interface ILocalLoginInfo {
   password: string
 }
 
+type logoutReason = "USER_EVENT" | "EXPIRED_TOKEN" | "FAILED_AUTHENTICATION" | "401_RESPONSE";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -53,10 +55,17 @@ export class UserService {
       )
   }
   
-  public logout() : void {
+  public logout(reason : logoutReason) : void {
+    // Log logout info
+    let logMessage = `User ${this.currentUser.id} logged out.`;
+    if (reason) { logMessage += ` Reason : ${reason}` }
+    console.info(logMessage);
+
+    //Remove user
     localStorage.removeItem("currentUser");
-    console.info(`User ${this.currentUser.id} logged out.`);
     this.currentUserSubject.next(null);
+
+    //Navigate to homepage
     this.router.navigate(['/']);
   }
   
