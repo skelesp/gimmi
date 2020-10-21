@@ -86,18 +86,17 @@ export class UserService {
   }
 
   private handleAErrorResponse (errorResponse: HttpErrorResponse) {
+    let errorMessage = 'Request ended with an error. Please try again.' + JSON.stringify(errorResponse);
     if (errorResponse.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', errorResponse.error.message);
+      errorMessage = 'An error occurred:' + errorResponse.error.message;
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
-      console.error(
-        `Gimmi API returned code ${errorResponse.status}, ` +
-        `body was: ${JSON.stringify(errorResponse.error)}`);
+      errorMessage = `Gimmi API returned code ${errorResponse.status}, ` +
+        `body was: ${JSON.stringify(errorResponse.error)}`;
     }
     // Return an observable with a user-facing error message.
-    return throwError(
-      'Request ended with an error. Please try again.');
+    return throwError(errorMessage);
     }
   }

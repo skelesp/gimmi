@@ -37,7 +37,7 @@ export class AuthErrorInterceptor implements HttpInterceptor {
               break;
             case 403:
               this.notificationService.showNotification(
-                "U bent niet gemachtigd om deze pagina te bezoeken of deze actie uit te voeren.",
+                "Uw gebruiker is niet gemachtigd om deze pagina te bezoeken of deze actie uit te voeren.",
                 "error"
               );
               break;
