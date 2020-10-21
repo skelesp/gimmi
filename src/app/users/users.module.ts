@@ -20,7 +20,8 @@ import { AuthErrorInterceptor } from './interceptors/auth-error.interceptor';
     UnknownUserMenuComponent
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthErrorInterceptor, multi: true }
   ]
 })
 export class UsersModule { }
