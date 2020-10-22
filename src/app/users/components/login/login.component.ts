@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ILocalLoginInfo, UserService } from '../../service/user.service';
+import { faAt, faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'gimmi-login',
@@ -10,6 +11,10 @@ import { ILocalLoginInfo, UserService } from '../../service/user.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   authenticationError: boolean;
+  showPassword: boolean;
+  mailIcon = faAt;
+  passwordIcon = faUnlockAlt;
+  showPasswordIcon = faEye;
 
   constructor(
     private userService: UserService
@@ -36,7 +41,13 @@ export class LoginComponent implements OnInit {
     }, error => {
       console.error(`Error occured: ${error}`);
       this.authenticationError = true;
+      this.showPassword = true;
     });
+  }
+
+  toggleShowPassword () {
+    this.showPassword = !this.showPassword;
+    this.showPasswordIcon = this.showPassword ? faEyeSlash : faEye;
   }
 
 }

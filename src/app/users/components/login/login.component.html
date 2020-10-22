@@ -1,5 +1,4 @@
-<div class="row">
-    <div class="col">
+
         <h4>Login met je email en paswoord</h4>
         <div *ngIf="authenticationError" class="alert alert-danger">
             De combinatie emailadres / paswoord is niet correct. <br /> 
@@ -7,28 +6,40 @@
         </div>
         
         <form [formGroup]='loginForm' (ngSubmit)='login()'>
-            <div class="form-group">
-                <label>Emailadres</label>
-                <input 
+            <div class="input-group my-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><fa-icon [icon]="mailIcon"></fa-icon></span>
+                </div>
+                <input
                     type="text" 
                     class="form-control"
+                    placeholder="Email (login)"
                     formControlName="email"
                     ng-change="loginCtrl.saveMailInRootScope()">
             </div>
-            <div class="form-group">
-                <label>Paswoord</label>
+            <div class="input-group my-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><fa-icon [icon]="passwordIcon"></fa-icon></span>
+                </div>
                 <input 
-                    type="password" 
-                    class="form-control" 
+                    [type]="showPassword ? 'text' : 'password'" 
+                    class="form-control"
+                    placeholder="Paswoord" 
                     formControlName="password">
-                <small id="forgottenPassword" class="form-text text-muted">
-                    <a [routerLink]="['/users/forgotpassword']">Paswoord vergeten?</a>
-                </small>
+                <div class="input-group-append">
+                    <button 
+                        type="button" 
+                        class="btn btn-outline-secondary border-secondary"
+                        (click)="toggleShowPassword()">
+                        <fa-icon [icon]="showPasswordIcon"></fa-icon></button>
+                </div>
             </div>
+            <small id="forgottenPassword" class="form-text text-muted my-2 float-right">
+                <a [routerLink]="['/users/forgotpassword']">Paswoord vergeten?</a>
+            </small>
             <div>
-                <button type="submit" class="btn btn-danger" [disabled]="!loginForm.valid || !loginForm.touched">Login</button>
+                <button type="submit" class="btn btn-danger my-3" [disabled]="!loginForm.valid || !loginForm.touched">Login</button>
             </div>
             Als dit je eerste bezoek is: <a [routerLink]="['/users/register']">klik hier om te registreren</a>
         </form>
-    </div>
-</div>
+    
