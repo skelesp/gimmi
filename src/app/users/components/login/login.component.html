@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col">
+        <h4>Login met je email en paswoord</h4>
+        <div *ngIf="authenticationError" class="alert alert-danger">
+            De combinatie emailadres / paswoord is niet correct. <br /> 
+            Paswoord vergeten? <a [routerLink]="['/users/forgotpassword']">Klik hier</a>.
+        </div>
+        
+        <form [formGroup]='loginForm' (ngSubmit)='login()'>
+            <div class="form-group">
+                <label>Emailadres</label>
+                <input 
+                    type="text" 
+                    class="form-control"
+                    formControlName="email"
+                    ng-change="loginCtrl.saveMailInRootScope()">
+            </div>
+            <div class="form-group">
+                <label>Paswoord</label>
+                <input 
+                    type="password" 
+                    class="form-control" 
+                    formControlName="password">
+                <small id="forgottenPassword" class="form-text text-muted">
+                    <a [routerLink]="['/users/forgotpassword']">Paswoord vergeten?</a>
+                </small>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-danger" [disabled]="!loginForm.valid || !loginForm.touched">Login</button>
+            </div>
+            Als dit je eerste bezoek is: <a [routerLink]="['/users/register']">klik hier om te registreren</a>
+        </form>
+    </div>
+</div>

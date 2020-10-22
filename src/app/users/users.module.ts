@@ -1,23 +1,27 @@
 import { NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { UsersRoutingModule } from './users-routing.module';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { SharedModule } from '../shared/shared.module';
 import { UnknownUserMenuComponent } from './components/unknown-user-menu/unknown-user-menu.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AuthErrorInterceptor } from './interceptors/auth-error.interceptor';
+import { LoginComponent } from './components/login/login.component';
 
 
 @NgModule({
-  declarations: [UserMenuComponent, UnknownUserMenuComponent],
+  declarations: [UserMenuComponent, UnknownUserMenuComponent, LoginComponent],
   imports: [
     SharedModule,
-    UsersRoutingModule
+    UsersRoutingModule,
+    ReactiveFormsModule
   ],
   exports: [
     UserMenuComponent,
-    UnknownUserMenuComponent
+    UnknownUserMenuComponent,
+    LoginComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
