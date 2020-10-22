@@ -93,19 +93,17 @@ export class PeopleService {
    * @description Handle errors in the people service HTTP calls
   */
  private handleError (error : HttpErrorResponse) {
-   if (error.error instanceof ErrorEvent) {
+   let errorMessage = 'Request ended with an error. Please try again.' + JSON.stringify(error);
+  if (error.error instanceof ErrorEvent) {
      // A client-side or network error occurred. Handle it accordingly.
-     console.error('An error occurred:', error.error.message);
+     errorMessage = 'An error occurred:' + error.error.message;
    } else {
      // The backend returned an unsuccessful response code.
      // The response body may contain clues as to what went wrong.
-     console.error(
-       `Gimmi API returned code ${error.status}, ` +
-       `body was: ${JSON.stringify(error.error)}`);
+     errorMessage = `Gimmi API returned code ${error.status}. Error info: ${JSON.stringify(error.error)}`;
    }
    // Return an observable with a user-facing error message.
-   return throwError(
-     'Request ended with an error. Please try again.');
+   return throwError( errorMessage );
  }
 
 }

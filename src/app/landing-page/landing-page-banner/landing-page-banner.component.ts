@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { User, UserService } from '../../users/service/user.service';
+import { UserService } from '../../users/service/user.service';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/users/models/user.model';
 
 @Component({
   selector: 'gimmi-landing-page-banner',
@@ -16,7 +17,7 @@ export class LandingPageBannerComponent implements OnInit {
   constructor( private userService: UserService) { }
 
   ngOnInit(): void {
-    this.currentUserSubscription = this.userService.currentUser.subscribe(user => {
+    this.currentUserSubscription = this.userService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
   }

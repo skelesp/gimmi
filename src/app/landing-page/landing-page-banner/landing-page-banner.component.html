@@ -35,7 +35,7 @@
                         <a class="btn btn-lg btn-warning mt-2 font-weight-bold shadow" [hidden]="currentUser"> Start nu met
                             Gimmi en ontdek het zelf!</a>
                         <a class="btn btn-lg btn-warning mt-2 font-weight-bold shadow" *ngIf="currentUser"> Ga naar je
-                            overzichtspagina, {{ currentUser.name }}!</a>
+                            overzichtspagina, {{ currentUser.firstName }}!</a>
                     </div>
                 </div>
             </div>
@@ -70,8 +70,7 @@
             <div class="col-12">
                 <a class="btn btn-lg btn-warning mt-2 font-weight-bold shadow" [hidden]="currentUser"> Start nu met Gimmi en ontdek het zelf!</a>
                 <a class="btn btn-lg btn-warning mt-2 font-weight-bold shadow" *ngIf="currentUser"> Ga naar je
-                    overzichtspagina,
-                    {{ currentUser.name }}!</a>
+                    overzichtspagina, {{ currentUser.firstName }}!</a>
             </div>
         </div>
     </div>

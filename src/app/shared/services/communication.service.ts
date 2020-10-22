@@ -27,8 +27,9 @@ export class CommunicationService {
         console.info('Mail sent:' + result);
         this.notificationService.showNotification("De mail werd verzonden.", 'success');
       }, (error: HttpErrorResponse) => {
-        console.error(error);
-        this.notificationService.showNotification("Er ging iets mis bij het verzenden van de mail. <br />Probeer nog eens, aub.", 'error');
+        if (error.status !== 401) {
+          this.notificationService.showNotification("Er ging iets mis bij het verzenden van de mail. Probeer nog eens, aub.", 'error');
+        }
       });
   }
 }
