@@ -30,7 +30,9 @@ export class LoginComponent implements OnInit {
     }
     this.userService.authenticate( credentials ).subscribe( user => {
       console.info(`User ${user.id} is authenticated.`);
-      
+      this.authenticationError = false;
+      this.loginForm.reset();
+
     }, error => {
       console.error(`Error occured: ${error}`);
       this.authenticationError = true;
