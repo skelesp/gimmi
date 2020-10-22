@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { ILocalLoginInfo, IUser, UserService } from 'src/app/users/service/user.service';
+import { UserService } from 'src/app/users/service/user.service';
 import { Subscription } from 'rxjs';
 import { faUserCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'gimmi-user-menu',
@@ -11,7 +12,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
   styleUrls: ['./user-menu.component.css']
 })
 export class UserMenuComponent implements OnInit, OnDestroy {
-  @Input() currentUser: IUser;
+  @Input() currentUser: User;
   currentUserSubscription: Subscription;
 
   userIcon = faUserCircle;

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { IUser, UserService } from '../../users/service/user.service';
+import { UserService } from '../../users/service/user.service';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/users/models/user.model';
 
 @Component({
   selector: 'gimmi-landing-page-banner',
@@ -10,7 +11,7 @@ import { Subscription } from 'rxjs';
 })
 export class LandingPageBannerComponent implements OnInit {
   checkIcon = faCheckCircle;
-  currentUser: IUser;
+  currentUser: User;
   currentUserSubscription: Subscription;
 
   constructor( private userService: UserService) { }

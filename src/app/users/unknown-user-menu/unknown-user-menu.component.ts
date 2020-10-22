@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { User } from '../models/user.model';
 import { ILocalLoginInfo, UserService } from '../service/user.service';
 
 @Component({
@@ -22,12 +23,15 @@ export class UnknownUserMenuComponent implements OnInit {
   }
 
   register() {
-    let registeredUser = {
-      id: '85070820135',
-      name: "Beeckmans",
-      firstName: "Stijn",
-      loginStrategy: "local"
-    }
+    let registeredUser = new User (
+      '85070820135',
+      "Beeckmans",
+       "Stijn",
+       "stijn.beeckmans@gmail.com",
+       "local",
+       "test-token-for-new-user",
+       []
+    )
     this.userService.register(registeredUser);
     this.menuItemClicked.emit();
   }

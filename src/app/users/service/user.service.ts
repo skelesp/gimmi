@@ -2,82 +2,80 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, map, tap } from 'rxjs/operators';
-import jwt_decode from "jwt-decode";
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-
-export interface IUser {
-  id: string;
-  name: string;
-  firstName: string;
-  loginStrategy: string;
-  token?: string;
-  accounts?: any
-}
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { JwtHelperService } from "@auth0/angular-jwt";
+import { IDecodedToken, User } from '../models/user.model';
 
 export interface ILocalLoginInfo {
   email: string,
   password: string
 }
 
+export interface IAuthResponse {
+  message: string;
+  success: boolean;
+  token: string;
+}
+
 type logoutReason = "USER_EVENT" | "EXPIRED_TOKEN" | "FAILED_AUTHENTICATION" | "401_RESPONSE";
+
+// Don't inject via constructor: https://stackoverflow.com/questions/49739277/nullinjectorerror-no-provider-for-jwthelperservice
+// See code example for standalone implementation: https://www.npmjs.com/package/@auth0/angular-jwt
+const jwtService = new JwtHelperService();
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private currentUserSubject: BehaviorSubject<IUser>;
-  public currentUser$: Observable<IUser>;
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser$: Observable<User>;
 
   constructor( 
-    private http$ : HttpClient,
-    private router: Router
-    ) { 
-    this.currentUserSubject = new BehaviorSubject<IUser>(this.getUserFromToken(this.token));
+    private http$: HttpClient,
+    private router: Router,
+    private notificationService: NotificationService
+  ) { 
+    this.currentUserSubject = new BehaviorSubject<User>(this.getUserFromStoredToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
   }
 
-  public get currentUser() : IUser {
+  public get currentUser() : User {
     return this.currentUserSubject.value;
   }
 
-  public get token() : string {
-    return localStorage.getItem('currentUser');
-  }
-
-  public authenticate (authInfo: ILocalLoginInfo ) : Observable<IUser> {
-    return this.http$.post<IUser>(environment.apiUrl + 'authenticate', {...authInfo, account: 'local'})
+  public authenticate (authInfo: ILocalLoginInfo ) : Observable<User> {
+    return this.http$.post<IAuthResponse>(environment.apiUrl + 'authenticate', {...authInfo, account: 'local'})
       .pipe(
         catchError(this.handleAErrorResponse),
-        tap( authResponse => this.persistentlySaveUserToken(authResponse.token)),
-        map( authResponse => this.getUserFromToken(authResponse.token)),
-        tap( user => this.setUser(user))
+        tap( authResponse => {
+          this.persistentlySaveUserToken(authResponse.token);
+          this.setUser(this.getUserFromStoredToken());
+        }),
+        map ( () => { return this.currentUser})
       )
   }
   
   public logout(reason : logoutReason) : void {
     // Log logout info
-    let logMessage = `User ${this.currentUser.id} logged out.`;
+    let logMessage = `User logged out.`;
     if (reason) { logMessage += ` Reason : ${reason}` }
     console.info(logMessage);
 
     //Remove user
     localStorage.removeItem("currentUser");
-    this.currentUserSubject.next(null);
+    this.currentUserSubject?.next(null); // On init of this service, currentUserSubject isn't created when logout is called for expired token.
 
     //Navigate to homepage
     this.router.navigate(['/']);
   }
   
-  public register(newUser : IUser) : void {
+  public register(newUser : User) : void {
     this.currentUserSubject.next(newUser);
   }
 
-  /**
-   * @description Sets the current user and stores it in local storage.
-   * @param user 
-   */
-  private setUser(user : IUser): void {
+  private setUser(user : User): void {
     this.currentUserSubject.next(user);
   }
 
@@ -85,14 +83,40 @@ export class UserService {
     localStorage.setItem('currentUser', token);
   }
 
-  private getUserFromToken (token: string) : IUser {
-    try {
-      let user = jwt_decode(token);
-      user.token = token;
-      return user;
-    } catch (Error) {
+  private getUserFromStoredToken () : User {
+    let token = localStorage.getItem('currentUser');
+    if (!token) {
+      console.info("[UserService] No token found in local storage");
+      return null
+    }
+
+    if (jwtService.isTokenExpired(token)) {
+      this.handleExpiredToken();
       return null;
     }
+    
+    let decodedToken: IDecodedToken = jwtService.decodeToken(token);
+    console.info("[UserService] Valid token found")
+    return new User(
+      decodedToken.id,
+      decodedToken.lastName,
+      decodedToken.firstName,
+      decodedToken.email,
+      decodedToken.loginStrategy,
+      token,
+      decodedToken.accounts
+    );
+  }
+
+  private handleExpiredToken () : void {
+    // CurrentUserSubject doesn't exist when token is checked on page load ==> Check if CurrentUserSubject exists
+    this.logout("EXPIRED_TOKEN");
+    
+    this.notificationService.showNotification(
+      "Je sessie is verlopen. Gelieve opnieuw in te loggen.",
+      "warning",
+      "Uitgelogd");
+    console.error("[UserService] Token is expired");
   }
 
   private handleAErrorResponse (errorResponse: HttpErrorResponse) {
@@ -108,5 +132,5 @@ export class UserService {
     }
     // Return an observable with a user-facing error message.
     return throwError(errorMessage);
-    }
   }
+}

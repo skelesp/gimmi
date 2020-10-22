@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IUser, UserService } from 'src/app/users/service/user.service';
+import { User } from 'src/app/users/models/user.model';
+import { UserService } from 'src/app/users/service/user.service';
 
 @Component({
   selector: 'gimmi-navigation-bar',
@@ -10,7 +11,7 @@ import { IUser, UserService } from 'src/app/users/service/user.service';
 export class NavigationBarComponent {
   public isNavbarCollapsed = true;
 
-  currentUser: IUser;
+  currentUser: User;
   currentUserSubscription: Subscription;
 
   constructor( private userService: UserService) {}
