@@ -31,6 +31,7 @@ const jwtService = new JwtHelperService();
 export class UserService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser$: Observable<User>;
+  public attemptedUrl: string;
 
   constructor( 
     private http$: HttpClient,

@@ -4,6 +4,8 @@ import { ILocalLoginInfo, UserService } from '../../service/user.service';
 import { faAt, faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { Subscription } from 'rxjs';
 import { User } from '../../models/user.model';
+import { Router } from '@angular/router';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 
 @Component({
   selector: 'gimmi-login',
@@ -21,7 +23,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   currentUserSubscription: Subscription;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -41,10 +45,23 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: this.loginForm.value.password
     }
     this.userService.authenticate( credentials ).subscribe( user => {
-      console.info(`User ${user.id} is authenticated.`);
+      // Form handling
       this.authenticationError = false;
       this.loginForm.reset();
-
+      
+      // Notify user
+      console.info(`User ${user.id} is authenticated.`);
+      this.notificationService.showNotification(
+        `Je bent nu ingelogd in Gimmi. Veel plezier gewenst!`,
+        "success",
+        `Welkom ${user.firstName}`
+      );
+        
+      // Redirect user after authentication
+      let redirectUrl = this.userService.attemptedUrl ? this.userService.attemptedUrl : "/";
+      this.router.navigate([redirectUrl]);
+      this.userService.attemptedUrl = null;
+      
     }, error => {
       console.error(error);
       this.authenticationError = true;
