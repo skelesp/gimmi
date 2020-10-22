@@ -69,7 +69,7 @@ export class UserService {
     this.currentUserSubject?.next(null); // On init of this service, currentUserSubject isn't created when logout is called for expired token.
 
     //Navigate to homepage
-    this.router.navigate(['/']);
+    location.reload(true);
   }
   
   public register(newUser : User) : void {
