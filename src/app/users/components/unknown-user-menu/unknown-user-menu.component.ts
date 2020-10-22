@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { User } from '../models/user.model';
-import { ILocalLoginInfo, UserService } from '../service/user.service';
+import { User } from '../../models/user.model';
+import { ILocalLoginInfo, UserService } from '../../service/user.service';
 
 @Component({
   selector: 'gimmi-unknown-user-menu',

@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { faUserCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { User } from '../models/user.model';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'gimmi-user-menu',

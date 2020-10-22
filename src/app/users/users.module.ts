@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 
 import { UsersRoutingModule } from './users-routing.module';
-import { UserMenuComponent } from './user-menu/user-menu.component';
+import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { SharedModule } from '../shared/shared.module';
-import { UnknownUserMenuComponent } from './unknown-user-menu/unknown-user-menu.component';
+import { UnknownUserMenuComponent } from './components/unknown-user-menu/unknown-user-menu.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AuthErrorInterceptor } from './interceptors/auth-error.interceptor';
