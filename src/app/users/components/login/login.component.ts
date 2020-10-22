@@ -1,20 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ILocalLoginInfo, UserService } from '../../service/user.service';
 import { faAt, faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { Subscription } from 'rxjs';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'gimmi-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   authenticationError: boolean;
   showPassword: boolean;
   mailIcon = faAt;
   passwordIcon = faUnlockAlt;
   showPasswordIcon = faEye;
+  loggedInUser: User;
+  currentUserSubscription: Subscription;
 
   constructor(
     private userService: UserService
@@ -26,6 +30,9 @@ export class LoginComponent implements OnInit {
       'password': new FormControl(null, [Validators.required])
     });
     this.authenticationError = false;
+    this.currentUserSubscription = this.userService.currentUser$.subscribe( user => {
+      this.loggedInUser = user;
+    });
   }
 
   login() {
@@ -50,4 +57,7 @@ export class LoginComponent implements OnInit {
     this.showPasswordIcon = this.showPassword ? faEyeSlash : faEye;
   }
 
+  ngOnDestroy () {
+    this.currentUserSubscription.unsubscribe();
+  }
 }
