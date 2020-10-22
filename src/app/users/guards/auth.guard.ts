@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
             return true
           }
           console.error("Auth Guard: no authenticated user found");
-          return this.router.createUrlTree(['/users/login']);
+          return this.router.createUrlTree(['users/login']);
         })
       )
   }
