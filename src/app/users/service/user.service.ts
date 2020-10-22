@@ -127,8 +127,7 @@ export class UserService {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
-      errorMessage = `Gimmi API returned code ${errorResponse.status}, ` +
-        `body was: ${JSON.stringify(errorResponse.error)}`;
+      errorMessage = `Gimmi API returned code ${errorResponse.status} with message "${errorResponse.error.message}"`;
     }
     // Return an observable with a user-facing error message.
     return throwError(errorMessage);

@@ -12,8 +12,8 @@ import { User } from '../../models/user.model';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
-  authenticationError: boolean;
-  showPassword: boolean;
+  authenticationError: boolean = false;
+  showPassword: boolean = false;
   mailIcon = faAt;
   passwordIcon = faUnlockAlt;
   showPasswordIcon = faEye;
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       'email': new FormControl(null, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required])
     });
-    this.authenticationError = false;
+
     this.currentUserSubscription = this.userService.currentUser$.subscribe( user => {
       this.loggedInUser = user;
     });
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loginForm.reset();
 
     }, error => {
-      console.error(`Error occured: ${error}`);
+      console.error(error);
       this.authenticationError = true;
       this.showPassword = true;
     });
