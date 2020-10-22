@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'gimmi-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   showPasswordIcon = faEye;
   loggedInUser: User;
   currentUserSubscription: Subscription;
+  redirectUrl: string;
 
   constructor(
     private userService: UserService,
@@ -37,6 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.currentUserSubscription = this.userService.currentUser$.subscribe( user => {
       this.loggedInUser = user;
     });
+    this.redirectUrl = this.userService.attemptedUrl ? environment.rootSiteUrl + this.userService.attemptedUrl : null;
   }
 
   login() {
@@ -61,7 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       let redirectUrl = this.userService.attemptedUrl ? this.userService.attemptedUrl : "/";
       this.router.navigate([redirectUrl]);
       this.userService.attemptedUrl = null;
-      
+
     }, error => {
       console.error(error);
       this.authenticationError = true;

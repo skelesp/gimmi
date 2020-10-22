@@ -7,6 +7,10 @@
         huidige account.</li>
     </ul>
 </div>
+<div *ngIf="redirectUrl" class="alert alert-info">
+    Je probeerde {{redirectUrl}} te bereiken, maar hiervoor moet je ingelogd zijn. <br/>
+    Na een succesvolle login zullen we je meteen naar deze pagina brengen.
+</div>
 <div *ngIf="authenticationError" class="alert alert-danger">
     De combinatie emailadres / paswoord is niet correct. <br /> 
     Paswoord vergeten? <a [routerLink]="['/users/forgotpassword']">Klik hier</a>.
