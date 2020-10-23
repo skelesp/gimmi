@@ -52,18 +52,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authenticationError = false;
       this.loginForm.reset();
       
-      // Notify user
-      console.info(`User ${user.id} is authenticated.`);
-      this.notificationService.showNotification(
-        `Je bent nu ingelogd in Gimmi. Veel plezier gewenst!`,
-        "success",
-        `Welkom ${user.firstName}`
-      );
-        
-      // Redirect user after authentication
-      let redirectUrl = this.userService.attemptedUrl ? this.userService.attemptedUrl : "/";
-      this.router.navigate([redirectUrl]);
-      this.userService.attemptedUrl = null;
+      this.userService.showAuthenticationConfirmation();
+      this.userService.redirectAfterAuthentication();
 
     }, error => {
       console.error(error);

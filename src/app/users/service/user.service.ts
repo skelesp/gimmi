@@ -76,6 +76,23 @@ export class UserService {
     this.currentUserSubject.next(newUser);
   }
 
+  public redirectAfterAuthentication () : void {
+    // Redirect user after authentication
+    let redirectUrl = this.attemptedUrl ? this.attemptedUrl : "/";
+    this.router.navigate([redirectUrl]);
+    this.attemptedUrl = null;
+  }
+
+  public showAuthenticationConfirmation () {
+    // Notify user
+    console.info(`User ${this.currentUser.id} is authenticated.`);
+    this.notificationService.showNotification(
+      `Je bent nu ingelogd in Gimmi. <br> Veel plezier gewenst!`,
+      "success",
+      `Welkom ${this.currentUser.firstName}`
+    );
+  }
+
   private setUser(user : User): void {
     this.currentUserSubject.next(user);
   }
