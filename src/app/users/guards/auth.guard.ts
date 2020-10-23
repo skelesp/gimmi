@@ -25,8 +25,9 @@ export class AuthGuard implements CanActivate {
           if (isAuthenticated) {
             return true
           }
-          console.error("Auth Guard: no authenticated user found");
-          return this.router.createUrlTree(['/users/login']);
+          console.error(`Auth Guard: no authenticated user found for route ${state.url}`);
+          this.userService.attemptedUrl = state.url;
+          return this.router.createUrlTree(['users/login']);
         })
       )
   }

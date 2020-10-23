@@ -31,6 +31,7 @@ const jwtService = new JwtHelperService();
 export class UserService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser$: Observable<User>;
+  public attemptedUrl: string;
 
   constructor( 
     private http$: HttpClient,
@@ -68,11 +69,36 @@ export class UserService {
     this.currentUserSubject?.next(null); // On init of this service, currentUserSubject isn't created when logout is called for expired token.
 
     //Navigate to homepage
-    this.router.navigate(['/']);
+    location.reload();
   }
   
   public register(newUser : User) : void {
     this.currentUserSubject.next(newUser);
+  }
+
+  /**
+   * @method @private 
+   * @description Method to redirect a user from a page after successful authentication.
+   */
+  public redirectAfterAuthentication () : void {
+    if (this.currentUser) { // Should always be true because only called after authentication...
+      // Redirect user after authentication
+      let defaultRedirect = `/people/${this.currentUser.id}`;
+      this.attemptedUrl = this.attemptedUrl ? this.attemptedUrl : defaultRedirect;
+      console.info(`User is redirected to ${this.attemptedUrl}`);
+      this.router.navigateByUrl(this.attemptedUrl);
+      this.attemptedUrl = null;
+    }
+  }
+
+  public showAuthenticationConfirmation () {
+    // Notify user
+    console.info(`User ${this.currentUser.id} is authenticated.`);
+    this.notificationService.showNotification(
+      `Je bent nu ingelogd in Gimmi. <br> Veel plezier gewenst!`,
+      "success",
+      `Welkom ${this.currentUser.firstName}`
+    );
   }
 
   private setUser(user : User): void {
@@ -127,8 +153,7 @@ export class UserService {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
-      errorMessage = `Gimmi API returned code ${errorResponse.status}, ` +
-        `body was: ${JSON.stringify(errorResponse.error)}`;
+      errorMessage = `Gimmi API returned code ${errorResponse.status} with message "${errorResponse.error.message}"`;
     }
     // Return an observable with a user-facing error message.
     return throwError(errorMessage);
