@@ -69,18 +69,26 @@ export class UserService {
     this.currentUserSubject?.next(null); // On init of this service, currentUserSubject isn't created when logout is called for expired token.
 
     //Navigate to homepage
-    location.reload(true);
+    location.reload();
   }
   
   public register(newUser : User) : void {
     this.currentUserSubject.next(newUser);
   }
 
+  /**
+   * @method @private 
+   * @description Method to redirect a user from a page after successful authentication.
+   */
   public redirectAfterAuthentication () : void {
-    // Redirect user after authentication
-    let redirectUrl = this.attemptedUrl ? this.attemptedUrl : "/";
-    this.router.navigate([redirectUrl]);
-    this.attemptedUrl = null;
+    if (this.currentUser) { // Should always be true because only called after authentication...
+      // Redirect user after authentication
+      let defaultRedirect = `/people/${this.currentUser.id}`;
+      this.attemptedUrl = this.attemptedUrl ? this.attemptedUrl : defaultRedirect;
+      console.info(`User is redirected to ${this.attemptedUrl}`);
+      this.router.navigateByUrl(this.attemptedUrl);
+      this.attemptedUrl = null;
+    }
   }
 
   public showAuthenticationConfirmation () {

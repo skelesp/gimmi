@@ -69,5 +69,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy () {
     this.currentUserSubscription.unsubscribe();
+    this.userService.attemptedUrl = null;
   }
 }
