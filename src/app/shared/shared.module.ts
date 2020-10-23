@@ -9,9 +9,10 @@ import { BrandLogoComponent } from './components/brand-logo/brand-logo.component
 import { RouterModule } from '@angular/router';
 import { CursorPointerDirective } from './directives/cursor-pointer.directive';
 import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
+import { BindQueryparamToInputDirective } from './directives/bind-queryparam-to-input.directive';
 
 @NgModule({
-  declarations: [BrandLogoComponent, CursorPointerDirective, CustomToastComponent],
+  declarations: [BrandLogoComponent, CursorPointerDirective, CustomToastComponent, BindQueryparamToInputDirective],
   imports: [
     CommonModule,
     NgbModule,
@@ -27,7 +28,8 @@ import { CustomToastComponent } from './components/custom-toast/custom-toast.com
     FormsModule,
     BrandLogoComponent,
     CursorPointerDirective,
-    CustomToastComponent
+    CustomToastComponent,
+    BindQueryparamToInputDirective
   ]
 })
 export class SharedModule { }
