@@ -25,9 +25,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   redirectUrl: string;
 
   constructor(
-    private userService: UserService,
-    private router: Router,
-    private notificationService: NotificationService
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -58,7 +56,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }, error => {
       console.error(error);
       this.authenticationError = true;
-      this.showPassword = true;
     });
   }
 
