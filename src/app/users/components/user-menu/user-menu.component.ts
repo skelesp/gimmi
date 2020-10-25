@@ -37,6 +37,7 @@ export class UserMenuComponent implements OnInit, OnDestroy {
       "info",
       'Uitgelogd'
     );
+    location.reload();
   }
 
   logOutFacebook(): void {
