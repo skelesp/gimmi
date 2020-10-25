@@ -13,7 +13,7 @@
 </div>
 <div *ngIf="authenticationError" class="alert alert-danger">
     De combinatie emailadres / paswoord is niet correct. <br /> 
-    Paswoord vergeten? <a [routerLink]="['/users/forgotpassword']">Klik hier</a>.
+    <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Paswoord vergeten?</a>
 </div>
 
 <form [formGroup]='loginForm' (ngSubmit)='login()'>
@@ -26,7 +26,7 @@
             class="form-control"
             placeholder="Email (login)"
             formControlName="email"
-            ng-change="loginCtrl.saveMailInRootScope()">
+            bindQueryParamToInput="e">
     </div>
     <div class="input-group my-2">
         <div class="input-group-prepend">
@@ -46,10 +46,10 @@
         </div>
     </div>
     <small id="forgottenPassword" class="form-text text-muted my-2 float-right">
-        <a [routerLink]="['/users/forgotpassword']">Paswoord vergeten?</a>
+        <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Paswoord vergeten?</a>
     </small>
     <div>
         <button type="submit" class="btn btn-danger my-3" [disabled]="!loginForm.valid || !loginForm.touched">Login</button>
     </div>
-    Als dit je eerste bezoek is: <a [routerLink]="['/users/register']">klik hier om te registreren</a>
+    Als dit je eerste bezoek is: <a [routerLink]="['/users/register']" [queryParams]="{e:loginForm.get('email').value}">klik hier om te registreren</a>
 </form>

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { IDecodedToken, User } from '../models/user.model';
@@ -67,9 +67,6 @@ export class UserService {
     //Remove user
     localStorage.removeItem("currentUser");
     this.currentUserSubject?.next(null); // On init of this service, currentUserSubject isn't created when logout is called for expired token.
-
-    //Navigate to homepage
-    location.reload();
   }
   
   public register(newUser : User) : void {
@@ -82,11 +79,14 @@ export class UserService {
    */
   public redirectAfterAuthentication () : void {
     if (this.currentUser) { // Should always be true because only called after authentication...
-      // Redirect user after authentication
       let defaultRedirect = `/people/${this.currentUser.id}`;
-      this.attemptedUrl = this.attemptedUrl ? this.attemptedUrl : defaultRedirect;
-      console.info(`User is redirected to ${this.attemptedUrl}`);
-      this.router.navigateByUrl(this.attemptedUrl);
+      
+      // Set redirect url
+      let redirectUrl = this.attemptedUrl ? this.attemptedUrl : defaultRedirect;
+      
+      // Redirect user after authentication
+      console.info(`User is redirected to ${redirectUrl}`);
+      this.router.navigateByUrl(redirectUrl);
       this.attemptedUrl = null;
     }
   }

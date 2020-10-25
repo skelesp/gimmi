@@ -4,8 +4,6 @@ import { ILocalLoginInfo, UserService } from '../../service/user.service';
 import { faAt, faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { Subscription } from 'rxjs';
 import { User } from '../../models/user.model';
-import { Router } from '@angular/router';
-import { NotificationService } from 'src/app/shared/services/notification.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -25,9 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   redirectUrl: string;
 
   constructor(
-    private userService: UserService,
-    private router: Router,
-    private notificationService: NotificationService
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.currentUserSubscription = this.userService.currentUser$.subscribe( user => {
       this.loggedInUser = user;
     });
+    // RedirectUrl only used to show in component 
     this.redirectUrl = this.userService.attemptedUrl ? environment.rootSiteUrl + this.userService.attemptedUrl : null;
   }
 
@@ -58,7 +55,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }, error => {
       console.error(error);
       this.authenticationError = true;
-      this.showPassword = true;
     });
   }
 

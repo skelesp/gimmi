@@ -27,15 +27,26 @@ export class AuthErrorInterceptor implements HttpInterceptor {
         if ([401, 403].indexOf(err.status) !== -1){
           switch (err.status) {
             case 401:
-              if (this.userService.currentUser) this.userService.logout("401_RESPONSE");
+              // No notification when login call failed.
               if (request.url.indexOf("api/authenticate") === -1) {
                 this.notificationService.showNotification(
                   "Voor het uitvoeren van deze actie moet u ingelogd zijn.",
                   "error",
                   "Login vereist"
-                );
+                  );
+                }
+
+              // Handle current user
+              let queryParams = {};
+              
+              if (this.userService.currentUser) {
+                queryParams = { e: this.userService.currentUser.email };
+                this.userService.logout("401_RESPONSE");
               }
-              this.router.navigate(['users/login']);
+              
+              // Navigate to login
+              this.userService.attemptedUrl = this.router.url;
+              this.router.navigate(['users/login'], {queryParams: queryParams});
               break;
             case 403:
               this.notificationService.showNotification(
