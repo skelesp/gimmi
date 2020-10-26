@@ -28,19 +28,18 @@ export class RegisterComponent implements OnInit {
         'birthday': new FormControl(null, Validators.required)
       }),
       'localAccountData': new FormGroup({
-        'email': new FormControl(null, [Validators.required, Validators.email]),
-        'password': new FormControl(null, [Validators.required])
+        'email': new FormControl(null, [Validators.required, Validators.email])
       })
     });
   }
 
   register () {
     let newUser : INewUserRequestInfo = {
-      firstname: this.registrationForm.get('personData.firstName').value,
-      lastname: this.registrationForm.get('personData.lastName').value,
-      birthday: this.registrationForm.get('personData.birthday').value,
-      email: this.registrationForm.get('localAccountData.email').value,
-      password: this.registrationForm.get('localAccountData.password').value
+      firstname: this.registrationForm.value.personData.firstName,
+      lastname: this.registrationForm.value.personData.lastName,
+      birthday: this.registrationForm.value.personData.birthday,
+      email: this.registrationForm.value.localAccountData.email,
+      password: this.registrationForm.value.localAccountData.password
     };
     this.userService.register( newUser).subscribe(
       user => {

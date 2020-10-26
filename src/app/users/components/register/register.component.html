@@ -52,11 +52,7 @@ Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationFor
             class="form-control"
             placeholder="Email (login)"
             bindQueryParamToInput="e">
-
-        <label>Paswoord</label>
-        <input formControlName="password"
-            type="password" 
-            class="form-control">
+        <gimmi-password-input [parentFormGroup]='registrationForm.get("localAccountData")'></gimmi-password-input>
     </div>
     <div>
         <button type="submit" class="btn btn-danger" [disabled]='!registrationForm.valid'>Registreer</button>
