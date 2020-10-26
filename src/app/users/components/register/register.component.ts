@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { PeopleService } from 'src/app/people/service/people.service';
 import { INewUserRequestInfo, User } from '../../models/user.model';
 import { UserService } from '../../service/user.service';
 
@@ -13,7 +14,10 @@ export class RegisterComponent implements OnInit {
   knownUser: boolean;
   registrationForm: FormGroup;
 
-  constructor( private userService : UserService) { }
+  constructor( 
+    private userService : UserService,
+    private peopleService : PeopleService
+  ) { }
 
   ngOnInit(): void {
     this.invitedFor = null; // Wordt pas geïmplementeerd als wishlist geïmplementeerd worden.
@@ -45,6 +49,12 @@ export class RegisterComponent implements OnInit {
 
         this.userService.showAuthenticationConfirmation();
         this.userService.redirectAfterAuthentication();
+        this.peopleService.addPerson({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          fullName: `${user.firstName} ${user.lastName}` 
+        })
       },
       error => {
         if (error.indexOf('User already exists') !== -1) {

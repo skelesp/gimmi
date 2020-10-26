@@ -45,6 +45,18 @@ export class PeopleService {
     });
   }
 
+  /**
+   * @description Add a person to the people list without call the backend.
+   * @param person 
+   */
+  addPerson ( person: IPerson ) {
+    console.log(this._people$.getValue());
+    this._people$.next(
+      [...this._people$.value, person]
+      );
+    console.log(this._people$.getValue());
+  }
+
   public findPersonByEmail (email: string): Observable<IPerson> {
     if (email) {
       return this.http$.get<IPersonSearchResponse>(environment.apiUrl + `people/email/${email}`)

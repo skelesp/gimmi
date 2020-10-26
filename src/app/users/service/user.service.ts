@@ -63,23 +63,23 @@ export class UserService {
       );
     }
     
-    /**
-     * @method @public
-     * @description This method registers a new user via the Gimmi API. The API call returns a logged in user which is set as current user.
-     * @param newUser User object formatted as needed by the API call. Interface = INewUserRequestInfo
-     * @returns An observable with the logged in user object.
-     */
-    public register(newUser : INewUserRequestInfo) : Observable<User> {
-      return this.http$.post<IAuthResponse>(environment.apiUrl + 'people', newUser)
-        .pipe(
-          catchError(this.handleAErrorResponse),
-          tap(authResponse => {
-            this.persistentlySaveUserToken(authResponse.token);
-            this.setUser(this.getUserFromStoredToken());
-          }),
-          map(() => { return this.currentUser })
-        );
-    }
+  /**
+   * @method @public
+   * @description This method registers a new user via the Gimmi API. The API call returns a logged in user which is set as current user.
+   * @param newUser User object formatted as needed by the API call. Interface = INewUserRequestInfo
+   * @returns An observable with the logged in user object.
+   */
+  public register(newUser : INewUserRequestInfo) : Observable<User> {
+    return this.http$.post<IAuthResponse>(environment.apiUrl + 'people', newUser)
+      .pipe(
+        catchError(this.handleAErrorResponse),
+        tap(authResponse => {
+          this.persistentlySaveUserToken(authResponse.token);
+          this.setUser(this.getUserFromStoredToken());
+        }),
+        map(() => { return this.currentUser })
+      );
+  }
 
   public logout(reason : logoutReason) : void {
     // Log logout info
