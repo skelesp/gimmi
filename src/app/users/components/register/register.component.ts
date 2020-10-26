@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { User } from '../../models/user.model';
+import { INewUserRequestInfo, User } from '../../models/user.model';
+import { UserService } from '../../service/user.service';
 
 @Component({
   selector: 'gimmi-register',
@@ -9,10 +10,10 @@ import { User } from '../../models/user.model';
 })
 export class RegisterComponent implements OnInit {
   invitedFor: string;
-  knownUser: User;
+  knownUser: boolean;
   registrationForm: FormGroup;
 
-  constructor() { }
+  constructor( private userService : UserService) { }
 
   ngOnInit(): void {
     this.invitedFor = null; // Wordt pas geïmplementeerd als wishlist geïmplementeerd worden.
@@ -30,7 +31,28 @@ export class RegisterComponent implements OnInit {
   }
 
   register () {
-    console.log(this.registrationForm.value);
+    let newUser : INewUserRequestInfo = {
+      firstname: this.registrationForm.get('personData.firstName').value,
+      lastname: this.registrationForm.get('personData.lastName').value,
+      birthday: this.registrationForm.get('personData.birthday').value,
+      email: this.registrationForm.get('localAccountData.email').value,
+      password: this.registrationForm.get('localAccountData.password').value
+    };
+    this.userService.register( newUser).subscribe(
+      user => {
+        // Form handling
+        this.registrationForm.reset();
+
+        this.userService.showAuthenticationConfirmation();
+        this.userService.redirectAfterAuthentication();
+      },
+      error => {
+        if (error.indexOf('User already exists') !== -1) {
+          this.knownUser = true;
+        }
+        console.error(error);
+      }
+    );
   }
 
 }

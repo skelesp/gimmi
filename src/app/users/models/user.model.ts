@@ -10,6 +10,14 @@ export class User {
     ) { }
 }
 
+export interface INewUserRequestInfo {
+    firstname: string,
+    lastname: string,
+    email: string,
+    birthday: string,
+    password: string
+}
+
 export interface IDecodedToken {
     _id: string;
     id: string;

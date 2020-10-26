@@ -23,12 +23,12 @@
     </p>
 </div>
 <h3>Registreer je op Gimmi</h3>
-Of klik <a [routerLink]="['/users','login']">hier</a> om je in te loggen met een bestaande account.<br />
+Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationForm.get('localAccountData.email').value}">hier</a> om je in te loggen met een bestaande account.<br />
 <div [hidden]="!knownUser" class="alert alert-danger">
-    Er bestaat al een gebruiker met dit emailadres. Gelieve <a [routerLink]="['/users','login']" [queryParams]="{e: knownUser?.email}">in te loggen met deze email</a> of
+    Er bestaat al een gebruiker met dit emailadres. Gelieve <a [routerLink]="['/users','login']" [queryParams]="{e: registrationForm.get('localAccountData.email').value}">in te loggen met deze email</a> of
     een ander emailadres te gebruiken.
     <br /> Indien u uw paswoord vergeten bent, klik
-    <a [routerLink]="['/users/forgotpassword']">hier</a>.
+    <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e: registrationForm.get('localAccountData.email').value}">hier</a>.
 </div>
 <form class="form" (submit)="register()" [formGroup]="registrationForm">
     <div class="form-group" formGroupName="personData">
@@ -48,9 +48,9 @@ Of klik <a [routerLink]="['/users','login']">hier</a> om je in te loggen met een
     <div class="form-group" formGroupName="localAccountData">
         <label>Emailadres</label>
         <input formControlName="email"
-            type="email" 
+            type="text" 
             class="form-control"
-            ng-change="saveMailInRootScope()"
+            placeholder="Email (login)"
             bindQueryParamToInput="e">
 
         <label>Paswoord</label>
