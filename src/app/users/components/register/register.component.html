@@ -36,14 +36,31 @@ Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationFor
         <input formControlName="firstName"
             type="text" 
             class="form-control">
+            <div id="firstNameError" class="form-text text-danger"
+            *ngIf="!registrationForm.get('personData.firstName').valid && registrationForm.get('personData.firstName').touched">
+            <small *ngIf="registrationForm.get('personData.firstName').errors?.required">
+                Voornaam is een verplicht veld</small>
+            </div>
+        
         <label>Familienaam</label>
         <input formControlName="lastName"
             type="text" 
             class="form-control" >
+            <div id="lastNameError" class="form-text text-danger"
+                *ngIf="!registrationForm.get('personData.lastName').valid && registrationForm.get('personData.lastName').touched">
+                <small *ngIf="registrationForm.get('personData.lastName').errors?.required">
+                    Familienaam is een verplicht veld</small>
+            </div>
+        
         <label>Geboortedatum</label>
         <input formControlName='birthday'
             type="date" 
             class="form-control">
+            <div id="birthdayError" class="form-text text-danger"
+                *ngIf="!registrationForm.get('personData.birthday').valid && registrationForm.get('personData.birthday').touched">
+                <small *ngIf="registrationForm.get('personData.birthday').errors?.required">
+                    Verjaardag is een verplicht veld</small>
+            </div>
     </div>
     <div class="form-group" formGroupName="localAccountData">
         <label>Emailadres</label>
@@ -52,6 +69,12 @@ Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationFor
             class="form-control"
             placeholder="Email (login)"
             bindQueryParamToInput="e">
+            <div id="emailError" class="form-text text-danger"
+                *ngIf="!registrationForm.get('localAccountData.email').valid && registrationForm.get('localAccountData.email').touched">
+                <small *ngIf="registrationForm.get('localAccountData.email').errors?.required">
+                    Email is een verplicht veld</small>
+            </div>
+
         <gimmi-password-input [parentFormGroup]='registrationForm.get("localAccountData")'></gimmi-password-input>
     </div>
     <div>
