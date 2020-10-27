@@ -1,0 +1,83 @@
+<ngb-alert type="info" *ngIf="!closed" (close)="closed=true">
+    <h5>Welkom op Gimmi, dé hulp in je cadeauzoektocht!</h5>
+    <p *ngIf="invitedFor">
+        Jij bent uitgenodigd om de wensenlijst van
+        <strong>{{invitedFor}}</strong> te bekijken.
+        <br />
+    </p>
+    <ol>
+        <li>Op Gimmi kan je een wensenlijst aanmaken met je favoriete cadeaus, zodat je met anderen kan delen wat je
+            graag zou krijgen.</li>
+        <li>Deze personen kunnen een cadeau dan reserveren, zodat jij zeker bent dat je elk cadeau maar 1 keer krijgt!
+        </li>
+    </ol>
+    
+    <p>
+        <strong>Om toegang te krijgen tot wenslijsten, moet je wel eerst even registreren hieronder.</strong><br>
+        <span *ngIf="invitedFor">
+            Na het registreren word je meteen naar de wensenlijst van {{invitedFor}}
+            gebracht.<br />
+        </span>
+        <em>Na je registratie maken we automatisch een lijst voor jou aan, dus vul deze maar meteen aan met de leukste
+            cadeaus!</em>
+    </p>
+</ngb-alert>
+<h3>Registreer je op Gimmi</h3>
+Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationForm.get('localAccountData.email').value}">hier</a> om je in te loggen met een bestaande account.<br />
+<div [hidden]="!knownUser" class="alert alert-danger">
+    Er bestaat al een gebruiker met dit emailadres. Gelieve <a [routerLink]="['/users','login']" [queryParams]="{e: registrationForm.get('localAccountData.email').value}">in te loggen met deze email</a> of
+    een ander emailadres te gebruiken.
+    <br /> Indien u uw wachtwoord vergeten bent, klik
+    <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e: registrationForm.get('localAccountData.email').value}">hier</a>.
+</div>
+<form class="form" (submit)="register()" [formGroup]="registrationForm">
+    <div class="form-group" formGroupName="personData">
+        <label>Voornaam</label>
+        <input formControlName="firstName"
+            type="text" 
+            class="form-control">
+            <div id="firstNameError" class="form-text text-danger"
+            *ngIf="!registrationForm.get('personData.firstName').valid && registrationForm.get('personData.firstName').touched">
+            <small *ngIf="registrationForm.get('personData.firstName').errors?.required">
+                Voornaam is een verplicht veld</small>
+            </div>
+        
+        <label>Familienaam</label>
+        <input formControlName="lastName"
+            type="text" 
+            class="form-control" >
+            <div id="lastNameError" class="form-text text-danger"
+                *ngIf="!registrationForm.get('personData.lastName').valid && registrationForm.get('personData.lastName').touched">
+                <small *ngIf="registrationForm.get('personData.lastName').errors?.required">
+                    Familienaam is een verplicht veld</small>
+            </div>
+        
+        <label>Geboortedatum</label>
+        <input formControlName='birthday'
+            type="date" 
+            class="form-control">
+            <div id="birthdayError" class="form-text text-danger"
+                *ngIf="!registrationForm.get('personData.birthday').valid && registrationForm.get('personData.birthday').touched">
+                <small *ngIf="registrationForm.get('personData.birthday').errors?.required">
+                    Verjaardag is een verplicht veld</small>
+            </div>
+    </div>
+    <div class="form-group" formGroupName="localAccountData">
+        <label>Emailadres</label>
+        <input formControlName="email"
+            type="text" 
+            class="form-control"
+            placeholder="Email (login)"
+            bindQueryParamToInput="e">
+            <div id="emailError" class="form-text text-danger"
+                *ngIf="!registrationForm.get('localAccountData.email').valid && registrationForm.get('localAccountData.email').touched">
+                <small *ngIf="registrationForm.get('localAccountData.email').errors?.required">
+                    Email is een verplicht veld</small>
+            </div>
+
+        <gimmi-password-input [parentFormGroup]='registrationForm.get("localAccountData")'></gimmi-password-input>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-danger" [disabled]='!registrationForm.valid'>Registreer</button>
+    </div>
+</form>
