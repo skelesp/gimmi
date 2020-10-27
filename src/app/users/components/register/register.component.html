@@ -1,16 +1,16 @@
-<div class="jumbotron">
+<ngb-alert type="info" *ngIf="!closed" (close)="closed=true">
     <h5>Welkom op Gimmi, dé hulp in je cadeauzoektocht!</h5>
     <p *ngIf="invitedFor">
         Jij bent uitgenodigd om de wensenlijst van
         <strong>{{invitedFor}}</strong> te bekijken.
         <br />
     </p>
-        <ol>
-            <li>Op Gimmi kan je een wensenlijst aanmaken met je favoriete cadeaus, zodat je met anderen kan delen wat je
-                graag zou krijgen.</li>
-            <li>Deze personen kunnen een cadeau dan reserveren, zodat jij zeker bent dat je elk cadeau maar 1 keer krijgt!
-            </li>
-        </ol>
+    <ol>
+        <li>Op Gimmi kan je een wensenlijst aanmaken met je favoriete cadeaus, zodat je met anderen kan delen wat je
+            graag zou krijgen.</li>
+        <li>Deze personen kunnen een cadeau dan reserveren, zodat jij zeker bent dat je elk cadeau maar 1 keer krijgt!
+        </li>
+    </ol>
     
     <p>
         <strong>Om toegang te krijgen tot wenslijsten, moet je wel eerst even registreren hieronder.</strong><br>
@@ -21,7 +21,7 @@
         <em>Na je registratie maken we automatisch een lijst voor jou aan, dus vul deze maar meteen aan met de leukste
             cadeaus!</em>
     </p>
-</div>
+</ngb-alert>
 <h3>Registreer je op Gimmi</h3>
 Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationForm.get('localAccountData.email').value}">hier</a> om je in te loggen met een bestaande account.<br />
 <div [hidden]="!knownUser" class="alert alert-danger">

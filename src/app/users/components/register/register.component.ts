@@ -13,6 +13,7 @@ export class RegisterComponent implements OnInit {
   invitedFor: string;
   knownUser: boolean;
   registrationForm: FormGroup;
+  closed: boolean;
 
   constructor( 
     private userService : UserService,
