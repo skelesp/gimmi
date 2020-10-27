@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[click], [ngbDropdown]'
+  selector: '[click], [ngbDropdown], [routerLink]'
 })
 export class CursorPointerDirective {
 
