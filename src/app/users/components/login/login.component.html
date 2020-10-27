@@ -1,4 +1,4 @@
-<h4>Login met je email en paswoord</h4>
+<h4>Login met je email en wachtwoord</h4>
 <div *ngIf="loggedInUser" class="alert alert-info">
     Je bent al ingelogd momenteel als <strong>{{loggedInUser.firstName}} {{loggedInUser.lastName}}</strong>.
     <ul>
@@ -12,8 +12,8 @@
     Na een succesvolle login zullen we je meteen naar deze pagina brengen.
 </div>
 <div *ngIf="authenticationError" class="alert alert-danger">
-    De combinatie emailadres / paswoord is niet correct. <br /> 
-    <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Paswoord vergeten?</a>
+    De combinatie emailadres / wachtwoord is niet correct. <br /> 
+    <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Wachtwoord vergeten?</a>
 </div>
 
 <form [formGroup]='loginForm' (ngSubmit)='login()'>
@@ -35,7 +35,7 @@
         <input 
             [type]="showPassword ? 'text' : 'password'" 
             class="form-control"
-            placeholder="Paswoord" 
+            placeholder="Wachtwoord" 
             formControlName="password">
         <div class="input-group-append">
             <button 
@@ -46,7 +46,7 @@
         </div>
     </div>
     <small id="forgottenPassword" class="form-text text-muted my-2 float-right">
-        <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Paswoord vergeten?</a>
+        <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Wachtwoord vergeten?</a>
     </small>
     <div>
         <button type="submit" class="btn btn-danger my-3" [disabled]="!loginForm.valid || !loginForm.touched">Login</button>

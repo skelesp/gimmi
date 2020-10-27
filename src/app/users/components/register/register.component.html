@@ -27,7 +27,7 @@ Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationFor
 <div [hidden]="!knownUser" class="alert alert-danger">
     Er bestaat al een gebruiker met dit emailadres. Gelieve <a [routerLink]="['/users','login']" [queryParams]="{e: registrationForm.get('localAccountData.email').value}">in te loggen met deze email</a> of
     een ander emailadres te gebruiken.
-    <br /> Indien u uw paswoord vergeten bent, klik
+    <br /> Indien u uw wachtwoord vergeten bent, klik
     <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e: registrationForm.get('localAccountData.email').value}">hier</a>.
 </div>
 <form class="form" (submit)="register()" [formGroup]="registrationForm">
