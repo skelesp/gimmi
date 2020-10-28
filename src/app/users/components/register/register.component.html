@@ -68,19 +68,10 @@ Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationFor
         label="Email"
         bindedQueryParam='e'>
     </gimmi-email-input>
-    <gimmi-password-input 
-        [parentFormGroup]='registrationForm.get("localAccountData")'
-        label="Wachtwoord">
-    </gimmi-password-input>
-    <gimmi-password-input 
-        [parentFormGroup]='registrationForm.get("localAccountData")'
-        controlName="passwordCheck"
-        placeholder="Geef wachtwoord nogmaals in"
-        label="Wachtwoordcontrole"
-        >
-    </gimmi-password-input>
+    <gimmi-password-check 
+        [parentFormGroup]="registrationForm.get('localAccountData')">
+    </gimmi-password-check>
     <div>
         <button type="submit" class="btn btn-danger mt-3" [disabled]='!registrationForm.valid'>Registreer</button>
     </div>
 </form>
-<pre>{{ registrationForm.value | json }}</pre>
