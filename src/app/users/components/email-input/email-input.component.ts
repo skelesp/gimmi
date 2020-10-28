@@ -10,6 +10,7 @@ import { faAt } from '@fortawesome/free-solid-svg-icons'
 export class EmailInputComponent implements OnInit {
   @Input() parentFormGroup: FormGroup;
   @Input() label: string = null;
+  @Input() bindedQueryParam: string = null;
   mailIcon = faAt;
 
   constructor() { }

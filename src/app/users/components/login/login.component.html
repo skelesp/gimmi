@@ -17,7 +17,10 @@
 </div>
 
 <form [formGroup]='loginForm' (ngSubmit)='login()'>
-    <gimmi-email-input [parentFormGroup]='loginForm'></gimmi-email-input>
+    <gimmi-email-input 
+        [parentFormGroup]='loginForm'
+        bindedQueryParam='e'>
+    </gimmi-email-input>
     <div class="input-group my-2">
         <div class="input-group-prepend">
             <span class="input-group-text"><fa-icon [icon]="passwordIcon"></fa-icon></span>

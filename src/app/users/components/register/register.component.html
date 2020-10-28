@@ -63,9 +63,16 @@ Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationFor
             </div>
     </div>
     <div class="form-group" formGroupName="localAccountData">
-        <gimmi-email-input [parentFormGroup]='registrationForm.get("localAccountData")' label="Email"></gimmi-email-input>
+        <gimmi-email-input 
+            [parentFormGroup]='registrationForm.get("localAccountData")' 
+            label="Email"
+            bindedQueryParam='e'>
+        </gimmi-email-input>
 
-        <gimmi-password-input [parentFormGroup]='registrationForm.get("localAccountData")'></gimmi-password-input>
+        <gimmi-password-input 
+            [parentFormGroup]='registrationForm.get("localAccountData")'>
+        </gimmi-password-input>
+        
     </div>
     <div>
         <button type="submit" class="btn btn-danger" [disabled]='!registrationForm.valid'>Registreer</button>

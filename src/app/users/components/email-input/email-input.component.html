@@ -10,7 +10,7 @@
                 type="text" 
                 class="form-control" 
                 placeholder="Email (login)" 
-                bindQueryParamToInput="e">
+                [bindQueryParamToInput]="bindedQueryParam">
         <div id="emailError" class="form-text text-danger"
             *ngIf="!parentFormGroup.get('email').valid && parentFormGroup.get('email').touched">
             <small *ngIf="parentFormGroup.get('email').errors?.required">
