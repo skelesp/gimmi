@@ -9,8 +9,9 @@ import { faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
 })
 export class PasswordInputComponent implements OnInit {
   @Input() parentFormGroup : FormGroup;
-  @Input() controlName : string = 'password'
-  @Input() placeholder : string = 'Wachtwoord'
+  @Input() controlName : string = 'password';
+  @Input() placeholder : string = 'Wachtwoord';
+  @Input() label : string = null;
   
   showPassword: boolean = false;
   passwordIcon = faUnlockAlt;
