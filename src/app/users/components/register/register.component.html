@@ -23,12 +23,12 @@
     </p>
 </ngb-alert>
 <h3>Registreer je op Gimmi</h3>
-Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationForm.get('localAccountData.email').value}">hier</a> om je in te loggen met een bestaande account.<br />
+Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationForm.get('localAccountData.email')?.value}">hier</a> om je in te loggen met een bestaande account.<br />
 <div [hidden]="!knownUser" class="alert alert-danger">
-    Er bestaat al een gebruiker met dit emailadres. Gelieve <a [routerLink]="['/users','login']" [queryParams]="{e: registrationForm.get('localAccountData.email').value}">in te loggen met deze email</a> of
+    Er bestaat al een gebruiker met dit emailadres. Gelieve <a [routerLink]="['/users','login']" [queryParams]="{e: registrationForm.get('localAccountData.email')?.value}">in te loggen met deze email</a> of
     een ander emailadres te gebruiken.
     <br /> Indien u uw wachtwoord vergeten bent, klik
-    <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e: registrationForm.get('localAccountData.email').value}">hier</a>.
+    <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e: registrationForm.get('localAccountData.email')?.value}">hier</a>.
 </div>
 <form class="form" (submit)="register()" [formGroup]="registrationForm">
     <div class="form-group" formGroupName="personData">
@@ -63,17 +63,7 @@ Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationFor
             </div>
     </div>
     <div class="form-group" formGroupName="localAccountData">
-        <label>Emailadres</label>
-        <input formControlName="email"
-            type="text" 
-            class="form-control"
-            placeholder="Email (login)"
-            bindQueryParamToInput="e">
-            <div id="emailError" class="form-text text-danger"
-                *ngIf="!registrationForm.get('localAccountData.email').valid && registrationForm.get('localAccountData.email').touched">
-                <small *ngIf="registrationForm.get('localAccountData.email').errors?.required">
-                    Email is een verplicht veld</small>
-            </div>
+        <gimmi-email-input [parentFormGroup]='registrationForm.get("localAccountData")' label="Email"></gimmi-email-input>
 
         <gimmi-password-input [parentFormGroup]='registrationForm.get("localAccountData")'></gimmi-password-input>
     </div>

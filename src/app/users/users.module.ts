@@ -11,10 +11,11 @@ import { AuthErrorInterceptor } from './interceptors/auth-error.interceptor';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PasswordInputComponent } from './components/password-input/password-input.component';
+import { EmailInputComponent } from './components/email-input/email-input.component';
 
 
 @NgModule({
-  declarations: [UserMenuComponent, UnknownUserMenuComponent, LoginComponent, RegisterComponent, PasswordInputComponent],
+  declarations: [UserMenuComponent, UnknownUserMenuComponent, LoginComponent, RegisterComponent, PasswordInputComponent, EmailInputComponent],
   imports: [
     SharedModule,
     UsersRoutingModule,
@@ -25,7 +26,8 @@ import { PasswordInputComponent } from './components/password-input/password-inp
     UnknownUserMenuComponent,
     LoginComponent,
     RegisterComponent,
-    PasswordInputComponent
+    PasswordInputComponent,
+    EmailInputComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

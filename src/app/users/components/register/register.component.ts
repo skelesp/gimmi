@@ -28,9 +28,7 @@ export class RegisterComponent implements OnInit {
         'lastName': new FormControl(null, Validators.required),
         'birthday': new FormControl(null, Validators.required)
       }),
-      'localAccountData': new FormGroup({
-        'email': new FormControl(null, [Validators.required, Validators.email])
-      })
+      'localAccountData': new FormGroup({})
     });
   }
 

@@ -17,17 +17,7 @@
 </div>
 
 <form [formGroup]='loginForm' (ngSubmit)='login()'>
-    <div class="input-group my-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><fa-icon [icon]="mailIcon"></fa-icon></span>
-        </div>
-        <input
-            type="text" 
-            class="form-control"
-            placeholder="Email (login)"
-            formControlName="email"
-            bindQueryParamToInput="e">
-    </div>
+    <gimmi-email-input [parentFormGroup]='loginForm'></gimmi-email-input>
     <div class="input-group my-2">
         <div class="input-group-prepend">
             <span class="input-group-text"><fa-icon [icon]="passwordIcon"></fa-icon></span>
