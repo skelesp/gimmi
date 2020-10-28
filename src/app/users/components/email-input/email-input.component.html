@@ -6,17 +6,17 @@
                 <fa-icon [icon]="mailIcon"></fa-icon>
             </span>
         </div>
-        <input  formControlName="email" 
+        <input  [formControlName]="controlName" 
                 type="text" 
                 class="form-control" 
                 placeholder="Email (login)" 
                 [bindQueryParamToInput]="bindedQueryParam">
     </div>
     <div id="emailError" class="form-text text-danger"
-        *ngIf="!parentFormGroup.get('email').valid && parentFormGroup.get('email').touched">
-        <small *ngIf="parentFormGroup.get('email').errors?.required">
+        *ngIf="!parentFormGroup.get(controlName).valid && parentFormGroup.get(controlName).touched">
+        <small *ngIf="parentFormGroup.get(controlName).errors?.required">
             Email is een verplicht veld</small>
-        <small *ngIf="parentFormGroup.get('email').errors?.email">
+        <small *ngIf="parentFormGroup.get(controlName).errors?.email">
             Geef een geldig emailadres in (formaat: *** @ *** . **)</small>
     </div>
 </div>

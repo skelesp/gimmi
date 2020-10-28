@@ -11,12 +11,13 @@ export class EmailInputComponent implements OnInit {
   @Input() parentFormGroup: FormGroup;
   @Input() label: string = null;
   @Input() bindedQueryParam: string = null;
+  @Input() controlName: string = 'email';
   mailIcon = faAt;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.parentFormGroup.addControl( 'email', new FormControl(null, [Validators.required, Validators.email]));
+    this.parentFormGroup.addControl(this.controlName, new FormControl(null, [Validators.required, Validators.email]));
   }
 
 }
