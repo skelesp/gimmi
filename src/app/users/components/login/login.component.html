@@ -21,23 +21,9 @@
         [parentFormGroup]='loginForm'
         bindedQueryParam='e'>
     </gimmi-email-input>
-    <div class="input-group my-2">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><fa-icon [icon]="passwordIcon"></fa-icon></span>
-        </div>
-        <input 
-            [type]="showPassword ? 'text' : 'password'" 
-            class="form-control"
-            placeholder="Wachtwoord" 
-            formControlName="password">
-        <div class="input-group-append">
-            <button 
-                type="button" 
-                class="btn btn-outline-secondary border-secondary"
-                (click)="toggleShowPassword()">
-                <fa-icon [icon]="showPasswordIcon"></fa-icon></button>
-        </div>
-    </div>
+    <gimmi-password-input
+        [parentFormGroup]='loginForm'
+    ></gimmi-password-input>
     <small id="forgottenPassword" class="form-text text-muted my-2 float-right">
         <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Wachtwoord vergeten?</a>
     </small>

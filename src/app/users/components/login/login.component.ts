@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ILocalLoginInfo, UserService } from '../../service/user.service';
-import { faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { Subscription } from 'rxjs';
 import { User } from '../../models/user.model';
 import { environment } from 'src/environments/environment';
@@ -14,9 +13,6 @@ import { environment } from 'src/environments/environment';
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   authenticationError: boolean = false;
-  showPassword: boolean = false;
-  passwordIcon = faUnlockAlt;
-  showPasswordIcon = faEye;
   loggedInUser: User;
   currentUserSubscription: Subscription;
   redirectUrl: string;
@@ -26,9 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
-      'password': new FormControl(null, [Validators.required])
-    });
+    this.loginForm = new FormGroup({});
 
     this.currentUserSubscription = this.userService.currentUser$.subscribe( user => {
       this.loggedInUser = user;
@@ -54,11 +48,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       console.error(error);
       this.authenticationError = true;
     });
-  }
-
-  toggleShowPassword () {
-    this.showPassword = !this.showPassword;
-    this.showPasswordIcon = this.showPassword ? faEyeSlash : faEye;
   }
 
   ngOnDestroy () {
