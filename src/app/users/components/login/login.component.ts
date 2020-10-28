@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ILocalLoginInfo, UserService } from '../../service/user.service';
-import { faAt, faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { Subscription } from 'rxjs';
 import { User } from '../../models/user.model';
 import { environment } from 'src/environments/environment';
@@ -15,7 +15,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   authenticationError: boolean = false;
   showPassword: boolean = false;
-  mailIcon = faAt;
   passwordIcon = faUnlockAlt;
   showPasswordIcon = faEye;
   loggedInUser: User;
@@ -28,7 +27,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      'email': new FormControl(null, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required])
     });
 

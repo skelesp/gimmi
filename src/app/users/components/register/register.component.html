@@ -1,4 +1,4 @@
-<ngb-alert type="info" *ngIf="!closed" (close)="closed=true">
+<ngb-alert type="info" *ngIf="!infoAlertClosed" (close)="infoAlertClosed=true">
     <h5>Welkom op Gimmi, dé hulp in je cadeauzoektocht!</h5>
     <p *ngIf="invitedFor">
         Jij bent uitgenodigd om de wensenlijst van
@@ -62,19 +62,18 @@ Of klik <a [routerLink]="['/users','login']"  [queryParams]="{e: registrationFor
                     Verjaardag is een verplicht veld</small>
             </div>
     </div>
-    <div class="form-group" formGroupName="localAccountData">
-        <gimmi-email-input 
-            [parentFormGroup]='registrationForm.get("localAccountData")' 
-            label="Email"
-            bindedQueryParam='e'>
-        </gimmi-email-input>
+    
+    <gimmi-email-input 
+        [parentFormGroup]='registrationForm.get("localAccountData")' 
+        label="Email"
+        bindedQueryParam='e'>
+    </gimmi-email-input>
 
-        <gimmi-password-input 
-            [parentFormGroup]='registrationForm.get("localAccountData")'>
-        </gimmi-password-input>
+    <gimmi-password-input 
+        [parentFormGroup]='registrationForm.get("localAccountData")'>
+    </gimmi-password-input>
         
-    </div>
     <div>
-        <button type="submit" class="btn btn-danger" [disabled]='!registrationForm.valid'>Registreer</button>
+        <button type="submit" class="btn btn-danger mt-3" [disabled]='!registrationForm.valid'>Registreer</button>
     </div>
 </form>
