@@ -1,6 +1,6 @@
-<div [formGroup]='parentFormGroup'>
+<div [formGroup]='parentFormGroup' class='mb-3'>
     <label *ngIf="label">{{label}}</label>
-    <div class="input-group mb-3">
+    <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">
                 <fa-icon [icon]="mailIcon"></fa-icon>
@@ -11,10 +11,12 @@
                 class="form-control" 
                 placeholder="Email (login)" 
                 [bindQueryParamToInput]="bindedQueryParam">
-        <div id="emailError" class="form-text text-danger"
-            *ngIf="!parentFormGroup.get('email').valid && parentFormGroup.get('email').touched">
-            <small *ngIf="parentFormGroup.get('email').errors?.required">
-                Email is een verplicht veld</small>
-        </div>
+    </div>
+    <div id="emailError" class="form-text text-danger"
+        *ngIf="!parentFormGroup.get('email').valid && parentFormGroup.get('email').touched">
+        <small *ngIf="parentFormGroup.get('email').errors?.required">
+            Email is een verplicht veld</small>
+        <small *ngIf="parentFormGroup.get('email').errors?.email">
+            Geef een geldig emailadres in (formaat: *** @ *** . **)</small>
     </div>
 </div>
