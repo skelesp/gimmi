@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControlOptions, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { faAt } from '@fortawesome/free-solid-svg-icons'
+import { PeopleService } from 'src/app/people/service/people.service';
+import { IPerson } from 'src/app/people/models/person.model';
 
 @Component({
   selector: 'gimmi-email-input',
@@ -12,12 +16,35 @@ export class EmailInputComponent implements OnInit {
   @Input() label: string = null;
   @Input() bindedQueryParam: string = null;
   @Input() controlName: string = 'email';
-  mailIcon = faAt;
+  @Input() placeholder: string = 'Email (login)';
+  @Input() emailExistsValidation: boolean = false;
 
-  constructor() { }
+  mailIcon = faAt;
+  knownPerson: IPerson;
+
+  constructor(private _peopleService: PeopleService) { }
 
   ngOnInit(): void {
-    this.parentFormGroup.addControl(this.controlName, new FormControl(null, [Validators.required, Validators.email]));
+    let emailControlOptions : AbstractControlOptions = {
+      validators: [Validators.required, Validators.email]
+    };
+    if (this.emailExistsValidation) {
+      emailControlOptions.asyncValidators = this.emailExists.bind(this);
+      emailControlOptions.updateOn = 'blur'
+    }
+    this.parentFormGroup.addControl(
+      this.controlName,
+      new FormControl(null, emailControlOptions)
+    );
+  }
+
+  emailExists(control: FormControl): Promise<any> | Observable<any> {
+    return this._peopleService.findPersonByEmail(control.value)
+      .pipe(
+        tap(value => this.knownPerson = value),
+        map(personResult => { return { 'emailExists': true } }),
+        catchError(error => { return of(null) })
+      );
   }
 
 }

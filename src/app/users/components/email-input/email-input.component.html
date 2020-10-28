@@ -9,7 +9,7 @@
         <input  [formControlName]="controlName" 
                 type="text" 
                 class="form-control" 
-                placeholder="Email (login)" 
+                [placeholder]="placeholder" 
                 [bindQueryParamToInput]="bindedQueryParam">
     </div>
     <div id="emailError" class="form-text text-danger"
@@ -18,5 +18,8 @@
             Email is een verplicht veld</small>
         <small *ngIf="parentFormGroup.get(controlName).errors?.email">
             Geef een geldig emailadres in (formaat: *** @ *** . **)</small>
+        <small *ngIf="parentFormGroup.get(controlName).errors?.emailExists" class="text-success">
+            Er is al een wishlist gekoppeld aan dit emailadres:
+            <a [routerLink]="['/people', knownPerson.id]">Bekijk de wensen van {{knownPerson.fullName}}</a></small>
     </div>
 </div>
