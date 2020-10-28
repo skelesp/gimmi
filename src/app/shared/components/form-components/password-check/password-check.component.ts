@@ -22,7 +22,7 @@ export class PasswordCheckComponent implements OnInit {
     const password = control.get('password');
     const passwordCheck = control.get('passwordCheck');
 
-    return password && passwordCheck && password.value !== passwordCheck.value ? { noPasswordMatch : true } : null;
+    return password?.value && passwordCheck?.value && password.value !== passwordCheck.value ? { noPasswordMatch : true } : null;
   }
 
 }
