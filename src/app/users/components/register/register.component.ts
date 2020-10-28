@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PeopleService } from 'src/app/people/service/people.service';
-import { INewUserRequestInfo, User } from '../../models/user.model';
+import { INewUserRequestInfo } from '../../models/user.model';
 import { UserService } from '../../service/user.service';
 
 @Component({
@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
   invitedFor: string;
   knownUser: boolean;
   registrationForm: FormGroup;
-  closed: boolean;
+  infoAlertClosed: boolean;
 
   constructor( 
     private userService : UserService,
@@ -28,9 +28,7 @@ export class RegisterComponent implements OnInit {
         'lastName': new FormControl(null, Validators.required),
         'birthday': new FormControl(null, Validators.required)
       }),
-      'localAccountData': new FormGroup({
-        'email': new FormControl(null, [Validators.required, Validators.email])
-      })
+      'localAccountData': new FormGroup({})
     });
   }
 
