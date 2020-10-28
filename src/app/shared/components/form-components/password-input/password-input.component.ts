@@ -9,25 +9,22 @@ import { faUnlockAlt, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icon
 })
 export class PasswordInputComponent implements OnInit {
   @Input() parentFormGroup : FormGroup;
+  @Input() controlName : string = 'password';
+  @Input() placeholder : string = 'Wachtwoord';
+  @Input() label : string = null;
+  
+  showPassword: boolean = false;
   passwordIcon = faUnlockAlt;
   showPasswordIcon = faEye;
-  showPassword: boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.parentFormGroup.addControl('password', new FormControl(null, Validators.required));
-    this.parentFormGroup.addControl('passwordCheck', new FormControl(null, [Validators.required, this.samePassword.bind(this)]));
+    this.parentFormGroup.addControl(this.controlName, new FormControl(null, Validators.required));
   }
 
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
     this.showPasswordIcon = this.showPassword ? faEyeSlash : faEye;
   }
-
-  samePassword( control : FormControl) : {'passwordMatch': boolean} {
-    if (control.value === this.parentFormGroup.controls.password.value) return null;
-    return { 'passwordMatch': true}
-  }
-
 }

@@ -11,6 +11,8 @@ import { CursorPointerDirective } from './directives/cursor-pointer.directive';
 import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
 import { BindQueryparamToInputDirective } from './directives/bind-queryparam-to-input.directive';
 import { EmailInputComponent } from './components/form-components/email-input/email-input.component';
+import { PasswordInputComponent } from './components/form-components/password-input/password-input.component';
+import { PasswordCheckComponent } from './components/form-components/password-check/password-check.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,10 @@ import { EmailInputComponent } from './components/form-components/email-input/em
     CursorPointerDirective, 
     CustomToastComponent, 
     BindQueryparamToInputDirective, 
-    EmailInputComponent],
+    EmailInputComponent,
+    PasswordInputComponent,
+    PasswordCheckComponent
+  ],
   imports: [
     CommonModule,
     NgbModule,
@@ -38,7 +43,9 @@ import { EmailInputComponent } from './components/form-components/email-input/em
     CursorPointerDirective,
     CustomToastComponent,
     BindQueryparamToInputDirective,
-    EmailInputComponent
+    EmailInputComponent,
+    PasswordInputComponent,
+    PasswordCheckComponent
   ]
 })
 export class SharedModule { }
