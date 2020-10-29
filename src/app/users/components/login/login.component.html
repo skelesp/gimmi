@@ -13,7 +13,10 @@
 </div>
 <div *ngIf="authenticationError" class="alert alert-danger">
     De combinatie emailadres / wachtwoord is niet correct. <br /> 
-    <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Wachtwoord vergeten?</a>
+    <gimmi-forgot-password-link 
+        [attemptedEmail]="loginForm.get('email').value"
+        linkText="Wachtwoord vergeten?">
+    </gimmi-forgot-password-link>
 </div>
 
 <form [formGroup]='loginForm' (ngSubmit)='login()'>
@@ -25,7 +28,10 @@
         [parentFormGroup]='loginForm'
     ></gimmi-password-input>
     <small id="forgottenPassword" class="form-text text-muted my-2 float-right">
-        <a [routerLink]="['/users/forgotpassword']" [queryParams]="{e:loginForm.get('email').value}">Wachtwoord vergeten?</a>
+        <gimmi-forgot-password-link 
+        [attemptedEmail]="loginForm.get('email').value"
+        linkText="Wachtwoord vergeten?">
+    </gimmi-forgot-password-link>
     </small>
     <div>
         <button type="submit" class="btn btn-danger my-3" [disabled]="!loginForm.valid || !loginForm.touched">Login</button>
