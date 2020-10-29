@@ -10,15 +10,6 @@
         <a ngbDropdownItem [routerLink]="['/people', currentUser.id]">Mijn wensenlijst</a>
         <a ngbDropdownItem [routerLink]="['/users', currentUser.id]" >Mijn gegevens</a>
         <div class="dropdown-divider"></div>
-        <a ngbDropdownItem [hidden]="currentUser.loginStrategy !== 'local'" (click)="logout()">
-            <div class="slide-container">
-                <fa-icon [icon]="logoutIcon" class="mr-1"></fa-icon>Uitloggen
-            </div>
-        </a>
-        <a ngbDropdownItem *ngIf="currentUser.loginStrategy === 'facebook'">
-            <div class="btn btn-social btn-sm btn-facebook" (click)="logOutFacebook()">
-                <fa-icon [icon]="facebookIcon"></fa-icon> Uitloggen
-            </div>
-        </a>
+        <gimmi-logout-button [currentUser]="currentUser"></gimmi-logout-button>
     </div>
 </div>
