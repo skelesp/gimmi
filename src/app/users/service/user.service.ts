@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, map, tap } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { IDecodedToken, INewUserRequestInfo, User } from '../models/user.model';
+import { IDecodedToken, INewUserRequestInfo, IPasswordResetRequest, User } from '../models/user.model';
 
 export interface ILocalLoginInfo {
   email: string,
@@ -118,6 +118,22 @@ export class UserService {
       "success",
       `Welkom ${this.currentUser.firstName}`
     );
+  }
+
+  /**
+   * @method @public
+   * @description 
+   */
+  public requestPasswordReset(email: string): Observable<any> {
+    let body: IPasswordResetRequest = {
+      email: email,
+      resetPasswordRoute: environment.rootSiteUrl + "/users/resetpassword"
+    }
+    
+    return this.http$.request('delete', environment.apiUrl + 'people/account/local', {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json;charset=utf-8'}),
+      body: body
+    }).pipe(catchError(this.handleAErrorResponse));
   }
 
   private setUser(user : User): void {

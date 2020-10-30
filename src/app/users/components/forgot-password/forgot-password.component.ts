@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { UserService } from '../../service/user.service';
 
 @Component({
   selector: 'gimmi-forgot-password',
@@ -11,15 +13,23 @@ export class ForgotPasswordComponent implements OnInit {
   successAlertClosed : boolean;
   requestSent : boolean = false;
   
-  constructor() { }
+  constructor( 
+    private userService : UserService,
+    private notificationService : NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.forgotPasswordForm = new FormGroup ({});
   }
 
   public requestPasswordReset () : void {
-    window.alert(`Send API request for email ${this.forgotPasswordForm.value.email}`);
-    this.requestSent = true;
+    this.userService.requestPasswordReset(this.forgotPasswordForm.value.email).subscribe(() => {
+      this.requestSent = true;
+      this.notificationService.showNotification(
+        'Er is een email verzonden naar uw emailadres. Gelieve op de link in de mail te klikken.',
+        'success'
+      )
+    });
   }
 
 }

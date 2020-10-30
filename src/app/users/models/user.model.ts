@@ -10,6 +10,11 @@ export class User {
     ) { }
 }
 
+export interface IPasswordResetRequest {
+    email: string,
+    resetPasswordRoute: string
+}
+
 export interface INewUserRequestInfo {
     firstname: string,
     lastname: string,
