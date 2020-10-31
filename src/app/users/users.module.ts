@@ -12,10 +12,11 @@ import { RegisterComponent } from './components/register/register.component';
 import { LogoutButtonComponent } from './components/logout-button/logout-button.component';
 import { ForgotPasswordLinkComponent } from './components/forgot-password-link/forgot-password-link.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 
 @NgModule({
-  declarations: [UserMenuComponent, UnknownUserMenuComponent, LoginComponent, RegisterComponent, LogoutButtonComponent, ForgotPasswordLinkComponent, ForgotPasswordComponent],
+  declarations: [UserMenuComponent, UnknownUserMenuComponent, LoginComponent, RegisterComponent, LogoutButtonComponent, ForgotPasswordLinkComponent, ForgotPasswordComponent, ResetPasswordComponent],
   imports: [
     SharedModule,
     UsersRoutingModule
