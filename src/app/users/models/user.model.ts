@@ -10,6 +10,11 @@ export class User {
     ) { }
 }
 
+export interface IPasswordResetRequest {
+    email: string,
+    resetPasswordRoute: string
+}
+
 export interface INewUserRequestInfo {
     firstname: string,
     lastname: string,
@@ -30,4 +35,10 @@ export interface IDecodedToken {
     iat: number;
     loginStrategy: string;
     accounts: any[];
+}
+
+export interface IValidatePasswordResetTokenResponse {
+    firstName: string;
+    token: string;
+    expiresOn: Date;
 }

@@ -28,7 +28,7 @@ export class PeopleService {
    * @method @public
    * @description Request the full list of people from the server. No filter applied! Puts result in private people observable.
    */
-  retrievePeopleList () : void {
+  public retrievePeopleList () : void {
     this.http$.get<IPersonSearchResponse[]>(environment.apiUrl + 'people')
     .pipe(
       map( peopleFromResponse => {
@@ -49,7 +49,7 @@ export class PeopleService {
    * @description Add a person to the people list without call the backend.
    * @param person 
    */
-  addPerson ( person: IPerson ) {
+  public addPerson ( person: IPerson ) {
     console.log(this._people$.getValue());
     this._people$.next(
       [...this._people$.value, person]
@@ -57,6 +57,11 @@ export class PeopleService {
     console.log(this._people$.getValue());
   }
 
+  /**
+   * @method @public
+   * @description Find a person based on an email address.
+   * @param email Search parameter 'email' to search for a person.
+   */
   public findPersonByEmail (email: string): Observable<IPerson> {
     if (email) {
       return this.http$.get<IPersonSearchResponse>(environment.apiUrl + `people/email/${email}`)
