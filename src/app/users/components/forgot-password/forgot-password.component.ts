@@ -29,6 +29,11 @@ export class ForgotPasswordComponent implements OnInit {
         'Er is een email verzonden naar uw emailadres. Gelieve op de link in de mail te klikken.',
         'success'
       )
+    }, error => {
+      this.notificationService.showNotification(
+        'Er ging iets fout bij het aanvragen van de wachtwoord reset. Gelieve opnieuw te proberen.',
+        'warning'
+      );
     });
   }
 
