@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { IDecodedToken, INewUserRequestInfo, IPasswordResetRequest, User } from '../models/user.model';
+import { IPersonSearchResponse } from 'src/app/people/models/person.model';
 
 export interface ILocalLoginInfo {
   email: string,
@@ -135,6 +136,26 @@ export class UserService {
       body: body
     }).pipe(catchError(this.handleAErrorResponse));
   }
+
+  /**
+   * @method @public
+   * @description
+   * @param password
+   */
+   public resetPassword (password : string, token: string) {
+    if (password && token) {
+      return this.http$.put<{email:string, usedToken:string}>(environment.apiUrl + 'people/account/local/' + token, {pw: password})
+      .pipe(
+        catchError(this.handleAErrorResponse)
+      )
+    }
+   }
+
+  /**
+   * @method @public
+   * @description Set the current user 
+   * @param user User object
+   */
 
   private setUser(user : User): void {
     this.currentUserSubject.next(user);

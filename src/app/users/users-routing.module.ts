@@ -14,7 +14,7 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent, canActivate : [EmailQueryParamGuard] },
       { path: 'register', component: RegisterComponent, canActivate: [EmailQueryParamGuard] },
       { path: 'forgotpassword', component: ForgotPasswordComponent },
-      { path: 'resetpassword/:id', component: ResetPasswordComponent }
+      { path: 'resetpassword/:token', component: ResetPasswordComponent }
     ]
   }
 ];
