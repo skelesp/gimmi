@@ -4,6 +4,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { PasswordResetTokenResolver } from "./resolvers/password-reset-token-resolver.service";
 import { EmailQueryParamGuard } from './guards/email-query-param.guard';
 
 
@@ -14,7 +15,7 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent, canActivate : [EmailQueryParamGuard] },
       { path: 'register', component: RegisterComponent, canActivate: [EmailQueryParamGuard] },
       { path: 'forgotpassword', component: ForgotPasswordComponent },
-      { path: 'resetpassword/:token', component: ResetPasswordComponent }
+      { path: 'resetpassword/:token', component: ResetPasswordComponent, resolve: { validToken: PasswordResetTokenResolver }}
     ]
   }
 ];

@@ -23,10 +23,9 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.resetPasswordForm = new FormGroup({ });
-    this.userService.validatePasswordResetToken(this.route.snapshot.paramMap.get('token')).subscribe( token => {
-      this.invalidToken = token ? false : true ;
-      console.log(token);
-    }, () => { this.invalidToken = true; });
+    this.route.data.subscribe( data => {
+      this.invalidToken = !data.validToken;
+    });
   }
 
   public saveNewPassword () {
