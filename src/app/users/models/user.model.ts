@@ -36,3 +36,9 @@ export interface IDecodedToken {
     loginStrategy: string;
     accounts: any[];
 }
+
+export interface IValidatePasswordResetTokenResponse {
+    firstName: string;
+    token: string;
+    expiresOn: Date;
+}

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { IDecodedToken, INewUserRequestInfo, IPasswordResetRequest, User } from '../models/user.model';
+import { IDecodedToken, INewUserRequestInfo, IPasswordResetRequest, IValidatePasswordResetTokenResponse, User } from '../models/user.model';
 import { IPersonSearchResponse } from 'src/app/people/models/person.model';
 
 export interface ILocalLoginInfo {
@@ -141,6 +141,7 @@ export class UserService {
    * @method @public
    * @description
    * @param password
+   * @param token
    */
    public resetPassword (password : string, token: string) {
     if (password && token) {
@@ -150,6 +151,20 @@ export class UserService {
       )
     }
    }
+
+  /**
+   * @method @public
+   * @description
+   * @param token Token received in validatae password request email
+   */
+  public validatePasswordResetToken( token: string) {
+    if (token) {
+      return this.http$.get<IValidatePasswordResetTokenResponse>(environment.apiUrl + 'people/account/local/' + token)
+        .pipe(
+          catchError(this.handleAErrorResponse)
+        )
+    }
+  }
 
   /**
    * @method @public
