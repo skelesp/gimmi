@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ILocalLoginInfo, UserService } from '../../service/user.service';
+import { UserService } from '../../service/user.service';
+import { ILocalLoginInfo } from "../../models/user.model";
 import { Subscription } from 'rxjs';
 import { User } from '../../models/user.model';
 import { environment } from 'src/environments/environment';

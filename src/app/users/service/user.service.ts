@@ -6,18 +6,30 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { IDecodedToken, INewUserRequestInfo, IPasswordResetRequest, IValidatePasswordResetTokenResponse, User } from '../models/user.model';
-import { IPersonSearchResponse } from 'src/app/people/models/person.model';
-
-export interface ILocalLoginInfo {
-  email: string,
-  password: string
-}
+import { IDecodedUserToken, ILocalLoginInfo, User } from '../models/user.model';
 
 export interface IAuthResponse {
   message: string;
   success: boolean;
   token: string;
+}
+
+export interface IPasswordResetRequest {
+  email: string,
+  resetPasswordRoute: string
+}
+
+export interface INewUserRequestInfo {
+  firstname: string,
+  lastname: string,
+  email: string,
+  birthday: string,
+  password: string
+}
+export interface IValidatePasswordResetTokenResponse {
+  firstName: string;
+  token: string;
+  expiresOn: Date;
 }
 
 type logoutReason = "USER_EVENT" | "EXPIRED_TOKEN" | "FAILED_AUTHENTICATION" | "401_RESPONSE";
@@ -192,7 +204,7 @@ export class UserService {
       return null;
     }
     
-    let decodedToken: IDecodedToken = jwtService.decodeToken(token);
+    let decodedToken: IDecodedUserToken = jwtService.decodeToken(token);
     console.info("[UserService] Valid token found")
     return new User(
       decodedToken.id,

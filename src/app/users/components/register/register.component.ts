@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PeopleService } from 'src/app/people/service/people.service';
-import { INewUserRequestInfo } from '../../models/user.model';
+import { INewUserRequestInfo } from '../../service/user.service';
 import { UserService } from '../../service/user.service';
 
 @Component({
