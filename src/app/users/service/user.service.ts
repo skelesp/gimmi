@@ -6,8 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { IDecodedToken, INewUserRequestInfo, IPasswordResetRequest, IValidatePasswordResetTokenResponse, User } from '../models/user.model';
-import { IPersonSearchResponse } from 'src/app/people/models/person.model';
+import { IDecodedUserToken, INewUserRequestInfo, IPasswordResetRequest, IValidatePasswordResetTokenResponse, User } from '../models/user.model';
 
 export interface ILocalLoginInfo {
   email: string,
@@ -192,7 +191,7 @@ export class UserService {
       return null;
     }
     
-    let decodedToken: IDecodedToken = jwtService.decodeToken(token);
+    let decodedToken: IDecodedUserToken = jwtService.decodeToken(token);
     console.info("[UserService] Valid token found")
     return new User(
       decodedToken.id,

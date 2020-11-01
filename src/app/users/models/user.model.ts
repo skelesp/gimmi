@@ -23,7 +23,7 @@ export interface INewUserRequestInfo {
     password: string
 }
 
-export interface IDecodedToken {
+export interface IDecodedUserToken {
     _id: string;
     id: string;
     firstName: string;
