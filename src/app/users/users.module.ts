@@ -15,13 +15,15 @@ import { LogoutButtonComponent } from './components/logout-button/logout-button.
 import { ForgotPasswordLinkComponent } from './components/forgot-password-link/forgot-password-link.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { FacebookLoginButtonComponent } from './components/facebook-login-button/facebook-login-button.component';
 
 
 @NgModule({
-  declarations: [UserMenuComponent, UnknownUserMenuComponent, LoginComponent, RegisterComponent, LogoutButtonComponent, ForgotPasswordLinkComponent, ForgotPasswordComponent, ResetPasswordComponent],
+  declarations: [UserMenuComponent, UnknownUserMenuComponent, LoginComponent, RegisterComponent, LogoutButtonComponent, ForgotPasswordLinkComponent, ForgotPasswordComponent, ResetPasswordComponent, FacebookLoginButtonComponent],
   imports: [
     SharedModule,
-    UsersRoutingModule
+    UsersRoutingModule,
+    SocialLoginModule
   ],
   exports: [
     UserMenuComponent,
@@ -36,7 +38,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     { provide: HTTP_INTERCEPTORS, useClass: AuthErrorInterceptor, multi: true },
     { provide: 'SocialAuthServiceConfig',
       useValue: {
-        autoLogin: false,
+        autoLogin: true,
         providers: [
           { 
             id: FacebookLoginProvider.PROVIDER_ID,
