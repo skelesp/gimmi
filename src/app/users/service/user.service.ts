@@ -53,7 +53,7 @@ export interface IFacebookAuthRequest {
   }
 }
 
-type logoutReason = "USER_EVENT" | "EXPIRED_TOKEN" | "FAILED_AUTHENTICATION" | "401_RESPONSE";
+type logoutReason = "USER_EVENT" | "EXPIRED_TOKEN" | "FAILED_AUTHENTICATION" | "401_RESPONSE" | "SOCIAL_ACCOUNT_LOGOUT";
 
 // Don't inject via constructor: https://stackoverflow.com/questions/49739277/nullinjectorerror-no-provider-for-jwthelperservice
 // See code example for standalone implementation: https://www.npmjs.com/package/@auth0/angular-jwt
@@ -76,9 +76,9 @@ export class UserService {
     this.currentUserSubject = new BehaviorSubject<User>(this.getUserFromStoredToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
 
-    if (!this.currentUser) {
+    if (!this.currentUser || this.currentUser.loginStrategy === 'facebook') {
       this.socialAuthService.authState.subscribe((FBuser) => {
-        if (FBuser) {
+        if (FBuser?.id) {
           this.authenticateWithFacebook(FBuser).subscribe(
             (user) => {
               console.info(`[UserService] User ${user.firstName} loggedIn with Facebook autologin`);
@@ -86,6 +86,9 @@ export class UserService {
           );
         } else {
           console.info('[UserService] No user found via Facebook autologin');
+          if (this.currentUser?.loginStrategy === 'facebook') {
+            this.logout('SOCIAL_ACCOUNT_LOGOUT');
+          }
         }
       });
     }
@@ -111,38 +114,40 @@ export class UserService {
         map ( () => { return this.currentUser})
       );
     }
-
-    public authenticateWithFacebook (fbUser : IFacebookUserInfo) : Observable<User> {
-      let facebookRequestBody : IFacebookAuthRequest = {
-        account: fbUser.provider.toLowerCase(),
-        fb:{
-          authResponse: {
-            userID: fbUser.id,
-            accessToken: fbUser.authToken
-          }
-        },
-        userInfo: {
-          email: fbUser.email,
-          first_name: fbUser.firstName,
-          last_name: fbUser.lastName,
-          picture: {
-            data: {
-              url: fbUser.photoUrl
-            }
+  /**
+   * @description Login with Facebook
+   */
+  public authenticateWithFacebook (fbUser : IFacebookUserInfo) : Observable<User> {
+    let facebookRequestBody : IFacebookAuthRequest = {
+      account: fbUser.provider.toLowerCase(),
+      fb:{
+        authResponse: {
+          userID: fbUser.id,
+          accessToken: fbUser.authToken
+        }
+      },
+      userInfo: {
+        email: fbUser.email,
+        first_name: fbUser.firstName,
+        last_name: fbUser.lastName,
+        picture: {
+          data: {
+            url: fbUser.photoUrl
           }
         }
       }
-      return this.http$.post<IAuthResponse>(environment.apiUrl + 'authenticate', facebookRequestBody)
-        .pipe(
-          catchError(this.handleAErrorResponse),
-          tap(authResponse => {
-            this.persistentlySaveUserToken(authResponse.token);
-            this.setUser(this.getUserFromStoredToken());
-          }),
-          map(() => { return this.currentUser })
-        );
     }
-    
+    return this.http$.post<IAuthResponse>(environment.apiUrl + 'authenticate', facebookRequestBody)
+      .pipe(
+        catchError(this.handleAErrorResponse),
+        tap(authResponse => {
+          this.persistentlySaveUserToken(authResponse.token);
+          this.setUser(this.getUserFromStoredToken());
+        }),
+        map(() => { return this.currentUser })
+      );
+  }
+  
   /**
    * @method @public
    * @description This method registers a new user via the Gimmi API. The API call returns a logged in user which is set as current user.
@@ -173,6 +178,13 @@ export class UserService {
   }
 
   /**
+   * @description Logout from Social account
+   */
+  public logoutFromSocialAccount () {
+    this.socialAuthService.signOut();
+  }
+
+  /**
    * @method @private 
    * @description Method to redirect a user from a page after successful authentication.
    */
@@ -184,7 +196,7 @@ export class UserService {
       let redirectUrl = this.attemptedUrl ? this.attemptedUrl : defaultRedirect;
       
       // Redirect user after authentication
-      console.info(`User is redirected to ${redirectUrl}`);
+      console.info(`[UserService] User is redirected to ${redirectUrl}`);
       this.router.navigateByUrl(redirectUrl);
       this.attemptedUrl = null;
     }

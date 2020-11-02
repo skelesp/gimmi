@@ -31,7 +31,7 @@ export class LogoutButtonComponent {
   }
 
   logOutFacebook(): void {
-    this.userService.logout("USER_EVENT");
+    this.userService.logoutFromSocialAccount();
   }
 
 }
