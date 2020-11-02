@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SocialLoginModule, SocialAuthServiceConfig } from "angularx-social-login";
+import { FacebookLoginProvider } from "angularx-social-login";
 
 import { UsersRoutingModule } from './users-routing.module';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
@@ -31,7 +33,18 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthErrorInterceptor, multi: true },
+    { provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          { 
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('106212316803375')
+          }
+        ]
+      } as SocialAuthServiceConfig  
+    }
   ]
 })
 export class UsersModule { }
