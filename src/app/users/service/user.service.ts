@@ -6,7 +6,8 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { IDecodedUserToken, ILocalLoginInfo, User } from '../models/user.model';
+import { IDecodedUserToken, IFacebookUserInfo, ILocalLoginInfo, User } from '../models/user.model';
+import { SocialAuthService } from "angularx-social-login";
 
 export interface IAuthResponse {
   message: string;
@@ -32,7 +33,27 @@ export interface IValidatePasswordResetTokenResponse {
   expiresOn: Date;
 }
 
-type logoutReason = "USER_EVENT" | "EXPIRED_TOKEN" | "FAILED_AUTHENTICATION" | "401_RESPONSE";
+export interface IFacebookAuthRequest {
+  account: string,
+  fb: {
+    authResponse: {
+      userID: string;
+      accessToken: string;
+    }
+  },
+  userInfo: {
+    email: string;
+    first_name: string;
+    last_name: string;
+    picture: {
+      data: { 
+        url: string;
+      }
+    }
+  }
+}
+
+type logoutReason = "USER_EVENT" | "EXPIRED_TOKEN" | "FAILED_AUTHENTICATION" | "401_RESPONSE" | "SOCIAL_ACCOUNT_LOGOUT";
 
 // Don't inject via constructor: https://stackoverflow.com/questions/49739277/nullinjectorerror-no-provider-for-jwthelperservice
 // See code example for standalone implementation: https://www.npmjs.com/package/@auth0/angular-jwt
@@ -49,10 +70,28 @@ export class UserService {
   constructor( 
     private http$: HttpClient,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private socialAuthService: SocialAuthService
   ) { 
     this.currentUserSubject = new BehaviorSubject<User>(this.getUserFromStoredToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
+
+    if (!this.currentUser || this.currentUser.loginStrategy === 'facebook') {
+      this.socialAuthService.authState.subscribe((FBuser) => {
+        if (FBuser?.id) {
+          this.authenticateWithFacebook(FBuser).subscribe(
+            (user) => {
+              console.info(`[UserService] User ${user.firstName} loggedIn with Facebook autologin`);
+            }
+          );
+        } else {
+          console.info('[UserService] No user found via Facebook autologin');
+          if (this.currentUser?.loginStrategy === 'facebook') {
+            this.logout('SOCIAL_ACCOUNT_LOGOUT');
+          }
+        }
+      });
+    }
   }
 
   public get currentUser() : User {
@@ -61,7 +100,7 @@ export class UserService {
   /**
    * @method @public
    * @description This method logs in a user via the Gimmi API. The API call returns a logged in user which is set as current user.
-   * @param authInfo Object with interface = ILocalLoginInfo.
+   * @param authInfo Object with interface = ILocalLoginInfo or IFacebookUserInfo.
    * @returns An observable with the logged in user object.
    */
   public authenticate (authInfo: ILocalLoginInfo ) : Observable<User> {
@@ -75,7 +114,40 @@ export class UserService {
         map ( () => { return this.currentUser})
       );
     }
-    
+  /**
+   * @description Login with Facebook
+   */
+  public authenticateWithFacebook (fbUser : IFacebookUserInfo) : Observable<User> {
+    let facebookRequestBody : IFacebookAuthRequest = {
+      account: fbUser.provider.toLowerCase(),
+      fb:{
+        authResponse: {
+          userID: fbUser.id,
+          accessToken: fbUser.authToken
+        }
+      },
+      userInfo: {
+        email: fbUser.email,
+        first_name: fbUser.firstName,
+        last_name: fbUser.lastName,
+        picture: {
+          data: {
+            url: fbUser.photoUrl
+          }
+        }
+      }
+    }
+    return this.http$.post<IAuthResponse>(environment.apiUrl + 'authenticate', facebookRequestBody)
+      .pipe(
+        catchError(this.handleAErrorResponse),
+        tap(authResponse => {
+          this.persistentlySaveUserToken(authResponse.token);
+          this.setUser(this.getUserFromStoredToken());
+        }),
+        map(() => { return this.currentUser })
+      );
+  }
+  
   /**
    * @method @public
    * @description This method registers a new user via the Gimmi API. The API call returns a logged in user which is set as current user.
@@ -106,6 +178,13 @@ export class UserService {
   }
 
   /**
+   * @description Logout from Social account
+   */
+  public logoutFromSocialAccount () {
+    this.socialAuthService.signOut();
+  }
+
+  /**
    * @method @private 
    * @description Method to redirect a user from a page after successful authentication.
    */
@@ -117,7 +196,7 @@ export class UserService {
       let redirectUrl = this.attemptedUrl ? this.attemptedUrl : defaultRedirect;
       
       // Redirect user after authentication
-      console.info(`User is redirected to ${redirectUrl}`);
+      console.info(`[UserService] User is redirected to ${redirectUrl}`);
       this.router.navigateByUrl(redirectUrl);
       this.attemptedUrl = null;
     }
@@ -196,7 +275,7 @@ export class UserService {
     let token = localStorage.getItem('currentUser');
     if (!token) {
       console.info("[UserService] No token found in local storage");
-      return null
+      return null;
     }
 
     if (jwtService.isTokenExpired(token)) {
@@ -205,7 +284,7 @@ export class UserService {
     }
     
     let decodedToken: IDecodedUserToken = jwtService.decodeToken(token);
-    console.info("[UserService] Valid token found")
+    console.info("[UserService] User decoded from valid token");
     return new User(
       decodedToken.id,
       decodedToken.lastName,
