@@ -15,7 +15,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Debug Angular app",
-            "url": "http://localhost:4200",
+            "url": "https://localhost:4200",
             "webRoot": "${workspaceFolder}"
         }
     ]
