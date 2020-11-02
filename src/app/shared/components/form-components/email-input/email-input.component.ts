@@ -6,6 +6,7 @@ import { faAt } from '@fortawesome/free-solid-svg-icons'
 import { PeopleService } from 'src/app/people/service/people.service';
 import { IPerson } from 'src/app/people/models/person.model';
 
+type EmailExistsRedirectType = "wishlist" | "login";
 @Component({
   selector: 'gimmi-email-input',
   templateUrl: './email-input.component.html',
@@ -18,6 +19,7 @@ export class EmailInputComponent implements OnInit {
   @Input() controlName: string = 'email';
   @Input() placeholder: string = 'Email (login)';
   @Input() emailExistsValidation: boolean = false;
+  @Input() emailExistsRedirectTo: EmailExistsRedirectType = "wishlist";
 
   mailIcon = faAt;
   knownPerson: IPerson;

@@ -73,7 +73,9 @@
     <gimmi-email-input 
         [parentFormGroup]='registrationForm.get("localAccountData")' 
         label="Email"
-        bindedQueryParam='e'>
+        bindedQueryParam='e'
+        [emailExistsValidation]='true'
+        emailExistsRedirectTo='login'>
     </gimmi-email-input>
     <gimmi-password-check 
         [parentFormGroup]="registrationForm.get('localAccountData')">
