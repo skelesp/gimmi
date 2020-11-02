@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { IDecodedUserToken, IFacebookUserInfo, ILocalLoginInfo, User } from '../models/user.model';
+import { SocialAuthService } from "angularx-social-login";
 
 export interface IAuthResponse {
   message: string;
@@ -69,10 +70,25 @@ export class UserService {
   constructor( 
     private http$: HttpClient,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private socialAuthService: SocialAuthService
   ) { 
     this.currentUserSubject = new BehaviorSubject<User>(this.getUserFromStoredToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
+
+    if (!this.currentUser) {
+      this.socialAuthService.authState.subscribe((FBuser) => {
+        if (FBuser) {
+          this.authenticateWithFacebook(FBuser).subscribe(
+            (user) => {
+              console.info(`[UserService] User ${user.firstName} loggedIn with Facebook autologin`);
+            }
+          );
+        } else {
+          console.info('[UserService] No user found via Facebook autologin');
+        }
+      });
+    }
   }
 
   public get currentUser() : User {
@@ -247,7 +263,7 @@ export class UserService {
     let token = localStorage.getItem('currentUser');
     if (!token) {
       console.info("[UserService] No token found in local storage");
-      return null
+      return null;
     }
 
     if (jwtService.isTokenExpired(token)) {
@@ -256,7 +272,7 @@ export class UserService {
     }
     
     let decodedToken: IDecodedUserToken = jwtService.decodeToken(token);
-    console.info("[UserService] Valid token found")
+    console.info("[UserService] User decoded from valid token");
     return new User(
       decodedToken.id,
       decodedToken.lastName,
