@@ -63,7 +63,7 @@ export class PeopleSearchComponent implements OnInit, OnDestroy {
     $event.preventDefault();
     if ($event.item) {
       const personId = $event.item.id;
-      this.router.navigate(['/people', personId]);
+      this.router.navigate(['/people', personId, 'dashboard']);
     } else {
       this.router.navigate(['/people/invite']);
     }

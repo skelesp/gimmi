@@ -1,0 +1,35 @@
+<div class="container" *ngIf='!person'>
+    <h4>Sorry, geen lijst gevonden.</h4>
+</div>
+<div class="container" *ngIf='person'>
+    <div class="row mb-2">
+        <div class="col-auto">
+            <h1>{{person?.firstName}} {{person?.lastName}}</h1>
+        </div>
+        <div class="col-sm-4 float-left">
+            <a  class="badge badge-pill badge-secondary float-left" 
+                [hidden]='currrentUser?.id !== person?.id'
+                [routerLink]='["/people", person?.id, "dashboard", "share"]'
+                *ngIf='person'>
+                Verstuur mijn lijst
+            </a>
+            <a  class="badge badge-pill badge-secondary float-right" 
+                [hidden]='currrentUser?.id === person?.id'
+                [routerLink]='["/people", currrentUser?.id, "dashboard"]'
+                *ngIf='currrentUser'>
+                Ga naar mijn lijst
+            </a>
+        </div>
+    </div>
+    
+    <div class='row'>
+        <div class="alert alert-info" role="alert">
+            <strong>Hier komt de extra info over de persoon</strong>
+        </div>
+    </div>  
+    <div class='row'>
+        <div class="alert alert-info" role="alert">
+            <strong>Hier komt de wishlist</strong>
+        </div>
+    </div>
+</div>

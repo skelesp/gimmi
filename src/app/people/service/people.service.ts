@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
@@ -8,8 +8,16 @@ import { IPersonSearchResponse, IPerson } from '../models/person.model';
 import { CommunicationService, MailInfo } from 'src/app/shared/services/communication.service';
 
 export interface InvitePersonData {
-  email: string,
-  notifyOnRegistration: boolean | null
+  email: string;
+  notifyOnRegistration: boolean | null;
+}
+
+export interface IPersonNameResponse {
+  _id : string;
+  firstName : string;
+  lastName : string;
+  fullName : string;
+  id : string;
 }
 
 @Injectable({
@@ -92,6 +100,17 @@ export class PeopleService {
     };
 
     this.communicationService.sendMail(mailInfo);
+  }
+
+  
+  /**
+   * @description Get name info for a person
+   * @param personId A valid personId 
+   */
+  public getNameById (personId : string) : Observable<IPersonNameResponse> {
+    return personId ? this.http$.get<IPersonNameResponse>( environment.apiUrl + 'people/' + personId + '/name').pipe(
+      catchError(this.handleError)
+    ) : throwError('No personId provided');
   }
 
   /**  
