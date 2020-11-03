@@ -5,6 +5,7 @@ import { PeopleRoutingModule } from './people-routing.module';
 import { PeopleSearchComponent } from './components/people-search/people-search.component';
 import { InviteComponent } from './components/invite/invite.component';
 import { PersonDashboardComponent } from './components/person-dashboard/person-dashboard.component';
+import { WishesModule } from '../wishes/wishes.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { PersonDashboardComponent } from './components/person-dashboard/person-d
   ],
   imports: [
     SharedModule,
-    PeopleRoutingModule
+    PeopleRoutingModule,
+    WishesModule
   ],
   exports: [
     PeopleSearchComponent,
