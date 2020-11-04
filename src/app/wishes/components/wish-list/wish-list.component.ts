@@ -19,9 +19,7 @@ export class WishListComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     console.warn('[WishListComponent] CALLED ngOnChanges!', changes);
     this.wishService.getWishlist(this.receiver).subscribe( (wishes) => {
-      this.wishes = wishes.filter( (wish) => {
-        return wish.status === 'open';
-      });
+      this.wishes = wishes
     });
   }
 

@@ -1,7 +1,7 @@
-type wishStatus = 'open' | 'received';
+export type wishStatus = 'Open' | 'Reserved' | 'Received' | 'Closed';
 
 export class Wish {
-    public status: wishStatus;
+    private _status: wishStatus;
 
     constructor(
         public id: string,
@@ -10,7 +10,18 @@ export class Wish {
         public image: string,
         public url: string
     ) {
-        this.status = 'open';
         if (!image) this.image = '<DEFAULT IMAGE>'
     }
+
+    
+    public set status (v : wishStatus) {
+        this._status = v;
+    }
+
+    
+    public get status() : wishStatus {
+        return this._status;
+    }
+    
+    
 }
