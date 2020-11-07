@@ -190,7 +190,7 @@ export class UserService {
    */
   public redirectAfterAuthentication () : void {
     if (this.currentUser) { // Should always be true because only called after authentication...
-      let defaultRedirect = `/people/${this.currentUser.id}`;
+      let defaultRedirect = `/people/${this.currentUser.id}/dashboard`;
       
       // Set redirect url
       let redirectUrl = this.attemptedUrl ? this.attemptedUrl : defaultRedirect;
