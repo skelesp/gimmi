@@ -149,6 +149,7 @@ export class PeopleService {
      errorMessage = `Gimmi API returned code ${error.status}. Error info: ${JSON.stringify(error.error)}`;
    }
    // Return an observable with a user-facing error message.
+   console.error(errorMessage);
    return throwError( errorMessage );
  }
 

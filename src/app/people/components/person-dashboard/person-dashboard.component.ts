@@ -17,9 +17,8 @@ export class PersonDashboardComponent implements OnInit {
   currrentUser : User;
 
   constructor(
-    private route : ActivatedRoute,
-    private peopleService : PeopleService,
-    private userService : UserService
+    private userService : UserService,
+    private route : ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -27,18 +26,9 @@ export class PersonDashboardComponent implements OnInit {
       this.currrentUser = currentUser;
     });
 
-    this.route.paramMap
-    .pipe(
-      switchMap( ( params : Params) => {
-        return this.peopleService.getNameById(params.get('personId') );
-      })
-    )
-    .subscribe((person: Person ) => { 
-      if (person) this.person = person;
-    },
-    error => {
-      console.error(error);
-    });
+    this.route.data.subscribe( ( data ) => {
+        this.person = data.personOnlyName;
+      });
   }
 
 }
