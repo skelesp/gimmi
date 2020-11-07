@@ -30,22 +30,14 @@ export class PersonDashboardComponent implements OnInit {
     this.route.paramMap
     .pipe(
       switchMap( ( params : Params) => {
-        return this.peopleService.getNameById(params.get('personId') ).pipe(
-          catchError((error) => { 
-            console.error(error);
-            return of(null);
-          })
-        );
+        return this.peopleService.getNameById(params.get('personId') );
       })
     )
-    .subscribe((personNameResponse: IPersonNameResponse ) => { 
-      if (personNameResponse) {
-        this.person = new Person (
-          personNameResponse.id,
-          personNameResponse.firstName,
-          personNameResponse.lastName
-        )
-      }
+    .subscribe((person: Person ) => { 
+      if (person) this.person = person;
+    },
+    error => {
+      console.error(error);
     });
   }
 

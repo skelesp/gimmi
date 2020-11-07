@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
-import { IPersonSearchResponse, IPerson } from '../models/person.model';
+import { IPersonSearchResponse, IPerson, Person } from '../models/person.model';
 import { CommunicationService, MailInfo } from 'src/app/shared/services/communication.service';
 
 export interface InvitePersonData {
@@ -106,10 +106,20 @@ export class PeopleService {
   /**
    * @description Get name info for a person
    * @param personId A valid personId 
+   * @returns Person object
    */
-  public getNameById (personId : string) : Observable<IPersonNameResponse> {
+  public getNameById (personId : string) : Observable<Person> {
     return personId ? this.http$.get<IPersonNameResponse>( environment.apiUrl + 'people/' + personId + '/name').pipe(
-      catchError(this.handleError)
+      catchError(this.handleError),
+      map((personNameResponse: IPersonNameResponse) => {
+        if (personNameResponse) {
+          return new Person(
+            personNameResponse.id,
+            personNameResponse.firstName,
+            personNameResponse.lastName
+          );
+        }
+      })
     ) : throwError('No personId provided');
   }
 
