@@ -1,5 +1,10 @@
 <h3>Wensenlijst</h3>
-<div class="card-columns ml-3 mr-3">
+<div *ngIf="!wishes">
+    <ngb-alert type="info">
+        <p>Er staan nog geen wensen op deze lijst. Vraag {{receiver.firstName}} om wensen op de lijst toe te voegen, zodat jij het perfect cadeau kan kopen...</p>
+    </ngb-alert>
+</div>
+<div *ngIf="wishes" class="card-columns ml-3 mr-3">
     <!-- Create wish component -->
     <!-- Show all wishes for the current receiver -->
     <div *ngFor="let wish of wishes">
