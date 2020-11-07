@@ -58,11 +58,9 @@ export class PeopleService {
    * @param person 
    */
   public addPerson ( person: IPerson ) {
-    console.log(this._people$.getValue());
     this._people$.next(
       [...this._people$.value, person]
       );
-    console.log(this._people$.getValue());
   }
 
   /**

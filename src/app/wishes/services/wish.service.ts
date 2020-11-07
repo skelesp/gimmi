@@ -79,16 +79,3 @@ export class WishService {
 
   }
 }
-
-/* tap( (wishes) => {
-        let wishStateObservables = wishes.map(wish => this.http$.get<wishStatus>(environment.apiUrl + 'wish/' + wish.id + '/state').pipe(catchError(() => of(null))));
-        forkJoin(wishStateObservables)
-          .pipe(
-            map(states => {
-              states.forEach((state, index) => {
-                wishes[index].status = state;
-              });
-              return wishes;
-            })
-          ).subscribe((wishes => { console.log(wishes) }));
-      }) */

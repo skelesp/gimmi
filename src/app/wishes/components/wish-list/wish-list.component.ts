@@ -19,7 +19,6 @@ export class WishListComponent implements OnInit, OnChanges {
   ) { }
   
   ngOnChanges(changes: SimpleChanges): void {
-    console.warn('[WishListComponent] CALLED ngOnChanges!', changes);
     this.loading = true;
     this.wishes = [];
     this.wishService.getWishlist(this.receiver).subscribe( (wishes) => {
