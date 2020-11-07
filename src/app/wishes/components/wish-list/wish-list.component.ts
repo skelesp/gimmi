@@ -11,6 +11,7 @@ import { WishService } from '../../services/wish.service';
 export class WishListComponent implements OnInit, OnChanges {
   @Input() receiver : Person;
   wishes: Wish[];
+  loading: boolean = false;
   
   constructor( 
     private wishService : WishService
@@ -18,9 +19,16 @@ export class WishListComponent implements OnInit, OnChanges {
   
   ngOnChanges(changes: SimpleChanges): void {
     console.warn('[WishListComponent] CALLED ngOnChanges!', changes);
+    this.loading = true;
+    this.wishes = [];
     this.wishService.getWishlist(this.receiver).subscribe( (wishes) => {
       this.wishes = wishes
-    });
+      this.loading = false;
+    }, () => {
+      this.wishes = null;
+      this.loading = false;
+    }
+    );
   }
 
   ngOnInit(): void {
