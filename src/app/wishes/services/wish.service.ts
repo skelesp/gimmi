@@ -61,13 +61,18 @@ export class WishService {
         return wishes;
       }),
       switchMap( (wishes) => {
-        let wishStateObservables = wishes.map(wish => this.http$.get<wishStatus>(environment.apiUrl + 'wish/' + wish.id + '/state').pipe(catchError(() => of(null))));
-        return forkJoin(wishStateObservables)
+        let wishStateObservables = wishes.map(wish => this.http$.get<wishStatus>(environment.apiUrl + 'wish/' + wish.id + '/state')
+          .pipe(catchError(() => of(null))));
+        return wishes.length !== 0 ? forkJoin(wishStateObservables) : of(null); // https://stackoverflow.com/questions/41723541/rxjs-switchmap-not-emitting-value-if-the-input-observable-is-empty-array
       }),
       map( states => {
-        states.forEach((state, index) => {
-          wishes[index].status = state;
-        });
+        if (states) {
+          states.forEach((state, index) => {
+            wishes[index].status = state;
+          });
+        } else {
+          wishes = [];
+        }
         return wishes;
       })      
     );
