@@ -15,9 +15,7 @@ const routes: Routes = [
     ] 
   },
   {
-    path: "people/:personId", resolve: { personOnlyName: PersonNameResolver }, children: [
-      { path: "dashboard", component: PersonDashboardComponent }
-    ] 
+    path: "people/:personId", component: PersonDashboardComponent, resolve: { personOnlyName: PersonNameResolver } 
   }
 ];
 

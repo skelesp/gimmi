@@ -9,13 +9,13 @@
         <div class="col-sm-4 float-left">
             <a  class="badge badge-pill badge-secondary float-left" 
                 [hidden]='currrentUser?.id !== person?.id'
-                [routerLink]='["/people", person?.id, "dashboard", "share"]'
+                [routerLink]='["/people", person?.id, "share"]'
                 *ngIf='person'>
                 Verstuur mijn lijst
             </a>
             <a  class="badge badge-pill badge-secondary float-right" 
                 [hidden]='currrentUser?.id === person?.id'
-                [routerLink]='["/people", currrentUser?.id, "dashboard"]'
+                [routerLink]='["/people", currrentUser?.id]'
                 *ngIf='currrentUser'>
                 Ga naar mijn lijst
             </a>
