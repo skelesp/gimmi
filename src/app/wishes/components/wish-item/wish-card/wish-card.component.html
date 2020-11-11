@@ -3,7 +3,8 @@
     <div class="position-relative">
         <img class="card-img-top img-fluid rounded w-100 mb-2 thumbnail inline" src="https://res.cloudinary.com/hunk4smqo/image/upload/v1557787935/wish_images/5cd9f53578d7de0004d142a3.jpg" />
         <!-- Wish card overlay with banners -->
-        <div class="card-img-overlay p-1 text-right h6">
+        <div    class="card-img-overlay p-1 text-right h6"
+                [ngClass]="{'blurred-card-overlay': wish.status !== 'Open'}">
             <!-- "Your idea" banner -->
             <span
                 class="w-75 badge badge-warning badge-wish-card-banner font-weight-normal text-wrap text-center badge-multiline disabled"
