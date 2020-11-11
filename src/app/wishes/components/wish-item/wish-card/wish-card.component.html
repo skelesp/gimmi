@@ -49,9 +49,9 @@
             </div>
         </div>
         <!-- Row with "idea of" -->
-        <div class="row no-gutters text-right">
+        <div class="row no-gutters text-right" *ngIf="wish.createdBy.id !== wish.receiver.id">
             <div class="col-11">
-                <p class="text-muted text-truncate">Idee van ***Creator***</p>
+                <p class="text-muted text-truncate">Toegevoegd door {{wish.createdBy.firstName}} {{wish.createdBy.lastName.charAt(0)}}.</p>
             </div>
         </div>
         <!-- CTA's -->

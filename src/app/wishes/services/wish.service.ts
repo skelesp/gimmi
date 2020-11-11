@@ -55,7 +55,9 @@ export class WishService {
             wish.title,
             wish.price,
             null,
-            wish.url
+            wish.url,
+            receiver,
+            new Person ( wish.createdBy._id, wish.createdBy.firstName, wish.createdBy.lastName )
           ));
         });
         return wishes;
