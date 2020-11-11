@@ -1,12 +1,13 @@
 <div class="container" *ngIf='!person'>
-    <h4>Sorry, geen lijst gevonden.</h4>
+    <ngb-alert>Sorry, geen lijst gevonden.</ngb-alert>
 </div>
-<div class="container" *ngIf='person'>
+
+<div *ngIf='person'>
     <div class="row mb-2">
         <div class="col-auto">
             <h1>{{person?.firstName}} {{person?.lastName}}</h1>
         </div>
-        <div class="col-sm-4 float-left">
+        <div class="col col-sm-4 float-left">
             <a  class="badge badge-pill badge-secondary float-left" 
                 [hidden]='currrentUser?.id !== person?.id'
                 [routerLink]='["/people", person?.id, "share"]'
@@ -22,12 +23,17 @@
         </div>
     </div>
 
-    <div class='row'>
-        <div class="alert alert-info" role="alert">
-            <strong>Hier komt de extra info over de persoon</strong>
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-info" role="alert">
+                <strong>Hier komt de extra info over de persoon</strong>
+            </div>
         </div>
     </div>
-
-    <gimmi-wish-list [receiver]='person'></gimmi-wish-list>
+    <div class="row">
+        <div class="col">
+            <gimmi-wish-list [receiver]='person'></gimmi-wish-list>
+        </div>
+    </div>
 
 </div>
