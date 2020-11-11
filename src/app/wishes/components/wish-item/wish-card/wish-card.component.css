@@ -10,12 +10,16 @@
   box-shadow:         0 0 2px 2px rgba(250, 159, 159, 0.2);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
 .dropdown-toggle::after {
-    display:none;
+  display:none;
 }
 
 .wish-card-title {
   font-size: 0.8rem;
   font-weight: 700;
+}
+
+.card:hover {
+  border: 1px solid #fecbcc!important;
 }
 
 /* Voor in Wish Action CTA */
