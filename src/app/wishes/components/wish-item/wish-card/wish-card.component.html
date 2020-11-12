@@ -19,7 +19,9 @@
         <div class="row no-gutters justify-content-between">
             <!-- Title -->
             <div class="col-10">
-                <a class="wish-card-title text-dark text-capitalize pointer">{{wish.title}}</a>
+                <a  class="wish-card-title text-dark text-capitalize"
+                    [ngClass]="{ 'text-muted' : wish.status !== 'Open'}"
+                    [routerLink]="['/wishes', wish.id]">{{wish.title}}</a>
             </div>
             <!-- Ellipsis menu -->
             <div class="col-1">
@@ -44,7 +46,8 @@
         <!-- Row with "price" -->
         <div class="row no-gutters">
             <div class="col-10">
-                <p class="card-text font-weight-bold">
+                <p  class="card-text font-weight-bold"
+                    [ngClass]="{ 'text-muted' : wish.status !== 'Open'}">
                     {{wish.price | currency : "EUR" : 'symbol' : '1.2-2'}}</p>
             </div>
         </div>
