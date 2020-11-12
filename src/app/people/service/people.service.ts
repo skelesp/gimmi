@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
-import { IPersonSearchResponse, IPerson } from '../models/person.model';
+import { IPersonSearchResponse, IPerson, Person } from '../models/person.model';
 import { CommunicationService, MailInfo } from 'src/app/shared/services/communication.service';
 
 export interface InvitePersonData {
-  email: string,
-  notifyOnRegistration: boolean | null
+  email: string;
+  notifyOnRegistration: boolean | null;
+}
+
+export interface IPersonNameResponse {
+  _id : string;
+  firstName : string;
+  lastName : string;
+  fullName : string;
+  id : string;
 }
 
 @Injectable({
@@ -50,11 +58,9 @@ export class PeopleService {
    * @param person 
    */
   public addPerson ( person: IPerson ) {
-    console.log(this._people$.getValue());
     this._people$.next(
       [...this._people$.value, person]
       );
-    console.log(this._people$.getValue());
   }
 
   /**
@@ -94,6 +100,27 @@ export class PeopleService {
     this.communicationService.sendMail(mailInfo);
   }
 
+  
+  /**
+   * @description Get name info for a person
+   * @param personId A valid personId 
+   * @returns Person object
+   */
+  public getNameById (personId : string) : Observable<Person> {
+    return personId ? this.http$.get<IPersonNameResponse>( environment.apiUrl + 'people/' + personId + '/name').pipe(
+      catchError(this.handleError),
+      map((personNameResponse: IPersonNameResponse) => {
+        if (personNameResponse) {
+          return new Person(
+            personNameResponse.id,
+            personNameResponse.firstName,
+            personNameResponse.lastName
+          );
+        }
+      })
+    ) : throwError('No personId provided');
+  }
+
   /**  
   * @method @private
   * @description Converts the person object received from the server to the person object used in the app. 
@@ -120,6 +147,7 @@ export class PeopleService {
      errorMessage = `Gimmi API returned code ${error.status}. Error info: ${JSON.stringify(error.error)}`;
    }
    // Return an observable with a user-facing error message.
+   console.error(errorMessage);
    return throwError( errorMessage );
  }
 

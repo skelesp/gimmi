@@ -18,10 +18,14 @@
             <p class="text-muted">Registreer je meteen en zet je eerste stappen om eindelijk jouw favoriete
                 cadeau's te krijgen, maak hier je ultieme wensenlijst aan!</p>
         </div>
-        <div class="col-lg-3 col-md-6 text-center">
-            <fa-icon 
+        <div class="col-lg-3 col-md-6 text-center" >
+            <fa-icon *ngIf='!currentUser'
+                [icon]="listIcon" size="4x" class="text-danger" ngbTooltip="Registreer en ga naar je lijst"
+                tooltipClass="customTooltip" placement="bottom-left" [routerLink]="['/users/register']"
+            ></fa-icon>
+            <fa-icon *ngIf='currentUser'
                 [icon]="listIcon" size="4x" class="text-danger" ngbTooltip="Ga naar je eigen lijst"
-                tooltipClass="customTooltip" placement="bottom-left"
+                tooltipClass="customTooltip" placement="bottom-left" [routerLink]='["/people", currentUser?.id]'
             ></fa-icon>
             <h3>Voeg wensen toe</h3>
             <p class="text-muted">Ontdek je iets leuks, zet het dadelijk op je lijstje. Of kopieer leuke ideeën

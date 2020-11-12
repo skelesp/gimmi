@@ -1,0 +1,41 @@
+.card {
+  border: none;
+  margin-bottom: 10px;
+  display: inline-block;
+  font-size: 0.75rem;
+}
+.shadow {
+  -webkit-box-shadow: 0 0 2px 2px rgba(250, 159, 159, 0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    0 0 2px 2px rgba(250, 159, 159, 0.2);  /* Firefox 3.5 - 3.6 */
+  box-shadow:         0 0 2px 2px rgba(250, 159, 159, 0.2);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
+.card:hover {
+  border: 1px solid #fecbcc!important;
+}
+.blurred-card-overlay {
+  background-color: rgba(250, 243, 243, 0.83)
+}
+.blurred-card-overlay a, .blurred-card-overlay p {
+  color: rgb(87, 87, 87);
+}
+.wish-card-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.dropdown-toggle::after {
+  display:none;
+}
+
+/* Voor in Wish Action CTA */
+.btn-wish-card-cta {
+  border-color: #fecbcc;
+}
+.card .form-control, .card .btn{
+  font-size: 0.85rem;
+}
+
+/* Voor wish banner */
+.badge-wish-card-banner {
+  opacity: .70;
+  font-size: 80%;
+}
