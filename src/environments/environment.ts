@@ -12,7 +12,7 @@ export const environment = {
       uploadPreset: 'wish_images',
     },
     defaultImage: {
-      public_id: "wish_images/default",
+      publicId: "wish_images/default",
       version: "1556702046"
     },
   }
