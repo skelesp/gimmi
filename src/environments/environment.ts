@@ -5,7 +5,17 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:5000/api/',
-  rootSiteUrl: 'http://localhost:4200'
+  rootSiteUrl: 'http://localhost:4200',
+  cloudinary: {
+    sdk: {
+      cloud_name: 'hunk4smqo',
+      uploadPreset: 'wish_images',
+    },
+    defaultImage: {
+      public_id: "wish_images/default",
+      version: "1556702046"
+    },
+  }
 };
 
 /*
