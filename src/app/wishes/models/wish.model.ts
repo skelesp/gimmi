@@ -1,7 +1,12 @@
 import { Person } from 'src/app/people/models/person.model';
+import { environment } from 'src/environments/environment';
 
 export type wishStatus = 'Open' | 'Reserved' | 'Received' | 'Closed';
 
+export interface ICloudinaryImage {
+    publicId: string,
+    version: string
+}
 export class Wish {
     private _status: wishStatus;
 
@@ -9,12 +14,12 @@ export class Wish {
         public id: string,
         public title: string,
         public price: number,
-        public image: string,
+        public image: ICloudinaryImage,
         public url: string,
         public receiver: Person,
         public createdBy: Person
     ) {
-        if (!image) this.image = '<DEFAULT IMAGE>'
+        if (!image) this.image = environment.cloudinary.defaultImage
     }
 
     

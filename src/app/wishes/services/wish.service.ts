@@ -54,7 +54,10 @@ export class WishService {
             wish._id,
             wish.title,
             wish.price,
-            null,
+            {
+              publicId: wish.image.public_id,
+              version: wish.image.version.toString()
+            },
             wish.url,
             receiver,
             new Person ( wish.createdBy._id, wish.createdBy.firstName, wish.createdBy.lastName )

@@ -5,6 +5,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
 
+import { CloudinaryModule } from '@cloudinary/angular-5.x';
+import * as Cloudinary from "cloudinary-core";
+import { environment } from 'src/environments/environment';
+
 import { BrandLogoComponent } from './components/brand-logo/brand-logo.component';
 import { RouterModule } from '@angular/router';
 import { CursorPointerDirective } from './directives/cursor-pointer.directive';
@@ -31,7 +35,12 @@ import { PasswordCheckComponent } from './components/form-components/password-ch
     FormsModule,
     RouterModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CloudinaryModule.forRoot(Cloudinary, {
+      cloud_name: environment.cloudinary.sdk.cloud_name,
+      upload_preset: environment.cloudinary.sdk.uploadPreset,
+      secure:true
+    }),
   ],
   exports: [
     CommonModule,
@@ -39,6 +48,7 @@ import { PasswordCheckComponent } from './components/form-components/password-ch
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
+    CloudinaryModule,
     BrandLogoComponent,
     CursorPointerDirective,
     CustomToastComponent,
