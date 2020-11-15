@@ -1,7 +1,11 @@
 <div class="card shadow mt-1 pb-1">
     <!-- https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4 -->
     <div class="position-relative">
-        <img class="card-img-top img-fluid rounded w-100 mb-2 thumbnail inline" src="https://res.cloudinary.com/hunk4smqo/image/upload/v1557787935/wish_images/5cd9f53578d7de0004d142a3.jpg" />
+        <cl-image   class="card-img-top img-fluid rounded w-100 mb-2 thumbnail inline" 
+                    public-id='wish_images/default'
+                    version='1556702046'>
+            <cl-transformation fetch-format="auto"></cl-transformation>
+        </cl-image>
         <!-- Wish card overlay with banners -->
         <div    class="card-img-overlay p-1 text-right h6"
                 [ngClass]="{'blurred-card-overlay': wish.status !== 'Open'}">
