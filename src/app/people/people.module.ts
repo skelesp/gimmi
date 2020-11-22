@@ -6,12 +6,14 @@ import { PeopleSearchComponent } from './components/people-search/people-search.
 import { InviteComponent } from './components/invite/invite.component';
 import { PersonDashboardComponent } from './components/person-dashboard/person-dashboard.component';
 import { WishesModule } from '../wishes/wishes.module';
+import { ExtraInfoComponent } from './components/extra-info/extra-info.component';
 
 @NgModule({
   declarations: [
     PeopleSearchComponent,
     InviteComponent,
-    PersonDashboardComponent
+    PersonDashboardComponent,
+    ExtraInfoComponent
   ],
   imports: [
     SharedModule,

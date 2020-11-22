@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/users/models/user.model';
 import { UserService } from 'src/app/users/service/user.service';
 import { Person } from '../../models/person.model';
-import { IPersonNameResponse, PeopleService } from '../../service/people.service';
 
 @Component({
   selector: 'gimmi-person-dashboard',
@@ -27,8 +24,8 @@ export class PersonDashboardComponent implements OnInit {
     });
 
     this.route.data.subscribe( ( data ) => {
-        this.person = data.personOnlyName;
-      });
+      this.person = data.person;
+    });
   }
 
 }

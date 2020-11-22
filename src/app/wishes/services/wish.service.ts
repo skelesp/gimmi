@@ -2,18 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { Person } from 'src/app/people/models/person.model';
+import { IPersonSearchResponse, Person } from 'src/app/people/models/person.model';
 import { environment } from 'src/environments/environment';
 import { Wish, wishStatus } from '../models/wish.model';
 
 interface IWishlistResponse {
   _id: {
-    receiver: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      birthday: Date;
-    }
+    receiver: IPersonSearchResponse
   };
   wishes: IWishResponse[];
   count: number;

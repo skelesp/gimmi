@@ -54,6 +54,21 @@ export class PeopleService {
   }
 
   /**
+   * @method @public
+   * @description Get a person by his ID from the Gimmi API.
+   * @param personId ID of a person
+   * @returns person object
+   */
+
+   public getPersonById( personId : string) : Observable<IPerson> {
+    return this.http$.get<IPersonSearchResponse>( environment.apiUrl + 'people/' + personId )
+    .pipe(
+      catchError(this.handleError),
+      map(personResult => this.convertPersonResponseToPerson(personResult))
+      )
+   }
+
+  /**
    * @description Add a person to the people list without call the backend.
    * @param person 
    */
