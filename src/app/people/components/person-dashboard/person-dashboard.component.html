@@ -29,7 +29,8 @@
                 [firstName]="person.firstName" 
                 [likes]="person.extraInfo?.likes" 
                 [dislikes]="person.extraInfo?.dislikes"
-                [personIsUser]="person?.id === currrentUser?.id">
+                [personIsUser]="person?.id === currrentUser?.id"
+                (extraInfoSaved)="updateExtraInfo($event)">
             </gimmi-extra-info>
         </div>
     </div>

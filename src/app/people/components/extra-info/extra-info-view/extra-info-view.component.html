@@ -1,4 +1,4 @@
-<div class="col-10 col-md-auto" *ngIf="items?.length">
+<div *ngIf="items?.length">
     <div class="h6" [ngSwitch]="itemType">
         <span *ngSwitchCase="'likes'">Waarmee kan je {{firstName}} een plezier doen?</span>
         <span *ngSwitchCase="'dislikes'">Wat krijgt {{firstName}} liever niet?</span>

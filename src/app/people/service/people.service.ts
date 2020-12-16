@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
-import { IPersonSearchResponse, IPerson, Person } from '../models/person.model';
+import { IPersonSearchResponse, IPerson, Person, ILike } from '../models/person.model';
 import { CommunicationService, MailInfo } from 'src/app/shared/services/communication.service';
 
 export interface InvitePersonData {
@@ -134,6 +134,20 @@ export class PeopleService {
         }
       })
     ) : throwError('No personId provided');
+  }
+
+  /**
+   * 
+   * @param @description Update the extra info (=likes and dislikes) of a person
+   * @param personId The id of the person which needs to be updated
+   * @param likes The updated likes of the person.
+   * @param dislikes The updated dislikes of the person.
+   */
+  public updateExtraInfo ( personId: string, likes: ILike[], dislikes: ILike[]) : Observable<IPerson> {
+    return this.http$.put<IPersonSearchResponse>(environment.apiUrl + 'people/' + personId + '/extraInfo', {likes, dislikes})
+    .pipe(
+    map( personResponse => this.convertPersonResponseToPerson(personResponse))
+    );
   }
 
   /**  

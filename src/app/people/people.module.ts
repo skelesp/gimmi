@@ -8,6 +8,7 @@ import { PersonDashboardComponent } from './components/person-dashboard/person-d
 import { WishesModule } from '../wishes/wishes.module';
 import { ExtraInfoComponent } from './components/extra-info/extra-info.component';
 import { ExtraInfoViewComponent } from './components/extra-info/extra-info-view/extra-info-view.component';
+import { ExtraInfoEditComponent } from './components/extra-info/extra-info-edit/extra-info-edit.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ExtraInfoViewComponent } from './components/extra-info/extra-info-view/
     InviteComponent,
     PersonDashboardComponent,
     ExtraInfoComponent,
-    ExtraInfoViewComponent
+    ExtraInfoViewComponent,
+    ExtraInfoEditComponent
   ],
   imports: [
     SharedModule,

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ILike } from 'src/app/people/models/person.model';
-
-type itemTypes = 'like' | 'dislike'; 
+import { itemTypes } from '../extra-info.component';
 
 @Component({
   selector: 'gimmi-extra-info-view',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/users/models/user.model';
 import { UserService } from 'src/app/users/service/user.service';
-import { Person } from '../../models/person.model';
+import { IExtraPersonInfo, Person } from '../../models/person.model';
 
 @Component({
   selector: 'gimmi-person-dashboard',
@@ -26,6 +26,11 @@ export class PersonDashboardComponent implements OnInit {
     this.route.data.subscribe( ( data ) => {
       this.person = data.person;
     });
+  }
+
+  updateExtraInfo(extraInfo: IExtraPersonInfo) {
+    this.person.extraInfo.likes = extraInfo.likes;
+    this.person.extraInfo.dislikes = extraInfo.dislikes;
   }
 
 }
