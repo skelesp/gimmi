@@ -25,9 +25,13 @@
 
     <div class="row">
         <div class="col">
-            <div class="alert alert-info" role="alert">
-                <strong>Hier komt de extra info over de persoon</strong>
-            </div>
+            <gimmi-extra-info 
+                [firstName]="person.firstName" 
+                [likes]="person.extraInfo?.likes" 
+                [dislikes]="person.extraInfo?.dislikes"
+                [personIsUser]="person?.id === currrentUser?.id"
+                (extraInfoSaved)="updateExtraInfo($event)">
+            </gimmi-extra-info>
         </div>
     </div>
     <div class="row">

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../users/guards/auth.guard';
 import { InviteComponent } from './components/invite/invite.component';
 import { PersonDashboardComponent } from './components/person-dashboard/person-dashboard.component';
-import { PersonNameResolver } from './resolvers/person-name-resolver.service';
+import { PersonResolver } from './resolvers/person-name-resolver.service';
 
 
 const routes: Routes = [
@@ -15,7 +15,7 @@ const routes: Routes = [
     ] 
   },
   {
-    path: "people/:personId", component: PersonDashboardComponent, resolve: { personOnlyName: PersonNameResolver } 
+    path: "people/:personId", component: PersonDashboardComponent, resolve: { person: PersonResolver } 
   }
 ];
 

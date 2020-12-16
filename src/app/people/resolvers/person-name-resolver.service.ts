@@ -8,14 +8,14 @@ import { PeopleService } from '../service/people.service';
 @Injectable({
   providedIn: 'root'
 })
-export class PersonNameResolver implements Resolve<Person>{
+export class PersonResolver implements Resolve<Person>{
 
   constructor(
     private peopleService : PeopleService
   ) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<Person> {
-    return this.peopleService.getNameById(route.paramMap.get('personId'))
+    return this.peopleService.getPersonById(route.paramMap.get('personId'))
       .pipe(
         catchError( () => { return of(null); })
       );
