@@ -5,37 +5,14 @@
         [hidden]="!personIsUser || (likes?.length || dislikes?.length)">
         Voeg extra info over jezelf toe...
     </div>
-    
-    <div class="col-10 col-md-auto" *ngIf="likes?.length">
-        <div class="h6">
-            Waarmee kan je {{firstName}} een plezier doen?
-        </div>
-        <div class="font-sm">
-            <ul>
-                <li *ngFor="let like of likes">
-                    <span *ngIf="!like.url">{{like.text}}</span>
-                    <a *ngIf="like.url" [href]="like.url" target="_blank">{{like.text}}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    
     <div class="col-2 col-md-auto order-md-3" [hidden]="!personIsUser">
         <fa-icon [icon]="pencilIcon" (click)="editMode = !editMode"></fa-icon>
     </div>
-    <div class="col-10 col-md-auto" *ngIf="dislikes?.length">
-        <div class="h6">Wat krijgt {{firstName}} liever niet?</div>
-        <div class="font-sm">
-            <ul>
-                <li *ngFor="let dislike of dislikes">
-                    <span *ngIf="!dislike.url">{{dislike.text}}</span>
-                    <a *ngIf="dislike.url" [href]="dislike.url" target="_blank">{{dislike.text}}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+    
+    <gimmi-extra-info-view [firstName]="firstName" [items]="likes" itemType="likes"></gimmi-extra-info-view>    
+    <gimmi-extra-info-view [firstName]="firstName" [items]="dislikes" itemType="dislikes"></gimmi-extra-info-view>
 
+</div>
 
 <div class="row" *ngIf="editMode">
     EDIT MODE

@@ -7,13 +7,15 @@ import { InviteComponent } from './components/invite/invite.component';
 import { PersonDashboardComponent } from './components/person-dashboard/person-dashboard.component';
 import { WishesModule } from '../wishes/wishes.module';
 import { ExtraInfoComponent } from './components/extra-info/extra-info.component';
+import { ExtraInfoViewComponent } from './components/extra-info/extra-info-view/extra-info-view.component';
 
 @NgModule({
   declarations: [
     PeopleSearchComponent,
     InviteComponent,
     PersonDashboardComponent,
-    ExtraInfoComponent
+    ExtraInfoComponent,
+    ExtraInfoViewComponent
   ],
   imports: [
     SharedModule,
