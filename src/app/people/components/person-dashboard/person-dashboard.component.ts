@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/users/models/user.model';
 import { UserService } from 'src/app/users/service/user.service';
 import { IExtraPersonInfo, Person } from '../../models/person.model';
+import { PeopleService } from '../../service/people.service';
 
 @Component({
   selector: 'gimmi-person-dashboard',
@@ -12,9 +13,11 @@ import { IExtraPersonInfo, Person } from '../../models/person.model';
 export class PersonDashboardComponent implements OnInit {
   person : Person;
   currrentUser : User;
+  personIsUser : boolean;
 
   constructor(
     private userService : UserService,
+    private personService: PeopleService,
     private route : ActivatedRoute
   ) { }
 
@@ -25,6 +28,7 @@ export class PersonDashboardComponent implements OnInit {
 
     this.route.data.subscribe( ( data ) => {
       this.person = data.person;
+      this.personIsUser = this.personService.isEqualToCurrentUser(this.person);
     });
   }
 
