@@ -6,6 +6,7 @@ import { map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { IPersonSearchResponse, IPerson, Person, ILike } from '../models/person.model';
 import { CommunicationService, MailInfo } from 'src/app/shared/services/communication.service';
+import { UserService } from 'src/app/users/service/user.service';
 
 export interface InvitePersonData {
   email: string;
@@ -29,7 +30,8 @@ export class PeopleService {
 
   constructor( 
     private http$: HttpClient,
-    private communicationService: CommunicationService 
+    private communicationService: CommunicationService,
+    private userService: UserService
   ) { }
 
   /**
@@ -162,7 +164,12 @@ export class PeopleService {
     return convertedPerson;
   }
 
-  /** @method @private 
+  public isEqualToCurrentUser( person: Person) : boolean {
+    return person?.id === this.userService.currentUser?.id;
+  }
+
+  /** 
+   * @method @private 
    * @description Handle errors in the people service HTTP calls
   */
  private handleError (error : HttpErrorResponse) {
