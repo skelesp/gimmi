@@ -1,10 +1,10 @@
-<span   *ngIf="text" 
+<span   *ngIf="config?.text" 
         [ngClass]="{
             'w-75 badge font-weight-normal text-wrap text-center badge-multiline disabled': true,
             'badge-wish-card-banner': true,
-            'badge-warning': backgroundColor === 'warning',
-            'badge-danger': backgroundColor === 'danger',
-            'badge-success': backgroundColor === 'success'
+            'badge-warning': config.backgroundColor === 'warning',
+            'badge-danger': config.backgroundColor === 'danger',
+            'badge-success': config.backgroundColor === 'success'
         }"
-><fa-icon [icon]="bannerIcon"></fa-icon> {{text}}
+><fa-icon [icon]="config.bannerIcon"></fa-icon> {{config.text}}
 </span>
