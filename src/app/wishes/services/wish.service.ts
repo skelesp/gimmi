@@ -95,7 +95,7 @@ export class WishService {
       map( states => {
         if (states) {
           states.forEach((state, index) => {
-            wishes[index].status = state;
+            wishes[index].status = state === 'Closed' ? 'Fulfilled': state;
           });
         } else {
           wishes = [];
