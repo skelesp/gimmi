@@ -14,12 +14,12 @@ const bannerConfigs: {[key  in WishScenarios]: BannerConfig} = {
   'OPEN_WISH': { text: null, backgroundColor: null, bannerIcon: null},
   'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER': { text: "Jouw idee", backgroundColor: 'warning', bannerIcon: faLightbulb },
   'RESERVED': { text: "Gereserveerd", backgroundColor: 'danger', bannerIcon: faCartArrowDown },
-  'RESERVED_BY_USER': { text: "Jouw reservatie", backgroundColor: 'warning', bannerIcon: faStar},
+  'RESERVED_BY_USER': { text: "Gereserveerd door jou", backgroundColor: 'warning', bannerIcon: faStar},
   'RESERVED_INCOGNITO_FOR_USER': { text: null, backgroundColor: null, bannerIcon: null },
   'RECEIVED': { text: "Ontvangen", backgroundColor: 'danger', bannerIcon: faGift },
-  'RECEIVED_GIVEN_BY_USER': { text: "Jouw cadeau", backgroundColor: 'warning', bannerIcon: faGift },
+  'RECEIVED_GIVEN_BY_USER': { text: "Gegeven door jou", backgroundColor: 'warning', bannerIcon: faGift },
   'FULFILLED': { text: "Wens vervuld", backgroundColor: 'success', bannerIcon: faThumbsUp },
-  'FULFILLED_BY_USER': { text: "Jouw cadeau", backgroundColor: 'success', bannerIcon: faThumbsUp }
+  'FULFILLED_BY_USER': { text: "Wens vervuld door jou", backgroundColor: 'success', bannerIcon: faThumbsUp }
 };
 @Component({
   selector: 'gimmi-wish-banner',
