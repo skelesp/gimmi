@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { PeopleService } from 'src/app/people/service/people.service';
+import { Component } from '@angular/core';
 import { WishItemComponent } from '../wish-item.component';
 
 @Component({
@@ -9,8 +8,8 @@ import { WishItemComponent } from '../wish-item.component';
 })
 export class WishCardComponent extends WishItemComponent {
 
-  constructor(peopleService: PeopleService) {
-    super(peopleService);
+  constructor() {
+    super();
    }
 
 }

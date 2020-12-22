@@ -4,6 +4,7 @@ import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { IPerson, IPersonSearchResponse, Person } from 'src/app/people/models/person.model';
 import { PeopleService } from 'src/app/people/service/people.service';
+import { UserService } from 'src/app/users/service/user.service';
 import { environment } from 'src/environments/environment';
 import { Wish, wishStatus } from '../models/wish.model';
 
@@ -50,7 +51,8 @@ export class WishService {
 
   constructor(
     private http$ : HttpClient,
-    private peopleService : PeopleService
+    private peopleService : PeopleService,
+    private userService : UserService
   ) { }
   
   public getWishlist ( receiver : Person) : Observable<Wish[]>{
@@ -58,6 +60,7 @@ export class WishService {
     return this.http$.get<IWishlistResponse[]>(environment.apiUrl + 'wishlist/' + receiver.id).pipe(
       map( (response) => {
         response[0].wishes.forEach((wish) => {
+          
           let newWish : Wish = new Wish(
             wish._id,
             wish.title,
@@ -74,17 +77,12 @@ export class WishService {
             wish.description,
             wish.amountWanted
           );
-          if (wish.reservation){
-            this.peopleService.getPersonById(wish.reservation.reservedBy).subscribe(person => {
-              newWish.reservation = {
-                ...wish.reservation,
-                reservedBy: new Person(person.id, person.firstName, person.lastName)
-              };
-            });
-          }
+          newWish.reservation = wish.reservation;          
+          newWish.setUserIsFlags(this.userService.currentUser);
           
           wishes.push(newWish);
         });
+
         return wishes;
       }),
       switchMap( (wishes) => {
