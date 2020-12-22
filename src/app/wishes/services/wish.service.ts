@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { IPersonSearchResponse, Person } from 'src/app/people/models/person.model';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { IPerson, IPersonSearchResponse, Person } from 'src/app/people/models/person.model';
+import { PeopleService } from 'src/app/people/service/people.service';
 import { environment } from 'src/environments/environment';
 import { Wish, wishStatus } from '../models/wish.model';
 
@@ -21,13 +22,24 @@ interface IWishResponse {
     version: number;
     public_id: string;
   };
-  price: number;
-  url: string;
+  price?: number;
+  url?: string;
   createdBy: {
     _id: string;
     firstName:string;
     lastName: string;
     birthday: Date;
+  },
+  color?: string,
+  size?: string,
+  description?: string,
+  amountWanted: number,
+  reservation?: {
+    reservedBy: string,
+    amount: 1,
+    reason: string,
+    reservationDate: Date,
+    handoverDate?: Date
   }
 }
 
@@ -37,7 +49,8 @@ interface IWishResponse {
 export class WishService {
 
   constructor(
-    private http$ : HttpClient
+    private http$ : HttpClient,
+    private peopleService : PeopleService
   ) { }
   
   public getWishlist ( receiver : Person) : Observable<Wish[]>{
@@ -45,7 +58,7 @@ export class WishService {
     return this.http$.get<IWishlistResponse[]>(environment.apiUrl + 'wishlist/' + receiver.id).pipe(
       map( (response) => {
         response[0].wishes.forEach((wish) => {
-          wishes.push(new Wish(
+          let newWish : Wish = new Wish(
             wish._id,
             wish.title,
             wish.price,
@@ -55,8 +68,22 @@ export class WishService {
             },
             wish.url,
             receiver,
-            new Person ( wish.createdBy._id, wish.createdBy.firstName, wish.createdBy.lastName )
-          ));
+            new Person ( wish.createdBy._id, wish.createdBy.firstName, wish.createdBy.lastName ),
+            wish.color,
+            wish.size,
+            wish.description,
+            wish.amountWanted
+          );
+          if (wish.reservation){
+            this.peopleService.getPersonById(wish.reservation.reservedBy).subscribe(person => {
+              newWish.reservation = {
+                ...wish.reservation,
+                reservedBy: new Person(person.id, person.firstName, person.lastName)
+              };
+            });
+          }
+          
+          wishes.push(newWish);
         });
         return wishes;
       }),
@@ -68,7 +95,7 @@ export class WishService {
       map( states => {
         if (states) {
           states.forEach((state, index) => {
-            wishes[index].status = state;
+            wishes[index].status = state === 'Closed' ? 'Fulfilled': state;
           });
         } else {
           wishes = [];

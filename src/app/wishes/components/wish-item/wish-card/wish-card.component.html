@@ -7,15 +7,13 @@
             <cl-transformation fetch-format="auto"></cl-transformation>
         </cl-image>
         <!-- Wish card overlay with banners -->
-        <div    class="card-img-overlay p-1 text-right h6"
-                [ngClass]="{'blurred-card-overlay': wish.status !== 'Open'}">
-            <!-- "Your idea" banner -->
-            <span
-                class="w-75 badge badge-warning badge-wish-card-banner font-weight-normal text-wrap text-center badge-multiline disabled"
-                ng-if="wish.state === 'Open' || !wish.state"
-                ng-show="wishCtrl.userIsCreator(wish.createdBy._id) && !wishlistCtrl.userIsReceiver">
-                <i class="fa fa-lightbulb-o mr-1" aria-hidden="true"></i> {{wish.status}}
-            </span>
+        <div class="card-img-overlay p-1 text-right h6" [ngClass]="{'blurred-card-overlay': wish.status !== 'Open'}">
+            <gimmi-wish-banner 
+                [status]="wish.status" 
+                [userIsReceiver]="userIsReceiver" 
+                [userIsCreator]="userIsCreator"
+                [userIsReservator]="userIsReservator">
+            </gimmi-wish-banner>
         </div>
     </div>
     <div class="card-block p-1 container">
@@ -64,7 +62,7 @@
         <!-- CTA's -->
         <div class="row no-gutters mt-2">
             <button class="btn btn-outline-danger btn-block btn-wish-card-cta border-1 shadow-sm">
-                Wish action component</button>
+                Wish action : {{wish.status}}</button>
         </div>
     </div>
 </div>
