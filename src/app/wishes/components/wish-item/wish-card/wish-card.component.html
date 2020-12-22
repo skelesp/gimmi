@@ -8,12 +8,7 @@
         </cl-image>
         <!-- Wish card overlay with banners -->
         <div class="card-img-overlay p-1 text-right h6" [ngClass]="{'blurred-card-overlay': wish.status !== 'Open'}">
-            <gimmi-wish-banner 
-                [status]="wish.status" 
-                [userIsReceiver]="userIsReceiver" 
-                [userIsCreator]="userIsCreator"
-                [userIsReservator]="userIsReservator">
-            </gimmi-wish-banner>
+            <gimmi-wish-banner [scenario]="wish.scenario" ></gimmi-wish-banner>
         </div>
     </div>
     <div class="card-block p-1 container">
@@ -61,7 +56,7 @@
         </div>
         <!-- CTA's -->
         <div class="row no-gutters mt-2">
-            <button class="btn btn-outline-danger btn-block btn-wish-card-cta border-1 shadow-sm">
+            <button class="btn btn-outline-danger btn-block btn-wish-card-cta border-1 shadow-sm"> 
                 Wish action : {{wish.status}}</button>
         </div>
     </div>
