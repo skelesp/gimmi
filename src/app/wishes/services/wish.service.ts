@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { IPerson, IPersonSearchResponse, Person } from 'src/app/people/models/person.model';
-import { PeopleService } from 'src/app/people/service/people.service';
+import { IPersonSearchResponse, Person } from 'src/app/people/models/person.model';
 import { UserService } from 'src/app/users/service/user.service';
 import { environment } from 'src/environments/environment';
 import { Wish, wishStatus } from '../models/wish.model';
@@ -51,7 +50,6 @@ export class WishService {
 
   constructor(
     private http$ : HttpClient,
-    private peopleService : PeopleService,
     private userService : UserService
   ) { }
   
