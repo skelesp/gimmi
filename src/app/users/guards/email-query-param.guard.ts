@@ -48,10 +48,3 @@ export class EmailQueryParamGuard implements CanActivate {
   }
   
 }
-
-/* return this._peopleService.findPersonByEmail(control.value)
-  .pipe(
-    tap(value => this.knownPerson = value),
-    map(personResult => { return { 'emailExists': true } }),
-    catchError(error => { return of(null) })
-  ); */

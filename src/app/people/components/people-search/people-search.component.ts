@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { debounceTime, map, distinctUntilChanged, filter } from "rxjs/operators";
 import { faSearch, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { IPerson } from '../../models/person.model';
+import { Person } from '../../models/person.model';
 import { PeopleService } from '../../service/people.service';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,8 +21,8 @@ export class PeopleSearchComponent implements OnInit, OnDestroy {
   userIcon = faUserCircle;
   searchIcon = faSearch;
   // Peoplelist variables
-  people: IPerson[] = [];
-  selectedPerson: IPerson;
+  people: Person[] = [];
+  selectedPerson: Person;
   private peopleSubscription: Subscription;
 
   constructor( private peopleService : PeopleService, private router : Router) { }
@@ -34,7 +34,7 @@ export class PeopleSearchComponent implements OnInit, OnDestroy {
     this.peopleService.retrievePeopleList();
   }
 
-  search = (text$: Observable<string>) : Observable<IPerson[]> => {
+  search = (text$: Observable<string>) : Observable<Person[]> => {
     const debouncedText$ = text$.pipe(
       debounceTime(200),
       distinctUntilChanged()
@@ -55,7 +55,7 @@ export class PeopleSearchComponent implements OnInit, OnDestroy {
     );
   }
 
-  inputFormatter (person: IPerson) {
+  inputFormatter (person: Person) {
     return `${person.fullName}`;
   }
 

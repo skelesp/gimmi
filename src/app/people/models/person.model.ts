@@ -8,19 +8,7 @@ export interface IExtraPersonInfo {
     dislikes: ILike[];
 }
 
-export interface IPerson {
-    id: string;
-    firstName: string;
-    lastName: string;
-    fullName: string;
-    extraInfo?: IExtraPersonInfo;
-    birthday?: Date;
-}
-
-export interface IPersonSearchResponse extends IPerson {
-    _id: string;
-}
-export class Person implements IPerson{
+export class Person {
     public extraInfo: IExtraPersonInfo;
     public birthday: Date;
 

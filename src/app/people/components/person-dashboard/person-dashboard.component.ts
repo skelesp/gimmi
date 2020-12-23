@@ -33,8 +33,7 @@ export class PersonDashboardComponent implements OnInit {
   }
 
   updateExtraInfo(extraInfo: IExtraPersonInfo) {
-    this.person.extraInfo.likes = extraInfo.likes;
-    this.person.extraInfo.dislikes = extraInfo.dislikes;
+    this.person.extraInfo = extraInfo;
   }
 
 }
