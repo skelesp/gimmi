@@ -7,7 +7,7 @@
             <cl-transformation fetch-format="auto"></cl-transformation>
         </cl-image>
         <!-- Wish card overlay with banners -->
-        <div class="card-img-overlay p-1 text-right h6" [ngClass]="{'blurred-card-overlay': wish.status !== 'Open'}">
+        <div class="card-img-overlay p-1 text-right h6" [ngClass]="{'blurred-card-overlay': !(wish.scenario === 'RESERVED_INCOGNITO_FOR_USER' || wish.scenario === 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' || wish.scenario === 'OPEN_WISH')}">
             <gimmi-wish-banner [scenario]="wish.scenario" ></gimmi-wish-banner>
         </div>
     </div>
