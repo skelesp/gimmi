@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
-import { IPersonSearchResponse, Person, ILike } from '../models/person.model';
+import { Person, ILike, IExtraPersonInfo } from '../models/person.model';
 import { CommunicationService, MailInfo } from 'src/app/shared/services/communication.service';
 import { UserService } from 'src/app/users/service/user.service';
 
@@ -19,6 +19,16 @@ export interface IPersonNameResponse {
   lastName : string;
   fullName : string;
   id : string;
+}
+
+export interface IPersonSearchResponse {
+  _id: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  extraInfo?: IExtraPersonInfo;
+  birthday?: Date;
 }
 
 @Injectable({
