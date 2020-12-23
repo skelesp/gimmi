@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { faAt } from '@fortawesome/free-solid-svg-icons'
 import { PeopleService } from 'src/app/people/service/people.service';
-import { IPerson } from 'src/app/people/models/person.model';
+import { Person } from 'src/app/people/models/person.model';
 
 type EmailExistsRedirectType = "wishlist" | "login";
 @Component({
@@ -22,7 +22,7 @@ export class EmailInputComponent implements OnInit {
   @Input() emailExistsRedirectTo: EmailExistsRedirectType = "wishlist";
 
   mailIcon = faAt;
-  knownPerson: IPerson;
+  knownPerson: Person;
 
   constructor(private _peopleService: PeopleService) { }
 

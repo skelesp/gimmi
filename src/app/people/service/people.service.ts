@@ -62,11 +62,11 @@ export class PeopleService {
    * @returns person object
    */
 
-   public getPersonById( personId : string) : Observable<IPerson> {
+   public getPersonById( personId : string) : Observable<Person> {
     return this.http$.get<IPersonSearchResponse>( environment.apiUrl + 'people/' + personId )
     .pipe(
       catchError(this.handleError),
-      map(personResult => this.convertPersonResponseToIPerson(personResult))
+      map(personResult => this.convertPersonResponseToPerson(personResult))
       )
    }
 
@@ -85,11 +85,11 @@ export class PeopleService {
    * @description Find a person based on an email address.
    * @param email Search parameter 'email' to search for a person.
    */
-  public findPersonByEmail (email: string): Observable<IPerson> {
+  public findPersonByEmail (email: string): Observable<Person> {
     if (email) {
       return this.http$.get<IPersonSearchResponse>(environment.apiUrl + `people/email/${email}`)
         .pipe(
-          map( personResult => this.convertPersonResponseToIPerson(personResult) ),
+          map( personResult => this.convertPersonResponseToPerson(personResult) ),
           catchError(this.handleError)
         )
     } else return throwError(new Error("No email provided to method findPersonByEmail"));
