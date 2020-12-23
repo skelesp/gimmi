@@ -165,7 +165,7 @@ export class PeopleService {
   }
 
   public isEqualToCurrentUser( person: Person) : boolean {
-    return person?.id === this.userService.currentUser?.id;
+    return person ? person.id === this.userService.currentUser?.id : undefined;
   }
 
   /** 
