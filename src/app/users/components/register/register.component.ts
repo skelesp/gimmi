@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Person } from 'src/app/people/models/person.model';
 import { PeopleService } from 'src/app/people/service/people.service';
 import { INewUserRequestInfo } from '../../service/user.service';
 import { UserService } from '../../service/user.service';
@@ -47,12 +48,7 @@ export class RegisterComponent implements OnInit {
 
         this.userService.showAuthenticationConfirmation();
         this.userService.redirectAfterAuthentication();
-        this.peopleService.addPerson({
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          fullName: `${user.firstName} ${user.lastName}` 
-        })
+        this.peopleService.addPerson(new Person(user.id, user.firstName, user.lastName))
       },
       error => {
         if (error.indexOf('User already exists') !== -1) {

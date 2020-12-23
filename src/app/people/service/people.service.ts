@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
-import { IPersonSearchResponse, IPerson, Person, ILike } from '../models/person.model';
+import { IPersonSearchResponse, Person, ILike } from '../models/person.model';
 import { CommunicationService, MailInfo } from 'src/app/shared/services/communication.service';
 import { UserService } from 'src/app/users/service/user.service';
 
@@ -25,8 +25,8 @@ export interface IPersonNameResponse {
   providedIn: 'root'
 })
 export class PeopleService {
-  private _people$ : BehaviorSubject<IPerson[]> = new BehaviorSubject<IPerson[]>([]);
-  public readonly people: Observable<IPerson[]> = this._people$.asObservable();
+  private _people$ : BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
+  public readonly people: Observable<Person[]> = this._people$.asObservable();
 
   constructor( 
     private http$: HttpClient,
@@ -42,9 +42,9 @@ export class PeopleService {
     this.http$.get<IPersonSearchResponse[]>(environment.apiUrl + 'people')
     .pipe(
       map( peopleFromResponse => {
-        let people: IPerson[] = [];
+        let people: Person[] = [];
         peopleFromResponse.forEach(person => {
-          people.push(this.convertPersonResponseToIPerson(person));
+          people.push(this.convertPersonResponseToPerson(person));
         });
         return people;
       }),
@@ -74,7 +74,7 @@ export class PeopleService {
    * @description Add a person to the people list without call the backend.
    * @param person 
    */
-  public addPerson ( person: IPerson ) {
+  public addPerson ( person: Person ) {
     this._people$.next(
       [...this._people$.value, person]
       );
@@ -154,16 +154,10 @@ export class PeopleService {
 
   /**  
   * @method @private
-  * @description Converts the person object received from the server to the person object used in the app. 
+  * @description Converts the person object received from the server to the person class instance used in the app. 
   * @param personResponse The person object received from the server
-  * @returns A person object that is usable in the app
+  * @returns A Person class instance that is usable in the app
   */
-  private convertPersonResponseToIPerson(personResponse: IPersonSearchResponse): IPerson {
-    let convertedPerson = personResponse;
-    delete convertedPerson._id;
-    return convertedPerson;
-  }
-
   private convertPersonResponseToPerson(personResponse: IPersonSearchResponse): Person {
     let person = new Person( personResponse.id, personResponse.firstName, personResponse.lastName );
     if (personResponse.birthday) person.birthday = personResponse.birthday;
