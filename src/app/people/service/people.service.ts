@@ -44,7 +44,7 @@ export class PeopleService {
       map( peopleFromResponse => {
         let people: IPerson[] = [];
         peopleFromResponse.forEach(person => {
-          people.push(this.convertPersonResponseToPerson(person));
+          people.push(this.convertPersonResponseToIPerson(person));
         });
         return people;
       }),
@@ -66,7 +66,7 @@ export class PeopleService {
     return this.http$.get<IPersonSearchResponse>( environment.apiUrl + 'people/' + personId )
     .pipe(
       catchError(this.handleError),
-      map(personResult => this.convertPersonResponseToPerson(personResult))
+      map(personResult => this.convertPersonResponseToIPerson(personResult))
       )
    }
 
@@ -89,7 +89,7 @@ export class PeopleService {
     if (email) {
       return this.http$.get<IPersonSearchResponse>(environment.apiUrl + `people/email/${email}`)
         .pipe(
-          map( personResult => this.convertPersonResponseToPerson(personResult) ),
+          map( personResult => this.convertPersonResponseToIPerson(personResult) ),
           catchError(this.handleError)
         )
     } else return throwError(new Error("No email provided to method findPersonByEmail"));
@@ -145,7 +145,7 @@ export class PeopleService {
    * @param likes The updated likes of the person.
    * @param dislikes The updated dislikes of the person.
    */
-  public updateExtraInfo ( personId: string, likes: ILike[], dislikes: ILike[]) : Observable<IPerson> {
+  public updateExtraInfo ( personId: string, likes: ILike[], dislikes: ILike[]) : Observable<Person> {
     return this.http$.put<IPersonSearchResponse>(environment.apiUrl + 'people/' + personId + '/extraInfo', {likes, dislikes})
     .pipe(
     map( personResponse => this.convertPersonResponseToPerson(personResponse))
@@ -158,11 +158,19 @@ export class PeopleService {
   * @param personResponse The person object received from the server
   * @returns A person object that is usable in the app
   */
-  private convertPersonResponseToPerson(personResponse: IPersonSearchResponse): IPerson {
+  private convertPersonResponseToIPerson(personResponse: IPersonSearchResponse): IPerson {
     let convertedPerson = personResponse;
     delete convertedPerson._id;
     return convertedPerson;
   }
+
+  private convertPersonResponseToPerson(personResponse: IPersonSearchResponse): Person {
+    let person = new Person( personResponse.id, personResponse.firstName, personResponse.lastName );
+    if (personResponse.birthday) person.birthday = personResponse.birthday;
+    if (personResponse.extraInfo) person.extraInfo = personResponse.extraInfo;
+    
+    return person;
+  } 
 
   public isEqualToCurrentUser( person: Person) : boolean {
     return person ? person.id === this.userService.currentUser?.id : undefined;
