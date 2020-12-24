@@ -22,13 +22,13 @@ export class WishListComponent implements OnInit, OnChanges {
     this.loading = true;
     this.wishes = [];
     this.wishService.getWishlist(this.receiver).subscribe( (wishes) => {
-      this.wishes = wishes
+      this.wishes = wishes;
       this.loading = false;
-    }, () => {
+    }, (err) => {
       this.wishes = null;
       this.loading = false;
-    }
-    );
+      console.error(err);
+    });
   }
 
   ngOnInit(): void {

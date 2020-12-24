@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { Person } from 'src/app/people/models/person.model';
-import { IPersonSearchResponse } from 'src/app/people/service/people.service';
-import { UserService } from 'src/app/users/service/user.service';
+
 import { environment } from 'src/environments/environment';
+import { Person } from 'src/app/people/models/person.model';
+import { IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
+import { UserService } from 'src/app/users/service/user.service';
 import { Wish, wishStatus } from '../models/wish.model';
 
 interface IWishlistResponse {
@@ -51,56 +52,72 @@ export class WishService {
 
   constructor(
     private http$ : HttpClient,
-    private userService : UserService
+    private userService : UserService,
+    private peopleService : PeopleService
   ) { }
-  
-  public getWishlist ( receiver : Person) : Observable<Wish[]>{
-    let wishes: Wish[] = [];
-    return this.http$.get<IWishlistResponse[]>(environment.apiUrl + 'wishlist/' + receiver.id).pipe(
-      map( (response) => {
-        response[0].wishes.forEach((wish) => {
-          
-          let newWish : Wish = new Wish(
-            wish._id,
-            wish.title,
-            wish.price,
-            {
-              publicId: wish.image.public_id,
-              version: wish.image.version.toString()
-            },
-            wish.url,
-            receiver,
-            new Person ( wish.createdBy._id, wish.createdBy.firstName, wish.createdBy.lastName ),
-            wish.color,
-            wish.size,
-            wish.description,
-            wish.amountWanted
-          );
-          newWish.reservation = wish.reservation;          
-          newWish.setUserIsFlags(this.userService.currentUser);
-          
-          wishes.push(newWish);
-        });
 
-        return wishes;
-      }),
-      switchMap( (wishes) => {
-        let wishStateObservables = wishes.map(wish => this.http$.get<wishStatus>(environment.apiUrl + 'wish/' + wish.id + '/state')
-          .pipe(catchError(() => of(null))));
-        return wishes.length !== 0 ? forkJoin(wishStateObservables) : of(null); // https://stackoverflow.com/questions/41723541/rxjs-switchmap-not-emitting-value-if-the-input-observable-is-empty-array
-      }),
-      map( states => {
-        if (states) {
-          states.forEach((state, index) => {
-            wishes[index].status = state === 'Closed' ? 'Fulfilled': state;
-          });
-        } else {
-          wishes = [];
-        }
-        return wishes;
-      })      
-    );
-
+  public getWishlist(receiver: Person): Observable<Wish[]> { //https://stackoverflow.com/questions/65417031/rxjs-how-to-make-foreach-loop-wait-for-inner-observable
+    return this.http$.get<IWishlistResponse[]>(
+      environment.apiUrl + 'wishlist/' + receiver.id
+    ).pipe(
+      // Create wish instances from each wish in API response and save reservation for later use
+      map( wishlistResponse => 
+        wishlistResponse[0].wishes.map(wish => ({
+          wish: this.createWishInstanceFromResponse(wish, receiver),
+          reservation: wish.reservation
+        }))),
+      // For each wish with reservation: get person info for 'reservedBy' id
+      map( wishesAndReservationObjects => wishesAndReservationObjects.map( ({wish, reservation}) => 
+        !reservation ? 
+        of(wish) : 
+        this.peopleService.getPersonById(reservation.reservedBy)
+        .pipe(
+          map ( reservedBy => {
+            if (reservedBy) wish.reservation = { 
+              ...reservation, 
+              reservedBy: new Person(reservedBy.id, reservedBy.firstName, reservedBy.lastName)
+            }
+            return wish;
+          })
+        )
+       )),
+      // forkJoin all observables, so the result is an array of all the wishes
+      switchMap( reservedByObservables => forkJoin(reservedByObservables)),
+      // Call method on each wish (with or without reservation) to set user flags in each instance (must be done after reservedBy is added)
+      map ( wishes => wishes.map( wish => {
+        wish.setUserIsFlags(this.userService.currentUser);
+        return wish;
+      })),
+      // For each wish: get state via API call
+      map ( wishesWithoutState => wishesWithoutState.map( wishWithoutState => 
+        this.http$.get<wishStatus>(environment.apiUrl + 'wish/' + wishWithoutState.id + '/state')
+        .pipe(
+          catchError(() => of(null)),
+          map( state => {
+            wishWithoutState.status = state;
+            return wishWithoutState;
+          })
+        )
+      )),
+      // Combine all stateObservables into 1 array
+      switchMap(stateObservables => forkJoin(stateObservables))
+    )
   }
 
+  private createWishInstanceFromResponse ( wishResponse : IWishResponse, receiver: Person ) : Wish {
+    let wish : Wish = new Wish (
+      wishResponse._id,
+      wishResponse.title,
+      wishResponse.price,
+      {publicId: wishResponse.image.public_id, version: wishResponse.image.version.toString()},
+      wishResponse.url,
+      receiver,
+      new Person(wishResponse.createdBy._id, wishResponse.createdBy.firstName, wishResponse.createdBy.lastName),
+      wishResponse.color,
+      wishResponse.size,
+      wishResponse.description,
+      wishResponse.amountWanted
+    );
+    return wish;
+  }
 }
