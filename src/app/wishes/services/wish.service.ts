@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Person } from 'src/app/people/models/person.model';
@@ -74,7 +74,7 @@ export class WishService {
         .pipe(
           map ( reservedBy => {
             if (reservedBy) wish.reservation = { 
-              ...reservation, 
+              ...reservation,   
               reservedBy: new Person(reservedBy.id, reservedBy.firstName, reservedBy.lastName)
             }
             return wish;
@@ -82,7 +82,7 @@ export class WishService {
         )
        )),
       // forkJoin all observables, so the result is an array of all the wishes
-      switchMap( reservedByObservables => forkJoin(reservedByObservables)),
+      switchMap(reservedByObservables => reservedByObservables.length !== 0 ? forkJoin(reservedByObservables) : of(<Wish[]>[])), //https://stackoverflow.com/questions/41723541/rxjs-switchmap-not-emitting-value-if-the-input-observable-is-empty-array
       // Call method on each wish (with or without reservation) to set user flags in each instance (must be done after reservedBy is added)
       map ( wishes => wishes.map( wish => {
         wish.setUserIsFlags(this.userService.currentUser);
@@ -100,7 +100,7 @@ export class WishService {
         )
       )),
       // Combine all stateObservables into 1 array
-      switchMap(stateObservables => forkJoin(stateObservables))
+      switchMap(stateObservables => stateObservables.length !== 0 ? forkJoin(stateObservables) : of(<Wish[]>[]))
     )
   }
 
