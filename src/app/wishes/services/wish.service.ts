@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
@@ -78,6 +78,11 @@ export class WishService {
               reservedBy: new Person(reservedBy.id, reservedBy.firstName, reservedBy.lastName)
             }
             return wish;
+          }),
+          catchError( (error : HttpErrorResponse) => {
+            console.error(`[wishService] ${error}`);
+            wish.reservation = {...reservation, reservedBy: new Person(reservation.reservedBy, 'not', 'found')}
+            return of(wish);
           })
         )
        )),
@@ -92,10 +97,14 @@ export class WishService {
       map ( wishesWithoutState => wishesWithoutState.map( wishWithoutState => 
         this.http$.get<wishStatus>(environment.apiUrl + 'wish/' + wishWithoutState.id + '/state')
         .pipe(
-          catchError(() => of(null)),
           map( state => {
             wishWithoutState.status = state;
             return wishWithoutState;
+          }),
+          catchError((error: HttpErrorResponse) => {
+            console.error(`[wishService] ${error}`);
+            wishWithoutState.status = 'Open';
+            return of(wishWithoutState);
           })
         )
       )),
