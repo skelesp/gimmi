@@ -35,6 +35,8 @@ export interface IPersonSearchResponse {
   updatedAt: Date;
   extraInfo?: IExtraPersonInfo;
   birthday?: Date;
+}
+export interface IPersonSearchResponseWithUserInfo extends IPersonSearchResponse {
   accounts?: any;
 }
 
@@ -80,7 +82,7 @@ export class PeopleService {
    */
 
    public getPersonById( personId : string) : Observable<Person> {
-    return this.http$.get<IPersonSearchResponse>( environment.apiUrl + 'people/' + personId )
+    return this.http$.get<IPersonSearchResponseWithUserInfo>( environment.apiUrl + 'people/' + personId )
     .pipe(
       catchError(this.handleError),
       map(personResult => this.convertPersonResponseToPerson(personResult))
@@ -155,7 +157,7 @@ export class PeopleService {
    * @param dislikes The updated dislikes of the person.
    */
   public updateExtraInfo ( personId: string, likes: ILike[], dislikes: ILike[]) : Observable<Person> {
-    return this.http$.put<IPersonSearchResponse>(environment.apiUrl + 'people/' + personId + '/extraInfo', {likes, dislikes})
+    return this.http$.put<IPersonSearchResponseWithUserInfo>(environment.apiUrl + 'people/' + personId + '/extraInfo', {likes, dislikes})
     .pipe(
       map( personResponse => this.convertPersonResponseToPerson(personResponse))
     );
@@ -177,7 +179,7 @@ export class PeopleService {
   * @param personResponse The person object received from the server
   * @returns A Person class instance that is usable in the app
   */
-  private convertPersonResponseToPerson(personResponse: IPersonSearchResponse | IPersonNameResponse | IPersonEmailResponse): Person {
+  private convertPersonResponseToPerson(personResponse: IPersonSearchResponse | IPersonSearchResponseWithUserInfo | IPersonNameResponse | IPersonEmailResponse): Person {
     let person = new Person( personResponse.id, personResponse.firstName, personResponse.lastName );
     if (this.isInstanceOfIPersonSearchResponse(personResponse)) {
       if (personResponse.birthday) person.birthday = personResponse.birthday;
@@ -191,8 +193,8 @@ export class PeopleService {
    * @method @private
    * @description Detect if an object implements the IPersonSearchResponse
    */
-  private isInstanceOfIPersonSearchResponse (object : any) : object is IPersonSearchResponse {
-    return 'extraInfo' in object || 'accounts' in object;
+  private isInstanceOfIPersonSearchResponse(object: any): object is IPersonSearchResponse {
+    return 'extraInfo' in object || 'birthday' in object;
   }
 
 
