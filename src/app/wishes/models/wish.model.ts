@@ -11,7 +11,7 @@ export interface ICloudinaryImage {
 }
 
 export interface IReservation {
-    reservedBy: string;
+    reservedBy: Person;
     amount: number;
     reservationDate: Date;
     reason: string;
@@ -78,7 +78,7 @@ export class Wish {
         this._userIs = {
             receiver: user.id === this.receiver.id,
             creator: user.id === this.createdBy.id,
-            reservator: user.id === this.reservation?.reservedBy
+            reservator: user.id === this.reservation?.reservedBy.id
         }
     }
 
