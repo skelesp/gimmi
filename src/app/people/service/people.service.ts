@@ -21,14 +21,23 @@ export interface IPersonNameResponse {
   id : string;
 }
 
+export interface IPersonEmailResponse extends IPersonNameResponse{
+  email: string;
+}
+
 export interface IPersonSearchResponse {
   _id: string;
   id: string;
   firstName: string;
   lastName: string;
+  email: string;
   fullName: string;
+  updatedAt: Date;
   extraInfo?: IExtraPersonInfo;
   birthday?: Date;
+}
+export interface IPersonSearchResponseWithUserInfo extends IPersonSearchResponse {
+  accounts?: any;
 }
 
 @Injectable({
@@ -49,7 +58,7 @@ export class PeopleService {
    * @description Request the full list of people from the server. No filter applied! Puts result in private people observable.
    */
   public retrievePeopleList () : void {
-    this.http$.get<IPersonSearchResponse[]>(environment.apiUrl + 'people')
+    this.http$.get<IPersonNameResponse[]>(environment.apiUrl + 'people')
     .pipe(
       map( peopleFromResponse => {
         let people: Person[] = [];
@@ -73,7 +82,7 @@ export class PeopleService {
    */
 
    public getPersonById( personId : string) : Observable<Person> {
-    return this.http$.get<IPersonSearchResponse>( environment.apiUrl + 'people/' + personId )
+    return this.http$.get<IPersonSearchResponseWithUserInfo>( environment.apiUrl + 'people/' + personId )
     .pipe(
       catchError(this.handleError),
       map(personResult => this.convertPersonResponseToPerson(personResult))
@@ -97,7 +106,7 @@ export class PeopleService {
    */
   public findPersonByEmail (email: string): Observable<Person> {
     if (email) {
-      return this.http$.get<IPersonSearchResponse>(environment.apiUrl + `people/email/${email}`)
+      return this.http$.get<IPersonEmailResponse>(environment.apiUrl + `people/email/${email}`)
         .pipe(
           map( personResult => this.convertPersonResponseToPerson(personResult) ),
           catchError(this.handleError)
@@ -136,15 +145,7 @@ export class PeopleService {
   public getNameById (personId : string) : Observable<Person> {
     return personId ? this.http$.get<IPersonNameResponse>( environment.apiUrl + 'people/' + personId + '/name').pipe(
       catchError(this.handleError),
-      map((personNameResponse: IPersonNameResponse) => {
-        if (personNameResponse) {
-          return new Person(
-            personNameResponse.id,
-            personNameResponse.firstName,
-            personNameResponse.lastName
-          );
-        }
-      })
+      map(personResponse => this.convertPersonResponseToPerson(personResponse))
     ) : throwError('No personId provided');
   }
 
@@ -156,10 +157,20 @@ export class PeopleService {
    * @param dislikes The updated dislikes of the person.
    */
   public updateExtraInfo ( personId: string, likes: ILike[], dislikes: ILike[]) : Observable<Person> {
-    return this.http$.put<IPersonSearchResponse>(environment.apiUrl + 'people/' + personId + '/extraInfo', {likes, dislikes})
+    return this.http$.put<IPersonSearchResponseWithUserInfo>(environment.apiUrl + 'people/' + personId + '/extraInfo', {likes, dislikes})
     .pipe(
-    map( personResponse => this.convertPersonResponseToPerson(personResponse))
+      map( personResponse => this.convertPersonResponseToPerson(personResponse))
     );
+  }
+  
+  /**
+   * @method @public
+   * @description Compare the current user with the person provided
+   * @param person
+   * @returns boolean (true = person is equal to current user)
+   */
+  public isEqualToCurrentUser( person: Person) : boolean {
+    return person ? person.id === this.userService.currentUser?.id : undefined;
   }
 
   /**  
@@ -168,17 +179,24 @@ export class PeopleService {
   * @param personResponse The person object received from the server
   * @returns A Person class instance that is usable in the app
   */
-  private convertPersonResponseToPerson(personResponse: IPersonSearchResponse): Person {
+  private convertPersonResponseToPerson(personResponse: IPersonSearchResponse | IPersonSearchResponseWithUserInfo | IPersonNameResponse | IPersonEmailResponse): Person {
     let person = new Person( personResponse.id, personResponse.firstName, personResponse.lastName );
-    if (personResponse.birthday) person.birthday = personResponse.birthday;
-    if (personResponse.extraInfo) person.extraInfo = personResponse.extraInfo;
+    if (this.isInstanceOfIPersonSearchResponse(personResponse)) {
+      if (personResponse.birthday) person.birthday = personResponse.birthday;
+      if (personResponse.extraInfo) person.extraInfo = personResponse.extraInfo; 
+    }
     
     return person;
   } 
 
-  public isEqualToCurrentUser( person: Person) : boolean {
-    return person ? person.id === this.userService.currentUser?.id : undefined;
+  /**
+   * @method @private
+   * @description Detect if an object implements the IPersonSearchResponse
+   */
+  private isInstanceOfIPersonSearchResponse(object: any): object is IPersonSearchResponse {
+    return 'extraInfo' in object || 'birthday' in object;
   }
+
 
   /** 
    * @method @private 
