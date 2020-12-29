@@ -36,13 +36,7 @@ interface IWishResponse {
   size?: string;
   description?: string;
   amountWanted: number;
-  reservation?: {
-    reservedBy: string;
-    amount: 1;
-    reason: string;
-    reservationDate: Date;
-    handoverDate?: Date;
-  },
+  reservation?: IReservationResponse,
   giftFeedback: {
     _id: string;
     satisfaction: string;
@@ -56,6 +50,16 @@ interface IWishResponse {
     closedOn: Date;
   }
 }
+
+interface IReservationResponse {
+  reservedBy: string;
+  amount: 1;
+  reason: string;
+  reservationDate: Date;
+  handoverDate?: Date;
+}
+
+type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
 
 @Injectable({
   providedIn: 'root'
@@ -95,7 +99,7 @@ export class WishService {
     )
   }
 
-  private addReservedByToWishReservation ( wish: Wish, reservation ) :  Observable<Wish>{
+  private addReservedByToWishReservation ( wish: Wish, reservation: IReservationResponse ) :  Observable<Wish>{
     return !reservation ? of(wish) :
       this.peopleService.getPersonById(reservation.reservedBy)
         .pipe(
@@ -115,10 +119,12 @@ export class WishService {
   }
 
   private addStateToWish (wishWithoutState : Wish) : Observable<Wish> {
-    return this.http$.get<wishStatus>(environment.apiUrl + 'wish/' + wishWithoutState.id + '/state')
+    return this.http$.get<wishStatusInResponse>(environment.apiUrl + 'wish/' + wishWithoutState.id + '/state')
       .pipe(
         map(state => {
-          wishWithoutState.status = state;
+          if (state === "Closed") wishWithoutState.status = "Fulfilled";
+          else wishWithoutState.status = state;
+          
           return wishWithoutState;
         }),
         catchError((error: HttpErrorResponse) => {
@@ -143,6 +149,13 @@ export class WishService {
       wishResponse.description,
       wishResponse.amountWanted
     );
+    if (wishResponse.giftFeedback) wish.giftFeedback = {
+      satisfaction: wishResponse.giftFeedback.satisfaction,
+      receivedOn: wishResponse.giftFeedback.receivedOn,
+      message: wishResponse.giftFeedback.message,
+      putBackOnList: wishResponse.giftFeedback.putBackOnlist
+    };
+    
     return wish;
   }
 }
