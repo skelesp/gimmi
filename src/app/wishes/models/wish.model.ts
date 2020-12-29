@@ -61,7 +61,7 @@ export class Wish {
     public set status (v : wishStatus) {
         this._status = v;
     }    
-    public get status() : wishStatus {
+    public get status(): wishStatus{
         return this._status;
     }
     public get userIsReceiver(): boolean {
