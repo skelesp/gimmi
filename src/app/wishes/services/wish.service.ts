@@ -44,11 +44,7 @@ interface IWishResponse {
     message: string;
     putBackOnlist: boolean;
   },
-  closure: {
-    closedBy: string;
-    reason: string;
-    closedOn: Date;
-  }
+  closure: IClosureResponse;
 }
 
 interface IReservationResponse {
@@ -57,6 +53,12 @@ interface IReservationResponse {
   reason: string;
   reservationDate: Date;
   handoverDate?: Date;
+}
+
+interface IClosureResponse {
+  closedBy: string;
+  reason: string;
+  closedOn: Date;
 }
 
 type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
@@ -76,23 +78,32 @@ export class WishService {
     return this.http$.get<IWishlistResponse[]>(
       environment.apiUrl + 'wishlist/' + receiver.id
     ).pipe(
-      // Create wish instances from each wish in API response and save reservation for later use and retrieve reservedBy Person object
-      switchMap( wishlistResponse => forkJoin(
-        wishlistResponse[0].wishes.map(wishResponse =>
-          this.addReservedByToWishReservation(
-            this.createWishInstanceFromResponse(wishResponse, receiver),
-            wishResponse.reservation
-          )
+      // Create wish instances from each wish in API response and save reservation / closure for later use and retrieve reservedBy Person object
+      // !! Niet de mooiste code, maar wordt toch verwijderd eenmaal de API alle personen populate in de wish zelf...
+      switchMap(wishlistResponse => forkJoin(
+        wishlistResponse[0].wishes.map(wishResponse => {
+            let wish = this.createWishInstanceFromResponse(wishResponse, receiver);
+            return forkJoin([
+              this.addReservedByToWishReservation(wish ,wishResponse.reservation),
+              this.addClosedByToWishClosure(wish, wishResponse.closure)
+            ])
+            .pipe(
+            map( ([wishWithReservation, wishWithClosure]) => {
+                wishWithReservation.closure = wishWithClosure.closure;
+                return wishWithReservation;
+              })
+            );
+          })
         )
-      )),
+      ), 
       // Call method on each wish (with or without reservation) to set user flags in each instance (must be done after reservedBy is added)
-      map ( wishes => wishes.map( wish => {
+      map(wishes => wishes.map(wish => {
         wish.setUserIsFlags(this.userService.currentUser);
         return wish;
       })),
       // For each wish: get state via API call
-      switchMap( wishesWithoutState => forkJoin(
-        wishesWithoutState.map( wishWithoutState => this.addStateToWish(wishWithoutState) )
+      switchMap(wishesWithoutState => forkJoin(
+        wishesWithoutState.map(wishWithoutState => this.addStateToWish(wishWithoutState))
       )),
       // Default case if observable returns null
       defaultIfEmpty(<Wish[]>[])
@@ -118,13 +129,32 @@ export class WishService {
         )
   }
 
+  private addClosedByToWishClosure (wish: Wish, closure: IClosureResponse): Observable<Wish> {
+    return !closure ? of(wish) :
+      this.peopleService.getPersonById(closure.closedBy)
+        .pipe(
+          map(closedBy => {
+            if (closedBy) wish.closure = {
+              ...closure,
+              closedBy: new Person(closedBy.id, closedBy.firstName, closedBy.lastName)
+            }
+            return wish;
+          }),
+          catchError((error: HttpErrorResponse) => {
+            console.error(`[wishService] ${error}`);
+            wish.closure = { ...closure, closedBy: new Person(closure.closedBy, 'not', 'found') }
+            return of(wish);
+          })
+        )
+  }
+
   private addStateToWish (wishWithoutState : Wish) : Observable<Wish> {
     return this.http$.get<wishStatusInResponse>(environment.apiUrl + 'wish/' + wishWithoutState.id + '/state')
       .pipe(
         map(state => {
           if (state === "Closed") wishWithoutState.status = "Fulfilled";
           else wishWithoutState.status = state;
-          
+
           return wishWithoutState;
         }),
         catchError((error: HttpErrorResponse) => {
