@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Person } from 'src/app/people/models/person.model';
 import { IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
 import { UserService } from 'src/app/users/service/user.service';
-import { Wish, wishStatus } from '../models/wish.model';
+import { IClosure, IReservation, Wish, wishStatus } from '../models/wish.model';
 
 interface IWishlistResponse {
   _id: {
@@ -79,71 +79,76 @@ export class WishService {
       environment.apiUrl + 'wishlist/' + receiver.id
     ).pipe(
       // Create wish instances from each wish in API response and save reservation / closure for later use and retrieve reservedBy Person object
-      // !! Niet de mooiste code, maar wordt toch verwijderd eenmaal de API alle personen populate in de wish zelf...
       switchMap(wishlistResponse => forkJoin(
-        wishlistResponse[0].wishes.map(wishResponse => {
-            let wish = this.createWishInstanceFromResponse(wishResponse, receiver);
-            return forkJoin([
-              this.addReservedByToWishReservation(wish ,wishResponse.reservation),
-              this.addClosedByToWishClosure(wish, wishResponse.closure)
-            ])
-            .pipe(
-            map( ([wishWithReservation, wishWithClosure]) => {
-                wishWithReservation.closure = wishWithClosure.closure;
-                return wishWithReservation;
-              })
-            );
-          })
+        wishlistResponse[0].wishes.map(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, receiver))
         )
       ), 
-      // Call method on each wish (with or without reservation) to set user flags in each instance (must be done after reservedBy is added)
-      map(wishes => wishes.map(wish => {
-        wish.setUserIsFlags(this.userService.currentUser);
-        return wish;
-      })),
       // For each wish: get state via API call
+      // !! Dit wordt overbodig als de API de state al in de cal meegeeft
       switchMap(wishesWithoutState => forkJoin(
         wishesWithoutState.map(wishWithoutState => this.addStateToWish(wishWithoutState))
       )),
-      // Default case if observable returns null
+      // Default case if wishlist is empty
       defaultIfEmpty(<Wish[]>[])
     )
   }
 
-  private addReservedByToWishReservation ( wish: Wish, reservation: IReservationResponse ) :  Observable<Wish>{
-    return !reservation ? of(wish) :
+  private convertWishResponseToFullWishInstance(wishResponse : IWishResponse, receiver : Person) : Observable<Wish>{
+    // Create wish without reservation and closure
+    let wish = this.createBasicWishInstanceFromResponse(wishResponse, receiver);
+    // Fetch Person corresponding to closedBy and reservedBy objectID's
+    // !! This can be avoided if the API returns fully populated wish object...
+    return forkJoin([
+      of(wish),
+      this.getFullReservationInfo(wishResponse.reservation),
+      this.getFullClosureInfo(wishResponse.closure)
+    ])
+    .pipe(
+      // Add full closure and reservation info into wish
+      map(([wish, reservationWithReservedByPerson, closureWithClosedByPerson]) => {
+        if(reservationWithReservedByPerson) wish.reservation = reservationWithReservedByPerson;
+        if(closureWithClosedByPerson) wish.closure = closureWithClosedByPerson;
+        // Call method on each wish (with or without reservation) to set user flags in each instance (must be done after reservedBy is added)
+        wish.setUserIsFlags(this.userService.currentUser);
+        return wish;
+      })
+    );
+  }
+
+  private getFullReservationInfo ( reservation: IReservationResponse ) :  Observable<IReservation>{
+    let completeReservation : IReservation;
+    return (!reservation || !reservation.reservedBy) ? of(null) :
       this.peopleService.getPersonById(reservation.reservedBy)
         .pipe(
           map(reservedBy => {
-            if (reservedBy) wish.reservation = {
+            if (reservedBy) completeReservation = {
               ...reservation,
               reservedBy: new Person(reservedBy.id, reservedBy.firstName, reservedBy.lastName)
             }
-            return wish;
+            return completeReservation;
           }),
           catchError((error: HttpErrorResponse) => {
-            console.error(`[wishService] ${error}`);
-            wish.reservation = { ...reservation, reservedBy: new Person(reservation.reservedBy, 'not', 'found') }
-            return of(wish);
+            console.error(`[wishService] ReservedBy ID not found`);
+            return of({ ...reservation, reservedBy: new Person(reservation.reservedBy, 'not', 'found') });
           })
         )
   }
 
-  private addClosedByToWishClosure (wish: Wish, closure: IClosureResponse): Observable<Wish> {
-    return !closure ? of(wish) :
+  private getFullClosureInfo (closure: IClosureResponse): Observable<IClosure> {
+    let completeClosure : IClosure;
+    return (!closure || !closure.closedBy) ? of(null) :
       this.peopleService.getPersonById(closure.closedBy)
         .pipe(
           map(closedBy => {
-            if (closedBy) wish.closure = {
+            if (closedBy) completeClosure = {
               ...closure,
               closedBy: new Person(closedBy.id, closedBy.firstName, closedBy.lastName)
             }
-            return wish;
+            return completeClosure;
           }),
           catchError((error: HttpErrorResponse) => {
-            console.error(`[wishService] ${error}`);
-            wish.closure = { ...closure, closedBy: new Person(closure.closedBy, 'not', 'found') }
-            return of(wish);
+            console.error(`[wishService] ClosedBy ID not found`);
+            return of({ ...closure, closedBy: new Person(closure.closedBy, 'not', 'found') });
           })
         )
   }
@@ -165,7 +170,7 @@ export class WishService {
       )
   }
   
-  private createWishInstanceFromResponse ( wishResponse : IWishResponse, receiver: Person ) : Wish {
+  private createBasicWishInstanceFromResponse ( wishResponse : IWishResponse, receiver: Person ) : Wish {
     let wish : Wish = new Wish (
       wishResponse._id,
       wishResponse.title,
