@@ -31,17 +31,29 @@ interface IWishResponse {
     firstName:string;
     lastName: string;
     birthday: Date;
-  },
-  color?: string,
-  size?: string,
-  description?: string,
-  amountWanted: number,
+  };
+  color?: string;
+  size?: string;
+  description?: string;
+  amountWanted: number;
   reservation?: {
-    reservedBy: string,
-    amount: 1,
-    reason: string,
-    reservationDate: Date,
-    handoverDate?: Date
+    reservedBy: string;
+    amount: 1;
+    reason: string;
+    reservationDate: Date;
+    handoverDate?: Date;
+  },
+  giftFeedback: {
+    _id: string;
+    satisfaction: string;
+    receivedOn: Date;
+    message: string;
+    putBackOnlist: boolean;
+  },
+  closure: {
+    closedBy: string;
+    reason: string;
+    closedOn: Date;
   }
 }
 
