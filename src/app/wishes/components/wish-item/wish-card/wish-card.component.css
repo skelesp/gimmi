@@ -25,17 +25,3 @@
 .dropdown-toggle::after {
   display:none;
 }
-
-/* Voor in Wish Action CTA */
-.btn-wish-card-cta {
-  border-color: #fecbcc;
-}
-.card .form-control, .card .btn{
-  font-size: 0.85rem;
-}
-
-/* Voor wish banner */
-.badge-wish-card-banner {
-  opacity: .70;
-  font-size: 80%;
-}
