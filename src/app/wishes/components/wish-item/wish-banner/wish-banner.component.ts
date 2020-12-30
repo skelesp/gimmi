@@ -16,6 +16,7 @@ const bannerConfigs: {[key  in WishScenario]: BannerConfig} = {
   'RESERVED_BY_USER': { text: "Gereserveerd door jou", backgroundColor: 'warning', bannerIcon: faStar},
   'RESERVED_INCOGNITO_FOR_USER': { text: null, backgroundColor: null, bannerIcon: null },
   'RECEIVED': { text: "Ontvangen", backgroundColor: 'danger', bannerIcon: faGift },
+  'RECEIVED_RECEIVER': { text: "Ontvangen", backgroundColor: 'danger', bannerIcon: faGift },
   'RECEIVED_GIVEN_BY_USER': { text: "Gegeven door jou", backgroundColor: 'warning', bannerIcon: faGift },
   'FULFILLED': { text: "Wens vervuld", backgroundColor: 'success', bannerIcon: faThumbsUp },
   'FULFILLED_BY_USER': { text: "Wens vervuld door jou", backgroundColor: 'success', bannerIcon: faThumbsUp }

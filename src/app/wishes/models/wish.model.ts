@@ -3,7 +3,7 @@ import { User } from 'src/app/users/models/user.model';
 import { environment } from 'src/environments/environment';
 
 export type wishStatus = 'Open' | 'Reserved' | 'Received' | 'Fulfilled';
-export type WishScenario = 'OPEN_WISH' | 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' | 'RESERVED' | 'RESERVED_BY_USER' | 'RESERVED_INCOGNITO_FOR_USER' | 'RECEIVED' | 'RECEIVED_GIVEN_BY_USER' | 'FULFILLED' | 'FULFILLED_BY_USER';
+export type WishScenario = 'OPEN_WISH' | 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' | 'RESERVED' | 'RESERVED_BY_USER' | 'RESERVED_INCOGNITO_FOR_USER' | 'RECEIVED' | 'RECEIVED_RECEIVER' | 'RECEIVED_GIVEN_BY_USER' | 'FULFILLED' | 'FULFILLED_BY_USER';
 
 export interface ICloudinaryImage {
     publicId: string,
@@ -85,31 +85,19 @@ export class Wish {
     public get scenario() : WishScenario {
         switch (this._status) {
             case 'Open':
-                if (!this._userIs.receiver && this._userIs.creator) {
-                   return 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER';
-                } else {
-                    return 'OPEN_WISH';
-                }
+                if (!this._userIs.receiver && this._userIs.creator) return 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER'
+                else return 'OPEN_WISH';
             case 'Reserved':
-                if (this._userIs.reservator) {
-                    return 'RESERVED_BY_USER'
-                } else if (!this._userIs.receiver) {
-                    return 'RESERVED'
-                } else { // user is the receiver and should not know that something is reserved on his list
-                    return 'RESERVED_INCOGNITO_FOR_USER'
-                }
+                if (this._userIs.reservator) return 'RESERVED_BY_USER'
+                else if (!this._userIs.receiver) return 'RESERVED'
+                else return 'RESERVED_INCOGNITO_FOR_USER'  // user is the receiver and should not know that something is reserved on his list
             case 'Received':
-                if (this._userIs.reservator) {
-                    return 'RECEIVED_GIVEN_BY_USER'
-                } else {
-                    return 'RECEIVED'
-                }
+                if (this._userIs.reservator) return 'RECEIVED_GIVEN_BY_USER'
+                else if (this._userIs.receiver) return 'RECEIVED_RECEIVER'
+                else return 'RECEIVED'
             case 'Fulfilled':
-                if (this._userIs.reservator) {
-                    return 'FULFILLED_BY_USER'
-                } else {
-                    return 'FULFILLED'
-                }
+                if (this._userIs.reservator) return 'FULFILLED_BY_USER'
+                else return 'FULFILLED'
             default:
                 console.warn(`No scenario set for wish with status ${this._status} and flags (receiver|creator|reservator): ${this._userIs.receiver}|${this._userIs.creator}|${this._userIs.reservator} `)
                 break;
