@@ -1,5 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
+import { faBan, faGift } from '@fortawesome/free-solid-svg-icons';
 import { WishScenario } from 'src/app/wishes/models/wish.model';
 
 interface CTAButtonConfig {
@@ -7,10 +9,10 @@ interface CTAButtonConfig {
   icon: IconDefinition
 }
 
-const reserveButtonConfig: CTAButtonConfig = { text: "Reserveer", icon: null };
 const noButtonConfig: CTAButtonConfig = { text: null, icon: null };
-const cancelButtonConfig: CTAButtonConfig = { text: "Annuleer", icon: null };
-const feedbackButtonConfig: CTAButtonConfig = { text: "Geef feedback", icon: null };
+const reserveButtonConfig: CTAButtonConfig = { text: "Reserveer", icon: faGift };
+const cancelButtonConfig: CTAButtonConfig = { text: "Wijzig reservatie", icon: faBan };
+const feedbackButtonConfig: CTAButtonConfig = { text: "Geef feedback", icon: faComment };
 
 const buttonConfigs: { [key in WishScenario]: CTAButtonConfig } = {
   'OPEN_WISH': reserveButtonConfig,
