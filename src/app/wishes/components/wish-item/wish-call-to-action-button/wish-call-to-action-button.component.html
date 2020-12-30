@@ -1,3 +1,4 @@
 <button *ngIf="config.text" 
-        class="btn btn-outline-danger btn-block btn-wish-card-cta border-1 shadow-sm">
+        class="btn btn-outline-danger btn-block btn-wish-card-cta border-1 shadow-sm"
+        (click)="config.onClick()">
         <fa-icon [icon]="config.icon" [size]="'lg'" class="mr-1"></fa-icon> {{config.text}}</button>
