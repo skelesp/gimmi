@@ -8,9 +8,10 @@ import { FilterOnStatePipe } from './pipes/filter-on-state.pipe';
 import { WishItemComponent } from './components/wish-item/wish-item.component';
 import { WishCardComponent } from './components/wish-item/wish-card/wish-card.component';
 import { WishBannerComponent } from './components/wish-item/wish-banner/wish-banner.component';
+import { WishCallToActionButtonComponent } from './components/wish-item/wish-call-to-action-button/wish-call-to-action-button.component';
 
 @NgModule({
-  declarations: [WishListComponent, FilterOnStatePipe, WishItemComponent, WishCardComponent, WishBannerComponent],
+  declarations: [WishListComponent, FilterOnStatePipe, WishItemComponent, WishCardComponent, WishBannerComponent, WishCallToActionButtonComponent],
   imports: [
     CommonModule,
     SharedModule,
