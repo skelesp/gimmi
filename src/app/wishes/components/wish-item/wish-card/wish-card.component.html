@@ -56,8 +56,7 @@
         </div>
         <!-- CTA's -->
         <div class="row no-gutters mt-2">
-            <button class="btn btn-outline-danger btn-block btn-wish-card-cta border-1 shadow-sm"> 
-                Wish action : {{wish.status}}</button>
+            <gimmi-wish-call-to-action-button class="w-100" [scenario]="wish.scenario"></gimmi-wish-call-to-action-button>
         </div>
     </div>
 </div>
