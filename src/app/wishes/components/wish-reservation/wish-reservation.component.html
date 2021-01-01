@@ -1,6 +1,6 @@
 <div class="modal-header" style="color:#000000">
     <h3 class="modal-title" id="modal-title">
-        Reserveer WISH.TITLE
+        Reserveer {{wish.title}}
     </h3>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
@@ -10,12 +10,12 @@
 <div class="modal-body" id="modal-body" style="color:#000000">
     <form class="form" (submit)="saveReservation()" [formGroup]="reservationForm">
         <div class="form-group">
-            <label for="handoverDate" class="form-control-label">Wanneer geef je het cadeau aan FIRSTNAME RECEIVER?</label>
+            <label for="handoverDate" class="form-control-label">Wanneer geef je het cadeau aan {{wish.receiver.firstName}}?</label>
             <input  type="date" class="form-control" id="handoverDate" name="handoverDate" 
                     ngbAutofocus
                     formControlName="handoverDate">
             <small id="handoverDateHelp" class="form-text text-muted">Je reservatie blijft onzichtbaar voor
-                FIRSTNAME RECEIVER tot na deze datum. Zo blijft het een verrassing!</small>
+                {{wish.receiver.firstName}} tot na deze datum. Zo blijft het een verrassing!</small>
         </div>
         <div class="form-group">
             <label for="reservationReason" class="form-control-label">Voor welke gelegenheid wil je deze cadeau geven?</label>

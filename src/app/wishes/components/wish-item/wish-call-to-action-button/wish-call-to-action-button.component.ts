@@ -52,7 +52,8 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   }
 
   reserve () {
-    this.modalService.open(WishReservationComponent);
+    let reservationPopup = this.modalService.open(WishReservationComponent);
+    reservationPopup.componentInstance.wish = this.wish;
   }
 
   changeReservation() {
