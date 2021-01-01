@@ -93,6 +93,8 @@ export class WishService {
     )
   }
 
+  /* PRIVATE methods */
+
   private convertWishResponseToFullWishInstance(wishResponse : IWishResponse, receiver : Person) : Observable<Wish>{
     // Create wish without reservation and closure
     let wish = this.createBasicWishInstanceFromResponse(wishResponse, receiver);

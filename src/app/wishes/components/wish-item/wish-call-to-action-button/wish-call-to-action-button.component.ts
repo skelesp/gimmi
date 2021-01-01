@@ -2,7 +2,10 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faBan, faGift } from '@fortawesome/free-solid-svg-icons';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { WishScenario } from 'src/app/wishes/models/wish.model';
+import { WishReservationComponent } from '../../wish-reservation/wish-reservation.component';
 
 interface CTAButtonConfig {
   text: string;
@@ -19,9 +22,9 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   config: CTAButtonConfig = { text: null, icon: null };
   
   readonly noButtonConfig: CTAButtonConfig = { text: null, icon: null };
-  readonly reserveButtonConfig: CTAButtonConfig = { text: "Reserveer", icon: faGift, onClick: this.reserve };
-  readonly cancelButtonConfig: CTAButtonConfig = { text: "Wijzig reservatie", icon: faBan, onClick: this.changeReservation };
-  readonly feedbackButtonConfig: CTAButtonConfig = { text: "Geef feedback", icon: faComment, onClick: this.giveFeedback };
+  readonly reserveButtonConfig: CTAButtonConfig = { text: "Reserveer", icon: faGift, onClick: this.reserve.bind(this) };
+  readonly cancelButtonConfig: CTAButtonConfig = { text: "Wijzig reservatie", icon: faBan, onClick: this.changeReservation.bind(this) };
+  readonly feedbackButtonConfig: CTAButtonConfig = { text: "Geef feedback", icon: faComment, onClick: this.giveFeedback.bind(this) };
 
   readonly buttonConfigs: { [key in WishScenario]: CTAButtonConfig } = {
     'OPEN_WISH': this.reserveButtonConfig,
@@ -36,7 +39,7 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
     'FULFILLED_BY_USER': this.noButtonConfig
   };
 
-  constructor() {  }
+  constructor( private modalService: NgbModal) {  }
 
   ngOnInit(): void {
     this.config = this.buttonConfigs[this.scenario];
@@ -47,7 +50,7 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   }
 
   reserve () {
-    alert("Reserveer");
+    this.modalService.open(WishReservationComponent);
   }
   changeReservation() {
     alert("Wijzig reservatie");

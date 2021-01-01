@@ -9,16 +9,18 @@ import { WishItemComponent } from './components/wish-item/wish-item.component';
 import { WishCardComponent } from './components/wish-item/wish-card/wish-card.component';
 import { WishBannerComponent } from './components/wish-item/wish-banner/wish-banner.component';
 import { WishCallToActionButtonComponent } from './components/wish-item/wish-call-to-action-button/wish-call-to-action-button.component';
+import { WishReservationComponent } from './components/wish-reservation/wish-reservation.component';
 
 @NgModule({
-  declarations: [WishListComponent, FilterOnStatePipe, WishItemComponent, WishCardComponent, WishBannerComponent, WishCallToActionButtonComponent],
+  declarations: [WishListComponent, FilterOnStatePipe, WishItemComponent, WishCardComponent, WishBannerComponent, WishCallToActionButtonComponent, WishReservationComponent],
   imports: [
     CommonModule,
     SharedModule,
     WishesRoutingModule
   ],
   exports: [
-    WishListComponent
+    WishListComponent,
+    WishReservationComponent
   ]
 })
 export class WishesModule { }

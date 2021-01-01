@@ -1,0 +1,35 @@
+<div class="modal-header" style="color:#000000">
+    <h3 class="modal-title" id="modal-title">
+        Reserveer WISH.TITLE
+    </h3>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body" id="modal-body" style="color:#000000">
+    <form class="form" (submit)="saveReservation()" [formGroup]="reservationForm">
+        <div class="form-group">
+            <label for="handoverDate" class="form-control-label">Wanneer geef je het cadeau aan FIRSTNAME RECEIVER?</label>
+            <input  type="date" class="form-control" id="handoverDate" name="handoverDate" 
+                    ngbAutofocus
+                    formControlName="handoverDate">
+            <small id="handoverDateHelp" class="form-text text-muted">Je reservatie blijft onzichtbaar voor
+                FIRSTNAME RECEIVER tot na deze datum. Zo blijft het een verrassing!</small>
+        </div>
+        <div class="form-group">
+            <label for="reservationReason" class="form-control-label">Voor welke gelegenheid wil je deze cadeau geven?</label>
+            <!-- https://stackoverflow.com/questions/38725365/how-to-show-placeholder-empty-option-in-select-control-in-angular-2 -->
+            <select class="form-control" id="reservationReason" formControlName="reason">
+                <option value="null" disabled selected hidden>Kies een reden</option>
+                <option [ngValue]="" [disabled]="true" [hidden]="true" [selected]="true">Choose your city</option>
+                <option *ngFor="let option of reasonOptions" [ngValue]="option">{{option}}</option>
+            </select>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="saveReservation()">Reserveer</button>
+    <button class="btn btn-danger" type="button" (click)="activeModal.dismiss('Cancel')">Annuleer</button>
+</div>
