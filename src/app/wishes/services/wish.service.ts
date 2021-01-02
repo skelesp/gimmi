@@ -111,16 +111,20 @@ export class WishService {
       switchMap(wishlistResponse => forkJoin(
         wishlistResponse[0].wishes.map(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, receiver))
         )
-      ), 
-      // For each wish: get state via API call
-      // !! Dit wordt overbodig als de API de state al in de cal meegeeft
-      switchMap(wishesWithoutState => forkJoin(
-        wishesWithoutState.map(wishWithoutState => this.addStateToWish(wishWithoutState))
-      )),
+      ),
       // Default case if wishlist is empty
       defaultIfEmpty(<Wish[]>[]),
       tap(wishes => this._wishes$.next(wishes))
     );
+  }
+
+  public updateWishInWishlist ( updatedWish: Wish ) : void {
+    let currentWishlist = [...this._wishes$.value]; //spread operator passes a copy of the array, so change detection will detect this change.
+    if (currentWishlist.length !== 0) {
+      let index = currentWishlist.findIndex(item => item.id === updatedWish.id);
+      currentWishlist[index] = updatedWish;
+    }
+    this._wishes$.next(currentWishlist);
   }
 
   public addReservation(wish: Wish, reservation: IReservation) : Observable<Wish>{
@@ -130,6 +134,7 @@ export class WishService {
       environment.apiUrl + 'wish/' + wish.id + '/reservation', 
       reservationRequestData
     ).pipe(
+      // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist
       map(wishResponse => {
         let newWishResponse:any = {...wishResponse};
         newWishResponse.reservation.reservedBy = newWishResponse.reservation.reservedBy.id;
@@ -137,7 +142,9 @@ export class WishService {
       }),
       switchMap(wishResponse => this.convertWishResponseToFullWishInstance(
         wishResponse, 
-        wish.receiver) )
+        wish.receiver) 
+        ),
+        tap( wish => this.updateWishInWishlist(wish) )
     )
   }
 
@@ -158,8 +165,14 @@ export class WishService {
       map(([wish, reservationWithReservedByPerson, closureWithClosedByPerson]) => {
         if(reservationWithReservedByPerson) wish.reservation = reservationWithReservedByPerson;
         if(closureWithClosedByPerson) wish.closure = closureWithClosedByPerson;
-        // Call method on each wish (with or without reservation) to set user flags in each instance (must be done after reservedBy is added)
-        wish.setUserIsFlags(this.userService.currentUser);
+        return wish;
+      }),
+      // Get state via API call
+      // !! Dit wordt overbodig als de API de state al in de cal meegeeft
+      switchMap( wish => this.addStateToWish(wish)),
+      // Call method to set user flags in each instance (must be done after reservedBy is added and status is retrieved)
+      map ( wish => {
+        wish.setUserIsFlags(this.userService.currentUser)
         return wish;
       })
     );
