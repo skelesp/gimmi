@@ -5,7 +5,7 @@ import { catchError, defaultIfEmpty, map, switchMap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Person } from 'src/app/people/models/person.model';
-import { IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
+import { IPersonNameResponse, IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
 import { UserService } from 'src/app/users/service/user.service';
 import { IClosure, IReservation, Wish, wishStatus } from '../models/wish.model';
 
@@ -30,26 +30,53 @@ interface IWishResponse {
     _id: string;
     firstName:string;
     lastName: string;
-    birthday: Date;
   };
   color?: string;
   size?: string;
   description?: string;
   amountWanted: number;
   reservation?: IReservationResponse,
-  giftFeedback: {
+  giftFeedback?: {
     _id: string;
     satisfaction: string;
     receivedOn: Date;
     message: string;
     putBackOnlist: boolean;
   },
-  closure: IClosureResponse;
+  closure?: IClosureResponse;
+}
+
+interface IWishReservationResponse {
+  receiver: string;
+  _id: string;
+  title: string;
+  image: {
+    version: number;
+    public_id: string;
+  };
+  price?: number;
+  url?: string;
+  createdBy: IPersonNameResponse;
+  color?: string;
+  size?: string;
+  description?: string;
+  amountWanted: number;
+  reservation: {
+    reservedBy: IPersonNameResponse,
+    amount: number;
+    reason: string;
+    reservationDate: Date;
+    handoverDate?: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    _id: string;
+    id: string;
+  }
 }
 
 interface IReservationResponse {
   reservedBy: string;
-  amount: 1;
+  amount: number;
   reason: string;
   reservationDate: Date;
   handoverDate?: Date;
@@ -90,6 +117,24 @@ export class WishService {
       )),
       // Default case if wishlist is empty
       defaultIfEmpty(<Wish[]>[])
+    )
+  }
+
+  public addReservation(wish: Wish, reservation: IReservation) : Observable<Wish>{
+    let reservationRequestData: IReservationResponse = { ...reservation, reservedBy: reservation.reservedBy.id };
+
+    return this.http$.post<IWishReservationResponse>(
+      environment.apiUrl + 'wish/' + wish.id + '/reservation', 
+      reservationRequestData
+    ).pipe(
+      map(wishResponse => {
+        let newWishResponse:any = {...wishResponse};
+        newWishResponse.reservation.reservedBy = newWishResponse.reservation.reservedBy.id;
+        return newWishResponse;
+      }),
+      switchMap(wishResponse => this.convertWishResponseToFullWishInstance(
+        wishResponse, 
+        wish.receiver) )
     )
   }
 

@@ -1,9 +1,11 @@
+import { toTypeScript } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Person } from 'src/app/people/models/person.model';
 import { UserService } from 'src/app/users/service/user.service';
 import { IReservation, Wish } from '../../models/wish.model';
+import { WishService } from '../../services/wish.service';
 
 @Component({
   selector: 'gimmi-wish-reservation',
@@ -17,7 +19,8 @@ export class WishReservationComponent implements OnInit {
 
   constructor( 
     public activeModal: NgbActiveModal,
-    private userService: UserService
+    private userService: UserService,
+    private wishService: WishService
   ) { }
 
   ngOnInit(): void {
@@ -39,7 +42,13 @@ export class WishReservationComponent implements OnInit {
         ),
       reservationDate: new Date()
     }
-    console.log(reservation);
+
+    this.wishService.addReservation(
+      this.wish,
+      reservation
+    ).subscribe(wish => console.log(wish));
+
+    this.activeModal.close(reservation);
   }
 
 }
