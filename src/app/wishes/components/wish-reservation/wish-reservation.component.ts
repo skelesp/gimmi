@@ -1,8 +1,8 @@
-import { toTypeScript } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Person } from 'src/app/people/models/person.model';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UserService } from 'src/app/users/service/user.service';
 import { IReservation, Wish } from '../../models/wish.model';
 import { WishService } from '../../services/wish.service';
@@ -20,7 +20,8 @@ export class WishReservationComponent implements OnInit {
   constructor( 
     public activeModal: NgbActiveModal,
     private userService: UserService,
-    private wishService: WishService
+    private wishService: WishService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +47,11 @@ export class WishReservationComponent implements OnInit {
     this.wishService.addReservation(
       this.wish,
       reservation
-    ).subscribe(wish => console.log(wish));
+    ).subscribe( wish => this.notificationService.showNotification(
+    `Wens ${wish.title} is gereserveerd. U hoeft dit perfecte cadeau enkel nog te kopen en af te geven!`,
+      'success',
+      'Gereserveerd'
+    ));
 
     this.activeModal.close(reservation);
   }
