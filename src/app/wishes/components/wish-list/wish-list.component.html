@@ -7,7 +7,7 @@
         <p>Er staan nog geen wensen op deze lijst. Vraag {{receiver.firstName}} om wensen op de lijst toe te voegen, zodat jij het perfect cadeau kan kopen...</p>
     </ngb-alert>
 </div>
-<div *ngIf="wishes" class="card-columns">
+<div *ngIf="wishes && !loading" class="card-columns">
     <gimmi-wish-card 
         *ngFor="let wish of wishes | filterOnState:wishlistFilter" 
         [wish]="wish">

@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, of } from 'rxjs';
-import { catchError, defaultIfEmpty, map, switchMap } from 'rxjs/operators';
+import { Observable, forkJoin, of, BehaviorSubject } from 'rxjs';
+import { catchError, defaultIfEmpty, map, switchMap, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Person } from 'src/app/people/models/person.model';
@@ -94,6 +94,8 @@ type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
   providedIn: 'root'
 })
 export class WishService {
+  private _wishes$: BehaviorSubject<Wish[]> = new BehaviorSubject<Wish[]>([]);
+  public readonly wishes: Observable<Wish[]> = this._wishes$.asObservable();
 
   constructor(
     private http$ : HttpClient,
@@ -116,8 +118,9 @@ export class WishService {
         wishesWithoutState.map(wishWithoutState => this.addStateToWish(wishWithoutState))
       )),
       // Default case if wishlist is empty
-      defaultIfEmpty(<Wish[]>[])
-    )
+      defaultIfEmpty(<Wish[]>[]),
+      tap(wishes => this._wishes$.next(wishes))
+    );
   }
 
   public addReservation(wish: Wish, reservation: IReservation) : Observable<Wish>{
