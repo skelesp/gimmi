@@ -7,8 +7,8 @@
     </button>
 </div>
 
-<div class="modal-body" id="modal-body" style="color:#000000">
-    <form class="form" (submit)="saveReservation()" [formGroup]="reservationForm">
+<form class="form" (ngSubmit)="saveReservation()" [formGroup]="reservationForm">
+    <div class="modal-body" id="modal-body" style="color:#000000">
         <div class="form-group">
             <label for="handoverDate" class="form-control-label">Wanneer geef je het cadeau aan {{wish.receiver.firstName}}?</label>
             <input  type="date" class="form-control" id="handoverDate" name="handoverDate" 
@@ -26,10 +26,13 @@
                 <option *ngFor="let option of reasonOptions" [ngValue]="option">{{option}}</option>
             </select>
         </div>
-    </form>
-</div>
-
-<div class="modal-footer">
-    <button class="btn btn-danger" type="button" (click)="saveReservation()">Reserveer</button>
-    <button class="btn btn-danger" type="button" (click)="activeModal.dismiss('Cancel')">Annuleer</button>
-</div>
+        <small *ngIf="reservationForm.get('reason').invalid && reservationForm.get('reason').touched" class="text-danger">
+            De gelegenheid is een verplicht veld.
+        </small>
+    </div>
+        
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="submit" [disabled]="reservationForm.invalid">Reserveer</button>
+        <button class="btn btn-danger" type="button" (click)="activeModal.dismiss('Cancel')">Annuleer</button>
+    </div>
+</form>
