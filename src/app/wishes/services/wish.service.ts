@@ -1,11 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, of } from 'rxjs';
-import { catchError, defaultIfEmpty, map, switchMap } from 'rxjs/operators';
+import { Observable, forkJoin, of, BehaviorSubject } from 'rxjs';
+import { catchError, defaultIfEmpty, map, switchMap, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Person } from 'src/app/people/models/person.model';
-import { IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
+import { IPersonNameResponse, IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
 import { UserService } from 'src/app/users/service/user.service';
 import { IClosure, IReservation, Wish, wishStatus } from '../models/wish.model';
 
@@ -30,26 +30,53 @@ interface IWishResponse {
     _id: string;
     firstName:string;
     lastName: string;
-    birthday: Date;
   };
   color?: string;
   size?: string;
   description?: string;
   amountWanted: number;
   reservation?: IReservationResponse,
-  giftFeedback: {
+  giftFeedback?: {
     _id: string;
     satisfaction: string;
     receivedOn: Date;
     message: string;
     putBackOnlist: boolean;
   },
-  closure: IClosureResponse;
+  closure?: IClosureResponse;
+}
+
+interface IWishReservationResponse {
+  receiver: string;
+  _id: string;
+  title: string;
+  image: {
+    version: number;
+    public_id: string;
+  };
+  price?: number;
+  url?: string;
+  createdBy: IPersonNameResponse;
+  color?: string;
+  size?: string;
+  description?: string;
+  amountWanted: number;
+  reservation: {
+    reservedBy: IPersonNameResponse,
+    amount: number;
+    reason: string;
+    reservationDate: Date;
+    handoverDate?: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    _id: string;
+    id: string;
+  }
 }
 
 interface IReservationResponse {
   reservedBy: string;
-  amount: 1;
+  amount: number;
   reason: string;
   reservationDate: Date;
   handoverDate?: Date;
@@ -67,6 +94,8 @@ type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
   providedIn: 'root'
 })
 export class WishService {
+  private _wishes$: BehaviorSubject<Wish[]> = new BehaviorSubject<Wish[]>([]);
+  public readonly wishes: Observable<Wish[]> = this._wishes$.asObservable();
 
   constructor(
     private http$ : HttpClient,
@@ -82,16 +111,44 @@ export class WishService {
       switchMap(wishlistResponse => forkJoin(
         wishlistResponse[0].wishes.map(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, receiver))
         )
-      ), 
-      // For each wish: get state via API call
-      // !! Dit wordt overbodig als de API de state al in de cal meegeeft
-      switchMap(wishesWithoutState => forkJoin(
-        wishesWithoutState.map(wishWithoutState => this.addStateToWish(wishWithoutState))
-      )),
+      ),
       // Default case if wishlist is empty
-      defaultIfEmpty(<Wish[]>[])
+      defaultIfEmpty(<Wish[]>[]),
+      tap(wishes => this._wishes$.next(wishes))
+    );
+  }
+
+  public updateWishInWishlist ( updatedWish: Wish ) : void {
+    let currentWishlist = [...this._wishes$.value]; //spread operator passes a copy of the array, so change detection will detect this change.
+    if (currentWishlist.length !== 0) {
+      let index = currentWishlist.findIndex(item => item.id === updatedWish.id);
+      currentWishlist[index] = updatedWish;
+    }
+    this._wishes$.next(currentWishlist);
+  }
+
+  public addReservation(wish: Wish, reservation: IReservation) : Observable<Wish>{
+    let reservationRequestData: IReservationResponse = { ...reservation, reservedBy: reservation.reservedBy.id };
+
+    return this.http$.post<IWishReservationResponse>(
+      environment.apiUrl + 'wish/' + wish.id + '/reservation', 
+      reservationRequestData
+    ).pipe(
+      // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist
+      map(wishResponse => {
+        let newWishResponse:any = {...wishResponse};
+        newWishResponse.reservation.reservedBy = newWishResponse.reservation.reservedBy.id;
+        return newWishResponse;
+      }),
+      switchMap(wishResponse => this.convertWishResponseToFullWishInstance(
+        wishResponse, 
+        wish.receiver) 
+        ),
+        tap( wish => this.updateWishInWishlist(wish) )
     )
   }
+
+  /* PRIVATE methods */
 
   private convertWishResponseToFullWishInstance(wishResponse : IWishResponse, receiver : Person) : Observable<Wish>{
     // Create wish without reservation and closure
@@ -108,8 +165,14 @@ export class WishService {
       map(([wish, reservationWithReservedByPerson, closureWithClosedByPerson]) => {
         if(reservationWithReservedByPerson) wish.reservation = reservationWithReservedByPerson;
         if(closureWithClosedByPerson) wish.closure = closureWithClosedByPerson;
-        // Call method on each wish (with or without reservation) to set user flags in each instance (must be done after reservedBy is added)
-        wish.setUserIsFlags(this.userService.currentUser);
+        return wish;
+      }),
+      // Get state via API call
+      // !! Dit wordt overbodig als de API de state al in de cal meegeeft
+      switchMap( wish => this.addStateToWish(wish)),
+      // Call method to set user flags in each instance (must be done after reservedBy is added and status is retrieved)
+      map ( wish => {
+        wish.setUserIsFlags(this.userService.currentUser)
         return wish;
       })
     );

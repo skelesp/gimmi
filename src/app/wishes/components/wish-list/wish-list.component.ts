@@ -20,17 +20,12 @@ export class WishListComponent implements OnInit, OnChanges {
   
   ngOnChanges(changes: SimpleChanges): void {
     this.loading = true;
-    this.wishes = [];
-    this.wishService.getWishlist(this.receiver).subscribe( (wishes) => {
-      this.wishes = wishes;
-      this.loading = false;
-    }, (err) => {
-      this.wishes = null;
-      this.loading = false;
-      console.error(err);
-    });
+    this.wishService.getWishlist(this.receiver).subscribe(
+      _ => this.loading = false
+    );
   }
 
   ngOnInit(): void {
+    this.wishService.wishes.subscribe(wishes => this.wishes = wishes );
   }
 }
