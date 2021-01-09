@@ -3,8 +3,10 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faBan, faGift } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 
 import { Wish, WishScenario } from 'src/app/wishes/models/wish.model';
+import { WishService } from 'src/app/wishes/services/wish.service';
 import { WishReservationComponent } from '../../wish-reservation/wish-reservation.component';
 
 interface CTAButtonConfig {
@@ -24,7 +26,7 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   readonly buttonConfigs: { [key:string] : CTAButtonConfig} = {
     noButton: { text: null, icon: null },
     reserve: { text: "Reserveer", icon: faGift, onClick: this.reserve.bind(this) },
-    cancel: { text: "Wijzig reservatie", icon: faBan, onClick: this.changeReservation.bind(this) },
+    cancel: { text: "Annuleer reservatie", icon: faBan, onClick: this.changeReservation.bind(this) },
     feedback: { text: "Geef feedback", icon: faComment, onClick: this.giveFeedback.bind(this) }
   } 
 
@@ -41,7 +43,11 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
     'FULFILLED_BY_USER': this.buttonConfigs.noButton
   };
 
-  constructor( private modalService: NgbModal) { }
+  constructor( 
+    private modalService: NgbModal,
+    private wishService: WishService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.config = this.scenarioButtonMapping[this.wish.scenario];
@@ -57,7 +63,12 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   }
 
   changeReservation() {
-    alert("Wijzig reservatie");
+    this.wishService.deleteReservation(this.wish).subscribe( wish => 
+      this.notificationService.showNotification( 
+        `Je reservatie van ${wish.title} voor ${wish.receiver.firstName} is geannuleerd.`,
+        'info',
+        'Reservatie geannuleerd' )
+    );
   }
 
   giveFeedback(){
