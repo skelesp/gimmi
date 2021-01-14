@@ -148,6 +148,23 @@ export class WishService {
     )
   }
 
+  public deleteReservation(wish: Wish) : Observable<Wish>{
+    return this.http$.delete<IWishReservationResponse>(
+      environment.apiUrl + 'wish/' + wish.id + '/reservation'
+    ).pipe(
+      // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist
+      map(wishResponse => {
+        let newWishResponse: any = { ...wishResponse };
+        return newWishResponse;
+      }),
+      switchMap(wishResponse => this.convertWishResponseToFullWishInstance(
+        wishResponse,
+        wish.receiver)
+      ),
+      tap(wish => this.updateWishInWishlist(wish))
+    );
+  }
+
   /* PRIVATE methods */
 
   private convertWishResponseToFullWishInstance(wishResponse : IWishResponse, receiver : Person) : Observable<Wish>{
