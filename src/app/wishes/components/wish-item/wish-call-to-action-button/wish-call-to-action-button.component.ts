@@ -3,10 +3,9 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faBan, faGift } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NotificationService } from 'src/app/shared/services/notification.service';
 
 import { Wish, WishScenario } from 'src/app/wishes/models/wish.model';
-import { WishService } from 'src/app/wishes/services/wish.service';
+import { ChangeWishReservationComponent } from '../../wish-reservation/change-wish-reservation/change-wish-reservation.component';
 import { WishReservationComponent } from '../../wish-reservation/wish-reservation.component';
 
 interface CTAButtonConfig {
@@ -26,7 +25,7 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   readonly buttonConfigs: { [key:string] : CTAButtonConfig} = {
     noButton: { text: null, icon: null },
     reserve: { text: "Reserveer", icon: faGift, onClick: this.reserve.bind(this) },
-    cancel: { text: "Annuleer reservatie", icon: faBan, onClick: this.changeReservation.bind(this) },
+    cancel: { text: "Verwijder reservatie", icon: faBan, onClick: this.changeReservation.bind(this) },
     feedback: { text: "Geef feedback", icon: faComment, onClick: this.giveFeedback.bind(this) }
   } 
 
@@ -44,9 +43,7 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   };
 
   constructor( 
-    private modalService: NgbModal,
-    private wishService: WishService,
-    private notificationService: NotificationService
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -63,12 +60,8 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   }
 
   changeReservation() {
-    this.wishService.deleteReservation(this.wish).subscribe( wish => 
-      this.notificationService.showNotification( 
-        `Je reservatie van ${wish.title} voor ${wish.receiver.firstName} is geannuleerd.`,
-        'info',
-        'Reservatie geannuleerd' )
-    );
+    let cancelReservationPopup = this.modalService.open(ChangeWishReservationComponent);
+    cancelReservationPopup.componentInstance.wish = this.wish;
   }
 
   giveFeedback(){
