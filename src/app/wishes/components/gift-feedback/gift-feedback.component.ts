@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Wish } from '../../models/wish.model';
+import { IGiftFeedback, Wish } from '../../models/wish.model';
 
 @Component({
   selector: 'gimmi-gift-feedback',
@@ -27,7 +27,13 @@ export class GiftFeedbackComponent implements OnInit {
   }
 
   saveGiftFeedback() {
-    console.log(this.giftFeedbackForm.value);
+    let giftFeedback: IGiftFeedback = {
+      satisfaction: this.satisfactionLevels[this.giftFeedbackForm.value.satisfaction-1],
+      receivedOn: this.giftFeedbackForm.value.receivedOn,
+      message: this.giftFeedbackForm.value.message,
+      putBackOnList: this.giftFeedbackForm.value.putBackOnList
+    };
+    console.log(giftFeedback);
     this.activeModal.close();
   }
 
