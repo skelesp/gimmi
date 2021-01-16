@@ -15,7 +15,8 @@
                         (hover)="hoveredRate=$event" 
                         (leave)="hoveredRate=null"
                         (rateChange)="selectedRate=$event"
-                        formControlName="satisfaction"></ngb-rating> {{ hoveredRate ? satisfactionLevels[hoveredRate-1] : satisfactionLevels[selectedRate-1] }}
+                        formControlName="satisfaction"></ngb-rating> 
+                        {{ hoveredRate ? satisfactionLevels[hoveredRate] : satisfactionLevels[selectedRate] }}
         </div>
         <div class="form-group">
             <label class="form-control-label" for="receivedOn">Wanneer heb je het cadeau ontvangen?</label>

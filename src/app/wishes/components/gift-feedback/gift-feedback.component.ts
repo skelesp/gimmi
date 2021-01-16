@@ -13,7 +13,7 @@ export class GiftFeedbackComponent implements OnInit {
   giftFeedbackForm : FormGroup;
   hoveredRate: number;
   selectedRate: number;
-  satisfactionLevels: string[] = ['Helemaal niet blij', 'Niet blij', 'Neutraal', 'Blij', 'Heel blij'];
+  satisfactionLevels: string[] = ['Duid je tevredenheid aan...','Helemaal niet blij', 'Niet blij', 'Neutraal', 'Blij', 'Heel blij'];
 
   constructor( public activeModal : NgbActiveModal) { }
 
@@ -28,7 +28,7 @@ export class GiftFeedbackComponent implements OnInit {
 
   saveGiftFeedback() {
     let giftFeedback: IGiftFeedback = {
-      satisfaction: this.satisfactionLevels[this.giftFeedbackForm.value.satisfaction-1],
+      satisfaction: this.satisfactionLevels[this.giftFeedbackForm.value.satisfaction],
       receivedOn: this.giftFeedbackForm.value.receivedOn,
       message: this.giftFeedbackForm.value.message,
       putBackOnList: this.giftFeedbackForm.value.putBackOnList
