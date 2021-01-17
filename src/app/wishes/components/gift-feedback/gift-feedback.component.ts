@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { IGiftFeedback, Wish } from '../../models/wish.model';
 
@@ -14,6 +15,7 @@ export class GiftFeedbackComponent implements OnInit {
   hoveredRate: number;
   selectedRate: number;
   satisfactionLevels: string[] = ['Duid je tevredenheid aan...','Helemaal niet blij', 'Niet blij', 'Neutraal', 'Blij', 'Heel blij'];
+  ratingIcon = faThumbsUp;
 
   constructor( public activeModal : NgbActiveModal) { }
 

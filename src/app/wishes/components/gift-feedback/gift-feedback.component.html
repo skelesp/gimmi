@@ -15,8 +15,16 @@
                         (hover)="hoveredRate=$event" 
                         (leave)="hoveredRate=null"
                         (rateChange)="selectedRate=$event"
-                        formControlName="satisfaction"></ngb-rating> 
-                        {{ hoveredRate ? satisfactionLevels[hoveredRate] : satisfactionLevels[selectedRate] }}
+                        formControlName="satisfaction">
+                        <ng-template let-fill="fill">
+                            <fa-icon    [icon]="ratingIcon" size="2x" 
+                                        class="mr-2 text-secondary" 
+                                        [class.text-success]="fill === 100"></fa-icon>
+                        </ng-template>
+            </ngb-rating> 
+            <span class="ml-2 text-muted font-weight-light">
+                {{ hoveredRate ? satisfactionLevels[hoveredRate] : satisfactionLevels[selectedRate] }}
+            </span>
         </div>
         <div class="form-group">
             <label class="form-control-label" for="receivedOn">Wanneer heb je het cadeau ontvangen?</label>
