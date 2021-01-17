@@ -16,6 +16,7 @@ export class GiftFeedbackComponent implements OnInit {
   selectedRate: number;
   satisfactionLevels: string[] = ['Duid je tevredenheid aan...','Helemaal niet blij', 'Niet blij', 'Neutraal', 'Blij', 'Heel blij'];
   ratingIcon = faThumbsUp;
+  maxDate: string = new Date().toISOString().slice(0, 10);
 
   constructor( public activeModal : NgbActiveModal) { }
 
