@@ -146,6 +146,9 @@ export class WishService {
     );
   }
 
+  public copy () {
+    alert("Copy isn't implemented yet");
+  }
   public addGiftFeedback (wish: Wish, giftFeedback: IGiftFeedback) : Observable<Wish> {
     return this.http$.post<IWishReservationResponse>(
       environment.apiUrl + 'wish/' + wish.id + "/feedback", 
