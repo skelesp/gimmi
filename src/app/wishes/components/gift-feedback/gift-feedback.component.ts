@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { switchMap} from 'rxjs/operators';
+
 import { IGiftFeedback, Wish } from '../../models/wish.model';
 import { WishService } from '../../services/wish.service';
 
@@ -40,12 +42,16 @@ export class GiftFeedbackComponent implements OnInit {
       message: this.giftFeedbackForm.value.message,
       putBackOnList: this.giftFeedbackForm.value.putBackOnList
     };
-    this.wishService.addGiftFeedback( this.wish, giftFeedback ).subscribe(
-      wish => { 
-        console.log(wish);
-        this.activeModal.close();
-      }
-    );
+
+    this.wishService.addGiftFeedback(this.wish, giftFeedback)
+    .pipe(switchMap(wish => this.wishService.close(wish)) )
+    .subscribe(wish => { 
+          console.log(wish);
+          this.activeModal.close();
+          if (wish.giftFeedback.putBackOnList) this.wishService.copy();
+          if (wish.giftFeedback.message) alert('mail will be sent');
+        }
+      );
   }
 
 }
