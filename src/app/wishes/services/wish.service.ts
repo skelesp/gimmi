@@ -41,7 +41,7 @@ interface IWishResponse {
     satisfaction: string;
     receivedOn: Date;
     message: string;
-    putBackOnlist: boolean;
+    putBackOnList: boolean;
   },
   closure?: IClosureResponse;
 }
@@ -74,12 +74,27 @@ interface IWishReservationResponse {
   }
 }
 
+interface IWishFeedbackResponse extends IWishReservationResponse {
+  giftFeedback: IGiftFeedbackResponse
+}
+
+interface IWishClosureResponse extends IWishFeedbackResponse {
+  closure: IClosureResponse
+}
+
 interface IReservationResponse {
   reservedBy: string;
   amount: number;
   reason: string;
   reservationDate: Date;
   handoverDate?: Date;
+}
+
+interface IGiftFeedbackResponse {
+  message: string,
+  putBackOnList: boolean,
+  receivedOn: Date,
+  satisfaction: string
 }
 
 interface IClosureResponse {
@@ -150,7 +165,7 @@ export class WishService {
     alert("Copy isn't implemented yet");
   }
   public addGiftFeedback (wish: Wish, giftFeedback: IGiftFeedback) : Observable<Wish> {
-    return this.http$.post<IWishReservationResponse>(
+    return this.http$.post<IWishFeedbackResponse>(
       environment.apiUrl + 'wish/' + wish.id + "/feedback", 
       giftFeedback
     ).pipe(
@@ -164,7 +179,7 @@ export class WishService {
       closedOn: new Date(),
       reason: "Cadeau ontvangen"
     }
-    return this.http$.post<IWishReservationResponse>(
+    return this.http$.post<IWishClosureResponse>(
       environment.apiUrl + 'wish/' + wish.id + "/closure",
       closure
     ).pipe(
@@ -285,11 +300,12 @@ export class WishService {
       wishResponse.description,
       wishResponse.amountWanted
     );
+
     if (wishResponse.giftFeedback) wish.giftFeedback = {
       satisfaction: wishResponse.giftFeedback.satisfaction,
       receivedOn: wishResponse.giftFeedback.receivedOn,
       message: wishResponse.giftFeedback.message,
-      putBackOnList: wishResponse.giftFeedback.putBackOnlist
+      putBackOnList: wishResponse.giftFeedback.putBackOnList
     };
     
     return wish;
