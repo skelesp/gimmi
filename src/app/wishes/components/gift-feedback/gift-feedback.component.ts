@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { IGiftFeedback, Wish } from '../../models/wish.model';
+import { WishService } from '../../services/wish.service';
 
 @Component({
   selector: 'gimmi-gift-feedback',
@@ -18,7 +19,10 @@ export class GiftFeedbackComponent implements OnInit {
   ratingIcon = faThumbsUp;
   maxDate: string = new Date().toISOString().slice(0, 10);
 
-  constructor( public activeModal : NgbActiveModal) { }
+  constructor( 
+    public activeModal : NgbActiveModal,
+    private wishService : WishService 
+  ) { }
 
   ngOnInit(): void {
     this.giftFeedbackForm = new FormGroup({
@@ -36,8 +40,12 @@ export class GiftFeedbackComponent implements OnInit {
       message: this.giftFeedbackForm.value.message,
       putBackOnList: this.giftFeedbackForm.value.putBackOnList
     };
-    console.log(giftFeedback);
-    this.activeModal.close();
+    this.wishService.addGiftFeedback( this.wish, giftFeedback ).subscribe(
+      wish => { 
+        console.log(wish);
+        this.activeModal.close();
+      }
+    );
   }
 
 }
