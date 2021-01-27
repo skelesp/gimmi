@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { switchMap} from 'rxjs/operators';
+import { PeopleService } from 'src/app/people/service/people.service';
+import { CommunicationService } from 'src/app/shared/services/communication.service';
 
 import { IGiftFeedback, Wish } from '../../models/wish.model';
 import { WishService } from '../../services/wish.service';
@@ -23,7 +25,9 @@ export class GiftFeedbackComponent implements OnInit {
 
   constructor( 
     public activeModal : NgbActiveModal,
-    private wishService : WishService 
+    private wishService : WishService,
+    private peopleService : PeopleService,
+    private communicationService : CommunicationService
   ) { }
 
   ngOnInit(): void {
@@ -49,7 +53,19 @@ export class GiftFeedbackComponent implements OnInit {
           console.log(wish);
           this.activeModal.close();
           if (wish.giftFeedback.putBackOnList) this.wishService.copy();
-          if (wish.giftFeedback.message) alert('mail will be sent');
+          if (wish.giftFeedback.message) {
+            this.peopleService.getEmailById(wish.reservation.reservedBy.id).subscribe( email => {
+              this.communicationService.sendMail({
+                to: email,
+                subject: `[GIMMI] ${wish.receiver.fullName} bedankt je voor je cadeau!!`,
+                html: `${wish.reservation.reservedBy.firstName} <br/><br/>
+                      Je hebt onlangs op Gimmi het cadeau '${wish.title}' gereserveerd voor ${wish.receiver.fullName}. <br/>
+                      Onlangs heb je dit cadeau afgegeven. Daarnet heeft ${wish.receiver.firstName} je een dankboodschap nagelaten:<br/><br/>
+                      <em>${wish.giftFeedback.message}</em><br/><br/><br/>
+                      Bedankt om Gimmi te gebruiken en hopelijk tot snel voor een nieuwe succesvolle cadeauzoektocht!`
+              });
+            })
+          }
         }
       );
   }
