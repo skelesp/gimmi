@@ -31,9 +31,10 @@ export class GiftFeedbackComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    let defaultReceivedDate = new Date(this.wish.reservation.reservationDate).toISOString().slice(0, 10);
     this.giftFeedbackForm = new FormGroup({
       'satisfaction': new FormControl(null, [Validators.required]),
-      'receivedOn': new FormControl(null, [Validators.required]),
+      'receivedOn': new FormControl( defaultReceivedDate, [Validators.required]),
       'message': new FormControl(null),
       'putBackOnList': new FormControl(false)
     });
