@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Person } from 'src/app/people/models/person.model';
 import { IPersonNameResponse, IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
 import { UserService } from 'src/app/users/service/user.service';
-import { IClosure, IReservation, Wish, wishStatus } from '../models/wish.model';
+import { IClosure, IGiftFeedback, IReservation, Wish, wishStatus } from '../models/wish.model';
 
 interface IWishlistResponse {
   _id: {
@@ -41,7 +41,7 @@ interface IWishResponse {
     satisfaction: string;
     receivedOn: Date;
     message: string;
-    putBackOnlist: boolean;
+    putBackOnList: boolean;
   },
   closure?: IClosureResponse;
 }
@@ -74,12 +74,27 @@ interface IWishReservationResponse {
   }
 }
 
+interface IWishFeedbackResponse extends IWishReservationResponse {
+  giftFeedback: IGiftFeedbackResponse
+}
+
+interface IWishClosureResponse extends IWishFeedbackResponse {
+  closure: IClosureResponse
+}
+
 interface IReservationResponse {
   reservedBy: string;
   amount: number;
   reason: string;
   reservationDate: Date;
   handoverDate?: Date;
+}
+
+interface IGiftFeedbackResponse {
+  message: string,
+  putBackOnList: boolean,
+  receivedOn: Date,
+  satisfaction: string
 }
 
 interface IClosureResponse {
@@ -134,17 +149,7 @@ export class WishService {
       environment.apiUrl + 'wish/' + wish.id + '/reservation', 
       reservationRequestData
     ).pipe(
-      // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist
-      map(wishResponse => {
-        let newWishResponse:any = {...wishResponse};
-        newWishResponse.reservation.reservedBy = newWishResponse.reservation.reservedBy.id;
-        return newWishResponse;
-      }),
-      switchMap(wishResponse => this.convertWishResponseToFullWishInstance(
-        wishResponse, 
-        wish.receiver) 
-        ),
-        tap( wish => this.updateWishInWishlist(wish) )
+      switchMap(wishReservationResponse => this.convertWishReservationResponseToUpdatedWish(wishReservationResponse, wish))
     )
   }
 
@@ -152,20 +157,51 @@ export class WishService {
     return this.http$.delete<IWishReservationResponse>(
       environment.apiUrl + 'wish/' + wish.id + '/reservation'
     ).pipe(
-      // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist
-      map(wishResponse => {
-        let newWishResponse: any = { ...wishResponse };
-        return newWishResponse;
-      }),
-      switchMap(wishResponse => this.convertWishResponseToFullWishInstance(
-        wishResponse,
-        wish.receiver)
-      ),
-      tap(wish => this.updateWishInWishlist(wish))
+      switchMap(reservationDeleteResponse => this.convertWishReservationResponseToUpdatedWish(reservationDeleteResponse, wish))
     );
   }
 
+  public copy () {
+    alert("Copy isn't implemented yet");
+  }
+  public addGiftFeedback (wish: Wish, giftFeedback: IGiftFeedback) : Observable<Wish> {
+    return this.http$.post<IWishFeedbackResponse>(
+      environment.apiUrl + 'wish/' + wish.id + "/feedback", 
+      giftFeedback
+    ).pipe(
+      switchMap(addFeedbackResponse => this.convertWishReservationResponseToUpdatedWish(addFeedbackResponse, wish))
+    )
+  }
+
+  public close (wish: Wish) : Observable<Wish>{
+    let closure: IClosureResponse = {
+      closedBy: this.userService.currentUser.id,
+      closedOn: new Date(),
+      reason: "Cadeau ontvangen"
+    }
+    return this.http$.post<IWishClosureResponse>(
+      environment.apiUrl + 'wish/' + wish.id + "/closure",
+      closure
+    ).pipe(
+      switchMap(wishClosureResponse => this.convertWishReservationResponseToUpdatedWish(wishClosureResponse, wish))
+    )
+  }
+
   /* PRIVATE methods */
+  private convertWishReservationResponseToUpdatedWish (wishReservationResponse: IWishReservationResponse, wish: Wish) : Observable<Wish>{
+    return of(wishReservationResponse).pipe(
+      // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist
+      map(wishResponse => {
+        let newWishResponse: any = { ...wishResponse };
+        if (newWishResponse.reservation)
+          newWishResponse.reservation.reservedBy = newWishResponse.reservation.reservedBy.id;
+        return newWishResponse;
+      }),
+      switchMap(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, wish.receiver)
+      ),
+      tap(wish => this.updateWishInWishlist(wish))
+    )
+  }
 
   private convertWishResponseToFullWishInstance(wishResponse : IWishResponse, receiver : Person) : Observable<Wish>{
     // Create wish without reservation and closure
@@ -264,11 +300,12 @@ export class WishService {
       wishResponse.description,
       wishResponse.amountWanted
     );
+
     if (wishResponse.giftFeedback) wish.giftFeedback = {
       satisfaction: wishResponse.giftFeedback.satisfaction,
       receivedOn: wishResponse.giftFeedback.receivedOn,
       message: wishResponse.giftFeedback.message,
-      putBackOnList: wishResponse.giftFeedback.putBackOnlist
+      putBackOnList: wishResponse.giftFeedback.putBackOnList
     };
     
     return wish;

@@ -1,0 +1,2 @@
+/* https://stackoverflow.com/questions/42423371/how-do-i-remove-the-blue-border-that-appears-when-clicking-on-a-uib-accordion-he */
+:focus {outline:0 !important;}

@@ -135,7 +135,6 @@ export class PeopleService {
 
     this.communicationService.sendMail(mailInfo);
   }
-
   
   /**
    * @description Get name info for a person
@@ -146,6 +145,19 @@ export class PeopleService {
     return personId ? this.http$.get<IPersonNameResponse>( environment.apiUrl + 'people/' + personId + '/name').pipe(
       catchError(this.handleError),
       map(personResponse => this.convertPersonResponseToPerson(personResponse))
+    ) : throwError('No personId provided');
+  }
+
+  /**
+   * @description Get email info for a person
+   * @param personId A valid personId
+   * @returns Person object
+   */
+  public getEmailById (personId : string) : Observable<string> {
+    return personId ? this.http$.get<string>(
+      environment.apiUrl + 'people/' + personId + '/email'
+    ).pipe(
+      catchError(this.handleError)      
     ) : throwError('No personId provided');
   }
 

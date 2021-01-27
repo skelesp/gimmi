@@ -5,6 +5,7 @@ import { faBan, faGift } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Wish, WishScenario } from 'src/app/wishes/models/wish.model';
+import { GiftFeedbackComponent } from '../../gift-feedback/gift-feedback.component';
 import { ChangeWishReservationComponent } from '../../wish-reservation/change-wish-reservation/change-wish-reservation.component';
 import { WishReservationComponent } from '../../wish-reservation/wish-reservation.component';
 
@@ -65,7 +66,8 @@ export class WishCallToActionButtonComponent implements OnInit, OnChanges {
   }
 
   giveFeedback(){
-    alert("Geef feedback");
+    let giftFeedbackPopup = this.modalService.open(GiftFeedbackComponent);
+    giftFeedbackPopup.componentInstance.wish = this.wish;
   }
 
 }
