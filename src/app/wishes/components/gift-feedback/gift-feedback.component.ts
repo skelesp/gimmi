@@ -50,7 +50,6 @@ export class GiftFeedbackComponent implements OnInit {
     this.wishService.addGiftFeedback(this.wish, giftFeedback)
     .pipe(switchMap(wish => this.wishService.close(wish)) )
     .subscribe(wish => { 
-          console.log(wish);
           this.activeModal.close();
           if (wish.giftFeedback.putBackOnList) this.wishService.copy();
           if (wish.giftFeedback.message) {
