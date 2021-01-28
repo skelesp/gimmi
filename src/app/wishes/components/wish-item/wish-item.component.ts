@@ -13,6 +13,10 @@ export class WishItemComponent implements OnInit {
   constructor( ) { }
 
   ngOnInit(): void {}
+
+  blurWishCardStatus() : boolean {
+    return !(this.wish.scenario === 'RESERVED_INCOGNITO_FOR_USER' || this.wish.scenario === 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' || this.wish.scenario === 'OPEN_WISH');
+  }
   
   edit () {
     window.alert(`editwish: ${this.wish.title}`);
