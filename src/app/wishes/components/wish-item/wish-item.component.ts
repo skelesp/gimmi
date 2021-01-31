@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Wish, WishScenario } from '../../models/wish.model';
-import { faEllipsisV, faBan, faGift } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faBan, faGift, faStar, faLightbulb, faCartArrowDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WishReservationComponent } from '../wish-reservation/wish-reservation.component';
 import { ChangeWishReservationComponent } from '../wish-reservation/change-wish-reservation/change-wish-reservation.component';
 import { GiftFeedbackComponent } from '../gift-feedback/gift-feedback.component';
 import { CTAButtonConfig } from './wish-call-to-action-button/wish-call-to-action-button.component';
+import { BannerConfig } from './wish-banner/wish-banner.component';
 
 @Component({
   template: '',
@@ -23,28 +24,58 @@ export class WishItemComponent implements OnInit {
     cancel: { text: "Verwijder reservatie", icon: faBan, onClick: this.changeReservation.bind(this) },
     feedback: { text: "Geef feedback", icon: faComment, onClick: this.giveFeedback.bind(this) }
   }
+  readonly bannerConfigs: { [key: string]: BannerConfig} = {
+    noBanner: { text: null, backgroundColor: null, bannerIcon: null },
+    yourIdea: { text: "Jouw idee", backgroundColor: 'warning', bannerIcon: faLightbulb },
+    reserved: { text: "Gereserveerd", backgroundColor: 'danger', bannerIcon: faCartArrowDown },
+    reservedByUser: { text: "Gereserveerd door jou", backgroundColor: 'warning', bannerIcon: faStar },
+    received: { text: "Ontvangen", backgroundColor: 'danger', bannerIcon: faGift },
+    givenByUser: { text: "Gegeven door jou", backgroundColor: 'warning', bannerIcon: faGift },
+    fulfilled: { text: "Wens vervuld", backgroundColor: 'success', bannerIcon: faThumbsUp },
+    fulfilledByUser: { text: "Wens vervuld door jou", backgroundColor: 'success', bannerIcon: faThumbsUp }
+  }
 
-  readonly wishScenarioConfig: { [key in WishScenario]: { CTAbutton: CTAButtonConfig} } = {
+  readonly wishScenarioConfig: { [key in WishScenario]: { CTAbutton: CTAButtonConfig, bannerConfig: BannerConfig} } = {
     'OPEN_WISH': { 
-      CTAbutton: this.CTAbuttonConfigs.reserve },
+      CTAbutton: this.CTAbuttonConfigs.reserve,
+      bannerConfig: this.bannerConfigs.noBanner 
+    },
     'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER': {
-      CTAbutton: this.CTAbuttonConfigs.reserve },
+      CTAbutton: this.CTAbuttonConfigs.reserve,
+      bannerConfig: this.bannerConfigs.yourIdea 
+    },
     'RESERVED': {
-      CTAbutton: this.CTAbuttonConfigs.noButton},
+      CTAbutton: this.CTAbuttonConfigs.noButton,
+      bannerConfig: this.bannerConfigs.reserved 
+    },
     'RESERVED_BY_USER': {
-      CTAbutton: this.CTAbuttonConfigs.cancel},
+      CTAbutton: this.CTAbuttonConfigs.cancel,
+      bannerConfig: this.bannerConfigs.reservedByUser
+    },
     'RESERVED_INCOGNITO_FOR_USER': {
-      CTAbutton: this.CTAbuttonConfigs.reserve},
+      CTAbutton: this.CTAbuttonConfigs.reserve,
+      bannerConfig: this.bannerConfigs.noBanner
+    },
     'RECEIVED': {
-      CTAbutton: this.CTAbuttonConfigs.noButton},
+      CTAbutton: this.CTAbuttonConfigs.noButton,
+      bannerConfig: this.bannerConfigs.received
+    },
     'RECEIVED_RECEIVER': {
-      CTAbutton: this.CTAbuttonConfigs.feedback},
+      CTAbutton: this.CTAbuttonConfigs.feedback,
+      bannerConfig: this.bannerConfigs.received
+    },
     'RECEIVED_GIVEN_BY_USER': {
-      CTAbutton: this.CTAbuttonConfigs.noButton},
+      CTAbutton: this.CTAbuttonConfigs.noButton,
+      bannerConfig: this.bannerConfigs.givenByUser
+    },
     'FULFILLED': {
-      CTAbutton: this.CTAbuttonConfigs.noButton},
+      CTAbutton: this.CTAbuttonConfigs.noButton,
+      bannerConfig: this.bannerConfigs.fulfilled
+    },
     'FULFILLED_BY_USER': {
-      CTAbutton: this.CTAbuttonConfigs.noButton}
+      CTAbutton: this.CTAbuttonConfigs.noButton,
+      bannerConfig: this.bannerConfigs.fulfilledByUser
+    }
   };
 
   constructor(
