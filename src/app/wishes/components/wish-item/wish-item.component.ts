@@ -24,17 +24,27 @@ export class WishItemComponent implements OnInit {
     feedback: { text: "Geef feedback", icon: faComment, onClick: this.giveFeedback.bind(this) }
   }
 
-  readonly scenarioButtonMapping: { [key in WishScenario]: CTAButtonConfig } = {
-    'OPEN_WISH': this.CTAbuttonConfigs.reserve,
-    'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER': this.CTAbuttonConfigs.reserve,
-    'RESERVED': this.CTAbuttonConfigs.noButton,
-    'RESERVED_BY_USER': this.CTAbuttonConfigs.cancel,
-    'RESERVED_INCOGNITO_FOR_USER': this.CTAbuttonConfigs.reserve,
-    'RECEIVED': this.CTAbuttonConfigs.noButton,
-    'RECEIVED_RECEIVER': this.CTAbuttonConfigs.feedback,
-    'RECEIVED_GIVEN_BY_USER': this.CTAbuttonConfigs.noButton,
-    'FULFILLED': this.CTAbuttonConfigs.noButton,
-    'FULFILLED_BY_USER': this.CTAbuttonConfigs.noButton
+  readonly wishScenarioConfig: { [key in WishScenario]: { CTAbutton: CTAButtonConfig} } = {
+    'OPEN_WISH': { 
+      CTAbutton: this.CTAbuttonConfigs.reserve },
+    'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER': {
+      CTAbutton: this.CTAbuttonConfigs.reserve },
+    'RESERVED': {
+      CTAbutton: this.CTAbuttonConfigs.noButton},
+    'RESERVED_BY_USER': {
+      CTAbutton: this.CTAbuttonConfigs.cancel},
+    'RESERVED_INCOGNITO_FOR_USER': {
+      CTAbutton: this.CTAbuttonConfigs.reserve},
+    'RECEIVED': {
+      CTAbutton: this.CTAbuttonConfigs.noButton},
+    'RECEIVED_RECEIVER': {
+      CTAbutton: this.CTAbuttonConfigs.feedback},
+    'RECEIVED_GIVEN_BY_USER': {
+      CTAbutton: this.CTAbuttonConfigs.noButton},
+    'FULFILLED': {
+      CTAbutton: this.CTAbuttonConfigs.noButton},
+    'FULFILLED_BY_USER': {
+      CTAbutton: this.CTAbuttonConfigs.noButton}
   };
 
   constructor(

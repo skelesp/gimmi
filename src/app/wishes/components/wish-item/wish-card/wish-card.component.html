@@ -56,7 +56,10 @@
         </div>
         <!-- CTA's -->
         <div class="row no-gutters mt-2">
-            <gimmi-wish-call-to-action-button class="w-100" [CTAconfig]="scenarioButtonMapping[wish.scenario]"></gimmi-wish-call-to-action-button>
+            <gimmi-wish-call-to-action-button 
+                class="w-100" 
+                [CTAconfig]="wishScenarioConfig[wish.scenario].CTAbutton">
+            </gimmi-wish-call-to-action-button>
         </div>
     </div>
 </div>
