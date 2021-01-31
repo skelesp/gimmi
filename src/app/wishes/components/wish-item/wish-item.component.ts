@@ -1,6 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Wish } from '../../models/wish.model';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { Wish, WishScenario } from '../../models/wish.model';
+import { faEllipsisV, faBan, faGift } from '@fortawesome/free-solid-svg-icons';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { WishReservationComponent } from '../wish-reservation/wish-reservation.component';
+import { ChangeWishReservationComponent } from '../wish-reservation/change-wish-reservation/change-wish-reservation.component';
+import { GiftFeedbackComponent } from '../gift-feedback/gift-feedback.component';
+import { CTAButtonConfig } from './wish-call-to-action-button/wish-call-to-action-button.component';
 
 @Component({
   template: '',
@@ -9,13 +15,61 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 export class WishItemComponent implements OnInit {
   @Input() wish: Wish;
   faEllipsisV = faEllipsisV;
+  config: CTAButtonConfig = { text: null, icon: null };
 
-  constructor( ) { }
+  readonly CTAbuttonConfigs: { [key: string]: CTAButtonConfig } = {
+    noButton: { text: null, icon: null },
+    reserve: { text: "Reserveer", icon: faGift, onClick: this.reserve.bind(this) },
+    cancel: { text: "Verwijder reservatie", icon: faBan, onClick: this.changeReservation.bind(this) },
+    feedback: { text: "Geef feedback", icon: faComment, onClick: this.giveFeedback.bind(this) }
+  }
+
+  readonly wishScenarioConfig: { [key in WishScenario]: { CTAbutton: CTAButtonConfig} } = {
+    'OPEN_WISH': { 
+      CTAbutton: this.CTAbuttonConfigs.reserve },
+    'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER': {
+      CTAbutton: this.CTAbuttonConfigs.reserve },
+    'RESERVED': {
+      CTAbutton: this.CTAbuttonConfigs.noButton},
+    'RESERVED_BY_USER': {
+      CTAbutton: this.CTAbuttonConfigs.cancel},
+    'RESERVED_INCOGNITO_FOR_USER': {
+      CTAbutton: this.CTAbuttonConfigs.reserve},
+    'RECEIVED': {
+      CTAbutton: this.CTAbuttonConfigs.noButton},
+    'RECEIVED_RECEIVER': {
+      CTAbutton: this.CTAbuttonConfigs.feedback},
+    'RECEIVED_GIVEN_BY_USER': {
+      CTAbutton: this.CTAbuttonConfigs.noButton},
+    'FULFILLED': {
+      CTAbutton: this.CTAbuttonConfigs.noButton},
+    'FULFILLED_BY_USER': {
+      CTAbutton: this.CTAbuttonConfigs.noButton}
+  };
+
+  constructor(
+    private modalService: NgbModal
+  ) { }
 
   ngOnInit(): void {}
 
   blurWishCardStatus() : boolean {
     return !(this.wish.scenario === 'RESERVED_INCOGNITO_FOR_USER' || this.wish.scenario === 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' || this.wish.scenario === 'OPEN_WISH');
+  }
+  
+  reserve() {
+    let reservationPopup = this.modalService.open(WishReservationComponent);
+    reservationPopup.componentInstance.wish = this.wish;
+  }
+
+  changeReservation() {
+    let cancelReservationPopup = this.modalService.open(ChangeWishReservationComponent);
+    cancelReservationPopup.componentInstance.wish = this.wish;
+  }
+
+  giveFeedback() {
+    let giftFeedbackPopup = this.modalService.open(GiftFeedbackComponent);
+    giftFeedbackPopup.componentInstance.wish = this.wish;
   }
   
   edit () {
@@ -24,10 +78,6 @@ export class WishItemComponent implements OnInit {
 
   copy() {
     window.alert(`Copy wish: ${this.wish.title}`);
-  }
-
-  reserve() {
-    window.alert(`Reserve wish: ${this.wish.title}`);
   }
 
   delete() {
