@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { WishItemComponent } from '../wish-item.component';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'gimmi-wish-card',
   templateUrl: './wish-card.component.html',
@@ -8,8 +10,10 @@ import { WishItemComponent } from '../wish-item.component';
 })
 export class WishCardComponent extends WishItemComponent {
 
-  constructor() {
-    super();
-   }
+  constructor(
+    private modalSrv: NgbModal
+  ) {
+    super(modalSrv);
+  }
 
 }
