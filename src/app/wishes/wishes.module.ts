@@ -12,9 +12,11 @@ import { WishCallToActionButtonComponent } from './components/wish-item/wish-cal
 import { WishReservationComponent } from './components/wish-reservation/wish-reservation.component';
 import { ChangeWishReservationComponent } from './components/wish-reservation/change-wish-reservation/change-wish-reservation.component';
 import { GiftFeedbackComponent } from './components/gift-feedback/gift-feedback.component';
+import { ActionListComponent } from './components/wish-item/action-list/action-list.component';
+import { ActionListItemComponent } from './components/wish-item/action-list/action-list-item/action-list-item.component';
 
 @NgModule({
-  declarations: [WishListComponent, FilterOnStatePipe, WishItemComponent, WishCardComponent, WishBannerComponent, WishCallToActionButtonComponent, WishReservationComponent, ChangeWishReservationComponent, GiftFeedbackComponent],
+  declarations: [WishListComponent, FilterOnStatePipe, WishItemComponent, WishCardComponent, WishBannerComponent, WishCallToActionButtonComponent, WishReservationComponent, ChangeWishReservationComponent, GiftFeedbackComponent, ActionListComponent, ActionListItemComponent],
   imports: [
     CommonModule,
     SharedModule,
