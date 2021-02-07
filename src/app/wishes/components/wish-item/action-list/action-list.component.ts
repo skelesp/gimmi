@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { faEllipsisV, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 export interface ActionListConfig {
@@ -13,13 +13,7 @@ export interface ActionListConfig {
   templateUrl: './action-list.component.html',
   styleUrls: ['./action-list.component.css']
 })
-export class ActionListComponent implements OnInit {
+export class ActionListComponent {
   @Input() actionListItems : ActionListConfig[];
   actionListIcon = faEllipsisV;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

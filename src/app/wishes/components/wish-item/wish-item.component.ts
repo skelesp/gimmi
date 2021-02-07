@@ -16,7 +16,7 @@ import { ActionListConfig } from './action-list/action-list.component';
 })
 export class WishItemComponent implements OnInit {
   @Input() wish: Wish;
-  config: CTAButtonConfig = { text: null, icon: null };
+  wishActionItems : ActionListConfig[] = [];
 
   readonly CTAbuttonConfigs: { [key: string]: CTAButtonConfig } = {
     noButton: { text: null, icon: null },
@@ -34,12 +34,11 @@ export class WishItemComponent implements OnInit {
     fulfilled: { text: "Wens vervuld", backgroundColor: 'success', bannerIcon: faThumbsUp },
     fulfilledByUser: { text: "Wens vervuld door jou", backgroundColor: 'success', bannerIcon: faThumbsUp }
   }
-  readonly actionListConfigs: { [key: string] : ActionListConfig } = {
+  readonly actionListItemConfigs: { [key: string] : ActionListConfig } = {
     edit: { text: "Aanpassen", icon: faEdit, onClick: this.edit.bind(this) },
     copy: { text: "Zet op eigen lijst", icon: faClone, onClick: this.copy.bind(this) },
     delete: { text: "Verwijderen", icon: faTrashAlt, onClick: this.delete.bind(this) }
   }
-
   readonly wishScenarioConfig: { [key in WishScenario]: { CTAbutton: CTAButtonConfig, bannerConfig: BannerConfig} } = {
     'OPEN_WISH': { 
       CTAbutton: this.CTAbuttonConfigs.reserve,
@@ -87,7 +86,13 @@ export class WishItemComponent implements OnInit {
     private modalService: NgbModal
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!this.wish.userIsReceiver) this.wishActionItems.push(this.actionListItemConfigs.copy);
+    if (this.wish.userIsReceiver || this.wish.userIsCreator) {
+      this.wishActionItems.unshift(this.actionListItemConfigs.edit);
+      this.wishActionItems.push(this.actionListItemConfigs.delete);
+    }
+  }
 
   blurWishCardStatus() : boolean {
     return !(this.wish.scenario === 'RESERVED_INCOGNITO_FOR_USER' || this.wish.scenario === 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' || this.wish.scenario === 'OPEN_WISH');

@@ -4,6 +4,6 @@
         <!-- Vertical ellipsis because this is more compact on mobile designs -->
     </div>
     <div ngbDropdownMenu class="mt-3">
-        <gimmi-action-list-item *ngFor="let item of actionListItems | keyvalue" [itemConfig]="item.value"></gimmi-action-list-item>
+        <gimmi-action-list-item *ngFor="let item of actionListItems" [itemConfig]="item"></gimmi-action-list-item>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActionListConfig } from '../action-list.component';
 
 @Component({
@@ -6,12 +6,6 @@ import { ActionListConfig } from '../action-list.component';
   templateUrl: './action-list-item.component.html',
   styleUrls: ['./action-list-item.component.css']
 })
-export class ActionListItemComponent implements OnInit {
+export class ActionListItemComponent {
   @Input() itemConfig: ActionListConfig;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }
