@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Wish, WishScenario } from '../../models/wish.model';
-import { faEllipsisV, faBan, faGift, faStar, faLightbulb, faCartArrowDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faGift, faStar, faLightbulb, faCartArrowDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WishReservationComponent } from '../wish-reservation/wish-reservation.component';
@@ -8,6 +8,7 @@ import { ChangeWishReservationComponent } from '../wish-reservation/change-wish-
 import { GiftFeedbackComponent } from '../gift-feedback/gift-feedback.component';
 import { CTAButtonConfig } from './wish-call-to-action-button/wish-call-to-action-button.component';
 import { BannerConfig } from './wish-banner/wish-banner.component';
+import { ActionListConfig } from './action-list/action-list.component';
 
 @Component({
   template: '',
@@ -15,7 +16,6 @@ import { BannerConfig } from './wish-banner/wish-banner.component';
 })
 export class WishItemComponent implements OnInit {
   @Input() wish: Wish;
-  faEllipsisV = faEllipsisV;
   config: CTAButtonConfig = { text: null, icon: null };
 
   readonly CTAbuttonConfigs: { [key: string]: CTAButtonConfig } = {
@@ -33,6 +33,10 @@ export class WishItemComponent implements OnInit {
     givenByUser: { text: "Gegeven door jou", backgroundColor: 'warning', bannerIcon: faGift },
     fulfilled: { text: "Wens vervuld", backgroundColor: 'success', bannerIcon: faThumbsUp },
     fulfilledByUser: { text: "Wens vervuld door jou", backgroundColor: 'success', bannerIcon: faThumbsUp }
+  }
+  readonly actionListConfigs: { [key: string] : ActionListConfig } = {
+    item1: { text: "test2", icon: faComment, onClick: this.edit.bind(this) },
+    item2: { text: "test1", icon: faGift, onClick: "https://sporza.be" }
   }
 
   readonly wishScenarioConfig: { [key in WishScenario]: { CTAbutton: CTAButtonConfig, bannerConfig: BannerConfig} } = {
