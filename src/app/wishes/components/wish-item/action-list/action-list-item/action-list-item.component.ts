@@ -1,5 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { ActionListConfig } from '../action-list.component';
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+
+export interface ActionListItemConfig {
+  text: string;
+  icon: IconDefinition;
+  onClick?: () => void;
+  url?: string;
+}
 
 @Component({
   selector: 'gimmi-action-list-item',
@@ -7,5 +14,5 @@ import { ActionListConfig } from '../action-list.component';
   styleUrls: ['./action-list-item.component.css']
 })
 export class ActionListItemComponent {
-  @Input() itemConfig: ActionListConfig;
+  @Input() itemConfig: ActionListItemConfig;
 }

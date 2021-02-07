@@ -1,12 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { faEllipsisV, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-
-export interface ActionListConfig {
-  text: string;
-  icon: IconDefinition;
-  onClick?: () => void;
-  url?: string;
-}
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { ActionListItemConfig } from './action-list-item/action-list-item.component';
 
 @Component({
   selector: 'gimmi-action-list',
@@ -14,6 +8,6 @@ export interface ActionListConfig {
   styleUrls: ['./action-list.component.css']
 })
 export class ActionListComponent {
-  @Input() actionListItems : ActionListConfig[];
+  @Input() actionListItems : ActionListItemConfig[];
   actionListIcon = faEllipsisV;
 }

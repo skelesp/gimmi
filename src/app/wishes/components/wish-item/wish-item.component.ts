@@ -8,7 +8,7 @@ import { ChangeWishReservationComponent } from '../wish-reservation/change-wish-
 import { GiftFeedbackComponent } from '../gift-feedback/gift-feedback.component';
 import { CTAButtonConfig } from './wish-call-to-action-button/wish-call-to-action-button.component';
 import { BannerConfig } from './wish-banner/wish-banner.component';
-import { ActionListConfig } from './action-list/action-list.component';
+import { ActionListItemConfig } from './action-list/action-list-item/action-list-item.component';
 
 @Component({
   template: '',
@@ -16,7 +16,7 @@ import { ActionListConfig } from './action-list/action-list.component';
 })
 export class WishItemComponent implements OnInit {
   @Input() wish: Wish;
-  wishActionItems : ActionListConfig[] = [];
+  wishActionItems : ActionListItemConfig[] = [];
 
   readonly CTAbuttonConfigs: { [key: string]: CTAButtonConfig } = {
     noButton: { text: null, icon: null },
@@ -34,7 +34,7 @@ export class WishItemComponent implements OnInit {
     fulfilled: { text: "Wens vervuld", backgroundColor: 'success', bannerIcon: faThumbsUp },
     fulfilledByUser: { text: "Wens vervuld door jou", backgroundColor: 'success', bannerIcon: faThumbsUp }
   };
-  readonly actionListItemConfigs: { [key: string] : ActionListConfig } = {
+  readonly actionListItemConfigs: { [key: string] : ActionListItemConfig } = {
     edit: { text: "Aanpassen", icon: faEdit, onClick: this.edit.bind(this) },
     copy: { text: "Zet op eigen lijst", icon: faClone, onClick: this.copy.bind(this) },
     delete: { text: "Verwijderen", icon: faTrashAlt, onClick: this.delete.bind(this) },
