@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Wish, WishScenario } from '../../models/wish.model';
-import { faBan, faGift, faStar, faLightbulb, faCartArrowDown, faThumbsUp, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faGift, faStar, faLightbulb, faCartArrowDown, faThumbsUp, faTrashAlt, faGlobeEurope } from '@fortawesome/free-solid-svg-icons';
 import { faClone, faComment, faEdit } from '@fortawesome/free-regular-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WishReservationComponent } from '../wish-reservation/wish-reservation.component';
@@ -23,7 +23,7 @@ export class WishItemComponent implements OnInit {
     reserve: { text: "Reserveer", icon: faGift, onClick: this.reserve.bind(this) },
     cancel: { text: "Verwijder reservatie", icon: faBan, onClick: this.changeReservation.bind(this) },
     feedback: { text: "Geef feedback", icon: faComment, onClick: this.giveFeedback.bind(this) }
-  }
+  };
   readonly bannerConfigs: { [key: string]: BannerConfig} = {
     noBanner: { text: null, backgroundColor: null, bannerIcon: null },
     yourIdea: { text: "Jouw idee", backgroundColor: 'warning', bannerIcon: faLightbulb },
@@ -33,12 +33,13 @@ export class WishItemComponent implements OnInit {
     givenByUser: { text: "Gegeven door jou", backgroundColor: 'warning', bannerIcon: faGift },
     fulfilled: { text: "Wens vervuld", backgroundColor: 'success', bannerIcon: faThumbsUp },
     fulfilledByUser: { text: "Wens vervuld door jou", backgroundColor: 'success', bannerIcon: faThumbsUp }
-  }
+  };
   readonly actionListItemConfigs: { [key: string] : ActionListConfig } = {
     edit: { text: "Aanpassen", icon: faEdit, onClick: this.edit.bind(this) },
     copy: { text: "Zet op eigen lijst", icon: faClone, onClick: this.copy.bind(this) },
-    delete: { text: "Verwijderen", icon: faTrashAlt, onClick: this.delete.bind(this) }
-  }
+    delete: { text: "Verwijderen", icon: faTrashAlt, onClick: this.delete.bind(this) },
+    externalSite: { text: "Externe website", icon: faGlobeEurope }
+  };
   readonly wishScenarioConfig: { [key in WishScenario]: { CTAbutton: CTAButtonConfig, bannerConfig: BannerConfig} } = {
     'OPEN_WISH': { 
       CTAbutton: this.CTAbuttonConfigs.reserve,
@@ -91,6 +92,10 @@ export class WishItemComponent implements OnInit {
     if (this.wish.userIsReceiver || this.wish.userIsCreator) {
       this.wishActionItems.unshift(this.actionListItemConfigs.edit);
       this.wishActionItems.push(this.actionListItemConfigs.delete);
+    }
+    if (this.wish.url) {
+      this.actionListItemConfigs.externalSite.url = this.wish.url;
+      this.wishActionItems.unshift(this.actionListItemConfigs.externalSite);
     }
   }
 
