@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Wish, WishScenario } from '../../models/wish.model';
-import { faBan, faGift, faStar, faLightbulb, faCartArrowDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import { faComment } from '@fortawesome/free-regular-svg-icons';
+import { faBan, faGift, faStar, faLightbulb, faCartArrowDown, faThumbsUp, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faClone, faComment, faEdit } from '@fortawesome/free-regular-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WishReservationComponent } from '../wish-reservation/wish-reservation.component';
 import { ChangeWishReservationComponent } from '../wish-reservation/change-wish-reservation/change-wish-reservation.component';
@@ -35,8 +35,9 @@ export class WishItemComponent implements OnInit {
     fulfilledByUser: { text: "Wens vervuld door jou", backgroundColor: 'success', bannerIcon: faThumbsUp }
   }
   readonly actionListConfigs: { [key: string] : ActionListConfig } = {
-    item1: { text: "test2", icon: faComment, onClick: this.edit.bind(this) },
-    item2: { text: "test1", icon: faGift, onClick: "https://sporza.be" }
+    edit: { text: "Aanpassen", icon: faEdit, onClick: this.edit.bind(this) },
+    copy: { text: "Zet op eigen lijst", icon: faClone, onClick: this.copy.bind(this) },
+    delete: { text: "Verwijderen", icon: faTrashAlt, onClick: this.delete.bind(this) }
   }
 
   readonly wishScenarioConfig: { [key in WishScenario]: { CTAbutton: CTAButtonConfig, bannerConfig: BannerConfig} } = {

@@ -4,7 +4,8 @@ import { faEllipsisV, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 export interface ActionListConfig {
   text: string;
   icon: IconDefinition;
-  onClick?: string | (() => void);
+  onClick?: () => void;
+  url?: string;
 }
 
 @Component({
