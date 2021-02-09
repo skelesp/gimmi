@@ -164,6 +164,16 @@ export class WishService {
   public copy () {
     alert("Copy isn't implemented yet");
   }
+
+  public delete (wish: Wish) : Observable<Wish>{
+    return this.http$.delete<IWishResponse>(
+      environment.apiUrl + 'wish/' + wish.id
+    ).pipe(
+      map(wishResponse => this.createBasicWishInstanceFromResponse(wishResponse, wish.receiver)),
+      tap( wish => this.deleteWishFromWishlist(wish) )
+    );
+  }
+
   public addGiftFeedback (wish: Wish, giftFeedback: IGiftFeedback) : Observable<Wish> {
     return this.http$.post<IWishFeedbackResponse>(
       environment.apiUrl + 'wish/' + wish.id + "/feedback", 
@@ -188,6 +198,14 @@ export class WishService {
   }
 
   /* PRIVATE methods */
+  private deleteWishFromWishlist (deletedWish : Wish) {
+    let filteredWishlist = this._wishes$.value.filter( wish => {
+      return wish.id !== deletedWish.id;
+    }); // Filter always returns copy of array
+    
+    this._wishes$.next(filteredWishlist);
+  }
+
   private convertWishReservationResponseToUpdatedWish (wishReservationResponse: IWishReservationResponse, wish: Wish) : Observable<Wish>{
     return of(wishReservationResponse).pipe(
       // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist

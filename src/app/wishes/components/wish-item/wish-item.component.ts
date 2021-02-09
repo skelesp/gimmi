@@ -9,6 +9,7 @@ import { GiftFeedbackComponent } from '../gift-feedback/gift-feedback.component'
 import { CTAButtonConfig } from './wish-call-to-action-button/wish-call-to-action-button.component';
 import { BannerConfig } from './wish-banner/wish-banner.component';
 import { ActionListItemConfig } from './action-list/action-list-item/action-list-item.component';
+import { WishDeleteComponent } from '../wish-delete/wish-delete.component';
 
 @Component({
   template: '',
@@ -127,7 +128,8 @@ export class WishItemComponent implements OnInit {
   }
 
   delete() {
-    window.alert(`Delete wish: ${this.wish.title}`);
+    let wishDeletePopup = this.modalService.open(WishDeleteComponent);
+    wishDeletePopup.componentInstance.wish = this.wish;
   }
 
 }
