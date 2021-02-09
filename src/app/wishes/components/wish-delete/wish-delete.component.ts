@@ -20,11 +20,13 @@ export class WishDeleteComponent {
   ) { }
 
   executeDeletion() {
-    this.wishService.delete();
-    this.notificationService.showNotification(
-      "De wens is verwijderd.",
-      "success",
-      "Wens verwijderd"
+    this.activeModal.close();
+    this.wishService.delete(this.wish).subscribe( (deletedWish) =>
+      this.notificationService.showNotification(
+        `Wens "${deletedWish.title}" is verwijderd.`,
+        "success",
+        "Wens verwijderd"
+      )
     );
   }
 
