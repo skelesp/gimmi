@@ -1,5 +1,6 @@
 import { Person } from 'src/app/people/models/person.model';
 import { User } from 'src/app/users/models/user.model';
+import { validateUrl } from 'src/app/_utility/url_utility';
 import { environment } from 'src/environments/environment';
 
 export type wishStatus = 'Open' | 'Reserved' | 'Received' | 'Fulfilled';
@@ -56,7 +57,7 @@ export class Wish {
         public amountWanted: number
     ) {
         if (!image) this.image = environment.cloudinary.defaultImage;
-        if (url) this.url = this.validateUrl(url);
+        if (url) this.url = validateUrl(url);
     }
     
     public set status (v : wishStatus) {
@@ -105,17 +106,4 @@ export class Wish {
         }
     }
     
-    private validateUrl ( url : string = "") {
-        let newUrl = window.decodeURIComponent(url);
-        newUrl = newUrl.trim().replace(/\s/g, "");
-
-        if (/^(:\/\/)/.test(newUrl)) {
-            return `http${newUrl}`;
-        }
-        if (!/^(f|ht)tps?:\/\//i.test(newUrl)) {
-            return `http://${newUrl}`;
-        }
-
-        return newUrl;
-    }    
 }
