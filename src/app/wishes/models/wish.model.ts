@@ -56,6 +56,7 @@ export class Wish {
         public amountWanted: number
     ) {
         if (!image) this.image = environment.cloudinary.defaultImage;
+        if (url) this.url = this.validateUrl(url);
     }
     
     public set status (v : wishStatus) {
@@ -104,5 +105,17 @@ export class Wish {
         }
     }
     
-    
+    private validateUrl ( url : string = "") {
+        let newUrl = window.decodeURIComponent(url);
+        newUrl = newUrl.trim().replace(/\s/g, "");
+
+        if (/^(:\/\/)/.test(newUrl)) {
+            return `http${newUrl}`;
+        }
+        if (!/^(f|ht)tps?:\/\//i.test(newUrl)) {
+            return `http://${newUrl}`;
+        }
+
+        return newUrl;
+    }    
 }
