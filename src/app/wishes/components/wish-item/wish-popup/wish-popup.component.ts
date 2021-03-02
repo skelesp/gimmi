@@ -18,13 +18,13 @@ export class WishPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.wishForm = new FormGroup({
-      'title': new FormControl(null, [Validators.required]),
-      'price': new FormControl(null),
-      'image': new FormControl(null),
-      'url': new FormControl(null),
-      'color': new FormControl(null),
-      'size': new FormControl(null),
-      'description': new FormControl(null),
+      'title': new FormControl(this.wish.title, [Validators.required]),
+      'price': new FormControl(this.wish?.price),
+      'image': new FormControl(this.wish?.image),
+      'url': new FormControl(this.wish?.url),
+      'color': new FormControl(this.wish?.color),
+      'size': new FormControl(this.wish?.size),
+      'description': new FormControl(this.wish?.description)
     });
   }
   updateWish () {
