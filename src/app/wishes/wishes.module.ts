@@ -15,9 +15,10 @@ import { GiftFeedbackComponent } from './components/gift-feedback/gift-feedback.
 import { ActionListComponent } from './components/wish-item/action-list/action-list.component';
 import { ActionListItemComponent } from './components/wish-item/action-list/action-list-item/action-list-item.component';
 import { WishDeleteComponent } from './components/wish-delete/wish-delete.component';
+import { WishPopupComponent } from './components/wish-item/wish-popup/wish-popup.component';
 
 @NgModule({
-  declarations: [WishListComponent, FilterOnStatePipe, WishItemComponent, WishCardComponent, WishBannerComponent, WishCallToActionButtonComponent, WishReservationComponent, ChangeWishReservationComponent, GiftFeedbackComponent, ActionListComponent, ActionListItemComponent, WishDeleteComponent],
+  declarations: [WishListComponent, FilterOnStatePipe, WishItemComponent, WishCardComponent, WishBannerComponent, WishCallToActionButtonComponent, WishReservationComponent, ChangeWishReservationComponent, GiftFeedbackComponent, ActionListComponent, ActionListItemComponent, WishDeleteComponent, WishPopupComponent],
   imports: [
     CommonModule,
     SharedModule,

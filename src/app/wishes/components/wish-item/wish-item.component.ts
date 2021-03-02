@@ -10,6 +10,7 @@ import { CTAButtonConfig } from './wish-call-to-action-button/wish-call-to-actio
 import { BannerConfig } from './wish-banner/wish-banner.component';
 import { ActionListItemConfig } from './action-list/action-list-item/action-list-item.component';
 import { WishDeleteComponent } from '../wish-delete/wish-delete.component';
+import { WishPopupComponent } from './wish-popup/wish-popup.component';
 
 @Component({
   template: '',
@@ -120,7 +121,8 @@ export class WishItemComponent implements OnInit {
   }
   
   edit () {
-    window.alert(`editwish: ${this.wish.title}`);
+    let editPopup = this.modalService.open(WishPopupComponent);
+    editPopup.componentInstance.wish = this.wish;
   }
 
   copy() {
