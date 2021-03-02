@@ -1,1 +1,80 @@
-<p>wish-popup works!</p>
+<div class="modal-header">
+    <h3 class="modal-title">Voeg een wens toe</h3>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<form [formGroup]="wishForm" (ngSubmit)="updateWish()">
+    <div class="modal-body container">
+        <div class="row">
+            <div class="col-7">
+                <div class="form-group required">
+                    <label for="wishTitle" class="form-control-label">Titel</label>
+                    <input  type="text" class="form-control form-control-sm" name="wishTitle" id="wishTitle"
+                            placeholder="Titel"
+                            formControlName="title" 
+                            NgbAutoFocus />
+                </div>
+                <div class="form-group">
+                    <label for="wishPrice" class="form-control-label">Prijs</label>
+                    <div class="input-group input-group-sm mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">€</div>
+                        </div>
+                        <input type="number" class="form-control form-control-sm" name="inputPrice" id="WishPrice"
+                                placeholder="Prijs" 
+                                formControlName="price" />
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <button class="btn btn-danger btn-sm" type="button">
+                        <i class="fa fa-camera mr-1" aria-hidden="true"></i> Kies afbeelding
+                    </button>
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="form-group">
+                    <cl-image   class="img-fluid rounded float-right" 
+                                [public-id]='wish.image.publicId'
+                                [attr.version]='wish.image.version'>
+                                <cl-transformation fetch-format="auto"></cl-transformation>
+                    </cl-image>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-12">
+                <label for="wishUrl" class="form-control-label">Website/webshop</label>
+                <input type="text" class="form-control form-control-sm" id="WishUrl"
+                        placeholder="Link naar externe website"
+                        formControlName="url"/>
+            </div>
+            <div class="form-group col-6">
+                <label for="wishColor" class="form-control-label">Kleur</label>
+                <input type="text" class="form-control form-control-sm" id="wishColor"
+                        placeholder="Gewenste kleur"
+                        formControlName="color" />
+            </div>
+            <div class="form-group col-6">
+                <label for="wishSize" class="form-control-label">Grootte/Maat</label>
+                <input type="text" class="form-control form-control-sm" id="WishSize"
+                        placeholder="Gewenste maat" 
+                        formControlName="size"/>
+            </div>
+            <div class="form-group col-12">
+                <label for="wishDescription" class="form-control-label">Beschrijving</label>
+                <textarea class="form-control form-control-sm" rows="3" id="wishDescription"
+                        placeholder="Geef een korte beschrijving van je wens"
+                        formControlName="description">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="submit" [disabled]="wishForm.invalid"
+            aria-describedby="saveHelpText">Wens opslaan</button>
+        <button class="btn btn-outline-danger" type="button" (click)="activeModal.dismiss('Cancel')">Annuleer</button>
+    </div>
+</form>
