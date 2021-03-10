@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Wish } from 'src/app/wishes/models/wish.model';
+import { WishService } from 'src/app/wishes/services/wish.service';
 
 @Component({
   selector: 'gimmi-wish-popup',
@@ -13,7 +14,8 @@ export class WishPopupComponent implements OnInit {
   wishForm: FormGroup;
 
   constructor(
-    public activeModal : NgbActiveModal
+    public activeModal : NgbActiveModal,
+    private wishService : WishService
   ){}
 
   ngOnInit(): void {
@@ -28,7 +30,12 @@ export class WishPopupComponent implements OnInit {
     });
   }
   updateWish () {
-    console.log(this.wishForm.value);
+    let updatedWish = {...this.wish, ...this.wishForm.value };
+    this.wishService.update( updatedWish ).subscribe( wish => {
+      console.log(wish);
+      this.activeModal.close(wish);
+    });
+    
   }
 
 }

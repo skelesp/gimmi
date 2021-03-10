@@ -103,6 +103,10 @@ interface IClosureResponse {
   closedOn: Date;
 }
 
+interface IWishRequest {
+  
+}
+
 type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
 
 @Injectable({
@@ -181,6 +185,21 @@ export class WishService {
     ).pipe(
       switchMap(addFeedbackResponse => this.convertWishReservationResponseToUpdatedWish(addFeedbackResponse, wish))
     )
+  }
+
+  public update ( wish : Wish ) : Observable<Wish>{
+    let wishRequest : IWishRequest = {
+      ...wish, 
+      _id: wish.id,
+      receiver: wish.receiver,
+      image : {public_id: wish.image.publicId, version: +wish.image.version}};
+    return this.http$.put<IWishReservationResponse>(
+      environment.apiUrl + 'wish/' + wish.id,
+      wishRequest
+    )
+    .pipe(
+      switchMap(updatedWish => this.convertWishReservationResponseToUpdatedWish(updatedWish, wish))
+    );
   }
 
   public close (wish: Wish) : Observable<Wish>{
