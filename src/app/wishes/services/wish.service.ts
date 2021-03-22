@@ -104,7 +104,25 @@ interface IClosureResponse {
 }
 
 interface IWishRequest {
-  
+  id: string;
+  title: string;
+  price: number;
+  image: {
+    public_id: string; 
+    version: number
+  };
+  reservation: IReservation;
+  giftFeedback: IGiftFeedback;
+  closure: IClosure;
+  copyOf: string;
+  url: string;
+  receiver: Person;
+  createdBy: Person;
+  color: string;
+  size: string;
+  description: string;
+  amountWanted: number;
+  _id: string;
 }
 
 type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
