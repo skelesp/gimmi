@@ -1,0 +1,18 @@
+<div class="card border border-danger shadow">
+    <!-- Image header of create wish card -->
+    <!-- https://stackoverflow.com/questions/43009351/how-to-make-links-work-with-card-img-overlay-in-bootstrap-v4 -->
+    <div class="position-relative pt-2 pb-md-3 pb-5">
+        <cl-image class="card-img-top rounded img-fluid thumbnail inline" alt="Standaard wensafbeelding"
+            [public-id]='image.publicId' 
+            [attr.version]='image.version'>
+            <cl-transformation fetch-format="auto"></cl-transformation>
+        </cl-image>
+        <span class="card-img-overlay blurred-card-overlay pointer" ng-click="createWishCtrl.openAddWishPopup()">
+            <p class="text-center">
+                <fa-icon [icon]='plusIcon' size='4x'></fa-icon>
+                <br />
+                <span class="h5 font-weight-bold">Voeg wens toe</span>
+            </p>
+        </span>
+    </div>
+</div>

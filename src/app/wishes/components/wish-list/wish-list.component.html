@@ -8,6 +8,7 @@
     </ngb-alert>
 </div>
 <div *ngIf="wishes && !loading" class="card-columns">
+    <gimmi-wish-create-card></gimmi-wish-create-card>
     <gimmi-wish-card 
         *ngFor="let wish of wishes | filterOnState:wishlistFilter" 
         [wish]="wish">
