@@ -7,7 +7,7 @@
             [attr.version]='image.version'>
             <cl-transformation fetch-format="auto"></cl-transformation>
         </cl-image>
-        <span class="card-img-overlay blurred-card-overlay pointer" ng-click="createWishCtrl.openAddWishPopup()">
+        <span class="card-img-overlay blurred-card-overlay pointer" (click)="openCreateWish()">
             <p class="text-center">
                 <fa-icon [icon]='plusIcon' size='4x'></fa-icon>
                 <br />

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import { ICloudinaryImage } from '../../models/wish.model';
+import { WishPopupComponent } from '../wish-item/wish-popup/wish-popup.component';
 
 @Component({
   selector: 'gimmi-wish-create-card',
@@ -16,9 +18,14 @@ export class WishCreateCardComponent implements OnInit {
   }
   plusIcon : IconDefinition = faPlus;
 
-  constructor() { }
+  constructor( private modalService : NgbModal) { }
 
   ngOnInit(): void {
+  }
+
+  openCreateWish () {
+    console.log('create wish opened');
+    this.modalService.open(WishPopupComponent);
   }
 
 }
