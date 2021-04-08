@@ -5,7 +5,7 @@
     </button>
 </div>
 
-<form [formGroup]="wishForm" (ngSubmit)="updateWish()">
+<form [formGroup]="wishForm" (ngSubmit)="saveWish()">
     <div class="modal-body container">
         <div class="row">
             <div class="col-7">
@@ -76,7 +76,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-danger" type="submit" [disabled]="wishForm.invalid"
-            aria-describedby="saveHelpText">Wens opslaan</button>
+            aria-describedby="saveHelpText">{{actionButtonText}}</button>
         <button class="btn btn-outline-danger" type="button" (click)="activeModal.dismiss('Cancel')">Annuleer</button>
     </div>
 </form>

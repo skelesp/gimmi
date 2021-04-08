@@ -24,8 +24,17 @@ export class WishCreateCardComponent implements OnInit {
   }
 
   openCreateWish () {
-    console.log('create wish opened');
-    this.modalService.open(WishPopupComponent);
+    let wishCreatePopup = this.modalService.open(WishPopupComponent);
+    wishCreatePopup.componentInstance.mode = 'create';
+
+    wishCreatePopup.result
+      .then( wish => {
+        console.info('Wish to create', wish);
+        // TODO: Add the following data: createdBy (currentUser), receiver (current list owner), amountWanted (1)
+        // ==> Misschien beter in wish create service method toevoegen? Maar service kent geen context, dus moet dan doorgegeven worden
+        // ZIE OUDE CODE
+      })
+      .catch();
   }
 
 }

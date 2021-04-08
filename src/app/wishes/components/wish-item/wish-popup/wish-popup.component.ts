@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Wish } from 'src/app/wishes/models/wish.model';
-import { WishService } from 'src/app/wishes/services/wish.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -12,11 +11,12 @@ import { environment } from 'src/environments/environment';
 })
 export class WishPopupComponent implements OnInit {
   @Input() wish: Wish = new Wish(null, null, null, environment.cloudinary.defaultImage, null, null, null, null, null, null, null);
+  @Input() mode: 'edit' | 'create';
   wishForm: FormGroup;
+  actionButtonText: string;
 
   constructor(
-    public activeModal : NgbActiveModal,
-    private wishService : WishService
+    public activeModal : NgbActiveModal
   ){}
 
   ngOnInit(): void {
@@ -29,14 +29,12 @@ export class WishPopupComponent implements OnInit {
       'size': new FormControl(this.wish?.size),
       'description': new FormControl(this.wish?.description)
     });
+
+    this.actionButtonText = (this.mode === 'create') ? "Wens toevoegen" : "Wens opslaan";
   }
-  updateWish () {
-    let updatedWish = {...this.wish, ...this.wishForm.value };
-    this.wishService.update( updatedWish ).subscribe( wish => {
-      console.log(wish);
-      this.activeModal.close(wish);
-    });
-    
+  saveWish () {
+    let returnedWish: Wish = { ...this.wish, ...this.wishForm.value };
+    this.activeModal.close(returnedWish);    
   }
 
 }
