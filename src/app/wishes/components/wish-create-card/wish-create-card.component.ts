@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Person } from 'src/app/people/models/person.model';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { User } from 'src/app/users/models/user.model';
+import { UserService } from 'src/app/users/service/user.service';
 import { environment } from 'src/environments/environment';
-import { ICloudinaryImage } from '../../models/wish.model';
+import { ICloudinaryImage, Wish } from '../../models/wish.model';
+import { WishService } from '../../services/wish.service';
 import { WishPopupComponent } from '../wish-item/wish-popup/wish-popup.component';
 
 @Component({
@@ -12,25 +17,39 @@ import { WishPopupComponent } from '../wish-item/wish-popup/wish-popup.component
   styleUrls: ['./wish-create-card.component.css']
 })
 export class WishCreateCardComponent implements OnInit {
+  @Input() receiver : Person;
   image : ICloudinaryImage = {
     publicId: environment.cloudinary.defaultImage.publicId,
     version: environment.cloudinary.defaultImage.version
   }
   plusIcon : IconDefinition = faPlus;
+  currentUser: User;
 
-  constructor( private modalService : NgbModal) { }
+  constructor( 
+    private modalService : NgbModal,
+    private wishService : WishService,
+    private userService : UserService,
+    private notificationService: NotificationService ) { }
 
   ngOnInit(): void {
+    this.currentUser = this.userService.currentUser;
   }
 
   openCreateWish () {
     let wishCreatePopup = this.modalService.open(WishPopupComponent);
     wishCreatePopup.componentInstance.mode = 'create';
 
-    wishCreatePopup.result
+    (wishCreatePopup.result as Promise<Wish>)
       .then( wish => {
-        console.info('Wish to create', wish);
-        // TODO: 
+        wish.createdBy = new Person(this.currentUser.id, this.currentUser.firstName, this.currentUser.lastName);
+        wish.receiver = this.receiver;
+        this.wishService.create(wish).subscribe(wish =>
+          this.notificationService.showNotification(
+            `De wens '${wish.title}' werd toegevoegd aan deze lijst.`,
+            'success',
+            'Wens toegevoegd'
+          )
+        );
       })
       .catch( reason => this.handlePopupDismissal(reason) );
   }

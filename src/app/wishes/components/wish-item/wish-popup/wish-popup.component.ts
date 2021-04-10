@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./wish-popup.component.css']
 })
 export class WishPopupComponent implements OnInit {
-  @Input() wish: Wish = new Wish(null, null, null, environment.cloudinary.defaultImage, null, null, null, null, null, null, null);
+  @Input() wish: Wish = new Wish(null, null, null, environment.cloudinary.defaultImage, null, null, null, null, null, null, 1);
   @Input() mode: 'edit' | 'create';
   wishForm: FormGroup;
   actionButtonText: string;

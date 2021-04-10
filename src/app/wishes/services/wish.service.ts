@@ -19,6 +19,7 @@ interface IWishlistResponse {
 
 interface IWishResponse {
   _id: string;
+  receiver: string;
   title: string;
   image: {
     version: number;
@@ -125,6 +126,22 @@ interface IWishRequest {
   _id: string;
 }
 
+interface IWishCreateRequest {
+  title: string;
+  price: number;
+  url: string;
+  color: string;
+  size: string;
+  description: string;
+  receiver: string;
+  createdBy: string;
+  amountWanted: number;
+  image: {
+    public_id: string;
+    version: number
+  };
+}
+
 type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
 
 @Injectable({
@@ -204,6 +221,31 @@ export class WishService {
       switchMap(addFeedbackResponse => this.convertWishReservationResponseToUpdatedWish(addFeedbackResponse, wish))
     )
   }
+  
+  public create ( newWish : Wish) : Observable<Wish>{
+    let wishCreatePayload : IWishCreateRequest = {
+      title: newWish.title,
+      price: newWish.price,
+      url: newWish.url,
+      color: newWish.color,
+      size: newWish.size,
+      description: newWish.description,
+      receiver: newWish.receiver.id,
+      createdBy: newWish.createdBy.id,
+      amountWanted: newWish.amountWanted,
+      image: {
+        public_id: newWish.image.publicId,
+        version: +newWish.image.version
+      }
+    }
+    return this.http$.post<IWishResponse>(
+      environment.apiUrl + "wish",
+      wishCreatePayload 
+    ).pipe(
+      switchMap(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, newWish.receiver)),
+      tap(wish => this.addWishToWishlist(wish))
+    )
+  }
 
   public update ( wish : Wish ) : Observable<Wish>{
     let wishRequest : IWishRequest = {
@@ -235,6 +277,12 @@ export class WishService {
   }
 
   /* PRIVATE methods */
+  private addWishToWishlist ( newWish : Wish) : void {
+    let wishlist = this._wishes$.value;
+    wishlist.unshift(newWish);
+    this._wishes$.next(wishlist);
+  }
+
   private deleteWishFromWishlist (deletedWish : Wish) {
     let filteredWishlist = this._wishes$.value.filter( wish => {
       return wish.id !== deletedWish.id;
