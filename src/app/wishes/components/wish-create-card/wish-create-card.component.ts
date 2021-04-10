@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import { ICloudinaryImage } from '../../models/wish.model';
 import { WishPopupComponent } from '../wish-item/wish-popup/wish-popup.component';
@@ -30,11 +30,16 @@ export class WishCreateCardComponent implements OnInit {
     wishCreatePopup.result
       .then( wish => {
         console.info('Wish to create', wish);
-        // TODO: Add the following data: createdBy (currentUser), receiver (current list owner), amountWanted (1)
-        // ==> Misschien beter in wish create service method toevoegen? Maar service kent geen context, dus moet dan doorgegeven worden
-        // ZIE OUDE CODE
+        // TODO: 
       })
-      .catch();
+      .catch( reason => this.handlePopupDismissal(reason) );
+  }
+
+  private handlePopupDismissal (reason : any) : void {
+    if (reason === ModalDismissReasons.ESC) reason = 'ESC pressed';
+    else if (reason === ModalDismissReasons.BACKDROP_CLICK) reason = 'Backdrop click';
+
+    console.warn(`Wish Create popup is closed: ${reason}`);
   }
 
 }
