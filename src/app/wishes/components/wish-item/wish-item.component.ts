@@ -11,6 +11,7 @@ import { BannerConfig } from './wish-banner/wish-banner.component';
 import { ActionListItemConfig } from './action-list/action-list-item/action-list-item.component';
 import { WishDeleteComponent } from '../wish-delete/wish-delete.component';
 import { WishPopupComponent } from './wish-popup/wish-popup.component';
+import { WishService } from '../../services/wish.service';
 
 @Component({
   template: '',
@@ -86,7 +87,8 @@ export class WishItemComponent implements OnInit {
   };
 
   constructor(
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private wishService: WishService
   ) { }
 
   ngOnInit(): void {
@@ -123,6 +125,13 @@ export class WishItemComponent implements OnInit {
   edit () {
     let editPopup = this.modalService.open(WishPopupComponent);
     editPopup.componentInstance.wish = this.wish;
+    editPopup.componentInstance.mode = 'edit';
+
+    editPopup.result.then( wish => {
+      this.wishService.update(wish).subscribe(wish => {
+        console.info('Wish updated:', wish);
+      });
+    }).catch( err => console.warn('popup closed:', err) );
   }
 
   copy() {
