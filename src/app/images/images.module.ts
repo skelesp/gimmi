@@ -4,22 +4,21 @@ import { CommonModule } from '@angular/common';
 import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular-5.x';
 import * as Cloudinary from "cloudinary-core";
 import { environment } from 'src/environments/environment';
-
-
-
+import { ImageUploadComponent } from './image-upload/image-upload.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [ImageUploadComponent],
   imports: [
     CommonModule,
     CloudinaryModule.forRoot(Cloudinary, {
-      cloud_name: environment.cloudinary.sdk.cloud_name,
-      upload_preset: environment.cloudinary.sdk.uploadPreset,
+      cloud_name: environment.cloudinary.cloud_name,
+      upload_preset: environment.cloudinary.uploadPreset,
       secure: true
     } as CloudinaryConfiguration),
   ],
   exports: [
-    CloudinaryModule
+    CloudinaryModule,
+    ImageUploadComponent
   ]
 })
 export class ImagesModule { }
