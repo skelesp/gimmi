@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { CloudinaryService } from '../services/cloudinary.service';
 
 @Component({
   selector: 'gimmi-image-upload',
@@ -11,6 +12,7 @@ export class ImageUploadComponent implements OnInit {
   private uploadWidgetConfig: any = {
     cloud_name: environment.cloudinary.cloud_name,
     uploadPreset: environment.cloudinary.uploadPreset,
+    api_key: environment.cloudinary.apiKey,
     secure: true,
     language: "nl",
     sources: ['local', 'image_search', 'url'],
@@ -25,9 +27,11 @@ export class ImageUploadComponent implements OnInit {
     text: environment.cloudinary.uploadWidget.text
   };
 
-  constructor() { }
+  constructor( private cloudinaryService : CloudinaryService) { }
 
   ngOnInit(): void {
+    this.uploadWidgetConfig.uploadSignature = this.cloudinaryService.getSignature.bind(this.cloudinaryService);
+
     this.uploadWidget = (window as any).cloudinary.createUploadWidget(
       this.uploadWidgetConfig,
       (error, result) => {
