@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from 'src/app/users/service/user.service';
-import { Wish } from 'src/app/wishes/models/wish.model';
+import { ICloudinaryImage, Wish } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -34,6 +34,12 @@ export class WishPopupComponent implements OnInit {
 
     this.actionButtonText = (this.mode === 'create') ? "Wens toevoegen" : "Wens opslaan";
   }
+
+  updateWishImage(newImage: ICloudinaryImage) {
+    this.wish.image = newImage;
+    this.wishForm.get("image").setValue(newImage);
+  }
+
   saveWish () {
     let returnedWish: Wish = { ...this.wish, ...this.wishForm.value };
     this.activeModal.close(returnedWish);    

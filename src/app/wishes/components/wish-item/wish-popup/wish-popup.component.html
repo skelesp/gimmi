@@ -33,7 +33,7 @@
                     <gimmi-image-upload 
                         [publicId]="wish?.id"
                         [tempPublicId_prefix]="userService.currentUser.id"
-                        (imageUploaded)="wish.image=$event"
+                        (imageUploaded)="updateWishImage($event)"
                     ></gimmi-image-upload>
                 </div>
             </div>
