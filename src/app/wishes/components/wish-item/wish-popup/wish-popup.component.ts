@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserService } from 'src/app/users/service/user.service';
 import { Wish } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
 
@@ -16,7 +17,8 @@ export class WishPopupComponent implements OnInit {
   actionButtonText: string;
 
   constructor(
-    public activeModal : NgbActiveModal
+    public activeModal : NgbActiveModal,
+    public userService : UserService
   ){}
 
   ngOnInit(): void {

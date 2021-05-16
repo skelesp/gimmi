@@ -30,7 +30,10 @@
                     </div>
                 </div>
                 <div class="form-group mt-2">
-                    <gimmi-image-upload></gimmi-image-upload>
+                    <gimmi-image-upload 
+                        [tempPublicId_prefix]="userService.currentUser.id"
+                        (imageUploaded)="wish.image=$event"
+                    ></gimmi-image-upload>
                 </div>
             </div>
             <div class="col-5">
@@ -41,7 +44,6 @@
                                 <cl-transformation fetch-format="auto"></cl-transformation>
                     </cl-image>
                 </div>
-
             </div>
         </div>
         <div class="row">

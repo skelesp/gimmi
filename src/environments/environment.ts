@@ -14,6 +14,7 @@ export const environment = {
       publicId: "wish_images/default",
       version: "1556702046"
     },
+    temporaryImagePostfix: '_temp',
     uploadWidget : {
       text: {
         "nl": {

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ICloudinaryImage } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
 import { CloudinaryService } from '../services/cloudinary.service';
 
@@ -8,6 +9,11 @@ import { CloudinaryService } from '../services/cloudinary.service';
   styleUrls: ['./image-upload.component.css']
 })
 export class ImageUploadComponent implements OnInit {
+  @Input() publicId : string;
+  @Input() tempPublicId_prefix: string = "";
+  @Input() tempPublicId_postfix: string = environment.cloudinary.temporaryImagePostfix;
+
+  @Output() imageUploaded: EventEmitter<ICloudinaryImage> = new EventEmitter();
   private uploadWidget : any = null;
   private uploadWidgetConfig: any = {
     cloud_name: environment.cloudinary.cloud_name,
@@ -31,19 +37,26 @@ export class ImageUploadComponent implements OnInit {
 
   ngOnInit(): void {
     this.uploadWidgetConfig.uploadSignature = this.cloudinaryService.getSignature.bind(this.cloudinaryService);
-
-    this.uploadWidget = (window as any).cloudinary.createUploadWidget(
-      this.uploadWidgetConfig,
-      (error, result) => {
-        console.error(error);
-        console.log(result);
-      }
-    )
   }
 
-  openUploadWidget($event) {
-    this.uploadWidget.open();
-    console.log("Open upload button is clicked!", $event);
+  openUploadWidget() {
+    this.uploadWidgetConfig.publicId = this.publicId ? this.publicId : this.cloudinaryService.generateRandomPublicId(this.tempPublicId_prefix, this.tempPublicId_postfix);
+
+    this.uploadWidget = (window as any).cloudinary.openUploadWidget(
+      this.uploadWidgetConfig,
+      (error, result) => {
+        if (error) {
+          console.error(error);
+          return;
+        } else if (result && result.event === "success") {
+          this.imageUploaded.emit({
+            publicId: result.info.public_id,
+            version: result.info.version
+          });
+          this.uploadWidget.close({ quiet: true });
+        }
+      }
+    );
   }
 
 }
