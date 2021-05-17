@@ -8,6 +8,7 @@ import { Person } from 'src/app/people/models/person.model';
 import { IPersonNameResponse, IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
 import { UserService } from 'src/app/users/service/user.service';
 import { IClosure, IGiftFeedback, IReservation, Wish, wishStatus } from '../models/wish.model';
+import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
 
 interface IWishlistResponse {
   _id: {
@@ -154,7 +155,8 @@ export class WishService {
   constructor(
     private http$ : HttpClient,
     private userService : UserService,
-    private peopleService : PeopleService
+    private peopleService : PeopleService,
+    private imageService: CloudinaryService
   ) { }
 
   public getWishlist(receiver: Person): Observable<Wish[]> { //https://stackoverflow.com/questions/65417031/rxjs-how-to-make-foreach-loop-wait-for-inner-observable
@@ -243,7 +245,14 @@ export class WishService {
       wishCreatePayload 
     ).pipe(
       switchMap(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, newWish.receiver)),
-      tap(wish => this.addWishToWishlist(wish))
+      switchMap(wish => this.imageService.renameImage(wish.image.publicId, wish.id).pipe(
+        map(newImage => {
+          wish.image = newImage;
+          return wish;
+        }),
+        tap(wish => this.addWishToWishlist(wish)),
+        switchMap(wish => this.update(wish))
+      ))
     )
   }
 
