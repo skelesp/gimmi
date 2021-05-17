@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
 import { UserService } from 'src/app/users/service/user.service';
 import { ICloudinaryImage, Wish } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
@@ -18,7 +19,8 @@ export class WishPopupComponent implements OnInit {
 
   constructor(
     public activeModal : NgbActiveModal,
-    public userService : UserService
+    public userService : UserService,
+    public imageService : CloudinaryService
   ){}
 
   ngOnInit(): void {
@@ -43,6 +45,16 @@ export class WishPopupComponent implements OnInit {
   saveWish () {
     let returnedWish: Wish = { ...this.wish, ...this.wishForm.value };
     this.activeModal.close(returnedWish);    
+  }
+
+  cancel () {
+    if (this.imageService.isTemporaryImage(this.wishForm.value.image)) {
+      this.imageService.deleteImage(this.wish.image.publicId).subscribe( result => {
+        if (result) console.info(`Image ${this.wishForm.value.image} is deleted from Cloudinary`);
+        else console.info(`Image ${this.wishForm.value.image} NOT deleted from Cloudinary`);
+      })
+    }
+    this.activeModal.dismiss('Cancel');
   }
 
 }
