@@ -211,7 +211,8 @@ export class WishService {
       environment.apiUrl + 'wish/' + wish.id
     ).pipe(
       map(wishResponse => this.createBasicWishInstanceFromResponse(wishResponse, wish.receiver)),
-      tap( wish => this.deleteWishFromWishlist(wish) )
+      tap(wish => this.deleteWishFromWishlist(wish) ),
+      tap(wish => this.imageService.deleteImage(wish.image.publicId).subscribe())
     );
   }
 
