@@ -38,7 +38,6 @@ export class WishPopupComponent implements OnInit {
   }
 
   updateWishImage(newImage: ICloudinaryImage) {
-    this.wish.image = newImage;
     this.wishForm.get("image").setValue(newImage);
   }
 

@@ -40,8 +40,8 @@
             <div class="col-5">
                 <div class="form-group">
                     <cl-image   class="img-fluid rounded float-right" 
-                                [public-id]='wish?.image?.publicId'
-                                [attr.version]='wish?.image?.version'>
+                                [public-id]="wishForm.get('image').value.publicId"
+                                [attr.version]="wishForm.get('image').value.version">
                                 <cl-transformation fetch-format="auto"></cl-transformation>
                     </cl-image>
                 </div>
