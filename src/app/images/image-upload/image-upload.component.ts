@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ICloudinaryImage } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
 import { CloudinaryService } from '../services/cloudinary.service';
@@ -33,7 +34,9 @@ export class ImageUploadComponent implements OnInit {
     text: environment.cloudinary.uploadWidget.text
   };
 
-  constructor( private cloudinaryService : CloudinaryService) { }
+  constructor( 
+    private cloudinaryService : CloudinaryService,
+    private notificationService : NotificationService) { }
 
   ngOnInit(): void {
     this.uploadWidgetConfig.uploadSignature = this.cloudinaryService.getSignature.bind(this.cloudinaryService);
@@ -47,6 +50,12 @@ export class ImageUploadComponent implements OnInit {
       (error, result) => {
         if (error) {
           console.error(error);
+          this.uploadWidget.close({ quiet: true });
+          this.notificationService.showNotification(
+            "De afbeelding kon niet opgeladen worden, probeer het opnieuw.",
+            'error',
+              'Afbeelding niet opgeladen'
+            )
           return;
         } else if (result && result.event === "success") {
           this.imageUploaded.emit({
