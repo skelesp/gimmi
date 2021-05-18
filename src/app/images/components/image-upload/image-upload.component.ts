@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ICloudinaryImage } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
-import { CloudinaryService } from '../services/cloudinary.service';
+import { CloudinaryService } from '../../services/cloudinary.service';
 
 @Component({
   selector: 'gimmi-image-upload',
