@@ -40,12 +40,9 @@ export class ImageUploadComponent implements OnInit {
 
   ngOnInit(): void {
     this.uploadWidgetConfig.uploadSignature = this.cloudinaryService.getSignature.bind(this.cloudinaryService);
-  }
-
-  openUploadWidget() {
     this.uploadWidgetConfig.publicId = this.publicId ? this.publicId : this.cloudinaryService.generateRandomPublicId(this.tempPublicId_prefix, this.tempPublicId_postfix);
 
-    this.uploadWidget = (window as any).cloudinary.openUploadWidget(
+    this.cloudinaryService.createUploadWidget(
       this.uploadWidgetConfig,
       (error, result) => {
         if (error) {
@@ -54,8 +51,8 @@ export class ImageUploadComponent implements OnInit {
           this.notificationService.showNotification(
             "De afbeelding kon niet opgeladen worden, probeer het opnieuw.",
             'error',
-              'Afbeelding niet opgeladen'
-            )
+            'Afbeelding niet opgeladen'
+          )
           return;
         } else if (result && result.event === "success") {
           this.imageUploaded.emit({
@@ -65,7 +62,11 @@ export class ImageUploadComponent implements OnInit {
           this.uploadWidget.close({ quiet: true });
         }
       }
-    );
+    ).subscribe(widget => this.uploadWidget = widget);
+  }
+
+  openUploadWidget() {
+    this.uploadWidget.open();
   }
 
 }

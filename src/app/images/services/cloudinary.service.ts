@@ -1,16 +1,49 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { fromEvent, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ICloudinaryImage } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
 
+const widgetUrl = 'https://widget.cloudinary.com/v2.0/global/all.js';
 @Injectable({
   providedIn: 'root'
 })
 export class CloudinaryService {
+  private renderer : Renderer2;
 
-  constructor( private http$ : HttpClient) { }
+  constructor( 
+    private http$ : HttpClient,
+    private rendererFactory : RendererFactory2
+  ) { 
+    this.renderer = rendererFactory.createRenderer(null, null);
+  }
+
+  // create the upload widget
+  createUploadWidget(data: any, callback: (error: any, result: any) => void): Observable<any> {
+    return this.scriptExists(widgetUrl)
+      // js is embeded -> call js function directly
+      ? of((window as any).cloudinary.createUploadWidget(data, callback))
+      // js isn't embeded -> embed js file and wait for it to load
+      : fromEvent(this.addJsToElement(widgetUrl), 'load').pipe(
+        // map to call of js function
+        map(e => (window as any).cloudinary.createUploadWidget(data, callback))
+      );
+  }
+
+  // check if js file is already embeded
+  private scriptExists(jsUrl: string): boolean {
+    return document.querySelector(`script[src="${jsUrl}"]`) ? true : false;
+  }
+
+  // embed external js file in html
+  private addJsToElement(jsUrl: string): HTMLScriptElement {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = jsUrl;
+    this.renderer.appendChild(document.body, script);
+    return script;
+  }
 
   /** Get a signature for a signed upload to Cloudinary */
   public getSignature (callback, params_to_sign) {
