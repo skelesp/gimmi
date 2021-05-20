@@ -246,28 +246,24 @@ export class WishService {
       wishCreatePayload 
     ).pipe(
       switchMap(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, newWish.receiver)),
-      switchMap(wish => this.imageService.renameImage(wish.image.publicId, wish.id).pipe(
-        map(newImage => {
-          wish.image = newImage;
-          return wish;
-        }),
-        tap(wish => this.addWishToWishlist(wish)),
-        switchMap(wish => this.update(wish))
-      ))
+      switchMap(wish => this.changeTemporaryImage(wish)),
+      tap(wish => this.addWishToWishlist(wish)),
+      switchMap(wish => this.update(wish))
     )
   }
 
   public update ( wish : Wish ) : Observable<Wish>{
-    let wishRequest : IWishRequest = {
-      ...wish, 
-      _id: wish.id,
-      receiver: wish.receiver,
-      image : {public_id: wish.image.publicId, version: +wish.image.version}};
-    return this.http$.put<IWishReservationResponse>(
-      environment.apiUrl + 'wish/' + wish.id,
-      wishRequest
-    )
-    .pipe(
+    return this.changeTemporaryImage(wish).pipe(
+      map(wish => { return {
+        ...wish,
+        _id: wish.id, 
+        receiver: wish.receiver,
+        image: { public_id: wish.image.publicId, version: +wish.image.version }
+      }}),
+      switchMap(wishRequest => this.http$.put<IWishReservationResponse>(
+        environment.apiUrl + 'wish/' + wish.id,
+        wishRequest
+      )),
       switchMap(updatedWish => this.convertWishReservationResponseToUpdatedWish(updatedWish, wish))
     );
   }
@@ -301,6 +297,19 @@ export class WishService {
     this._wishes$.next(filteredWishlist);
   }
 
+  private changeTemporaryImage (wish : Wish) : Observable<Wish>{
+    if (this.imageService.isTemporaryImage(wish.image) ) {
+      return this.imageService.renameImage(wish.image.publicId, wish.id).pipe(
+        map(newImage => {
+          wish.image = newImage;
+          return wish;
+        })
+      )
+    } else {
+      return of(wish);
+    }
+  }
+  
   private convertWishReservationResponseToUpdatedWish (wishReservationResponse: IWishReservationResponse, wish: Wish) : Observable<Wish>{
     return of(wishReservationResponse).pipe(
       // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist

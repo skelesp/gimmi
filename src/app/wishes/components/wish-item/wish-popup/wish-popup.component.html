@@ -31,7 +31,6 @@
                 </div>
                 <div class="form-group mt-2">
                     <gimmi-image-upload 
-                        [publicId]="wish?.id"
                         [tempPublicId_prefix]="userService.currentUser.id"
                         (imageUploaded)="updateWishImage($event)"
                     ></gimmi-image-upload>
