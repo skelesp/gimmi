@@ -48,7 +48,7 @@ export class WishPopupComponent implements OnInit {
 
   cancel () {
     if (this.imageService.isTemporaryImage(this.wishForm.value.image)) {
-      this.imageService.deleteImage(this.wishForm.value.image.publicId).subscribe( result => {
+      this.imageService.deleteImage(this.wishForm.value.image).subscribe( result => {
         if (result) console.info(`Image ${this.wishForm.value.image.publicId} is deleted from Cloudinary`);
         else console.info(`Image ${this.wishForm.value.image.publicId} NOT deleted from Cloudinary`);
       })

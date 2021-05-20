@@ -14,7 +14,7 @@ export class CloudinaryService {
 
   constructor( 
     private http$ : HttpClient,
-    private rendererFactory : RendererFactory2
+    rendererFactory : RendererFactory2
   ) { 
     this.renderer = rendererFactory.createRenderer(null, null);
   }
@@ -76,11 +76,11 @@ export class CloudinaryService {
    * @function deleteImage
    * @param {String} publicId The current publicId of the image
    */
-  public deleteImage ( publicId : string) : Observable<boolean>{
-    if (publicId === environment.cloudinary.defaultImage.publicId) return of(false)
+  public deleteImage ( image : ICloudinaryImage) : Observable<boolean>{
+    if (image.publicId === environment.cloudinary.defaultImage.publicId) return of(false)
 
     return this.http$.delete<any>(
-      environment.apiUrl + 'images/' + encodeURIComponent(publicId)
+      environment.apiUrl + 'images/' + encodeURIComponent(image.publicId)
     ).pipe(
       map( result => result.delete === "ok")
     );

@@ -212,7 +212,7 @@ export class WishService {
     ).pipe(
       map(wishResponse => this.createBasicWishInstanceFromResponse(wishResponse, wish.receiver)),
       tap(wish => this.deleteWishFromWishlist(wish) ),
-      tap(wish => this.imageService.deleteImage(wish.image.publicId).subscribe())
+      tap(wish => this.imageService.deleteImage(wish.image).subscribe())
     );
   }
 
