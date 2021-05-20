@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { ICloudinaryImage } from 'src/app/wishes/models/wish.model';
+import { IWishImage } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
 import { CloudinaryService } from '../../services/cloudinary.service';
 
@@ -14,7 +14,7 @@ export class ImageUploadComponent implements OnInit {
   @Input() tempPublicId_prefix: string = "";
   @Input() tempPublicId_postfix: string = environment.cloudinary.temporaryImagePostfix;
 
-  @Output() imageUploaded: EventEmitter<ICloudinaryImage> = new EventEmitter();
+  @Output() imageUploaded: EventEmitter<IWishImage> = new EventEmitter();
   private uploadWidget : any = null;
   private uploadWidgetConfig: any = {
     cloud_name: environment.cloudinary.cloud_name,

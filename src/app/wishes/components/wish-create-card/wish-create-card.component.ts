@@ -7,7 +7,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { User } from 'src/app/users/models/user.model';
 import { UserService } from 'src/app/users/service/user.service';
 import { environment } from 'src/environments/environment';
-import { ICloudinaryImage, Wish } from '../../models/wish.model';
+import { IWishImage, Wish } from '../../models/wish.model';
 import { WishService } from '../../services/wish.service';
 import { WishPopupComponent } from '../wish-item/wish-popup/wish-popup.component';
 
@@ -18,7 +18,7 @@ import { WishPopupComponent } from '../wish-item/wish-popup/wish-popup.component
 })
 export class WishCreateCardComponent implements OnInit {
   @Input() receiver : Person;
-  image : ICloudinaryImage = {
+  image : IWishImage = {
     publicId: environment.cloudinary.defaultImage.publicId,
     version: environment.cloudinary.defaultImage.version
   }
