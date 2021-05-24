@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { fromEvent, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { IWishImage } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
 
@@ -69,7 +69,11 @@ export class CloudinaryService {
     return this.http$.delete<any>(
       environment.apiUrl + 'images/' + encodeURIComponent(image.publicId)
     ).pipe(
-      map( result => result.delete === "ok")
+      map( result => result.delete === "ok"),
+      catchError((error: HttpErrorResponse) => {
+        console.error('[cloudinaryService] PublicID not found', error);
+        return of(false);
+      })
     );
   }
 

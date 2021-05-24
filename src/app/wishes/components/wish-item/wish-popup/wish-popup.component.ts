@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
@@ -11,11 +11,12 @@ import { environment } from 'src/environments/environment';
   templateUrl: './wish-popup.component.html',
   styleUrls: ['./wish-popup.component.css']
 })
-export class WishPopupComponent implements OnInit {
+export class WishPopupComponent implements OnInit, OnDestroy {
   @Input() wish: Wish = new Wish(null, null, null, environment.cloudinary.defaultImage, null, null, null, null, null, null, 1);
   @Input() mode: 'edit' | 'create';
   wishForm: FormGroup;
   actionButtonText: string;
+  saving: boolean = false;
 
   constructor(
     public activeModal : NgbActiveModal,
@@ -42,18 +43,27 @@ export class WishPopupComponent implements OnInit {
   }
 
   saveWish () {
+    this.saving = true;
     let returnedWish: Wish = { ...this.wish, ...this.wishForm.value };
     this.activeModal.close(returnedWish);    
   }
 
   cancel () {
-    if (this.imageService.isTemporaryImage(this.wishForm.value.image)) {
-      this.imageService.deleteImage(this.wishForm.value.image).subscribe( result => {
-        if (result) console.info(`Image ${this.wishForm.value.image.publicId} is deleted from Cloudinary`);
-        else console.info(`Image ${this.wishForm.value.image.publicId} NOT deleted from Cloudinary`);
-      })
-    }
     this.activeModal.dismiss('Cancel');
   }
 
+  private deleteTempWishImage ( image : IWishImage ) {
+    if (this.imageService.isTemporaryImage(image)) {
+      this.imageService.deleteImage(image).subscribe(result => {
+        if (result) console.info(`Image ${image.publicId} is deleted from Cloudinary`);
+        else console.info(`Image ${image.publicId} NOT deleted from Cloudinary`);
+      })
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (!this.saving) {
+      this.deleteTempWishImage(this.wishForm.value.image);
+    }
+  }
 }
