@@ -5,9 +5,10 @@ import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular-5
 import * as Cloudinary from "cloudinary-core";
 import { environment } from 'src/environments/environment';
 import { ImageUploadComponent } from './components/image-upload/image-upload.component';
+import { ImageViewComponent } from './components/image-view/image-view.component';
 
 @NgModule({
-  declarations: [ImageUploadComponent],
+  declarations: [ImageUploadComponent, ImageViewComponent],
   imports: [
     CommonModule,
     CloudinaryModule.forRoot(Cloudinary, {
@@ -18,7 +19,8 @@ import { ImageUploadComponent } from './components/image-upload/image-upload.com
   ],
   exports: [
     CloudinaryModule,
-    ImageUploadComponent
+    ImageUploadComponent,
+    ImageViewComponent
   ]
 })
 export class ImagesModule { }
