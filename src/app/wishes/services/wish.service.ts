@@ -8,6 +8,7 @@ import { Person } from 'src/app/people/models/person.model';
 import { IPersonNameResponse, IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
 import { UserService } from 'src/app/users/service/user.service';
 import { IClosure, IGiftFeedback, IReservation, Wish, wishStatus } from '../models/wish.model';
+import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
 
 interface IWishlistResponse {
   _id: {
@@ -154,7 +155,8 @@ export class WishService {
   constructor(
     private http$ : HttpClient,
     private userService : UserService,
-    private peopleService : PeopleService
+    private peopleService : PeopleService,
+    private imageService: CloudinaryService
   ) { }
 
   public getWishlist(receiver: Person): Observable<Wish[]> { //https://stackoverflow.com/questions/65417031/rxjs-how-to-make-foreach-loop-wait-for-inner-observable
@@ -209,7 +211,8 @@ export class WishService {
       environment.apiUrl + 'wish/' + wish.id
     ).pipe(
       map(wishResponse => this.createBasicWishInstanceFromResponse(wishResponse, wish.receiver)),
-      tap( wish => this.deleteWishFromWishlist(wish) )
+      tap(wish => this.deleteWishFromWishlist(wish) ),
+      tap(wish => this.imageService.deleteImage(wish.image).subscribe())
     );
   }
 
@@ -243,21 +246,24 @@ export class WishService {
       wishCreatePayload 
     ).pipe(
       switchMap(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, newWish.receiver)),
-      tap(wish => this.addWishToWishlist(wish))
+      switchMap(wish => this.changeTemporaryImage(wish)),
+      tap(wish => this.addWishToWishlist(wish)),
+      switchMap(wish => this.update(wish))
     )
   }
 
   public update ( wish : Wish ) : Observable<Wish>{
-    let wishRequest : IWishRequest = {
-      ...wish, 
-      _id: wish.id,
-      receiver: wish.receiver,
-      image : {public_id: wish.image.publicId, version: +wish.image.version}};
-    return this.http$.put<IWishReservationResponse>(
-      environment.apiUrl + 'wish/' + wish.id,
-      wishRequest
-    )
-    .pipe(
+    return this.changeTemporaryImage(wish).pipe(
+      map(wish => { return {
+        ...wish,
+        _id: wish.id, 
+        receiver: wish.receiver,
+        image: { public_id: wish.image.publicId, version: +wish.image.version }
+      }}),
+      switchMap(wishRequest => this.http$.put<IWishReservationResponse>(
+        environment.apiUrl + 'wish/' + wish.id,
+        wishRequest
+      )),
       switchMap(updatedWish => this.convertWishReservationResponseToUpdatedWish(updatedWish, wish))
     );
   }
@@ -291,6 +297,19 @@ export class WishService {
     this._wishes$.next(filteredWishlist);
   }
 
+  private changeTemporaryImage (wish : Wish) : Observable<Wish>{
+    if (this.imageService.isTemporaryImage(wish.image) ) {
+      return this.imageService.renameImage(wish.image.publicId, wish.id).pipe(
+        map(newImage => {
+          wish.image = newImage;
+          return wish;
+        })
+      )
+    } else {
+      return of(wish);
+    }
+  }
+  
   private convertWishReservationResponseToUpdatedWish (wishReservationResponse: IWishReservationResponse, wish: Wish) : Observable<Wish>{
     return of(wishReservationResponse).pipe(
       // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist

@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Wish } from 'src/app/wishes/models/wish.model';
+import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
+import { UserService } from 'src/app/users/service/user.service';
+import { IWishImage, Wish } from 'src/app/wishes/models/wish.model';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -9,14 +11,17 @@ import { environment } from 'src/environments/environment';
   templateUrl: './wish-popup.component.html',
   styleUrls: ['./wish-popup.component.css']
 })
-export class WishPopupComponent implements OnInit {
+export class WishPopupComponent implements OnInit, OnDestroy {
   @Input() wish: Wish = new Wish(null, null, null, environment.cloudinary.defaultImage, null, null, null, null, null, null, 1);
   @Input() mode: 'edit' | 'create';
   wishForm: FormGroup;
   actionButtonText: string;
+  saving: boolean = false;
 
   constructor(
-    public activeModal : NgbActiveModal
+    public activeModal : NgbActiveModal,
+    public userService : UserService,
+    public imageService : CloudinaryService
   ){}
 
   ngOnInit(): void {
@@ -32,9 +37,33 @@ export class WishPopupComponent implements OnInit {
 
     this.actionButtonText = (this.mode === 'create') ? "Wens toevoegen" : "Wens opslaan";
   }
+
+  updateWishImage(newImage: IWishImage) {
+    this.wishForm.get("image").setValue(newImage);
+  }
+
   saveWish () {
+    this.saving = true;
     let returnedWish: Wish = { ...this.wish, ...this.wishForm.value };
     this.activeModal.close(returnedWish);    
   }
 
+  cancel () {
+    this.activeModal.dismiss('Cancel');
+  }
+
+  private deleteTempWishImage ( image : IWishImage ) {
+    if (this.imageService.isTemporaryImage(image)) {
+      this.imageService.deleteImage(image).subscribe(result => {
+        if (result) console.info(`Image ${image.publicId} is deleted from Cloudinary`);
+        else console.info(`Image ${image.publicId} NOT deleted from Cloudinary`);
+      })
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (!this.saving) {
+      this.deleteTempWishImage(this.wishForm.value.image);
+    }
+  }
 }

@@ -5,10 +5,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
 
-import { CloudinaryModule } from '@cloudinary/angular-5.x';
-import * as Cloudinary from "cloudinary-core";
-import { environment } from 'src/environments/environment';
-
 import { BrandLogoComponent } from './components/brand-logo/brand-logo.component';
 import { RouterModule } from '@angular/router';
 import { CursorPointerDirective } from './directives/cursor-pointer.directive';
@@ -17,6 +13,7 @@ import { BindQueryparamToInputDirective } from './directives/bind-queryparam-to-
 import { EmailInputComponent } from './components/form-components/email-input/email-input.component';
 import { PasswordInputComponent } from './components/form-components/password-input/password-input.component';
 import { PasswordCheckComponent } from './components/form-components/password-check/password-check.component';
+import { ImagesModule } from '../images/images.module';
 
 @NgModule({
   declarations: [
@@ -36,11 +33,7 @@ import { PasswordCheckComponent } from './components/form-components/password-ch
     RouterModule,
     HttpClientModule,
     ReactiveFormsModule,
-    CloudinaryModule.forRoot(Cloudinary, {
-      cloud_name: environment.cloudinary.sdk.cloud_name,
-      upload_preset: environment.cloudinary.sdk.uploadPreset,
-      secure:true
-    }),
+    ImagesModule
   ],
   exports: [
     CommonModule,
@@ -48,14 +41,14 @@ import { PasswordCheckComponent } from './components/form-components/password-ch
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
-    CloudinaryModule,
     BrandLogoComponent,
     CursorPointerDirective,
     CustomToastComponent,
     BindQueryparamToInputDirective,
     EmailInputComponent,
     PasswordInputComponent,
-    PasswordCheckComponent
+    PasswordCheckComponent,
+    ImagesModule
   ]
 })
 export class SharedModule { }

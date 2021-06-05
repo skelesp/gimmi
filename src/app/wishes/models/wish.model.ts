@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 export type wishStatus = 'Open' | 'Reserved' | 'Received' | 'Fulfilled';
 export type WishScenario = 'OPEN_WISH' | 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' | 'RESERVED' | 'RESERVED_BY_USER' | 'RESERVED_INCOGNITO_FOR_USER' | 'RECEIVED' | 'RECEIVED_RECEIVER' | 'RECEIVED_GIVEN_BY_USER' | 'FULFILLED' | 'FULFILLED_BY_USER';
 
-export interface ICloudinaryImage {
+export interface IWishImage {
     publicId: string,
     version: string
 }
@@ -47,7 +47,7 @@ export class Wish {
         public id: string,
         public title: string,
         public price: number,
-        public image: ICloudinaryImage,
+        public image: IWishImage,
         public url: string,
         public receiver: Person,
         public createdBy: Person,

@@ -30,20 +30,20 @@
                     </div>
                 </div>
                 <div class="form-group mt-2">
-                    <button class="btn btn-danger btn-sm" type="button">
-                        <i class="fa fa-camera mr-1" aria-hidden="true"></i> Kies afbeelding
-                    </button>
+                    <gimmi-image-upload 
+                        [tempPublicId_prefix]="userService.currentUser.id"
+                        (imageUploaded)="updateWishImage($event)"
+                    ></gimmi-image-upload>
                 </div>
             </div>
             <div class="col-5">
                 <div class="form-group">
                     <cl-image   class="img-fluid rounded float-right" 
-                                [public-id]='wish?.image?.publicId'
-                                [attr.version]='wish?.image?.version'>
+                                [public-id]="wishForm.get('image').value.publicId"
+                                [attr.version]="wishForm.get('image').value.version">
                                 <cl-transformation fetch-format="auto"></cl-transformation>
                     </cl-image>
                 </div>
-
             </div>
         </div>
         <div class="row">
@@ -77,6 +77,6 @@
     <div class="modal-footer">
         <button class="btn btn-danger" type="submit" [disabled]="wishForm.invalid"
             aria-describedby="saveHelpText">{{actionButtonText}}</button>
-        <button class="btn btn-outline-danger" type="button" (click)="activeModal.dismiss('Cancel')">Annuleer</button>
+        <button class="btn btn-outline-danger" type="button" (click)="cancel()">Annuleer</button>
     </div>
 </form>
