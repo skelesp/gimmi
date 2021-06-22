@@ -64,7 +64,7 @@ export class CloudinaryService {
    * @param {String} publicId The current publicId of the image
    */
   public deleteImage ( image : IWishImage) : Observable<boolean>{
-    if (image.publicId === environment.cloudinary.defaultImage.publicId) return of(false)
+    if (!image?.publicId || image?.publicId === environment.cloudinary.defaultImage.publicId) return of(false);
 
     return this.http$.delete<any>(
       environment.apiUrl + 'images/' + encodeURIComponent(image.publicId)
@@ -88,7 +88,7 @@ export class CloudinaryService {
   }
 
   public isTemporaryImage (image : IWishImage) {
-    return image.publicId.slice(-environment.cloudinary.temporaryImagePostfix.length) === environment.cloudinary.temporaryImagePostfix;
+    return image?.publicId.slice(-environment.cloudinary.temporaryImagePostfix.length) === environment.cloudinary.temporaryImagePostfix;
   }
 
   /*******************

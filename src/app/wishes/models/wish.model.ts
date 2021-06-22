@@ -33,6 +33,7 @@ export interface IClosure {
 }
 export class Wish {
     private _status: wishStatus;
+    public image: IWishImage;
     public reservation: IReservation;
     public giftFeedback: IGiftFeedback;
     public closure: IClosure;
@@ -47,7 +48,6 @@ export class Wish {
         public id: string,
         public title: string,
         public price: number,
-        public image: IWishImage,
         public url: string,
         public receiver: Person,
         public createdBy: Person,
@@ -56,7 +56,6 @@ export class Wish {
         public description: string,
         public amountWanted: number
     ) {
-        if (!image) this.image = environment.cloudinary.defaultImage;
         if (url) this.url = validateUrl(url);
     }
     
