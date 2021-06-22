@@ -109,7 +109,7 @@ interface IWishRequest {
   id: string;
   title: string;
   price: number;
-  image: {
+  image?: {
     public_id: string; 
     version: number
   };
@@ -137,7 +137,7 @@ interface IWishCreateRequest {
   receiver: string;
   createdBy: string;
   amountWanted: number;
-  image: {
+  image?: {
     public_id: string;
     version: number
   };
@@ -236,11 +236,13 @@ export class WishService {
       receiver: newWish.receiver.id,
       createdBy: newWish.createdBy.id,
       amountWanted: newWish.amountWanted,
-      image: {
-        public_id: newWish.image.publicId,
-        version: +newWish.image.version
-      }
     }
+
+    if (newWish.image) wishCreatePayload.image = {
+      public_id: newWish.image.publicId,
+      version: +newWish.image.version
+    }
+
     return this.http$.post<IWishResponse>(
       environment.apiUrl + "wish",
       wishCreatePayload 
@@ -254,12 +256,17 @@ export class WishService {
 
   public update ( wish : Wish ) : Observable<Wish>{
     return this.changeTemporaryImage(wish).pipe(
-      map(wish => { return {
-        ...wish,
-        _id: wish.id, 
-        receiver: wish.receiver,
-        image: { public_id: wish.image.publicId, version: +wish.image.version }
-      }}),
+      map(wish => { 
+        return <IWishRequest>{
+          ...wish,
+          _id: wish.id,
+          receiver: wish.receiver,
+          // Conditionally add property to object literal: https://2ality.com/2017/04/conditional-literal-entries.html#conditionally-adding-properties-inside-object-literals
+          // Needed because image interface foor API (with "public_id") is different from webapp (with "publicId")
+          // If interfaces are aligned, image can correctly be copied by ...wish above, so this code becomes obsolete.
+          ...(wish.image?.publicId ? { image: { public_id: wish.image?.publicId, version: +wish.image?.version }} : {})
+        }
+      }),
       switchMap(wishRequest => this.http$.put<IWishReservationResponse>(
         environment.apiUrl + 'wish/' + wish.id,
         wishRequest
@@ -298,7 +305,7 @@ export class WishService {
   }
 
   private changeTemporaryImage (wish : Wish) : Observable<Wish>{
-    if (this.imageService.isTemporaryImage(wish.image) ) {
+    if (wish.image && this.imageService.isTemporaryImage(wish.image) ) {
       return this.imageService.renameImage(wish.image.publicId, wish.id).pipe(
         map(newImage => {
           wish.image = newImage;
@@ -413,7 +420,6 @@ export class WishService {
       wishResponse._id,
       wishResponse.title,
       wishResponse.price,
-      {publicId: wishResponse.image.public_id, version: wishResponse.image.version.toString()},
       wishResponse.url,
       receiver,
       new Person(wishResponse.createdBy._id, wishResponse.createdBy.firstName, wishResponse.createdBy.lastName),
@@ -422,6 +428,8 @@ export class WishService {
       wishResponse.description,
       wishResponse.amountWanted
     );
+    
+    if (wishResponse.image?.public_id) wish.image = { publicId: wishResponse.image.public_id, version: wishResponse.image.version.toString() };
 
     if (wishResponse.giftFeedback) wish.giftFeedback = {
       satisfaction: wishResponse.giftFeedback.satisfaction,

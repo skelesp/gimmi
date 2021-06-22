@@ -4,7 +4,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
 import { UserService } from 'src/app/users/service/user.service';
 import { IWishImage, Wish } from 'src/app/wishes/models/wish.model';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'gimmi-wish-popup',
@@ -12,7 +11,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./wish-popup.component.css']
 })
 export class WishPopupComponent implements OnInit, OnDestroy {
-  @Input() wish: Wish = new Wish(null, null, null, environment.cloudinary.defaultImage, null, null, null, null, null, null, 1);
+  @Input() wish: Wish = new Wish(null, null, null, null, null, null, null, null, null, 1);
   @Input() mode: 'edit' | 'create';
   wishForm: FormGroup;
   actionButtonText: string;
@@ -62,7 +61,7 @@ export class WishPopupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (!this.saving) {
+    if (!this.saving && this.wishForm.value.image) {
       this.deleteTempWishImage(this.wishForm.value.image);
     }
   }
