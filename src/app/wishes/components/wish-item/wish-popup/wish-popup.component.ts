@@ -12,9 +12,10 @@ import { IWishImage, Wish } from 'src/app/wishes/models/wish.model';
 })
 export class WishPopupComponent implements OnInit, OnDestroy {
   @Input() wish: Wish = new Wish(null, null, null, null, null, null, null, null, null, 1);
-  @Input() mode: 'edit' | 'create';
+  @Input() mode: 'edit' | 'create' | 'copy';
   wishForm: FormGroup;
   actionButtonText: string;
+  popupTitle: string;
   saving: boolean = false;
 
   constructor(
@@ -33,8 +34,29 @@ export class WishPopupComponent implements OnInit, OnDestroy {
       'size': new FormControl(this.wish?.size),
       'description': new FormControl(this.wish?.description)
     });
+    
+    this.setSaveButtonText();
+  }
 
-    this.actionButtonText = (this.mode === 'create') ? "Wens toevoegen" : "Wens opslaan";
+  private setSaveButtonText () {
+    switch (this.mode) {
+      case 'create':
+        this.actionButtonText = "Wens toevoegen";
+        this.popupTitle = "Voeg een wens toe";
+        break;
+      case 'edit':
+        this.actionButtonText = "Wens aanpassen";
+        this.popupTitle = "Pas deze wens aan";
+        break;
+      case 'copy':
+        this.actionButtonText = "Wens kopiëren";
+        this.popupTitle = "Kopieer deze wens op je lijst";
+        break;
+      default:
+        this.actionButtonText = "Wens opslaan";
+        this.popupTitle = "Pas deze wens aan";
+        break;
+    }
   }
 
   updateWishImage(newImage: IWishImage) {

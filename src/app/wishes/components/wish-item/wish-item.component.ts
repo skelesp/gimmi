@@ -12,6 +12,11 @@ import { ActionListItemConfig } from './action-list/action-list-item/action-list
 import { WishDeleteComponent } from '../wish-delete/wish-delete.component';
 import { WishPopupComponent } from './wish-popup/wish-popup.component';
 import { WishService } from '../../services/wish.service';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { Person } from 'src/app/people/models/person.model';
+import { UserService } from 'src/app/users/service/user.service';
+import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   template: '',
@@ -88,7 +93,10 @@ export class WishItemComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private wishService: WishService
+    private wishService: WishService,
+    private notificationService: NotificationService,
+    private userService: UserService,
+    private imageService: CloudinaryService
   ) { }
 
   ngOnInit(): void {
@@ -135,7 +143,36 @@ export class WishItemComponent implements OnInit {
   }
 
   copy() {
-    window.alert(`Copy wish: ${this.wish.title}`);
+    this.imageService.uploadImage(
+      this.imageService.generateCloudinaryUrl(this.wish.image),
+      this.imageService.generateRandomPublicId(this.wish.id, environment.cloudinary.temporaryImagePostfix)
+    ).subscribe(image => {
+      let copyPopup;
+
+      copyPopup = this.modalService.open(WishPopupComponent);
+      copyPopup.componentInstance.mode = 'copy';
+      copyPopup.componentInstance.wish = { ...this.wish, description: "", image };
+
+      (copyPopup.result as Promise<Wish>).then(wish => {
+        let currentUser = new Person(
+          this.userService.currentUser.id,
+          this.userService.currentUser.firstName,
+          this.userService.currentUser.lastName
+        );
+        wish.createdBy = currentUser;
+        wish.receiver = currentUser;
+        wish.copyOf = wish.id;
+        wish.id = undefined;
+
+        this.wishService.create(wish).subscribe(wish =>
+          this.notificationService.showNotification(
+            `De wens '${wish.title}' werd toegevoegd aan je lijst.`,
+            'success',
+            'Wens gekopieerd'
+          )
+        );
+      }).catch(err => console.warn('popup closed:', err));
+    }); 
   }
 
   delete() {
