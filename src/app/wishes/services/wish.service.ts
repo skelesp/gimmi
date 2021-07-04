@@ -139,8 +139,9 @@ interface IWishCreateRequest {
   amountWanted: number;
   image?: {
     public_id: string;
-    version: number
+    version: number;
   };
+  copyOf?: string;
 }
 
 type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
@@ -202,10 +203,6 @@ export class WishService {
     );
   }
 
-  public copy () {
-    alert("Copy isn't implemented yet");
-  }
-
   public delete (wish: Wish) : Observable<Wish>{
     return this.http$.delete<IWishResponse>(
       environment.apiUrl + 'wish/' + wish.id
@@ -242,6 +239,8 @@ export class WishService {
       public_id: newWish.image.publicId,
       version: +newWish.image.version
     }
+
+    if (newWish.copyOf) wishCreatePayload.copyOf = newWish.copyOf;
 
     return this.http$.post<IWishResponse>(
       environment.apiUrl + "wish",

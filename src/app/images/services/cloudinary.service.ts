@@ -109,7 +109,7 @@ export class CloudinaryService {
    * @param {String} public_id
    * @param {String} version
    */
-  generateCloudinaryUrl ( image: IWishImage ) : string {
+ public generateCloudinaryUrl ( image: IWishImage ) : string {
     return "https://res.cloudinary.com/" + environment.cloudinary.cloud_name + "/image/upload/v" + image.version + "/" + image.publicId
   }
 
