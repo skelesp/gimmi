@@ -51,12 +51,12 @@ export class CloudinaryService {
    * @return {Error} Return an image if the upload failed
    */
   public uploadImage (imageUrl: string, publicId: string) : Observable<IWishImage>{
-    return this.http$.post<{ public_id: string, version: string }>(
+    return imageUrl ? this.http$.post<{ public_id: string, version: string }>(
       environment.apiUrl + 'images',
       {public_id: publicId, image: imageUrl}
     ).pipe(
       map(newImage => ({ publicId: newImage.public_id, version: newImage.version}) )
-    )
+    ) : of(null);
   }
 
   /**
@@ -110,7 +110,7 @@ export class CloudinaryService {
    * @param {String} version
    */
  public generateCloudinaryUrl ( image: IWishImage ) : string {
-    return "https://res.cloudinary.com/" + environment.cloudinary.cloud_name + "/image/upload/v" + image.version + "/" + image.publicId
+    return image ? "https://res.cloudinary.com/" + environment.cloudinary.cloud_name + "/image/upload/v" + image.version + "/" + image.publicId : null;
   }
 
   public isTemporaryImage (image : IWishImage) {
