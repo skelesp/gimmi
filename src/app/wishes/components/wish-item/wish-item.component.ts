@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Wish, WishScenario } from '../../models/wish.model';
 import { faBan, faGift, faStar, faLightbulb, faCartArrowDown, faThumbsUp, faTrashAlt, faGlobeEurope } from '@fortawesome/free-solid-svg-icons';
 import { faClone, faComment, faEdit } from '@fortawesome/free-regular-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { switchMap } from 'rxjs/operators';
+
+import { IGiftFeedback, Wish, WishScenario } from '../../models/wish.model';
 import { WishReservationComponent } from '../wish-reservation/wish-reservation.component';
 import { ChangeWishReservationComponent } from '../wish-reservation/change-wish-reservation/change-wish-reservation.component';
 import { GiftFeedbackComponent } from '../gift-feedback/gift-feedback.component';
@@ -16,6 +18,8 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { Person } from 'src/app/people/models/person.model';
 import { UserService } from 'src/app/users/service/user.service';
 import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
+import { CommunicationService } from 'src/app/shared/services/communication.service';
+import { PeopleService } from 'src/app/people/service/people.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -96,7 +100,9 @@ export class WishItemComponent implements OnInit {
     private wishService: WishService,
     private notificationService: NotificationService,
     private userService: UserService,
-    private imageService: CloudinaryService
+    private imageService: CloudinaryService,
+    private peopleService: PeopleService,
+    private communicationService: CommunicationService
   ) { }
 
   ngOnInit(): void {
@@ -128,6 +134,28 @@ export class WishItemComponent implements OnInit {
   giveFeedback() {
     let giftFeedbackPopup = this.modalService.open(GiftFeedbackComponent);
     giftFeedbackPopup.componentInstance.wish = this.wish;
+
+    (giftFeedbackPopup.result as Promise<IGiftFeedback>).then( giftFeedback => {
+      this.wishService.addGiftFeedback(this.wish, giftFeedback)
+        .pipe(switchMap(wish => this.wishService.close(wish)))
+        .subscribe(wish => {
+          if (wish.giftFeedback.putBackOnList) this.copy();
+          if (wish.giftFeedback.message) {
+            this.peopleService.getEmailById(wish.reservation.reservedBy.id).subscribe(email => {
+              this.communicationService.sendMail({
+                to: email,
+                subject: `[GIMMI] ${wish.receiver.fullName} bedankt je voor je cadeau!!`,
+                html: `${wish.reservation.reservedBy.firstName} <br/><br/>
+                      Je hebt onlangs op Gimmi het cadeau '${wish.title}' gereserveerd voor ${wish.receiver.fullName}. <br/>
+                      Onlangs heb je dit cadeau afgegeven. Daarnet heeft ${wish.receiver.firstName} je een dankboodschap nagelaten:<br/><br/>
+                      <em>${wish.giftFeedback.message}</em><br/><br/><br/>
+                      Bedankt om Gimmi te gebruiken en hopelijk tot snel voor een nieuwe succesvolle cadeauzoektocht!`
+              });
+            })
+          }
+        }
+        );
+    });
   }
   
   edit () {
@@ -135,7 +163,7 @@ export class WishItemComponent implements OnInit {
     editPopup.componentInstance.wish = this.wish;
     editPopup.componentInstance.mode = 'edit';
 
-    editPopup.result.then( wish => {
+    (editPopup.result as Promise<Wish>).then( wish => {
       this.wishService.update(wish).subscribe(wish => {
         console.info('Wish updated:', wish);
       });
