@@ -2,8 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
+import { User } from 'src/app/users/models/user.model';
 import { UserService } from 'src/app/users/service/user.service';
 import { IWishImage, Wish } from 'src/app/wishes/models/wish.model';
+import { WishService } from 'src/app/wishes/services/wish.service';
 
 @Component({
   selector: 'gimmi-wish-popup',
@@ -12,15 +14,19 @@ import { IWishImage, Wish } from 'src/app/wishes/models/wish.model';
 })
 export class WishPopupComponent implements OnInit, OnDestroy {
   @Input() wish: Wish = new Wish(null, null, null, null, null, null, null, null, null, 1);
-  @Input() mode: 'edit' | 'create';
+  @Input() mode: 'edit' | 'create' | 'copy';
   wishForm: FormGroup;
   actionButtonText: string;
+  popupTitle: string;
   saving: boolean = false;
+  showWarningExistingCopy: boolean = false;
+  currentUser: User;
 
   constructor(
     public activeModal : NgbActiveModal,
     public userService : UserService,
-    public imageService : CloudinaryService
+    public imageService : CloudinaryService,
+    public wishService : WishService
   ){}
 
   ngOnInit(): void {
@@ -33,8 +39,39 @@ export class WishPopupComponent implements OnInit, OnDestroy {
       'size': new FormControl(this.wish?.size),
       'description': new FormControl(this.wish?.description)
     });
+    
+    this.setSaveButtonText();
 
-    this.actionButtonText = (this.mode === 'create') ? "Wens toevoegen" : "Wens opslaan";
+    this.currentUser = this.userService.currentUser;
+
+    if (this.mode === 'copy') {
+      this.wishService.getCopiesOnListOf(this.wish.receiver).subscribe(receiversCopies => {
+        if ( receiversCopies.find( w => w.copyOf === this.wish.copyOf ) ) {
+          this.showWarningExistingCopy = true;
+        }
+      })
+    }
+  }
+
+  private setSaveButtonText () {
+    switch (this.mode) {
+      case 'create':
+        this.actionButtonText = "Wens toevoegen";
+        this.popupTitle = "Voeg een wens toe";
+        break;
+      case 'edit':
+        this.actionButtonText = "Wens aanpassen";
+        this.popupTitle = "Pas deze wens aan";
+        break;
+      case 'copy':
+        this.actionButtonText = "Wens kopiëren";
+        this.popupTitle = "Kopieer deze wens op je lijst";
+        break;
+      default:
+        this.actionButtonText = "Wens opslaan";
+        this.popupTitle = "Pas deze wens aan";
+        break;
+    }
   }
 
   updateWishImage(newImage: IWishImage) {

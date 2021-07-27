@@ -139,8 +139,9 @@ interface IWishCreateRequest {
   amountWanted: number;
   image?: {
     public_id: string;
-    version: number
+    version: number;
   };
+  copyOf?: string;
 }
 
 type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
@@ -151,6 +152,8 @@ type wishStatusInResponse = 'Open' | 'Reserved' | 'Received' | 'Closed';
 export class WishService {
   private _wishes$: BehaviorSubject<Wish[]> = new BehaviorSubject<Wish[]>([]);
   public readonly wishes: Observable<Wish[]> = this._wishes$.asObservable();
+  private _currentReceiver$ : BehaviorSubject<Person> = new BehaviorSubject<Person>(null);
+  public readonly currentReceiver: Observable<Person> = this._currentReceiver$.asObservable();
 
   constructor(
     private http$ : HttpClient,
@@ -163,6 +166,14 @@ export class WishService {
     return this.http$.get<IWishlistResponse[]>(
       environment.apiUrl + 'wishlist/' + receiver.id
     ).pipe(
+      tap(wishlistResponse => {
+        let receiver : Person = new Person(
+          wishlistResponse[0]._id.receiver._id,
+          wishlistResponse[0]._id.receiver.firstName,
+          wishlistResponse[0]._id.receiver.lastName
+        );
+        this._currentReceiver$.next(receiver);
+      }),
       // Create wish instances from each wish in API response and save reservation / closure for later use and retrieve reservedBy Person object
       switchMap(wishlistResponse => forkJoin(
         wishlistResponse[0].wishes.map(wishResponse => this.convertWishResponseToFullWishInstance(wishResponse, receiver))
@@ -202,10 +213,6 @@ export class WishService {
     );
   }
 
-  public copy () {
-    alert("Copy isn't implemented yet");
-  }
-
   public delete (wish: Wish) : Observable<Wish>{
     return this.http$.delete<IWishResponse>(
       environment.apiUrl + 'wish/' + wish.id
@@ -242,6 +249,8 @@ export class WishService {
       public_id: newWish.image.publicId,
       version: +newWish.image.version
     }
+
+    if (newWish.copyOf) wishCreatePayload.copyOf = newWish.copyOf;
 
     return this.http$.post<IWishResponse>(
       environment.apiUrl + "wish",
@@ -289,11 +298,23 @@ export class WishService {
     )
   }
 
+  public getCopiesOnListOf(receiver: Person) : Observable<Wish[]> {
+    return receiver ? 
+      this.http$.get<Wish[]>(
+        environment.apiUrl + 'wishlist/' + receiver.id + '/copies'
+      ).pipe(
+        tap(wishes => console.log(wishes))
+      )
+    : of([]);
+  }
+
   /* PRIVATE methods */
   private addWishToWishlist ( newWish : Wish) : void {
-    let wishlist = this._wishes$.value;
-    wishlist.unshift(newWish);
-    this._wishes$.next(wishlist);
+    if (this._currentReceiver$.value.id === newWish.receiver.id) {
+      let wishlist = this._wishes$.value;
+      wishlist.unshift(newWish);
+      this._wishes$.next(wishlist);
+    }
   }
 
   private deleteWishFromWishlist (deletedWish : Wish) {

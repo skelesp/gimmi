@@ -43,6 +43,23 @@ export class CloudinaryService {
   }
 
   /**
+   * Upload a cloudinary image
+   * @function uploadImage
+   * @param {String} publicId The wanted publicId of the image (best practice: equal to wish ID)
+   * @param {String} image A url or image string
+   * @return {Image} Return an image if the upload succeeded
+   * @return {Error} Return an image if the upload failed
+   */
+  public uploadImage (imageUrl: string, publicId: string) : Observable<IWishImage>{
+    return imageUrl ? this.http$.post<{ public_id: string, version: string }>(
+      environment.apiUrl + 'images',
+      {public_id: publicId, image: imageUrl}
+    ).pipe(
+      map(newImage => ({ publicId: newImage.public_id, version: newImage.version}) )
+    ) : of(null);
+  }
+
+  /**
    * Rename a cloudinary imagee
    * @function renameImage
    * @param {String} publicId The current publicId of the image
@@ -85,6 +102,15 @@ export class CloudinaryService {
   public generateRandomPublicId (prefix, postfix) {
     var randomNumber : number = Math.floor((Math.random() * 1000000) + 1);
     return `${prefix}-${randomNumber}${postfix}`
+  }
+
+  /** 
+   * Generate a cloudinary URL based on public_id
+   * @param {String} public_id
+   * @param {String} version
+   */
+ public generateCloudinaryUrl ( image: IWishImage ) : string {
+    return image ? "https://res.cloudinary.com/" + environment.cloudinary.cloud_name + "/image/upload/v" + image.version + "/" + image.publicId : null;
   }
 
   public isTemporaryImage (image : IWishImage) {
