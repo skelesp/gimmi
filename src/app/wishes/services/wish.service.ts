@@ -298,6 +298,16 @@ export class WishService {
     )
   }
 
+  public getCopiesOnListOf(receiver: Person) : Observable<Wish[]> {
+    return receiver ? 
+      this.http$.get<Wish[]>(
+        environment.apiUrl + 'wishlist/' + receiver.id + '/copies'
+      ).pipe(
+        tap(wishes => console.log(wishes))
+      )
+    : of([]);
+  }
+
   /* PRIVATE methods */
   private addWishToWishlist ( newWish : Wish) : void {
     if (this._currentReceiver$.value.id === newWish.receiver.id) {

@@ -5,6 +5,10 @@
     </button>
 </div>
 
+<ngb-alert type="warning" *ngIf="showWarningExistingCopy" (close)="showWarningExistingCopy = false">
+    <p>Opgelet, er staat al een kopie van deze wens op je lijst. (Mogelijks ben je dubbels aan het toevoegen)</p>
+</ngb-alert>
+
 <form [formGroup]="wishForm" (ngSubmit)="saveWish()">
     <div class="modal-body container">
         <div class="row">
@@ -31,7 +35,7 @@
                 </div>
                 <div class="form-group mt-2">
                     <gimmi-image-upload 
-                        [tempPublicId_prefix]="userService.currentUser.id"
+                        [tempPublicId_prefix]="currentUser.id"
                         (imageUploaded)="updateWishImage($event)"
                     ></gimmi-image-upload>
                 </div>

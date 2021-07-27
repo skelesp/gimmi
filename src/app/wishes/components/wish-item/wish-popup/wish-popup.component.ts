@@ -2,8 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
+import { User } from 'src/app/users/models/user.model';
 import { UserService } from 'src/app/users/service/user.service';
 import { IWishImage, Wish } from 'src/app/wishes/models/wish.model';
+import { WishService } from 'src/app/wishes/services/wish.service';
 
 @Component({
   selector: 'gimmi-wish-popup',
@@ -17,11 +19,14 @@ export class WishPopupComponent implements OnInit, OnDestroy {
   actionButtonText: string;
   popupTitle: string;
   saving: boolean = false;
+  showWarningExistingCopy: boolean = false;
+  currentUser: User;
 
   constructor(
     public activeModal : NgbActiveModal,
     public userService : UserService,
-    public imageService : CloudinaryService
+    public imageService : CloudinaryService,
+    public wishService : WishService
   ){}
 
   ngOnInit(): void {
@@ -36,6 +41,16 @@ export class WishPopupComponent implements OnInit, OnDestroy {
     });
     
     this.setSaveButtonText();
+
+    this.currentUser = this.userService.currentUser;
+
+    if (this.mode === 'copy') {
+      this.wishService.getCopiesOnListOf(this.wish.receiver).subscribe(receiversCopies => {
+        if ( receiversCopies.find( w => w.copyOf === this.wish.copyOf ) ) {
+          this.showWarningExistingCopy = true;
+        }
+      })
+    }
   }
 
   private setSaveButtonText () {

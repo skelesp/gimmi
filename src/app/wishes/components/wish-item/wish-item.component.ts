@@ -176,22 +176,25 @@ export class WishItemComponent implements OnInit {
       this.imageService.generateRandomPublicId(this.wish.id, environment.cloudinary.temporaryImagePostfix)
     ).subscribe(image => {
       let copyPopup;
+      let currentUser = new Person(
+        this.userService.currentUser.id,
+        this.userService.currentUser.firstName,
+        this.userService.currentUser.lastName
+      );
 
       copyPopup = this.modalService.open(WishPopupComponent);
       copyPopup.componentInstance.mode = 'copy';
-      copyPopup.componentInstance.wish = { ...this.wish, description: "", image };
+      copyPopup.componentInstance.wish = { 
+        ...this.wish, 
+        id: undefined, 
+        copyOf: this.wish.id, 
+        description: "", 
+        image,
+        createdBy: currentUser,
+        receiver: currentUser
+      };
 
       (copyPopup.result as Promise<Wish>).then(wish => {
-        let currentUser = new Person(
-          this.userService.currentUser.id,
-          this.userService.currentUser.firstName,
-          this.userService.currentUser.lastName
-        );
-        wish.createdBy = currentUser;
-        wish.receiver = currentUser;
-        wish.copyOf = wish.id;
-        wish.id = undefined;
-
         this.wishService.create(wish).subscribe(wish =>
           this.notificationService.showNotification(
             `De wens '${wish.title}' werd toegevoegd aan je lijst.`,
