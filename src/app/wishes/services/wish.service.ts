@@ -48,7 +48,7 @@ interface IWishResponse {
   closure?: IClosureResponse;
 }
 
-interface IWishReservationResponse {
+interface IWishResponseWithFullCreatedBy {
   receiver: string;
   _id: string;
   title: string;
@@ -63,6 +63,12 @@ interface IWishReservationResponse {
   size?: string;
   description?: string;
   amountWanted: number;
+  reservation?: any;
+  giftFeedback?: any;
+  closure?: any;
+}
+
+interface IWishReservationResponse extends IWishResponseWithFullCreatedBy {
   reservation: {
     reservedBy: IPersonNameResponse,
     amount: number;
@@ -306,6 +312,18 @@ export class WishService {
         tap(wishes => console.log(wishes))
       )
     : of([]);
+  } 
+
+  public getWishById ( wishID: string ) : Observable<Wish> {
+    return wishID ? 
+      this.http$.get<IWishResponseWithFullCreatedBy[]>(environment.apiUrl + 'wish/' + wishID)
+          .pipe( 
+            map(wishResponse => wishResponse[0]),
+            switchMap(wishResponse => this.peopleService.getPersonById(wishResponse.receiver).pipe(
+              switchMap(personResponse => this.convertWishResponseToFullWishInstance(wishResponse, personResponse) )
+              )),
+          )          
+      : of(null);
   }
 
   /* PRIVATE methods */
@@ -338,7 +356,7 @@ export class WishService {
     }
   }
   
-  private convertWishReservationResponseToUpdatedWish (wishReservationResponse: IWishReservationResponse, wish: Wish) : Observable<Wish>{
+  private convertWishReservationResponseToUpdatedWish (wishReservationResponse: IWishReservationResponse | IWishResponseWithFullCreatedBy, wish: Wish) : Observable<Wish>{
     return of(wishReservationResponse).pipe(
       // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist
       map(wishResponse => {
@@ -353,7 +371,7 @@ export class WishService {
     )
   }
 
-  private convertWishResponseToFullWishInstance(wishResponse : IWishResponse, receiver : Person) : Observable<Wish>{
+  private convertWishResponseToFullWishInstance(wishResponse : IWishResponse | IWishResponseWithFullCreatedBy, receiver : Person) : Observable<Wish>{
     // Create wish without reservation and closure
     let wish = this.createBasicWishInstanceFromResponse(wishResponse, receiver);
     // Fetch Person corresponding to closedBy and reservedBy objectID's
