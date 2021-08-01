@@ -16,7 +16,7 @@ import { CommunicationService } from 'src/app/shared/services/communication.serv
   styleUrls: ['./wish-page.component.css']
 })
 export class WishPageComponent extends WishItemComponent implements OnInit {
-
+  wishID: string;
   constructor(
     private modalSrv: NgbModal,
     private wishSrv: WishService,
@@ -39,7 +39,7 @@ export class WishPageComponent extends WishItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.route.data.subscribe( data => { this.wish = data.wish })
   }
 
 }
