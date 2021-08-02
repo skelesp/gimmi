@@ -46,6 +46,8 @@ interface IWishResponse {
     putBackOnList: boolean;
   },
   closure?: IClosureResponse;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface IWishResponseWithFullCreatedBy {
@@ -66,6 +68,8 @@ interface IWishResponseWithFullCreatedBy {
   reservation?: any;
   giftFeedback?: any;
   closure?: any;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface IWishReservationResponse extends IWishResponseWithFullCreatedBy {
@@ -467,7 +471,8 @@ export class WishService {
       wishResponse.description,
       wishResponse.amountWanted
     );
-    
+    wish.createdAt = wishResponse.createdAt;
+
     if (wishResponse.image?.public_id) wish.image = { publicId: wishResponse.image.public_id, version: wishResponse.image.version.toString() };
 
     if (wishResponse.giftFeedback) wish.giftFeedback = {

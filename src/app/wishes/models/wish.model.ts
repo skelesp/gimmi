@@ -38,6 +38,7 @@ export class Wish {
     public giftFeedback: IGiftFeedback;
     public closure: IClosure;
     public copyOf: string;
+    public createdAt: Date;
     private _userIs : {[key: string]:boolean} = {
         receiver: null,
         creator: null,
