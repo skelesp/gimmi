@@ -1,6 +1,6 @@
 
 <div class="container mt-2">
-    <a ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})" class="badge badge-secondary mb-2 lead"> 
+    <a [routerLink]="['/people', wish.receiver.id]" class="badge badge-secondary mb-2 lead"> 
         <i class="fa fa-arrow-left" aria-hidden="true"></i> Terug naar lijst</a>
     <div class="jumbotron pt-3 pb-1 mb-1">
         <div class="row">
@@ -46,12 +46,13 @@
                     <span class="fa fa-user mr-3" aria-hidden="true"></span>
                     Idee van: {{wish.createdBy.fullName}}
                 </li>
-                <li class="list-group-item" ng-show="wishInfoCtrl.wish.url">
+                <li class="list-group-item" [hidden]="!wish.url">
                     <a href="{{wish.url}}" target="_blank">
                         <span class="fa fa-external-link mr-2" aria-hidden="true"></span>
                         Externe website</a>
                 </li>
                 <li class="list-group-item"
+                    [hidden]="!wish.reservation"
                     ng-show="wishInfoCtrl.wish.reservation && !wishInfoCtrl.isIncognitoReservation(wishInfoCtrl.wish)">
                     <span class="fa fa-gift mr-3" aria-hidden="true"></span>Gereserveerd door:
                     {{wish.reservation?.reservedBy.fullName}}
@@ -60,16 +61,16 @@
                     ng-show="!wishInfoCtrl.wish.reservation || wishInfoCtrl.isIncognitoReservation(wishInfoCtrl.wish)">
                     <span class="fa fa-gift mr-3" aria-hidden="true"></span>Nog niet gereserveerd
                 </li>
-                <li class="list-group-item" ng-show="wishInfoCtrl.wish.color">
+                <li class="list-group-item" [hidden]="!wish.color">
                     <span class="fa fa-paint-brush mr-2" aria-hidden="true"></span>{{wish.color}}
                 </li>
-                <li class="list-group-item" ng-show="wishInfoCtrl.wish.size">
+                <li class="list-group-item" [hidden]="!wish.size">
                     <span class="fa fa-expand mr-2" aria-hidden="true"></span>{{wish.size}}
                 </li>
-                <li class="list-group-item" ng-show="wishInfoCtrl.wish.description">
+                <li class="list-group-item" [hidden]="!wish.description">
                     <span class="fa fa-commenting-o mr-2" aria-hidden="true"></span>{{wish.description}}
                 </li>
-                <li class="list-group-item" ng-show="wishInfoCtrl.wish.closure">
+                <li class="list-group-item" [hidden]="!wish.closure">
                     <span class="fa fa-check mr-2" aria-hidden="true"></span>Afgesloten op:
                     {{wish.closure?.closedOn | date: 'dd / MM / \'yy'}}
                 </li>
