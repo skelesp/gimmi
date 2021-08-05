@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { WishItemComponent } from '../wish-item.component';
-
+import { ActivatedRoute } from '@angular/router';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faCalendarPlus, faCheck, faComment, faExpand, faExternalLinkAlt, faGift, faListAlt, faPaintBrush, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { WishItemComponent } from '../wish-item.component';
 import { WishService } from 'src/app/wishes/services/wish.service';
 import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -17,6 +19,16 @@ import { CommunicationService } from 'src/app/shared/services/communication.serv
 })
 export class WishPageComponent extends WishItemComponent implements OnInit {
   wishID: string;
+  listIcon: IconDefinition = faListAlt;
+  calendarIcon: IconDefinition = faCalendarPlus;
+  userIcon: IconDefinition = faUser;
+  linkIcon: IconDefinition = faExternalLinkAlt;
+  giftIcon: IconDefinition = faGift;
+  colorIcon: IconDefinition = faPaintBrush;
+  sizeIcon: IconDefinition = faExpand;
+  textIcon: IconDefinition = faComment;
+  doneIcon: IconDefinition = faCheck;
+
   constructor(
     private modalSrv: NgbModal,
     private wishSrv: WishService,

@@ -8,16 +8,14 @@
                 <h2>{{wish.title}}</h2>
                 <h6>voor {{wish.receiver.fullName}}
                     <a class="badge badge-light text-dark p-0 ml-2"
-                        ui-sref="gimmi.wishlist({receiverID: wishInfoCtrl.receiverID})" uib-tooltip="Terug naar lijst"
-                        tooltip-placement="top-left" tooltip-class="customTooltip"><i class="fa fa-list-alt"
-                            aria-hidden="true"></i></a>
+                        [routerLink]="['/people', wish.receiver.id]" uib-tooltip="Terug naar lijst"
+                        tooltip-placement="top-left" tooltip-class="customTooltip"><fa-icon [icon]="listIcon"></fa-icon></a>
                 </h6>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <h3 class="float-right"><span class="badge badge-pill badge-warning">{{wish.price |
-                        currency : "EUR" : 'symbol' : '1.2-2'}}</span></h3>
+                <h3 class="float-right"><span class="badge badge-pill badge-warning">{{wish.price | currency : "EUR" : 'symbol' : '1.2-2'}}</span></h3>
             </div>
         </div>
     </div>
@@ -39,39 +37,38 @@
         <div class="col-md-4">
             <ul class="list-group my-2">
                 <li class="list-group-item">
-                    <span class="fa fa-calendar-plus-o mr-2" aria-hidden="true"></span>
+                    <fa-icon [icon]="calendarIcon" class="mr-2"></fa-icon>
                     Toegevoegd op: {{wish.createdAt | date: 'dd/MM/\'yy' }}
                 </li>
                 <li class="list-group-item">
-                    <span class="fa fa-user mr-3" aria-hidden="true"></span>
+                    <fa-icon [icon]="userIcon" class="mr-2"></fa-icon>
                     Idee van: {{wish.createdBy.fullName}}
                 </li>
                 <li class="list-group-item" [hidden]="!wish.url">
-                    <a href="{{wish.url}}" target="_blank">
-                        <span class="fa fa-external-link mr-2" aria-hidden="true"></span>
-                        Externe website</a>
+                    <fa-icon [icon]="linkIcon" class="mr-2"></fa-icon>
+                    <a href="{{wish.url}}" target="_blank">Externe website</a>
                 </li>
                 <li class="list-group-item"
                     [hidden]="!wish.reservation"
                     ng-show="wishInfoCtrl.wish.reservation && !wishInfoCtrl.isIncognitoReservation(wishInfoCtrl.wish)">
-                    <span class="fa fa-gift mr-3" aria-hidden="true"></span>Gereserveerd door:
+                    <fa-icon [icon]="linkIcon" class="mr-2"></fa-icon>Gereserveerd door:
                     {{wish.reservation?.reservedBy.fullName}}
                 </li>
                 <li class="list-group-item"
                     ng-show="!wishInfoCtrl.wish.reservation || wishInfoCtrl.isIncognitoReservation(wishInfoCtrl.wish)">
-                    <span class="fa fa-gift mr-3" aria-hidden="true"></span>Nog niet gereserveerd
+                    <fa-icon [icon]="giftIcon" class="mr-2"></fa-icon>Nog niet gereserveerd
                 </li>
                 <li class="list-group-item" [hidden]="!wish.color">
-                    <span class="fa fa-paint-brush mr-2" aria-hidden="true"></span>{{wish.color}}
+                    <fa-icon [icon]="colorIcon" class="mr-2"></fa-icon>{{wish.color}}
                 </li>
                 <li class="list-group-item" [hidden]="!wish.size">
-                    <span class="fa fa-expand mr-2" aria-hidden="true"></span>{{wish.size}}
+                    <fa-icon [icon]="sizeIcon" class="mr-2"></fa-icon>{{wish.size}}
                 </li>
                 <li class="list-group-item" [hidden]="!wish.description">
-                    <span class="fa fa-commenting-o mr-2" aria-hidden="true"></span>{{wish.description}}
+                    <fa-icon [icon]="textIcon" class="mr-2"></fa-icon>{{wish.description}}
                 </li>
                 <li class="list-group-item" [hidden]="!wish.closure">
-                    <span class="fa fa-check mr-2" aria-hidden="true"></span>Afgesloten op:
+                    <fa-icon [icon]="doneIcon" class="mr-2"></fa-icon>Afgesloten op:
                     {{wish.closure?.closedOn | date: 'dd / MM / \'yy'}}
                 </li>
             </ul>
