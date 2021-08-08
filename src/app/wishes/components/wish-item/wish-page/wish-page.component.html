@@ -8,8 +8,8 @@
                 <h2>{{wish.title}}</h2>
                 <h6>voor {{wish.receiver.fullName}}
                     <a class="badge badge-light text-dark p-0 ml-2"
-                        [routerLink]="['/people', wish.receiver.id]" uib-tooltip="Terug naar lijst"
-                        tooltip-placement="top-left" tooltip-class="customTooltip"><fa-icon [icon]="listIcon"></fa-icon></a>
+                    [routerLink]="['/people', wish.receiver.id]" uib-tooltip="Terug naar lijst"
+                    tooltip-placement="top-left" tooltip-class="customTooltip"><fa-icon [icon]="listIcon"></fa-icon></a>
                 </h6>
             </div>
         </div>
@@ -19,16 +19,9 @@
             </div>
         </div>
     </div>
-    <div class="row" ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'fulfilled'">
-        <div class="col-12 text-success font-weight-bold p-4">
-            <span ng-show="!wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID)">{{wish.receiver.firstName}} heeft dit
-                cadeau al, je kan dit dus niet meer reserveren.</span>
-            <span ng-show="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID)">Je hebt dit cadeau al, je kan dit dus
-                niet meer reserveren.</span>
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-5">
+            <gimmi-wish-banner [bannerConfig]="wishScenarioConfig[wish.scenario].bannerConfig"></gimmi-wish-banner>
             <gimmi-image-view 
                 class="img-fluid" 
                 [image]="wish.image">
@@ -49,13 +42,12 @@
                     <a href="{{wish.url}}" target="_blank">Externe website</a>
                 </li>
                 <li class="list-group-item"
-                    [hidden]="!wish.reservation"
-                    ng-show="wishInfoCtrl.wish.reservation && !wishInfoCtrl.isIncognitoReservation(wishInfoCtrl.wish)">
-                    <fa-icon [icon]="linkIcon" class="mr-2"></fa-icon>Gereserveerd door:
+                    [hidden]="!canShowReservationStatus()">
+                    <fa-icon [icon]="giftIcon" class="mr-2"></fa-icon>Gereserveerd door:
                     {{wish.reservation?.reservedBy.fullName}}
                 </li>
                 <li class="list-group-item"
-                    ng-show="!wishInfoCtrl.wish.reservation || wishInfoCtrl.isIncognitoReservation(wishInfoCtrl.wish)">
+                    [hidden]="canShowReservationStatus()">
                     <fa-icon [icon]="giftIcon" class="mr-2"></fa-icon>Nog niet gereserveerd
                 </li>
                 <li class="list-group-item" [hidden]="!wish.color">
@@ -98,7 +90,6 @@
                 ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'reserved' && wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID)"
                 ng-click="wishInfoCtrl.openFeedbackPopup(wishInfoCtrl.wish)"><i class="fa fa-gift"
                     aria-hidden="true"></i> Cadeau ontvangen? Geef feedback!</button>
-            <!-- ng-if="wishCtrl.reservationStatus(wish) === 'reserved'" ng-show="wishlistCtrl.userIsReceiver" -->
         </div>
     </div>
 </div>

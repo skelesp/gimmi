@@ -117,7 +117,7 @@ export class WishItemComponent implements OnInit {
     }
   }
 
-  blurWishCardStatus() : boolean {
+  canShowReservationStatus() : boolean {
     return !(this.wish.scenario === 'RESERVED_INCOGNITO_FOR_USER' || this.wish.scenario === 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' || this.wish.scenario === 'OPEN_WISH');
   }
   
