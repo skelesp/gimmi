@@ -72,18 +72,19 @@ interface IWishResponseWithFullCreatedBy {
   updatedAt: Date;
 }
 
+interface IReservationResponseWithFullReservedBy {
+  reservedBy: IPersonNameResponse,
+  amount: number;
+  reason: string;
+  reservationDate: Date;
+  handoverDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  _id: string;
+  id: string;
+}
 interface IWishReservationResponse extends IWishResponseWithFullCreatedBy {
-  reservation: {
-    reservedBy: IPersonNameResponse,
-    amount: number;
-    reason: string;
-    reservationDate: Date;
-    handoverDate?: Date;
-    createdAt: Date;
-    updatedAt: Date;
-    _id: string;
-    id: string;
-  }
+  reservation: IReservationResponseWithFullReservedBy;
 }
 
 interface IWishFeedbackResponse extends IWishReservationResponse {
@@ -403,10 +404,23 @@ export class WishService {
     );
   }
 
-  private getFullReservationInfo ( reservation: IReservationResponse ) :  Observable<IReservation>{
+  private isInstanceOfIReservationResponseWithFullReservedBy(reservation: IReservationResponse | IReservationResponseWithFullReservedBy): reservation is IReservationResponseWithFullReservedBy {
+    if (typeof reservation.reservedBy === 'string') return false;
+    return 'firstName' in reservation.reservedBy && 'lastName' in reservation.reservedBy;
+  }
+
+  private getFullReservationInfo ( reservation: IReservationResponse | IReservationResponseWithFullReservedBy) :  Observable<IReservation>{
     let completeReservation : IReservation;
-    return (!reservation || !reservation.reservedBy) ? of(null) :
-      this.peopleService.getPersonById(reservation.reservedBy)
+    if (!reservation || !reservation.reservedBy) {return of(null) ;}
+    else if (this.isInstanceOfIReservationResponseWithFullReservedBy(reservation)) {
+      return of({
+      ...reservation, reservedBy: new Person(
+        reservation.reservedBy.id, 
+        reservation.reservedBy.firstName, 
+        reservation.reservedBy.lastName)
+      })
+    } else {
+      return this.peopleService.getPersonById(reservation.reservedBy)
         .pipe(
           map(reservedBy => {
             if (reservedBy) completeReservation = {
@@ -420,6 +434,7 @@ export class WishService {
             return of({ ...reservation, reservedBy: new Person(reservation.reservedBy, 'not', 'found') });
           })
         )
+    }
   }
 
   private getFullClosureInfo (closure: IClosureResponse): Observable<IClosure> {
