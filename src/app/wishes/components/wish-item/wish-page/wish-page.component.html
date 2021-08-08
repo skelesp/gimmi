@@ -4,13 +4,16 @@
         <i class="fa fa-arrow-left" aria-hidden="true"></i> Terug naar lijst</a>
     <div class="jumbotron pt-3 pb-1 mb-1">
         <div class="row">
-            <div class="col col-12">
+            <div class="col col-11">
                 <h2>{{wish.title}}</h2>
                 <h6>voor {{wish.receiver.fullName}}
                     <a class="badge badge-light text-dark p-0 ml-2"
                     [routerLink]="['/people', wish.receiver.id]" uib-tooltip="Terug naar lijst"
                     tooltip-placement="top-left" tooltip-class="customTooltip"><fa-icon [icon]="listIcon"></fa-icon></a>
                 </h6>
+            </div>
+            <div class="col-1">
+                <gimmi-action-list [actionListItems]="wishActionItems"></gimmi-action-list>
             </div>
         </div>
         <div class="row">
@@ -66,6 +69,10 @@
             </ul>
         </div>
         <div class="col-md-3 pull-right">
+            <gimmi-wish-call-to-action-button class="w-100" [CTAconfig]="wishScenarioConfig[wish.scenario].CTAbutton">
+            </gimmi-wish-call-to-action-button>
+        </div>
+        <!-- <div class="col-md-3 pull-right">
             <button type="button" name="editWish" class="btn btn-block btn-outline-info btn-multiline text-left"
                 ng-show="wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID) || wishInfoCtrl.userIsCreator(wishInfoCtrl.wish.createdBy._id)"
                 ng-click="wishInfoCtrl.editWishDetails(wishInfoCtrl.wish)"><i class="fa fa-edit" aria-hidden="true"></i>
@@ -90,6 +97,6 @@
                 ng-show="wishInfoCtrl.reservationStatus(wishInfoCtrl.wish) === 'reserved' && wishInfoCtrl.userIsReceiver(wishInfoCtrl.receiverID)"
                 ng-click="wishInfoCtrl.openFeedbackPopup(wishInfoCtrl.wish)"><i class="fa fa-gift"
                     aria-hidden="true"></i> Cadeau ontvangen? Geef feedback!</button>
-        </div>
+        </div> -->
     </div>
 </div>

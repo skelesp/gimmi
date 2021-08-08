@@ -106,6 +106,10 @@ export class WishItemComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.defineWishActions();
+  }
+
+  private defineWishActions(): void {
     if (!this.wish.userIsReceiver) this.wishActionItems.push(this.actionListItemConfigs.copy);
     if (this.wish.userIsReceiver || this.wish.userIsCreator) {
       this.wishActionItems.unshift(this.actionListItemConfigs.edit);
