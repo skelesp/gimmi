@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Person } from 'src/app/people/models/person.model';
 import { IPersonNameResponse, IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
 import { UserService } from 'src/app/users/service/user.service';
-import { IClosure, IGiftFeedback, IReservation, Wish, wishStatus } from '../models/wish.model';
+import { IClosure, IGiftFeedback, IReservation, Wish } from '../models/wish.model';
 import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
 
 interface IWishlistResponse {
@@ -165,6 +165,8 @@ export class WishService {
   public readonly wishes: Observable<Wish[]> = this._wishes$.asObservable();
   private _currentReceiver$ : BehaviorSubject<Person> = new BehaviorSubject<Person>(null);
   public readonly currentReceiver: Observable<Person> = this._currentReceiver$.asObservable();
+  private _selectedWish$ : BehaviorSubject<Wish> = new BehaviorSubject<Wish>(null);
+  public readonly selectedWish: Observable<Wish> = this._selectedWish$.asObservable();
 
   constructor(
     private http$ : HttpClient,
@@ -194,15 +196,6 @@ export class WishService {
       defaultIfEmpty(<Wish[]>[]),
       tap(wishes => this._wishes$.next(wishes))
     );
-  }
-
-  public updateWishInWishlist ( updatedWish: Wish ) : void {
-    let currentWishlist = [...this._wishes$.value]; //spread operator passes a copy of the array, so change detection will detect this change.
-    if (currentWishlist.length !== 0) {
-      let index = currentWishlist.findIndex(item => item.id === updatedWish.id);
-      currentWishlist[index] = updatedWish;
-    }
-    this._wishes$.next(currentWishlist);
   }
 
   public addReservation(wish: Wish, reservation: IReservation) : Observable<Wish>{
@@ -327,11 +320,27 @@ export class WishService {
             switchMap(wishResponse => this.peopleService.getPersonById(wishResponse.receiver).pipe(
               switchMap(personResponse => this.convertWishResponseToFullWishInstance(wishResponse, personResponse) )
               )),
+              tap(wish => this.updateSelectedWish(wish))
           )          
       : of(null);
   }
 
   /* PRIVATE methods */
+  private updateSelectedWish ( wish: Wish ) {
+    this._selectedWish$.next(wish);
+  }
+
+  private updateWishInWishlist(updatedWish: Wish): void {
+    let currentWishlist = [...this._wishes$.value]; //spread operator passes a copy of the array, so change detection will detect this change.
+    if (currentWishlist.length !== 0) {
+      let index = currentWishlist.findIndex(item => item.id === updatedWish.id);
+      currentWishlist[index] = updatedWish;
+    }
+    this._wishes$.next(currentWishlist);
+    
+    if (this._selectedWish$.value) this.updateSelectedWish(updatedWish);
+  }
+
   private addWishToWishlist ( newWish : Wish) : void {
     if (this._currentReceiver$.value.id === newWish.receiver.id) {
       let wishlist = this._wishes$.value;

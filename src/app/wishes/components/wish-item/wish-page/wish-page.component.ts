@@ -30,28 +30,29 @@ export class WishPageComponent extends WishItemComponent implements OnInit {
   doneIcon: IconDefinition = faCheck;
 
   constructor(
-    private modalSrv: NgbModal,
-    private wishSrv: WishService,
-    private notificationSrv: NotificationService,
-    private userSrv: UserService,
-    private imageSrv: CloudinaryService,
-    private peopleSrv: PeopleService,
-    private communicationSrv: CommunicationService,
-    private route: ActivatedRoute
+    protected modalService: NgbModal,
+    protected wishService: WishService,
+    protected notificationService: NotificationService,
+    protected userService: UserService,
+    protected imageService: CloudinaryService,
+    protected peopleService: PeopleService,
+    protected communicationService: CommunicationService,
+    protected route: ActivatedRoute
   ) {
     super(
-      modalSrv,
-      wishSrv,
-      notificationSrv,
-      userSrv,
-      imageSrv,
-      peopleSrv,
-      communicationSrv
+      modalService,
+      wishService,
+      notificationService,
+      userService,
+      imageService,
+      peopleService,
+      communicationService
     );
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe( data => { this.wish = data.wish })
+    // this.route.data.subscribe( data => { this.wish = data.wish })
+    this.wishService.selectedWish.subscribe(selectedWish => this.wish = selectedWish);
     super.ngOnInit();
   }
 

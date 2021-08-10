@@ -96,13 +96,13 @@ export class WishItemComponent implements OnInit {
   };
 
   constructor(
-    private modalService: NgbModal,
-    private wishService: WishService,
-    private notificationService: NotificationService,
-    private userService: UserService,
-    private imageService: CloudinaryService,
-    private peopleService: PeopleService,
-    private communicationService: CommunicationService
+    protected modalService: NgbModal,
+    protected wishService: WishService,
+    protected notificationService: NotificationService,
+    protected userService: UserService,
+    protected imageService: CloudinaryService,
+    protected peopleService: PeopleService,
+    protected communicationService: CommunicationService
   ) { }
 
   ngOnInit(): void {
