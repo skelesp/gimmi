@@ -51,8 +51,9 @@ export class WishPageComponent extends WishItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.route.data.subscribe( data => { this.wish = data.wish })
-    this.wishService.selectedWish.subscribe(selectedWish => this.wish = selectedWish);
+    this.wishService.selectedWish.subscribe(selectedWish => {
+      this.wish = selectedWish;
+    });
     super.ngOnInit();
   }
 

@@ -17,7 +17,9 @@ export class WishResolver implements Resolve<Wish>{
   resolve ( route : ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<Wish> {
     return this.wishService.getWishById(route.paramMap.get('wishId'))
       .pipe(
-        catchError(() => { return of(null); })
+        catchError(() => { 
+          console.error(`[wish resolver] Error in getting wish by ID.`)
+          return of(null); })
       );
   }
 }

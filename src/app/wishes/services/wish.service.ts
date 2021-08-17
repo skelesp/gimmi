@@ -313,6 +313,16 @@ export class WishService {
   } 
 
   public getWishById ( wishID: string ) : Observable<Wish> {
+    // Check wish caches for wishID
+    if (this._selectedWish$.value?.id === wishID) return of(this._selectedWish$.value);
+    
+    let index = this.findWishInWishlist(wishID);
+    if (index !== -1) {
+      let cachedWish: Wish = this._wishes$.value[index];
+      this.updateSelectedWish(cachedWish);
+      return of(cachedWish);
+    }
+    
     return wishID ? 
       this.http$.get<IWishResponseWithFullCreatedBy[]>(environment.apiUrl + 'wish/' + wishID)
           .pipe( 
@@ -326,14 +336,18 @@ export class WishService {
   }
 
   /* PRIVATE methods */
-  private updateSelectedWish ( wish: Wish ) {
+  private updateSelectedWish ( wish: Wish ) : void {
     this._selectedWish$.next(wish);
+  }
+
+  private findWishInWishlist (wishID : string) : number {
+    return this._wishes$.value.findIndex(item => item.id === wishID);
   }
 
   private updateWishInWishlist(updatedWish: Wish): void {
     let currentWishlist = [...this._wishes$.value]; //spread operator passes a copy of the array, so change detection will detect this change.
     if (currentWishlist.length !== 0) {
-      let index = currentWishlist.findIndex(item => item.id === updatedWish.id);
+      let index = this.findWishInWishlist(updatedWish.id);
       currentWishlist[index] = updatedWish;
     }
     this._wishes$.next(currentWishlist);
