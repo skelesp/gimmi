@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Person } from 'src/app/people/models/person.model';
 import { IPersonNameResponse, IPersonSearchResponse, PeopleService } from 'src/app/people/service/people.service';
 import { UserService } from 'src/app/users/service/user.service';
-import { IClosure, IGiftFeedback, IReservation, Wish, wishStatus } from '../models/wish.model';
+import { IClosure, IGiftFeedback, IReservation, Wish } from '../models/wish.model';
 import { CloudinaryService } from 'src/app/images/services/cloudinary.service';
 
 interface IWishlistResponse {
@@ -46,9 +46,11 @@ interface IWishResponse {
     putBackOnList: boolean;
   },
   closure?: IClosureResponse;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-interface IWishReservationResponse {
+interface IWishResponseWithFullCreatedBy {
   receiver: string;
   _id: string;
   title: string;
@@ -63,17 +65,26 @@ interface IWishReservationResponse {
   size?: string;
   description?: string;
   amountWanted: number;
-  reservation: {
-    reservedBy: IPersonNameResponse,
-    amount: number;
-    reason: string;
-    reservationDate: Date;
-    handoverDate?: Date;
-    createdAt: Date;
-    updatedAt: Date;
-    _id: string;
-    id: string;
-  }
+  reservation?: any;
+  giftFeedback?: any;
+  closure?: any;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface IReservationResponseWithFullReservedBy {
+  reservedBy: IPersonNameResponse,
+  amount: number;
+  reason: string;
+  reservationDate: Date;
+  handoverDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  _id: string;
+  id: string;
+}
+interface IWishReservationResponse extends IWishResponseWithFullCreatedBy {
+  reservation: IReservationResponseWithFullReservedBy;
 }
 
 interface IWishFeedbackResponse extends IWishReservationResponse {
@@ -154,6 +165,8 @@ export class WishService {
   public readonly wishes: Observable<Wish[]> = this._wishes$.asObservable();
   private _currentReceiver$ : BehaviorSubject<Person> = new BehaviorSubject<Person>(null);
   public readonly currentReceiver: Observable<Person> = this._currentReceiver$.asObservable();
+  private _selectedWish$ : BehaviorSubject<Wish> = new BehaviorSubject<Wish>(null);
+  public readonly selectedWish: Observable<Wish> = this._selectedWish$.asObservable();
 
   constructor(
     private http$ : HttpClient,
@@ -183,15 +196,6 @@ export class WishService {
       defaultIfEmpty(<Wish[]>[]),
       tap(wishes => this._wishes$.next(wishes))
     );
-  }
-
-  public updateWishInWishlist ( updatedWish: Wish ) : void {
-    let currentWishlist = [...this._wishes$.value]; //spread operator passes a copy of the array, so change detection will detect this change.
-    if (currentWishlist.length !== 0) {
-      let index = currentWishlist.findIndex(item => item.id === updatedWish.id);
-      currentWishlist[index] = updatedWish;
-    }
-    this._wishes$.next(currentWishlist);
   }
 
   public addReservation(wish: Wish, reservation: IReservation) : Observable<Wish>{
@@ -306,9 +310,51 @@ export class WishService {
         tap(wishes => console.log(wishes))
       )
     : of([]);
+  } 
+
+  public getWishById ( wishID: string ) : Observable<Wish> {
+    // Check wish caches for wishID
+    if (this._selectedWish$.value?.id === wishID) return of(this._selectedWish$.value);
+    
+    let index = this.findWishInWishlist(wishID);
+    if (index !== -1) {
+      let cachedWish: Wish = this._wishes$.value[index];
+      this.updateSelectedWish(cachedWish);
+      return of(cachedWish);
+    }
+    
+    return wishID ? 
+      this.http$.get<IWishResponseWithFullCreatedBy[]>(environment.apiUrl + 'wish/' + wishID)
+          .pipe( 
+            map(wishResponse => wishResponse[0]),
+            switchMap(wishResponse => this.peopleService.getPersonById(wishResponse.receiver).pipe(
+              switchMap(personResponse => this.convertWishResponseToFullWishInstance(wishResponse, personResponse) )
+              )),
+              tap(wish => this.updateSelectedWish(wish))
+          )          
+      : of(null);
   }
 
   /* PRIVATE methods */
+  private updateSelectedWish ( wish: Wish ) : void {
+    this._selectedWish$.next(wish);
+  }
+
+  private findWishInWishlist (wishID : string) : number {
+    return this._wishes$.value.findIndex(item => item.id === wishID);
+  }
+
+  private updateWishInWishlist(updatedWish: Wish): void {
+    let currentWishlist = [...this._wishes$.value]; //spread operator passes a copy of the array, so change detection will detect this change.
+    if (currentWishlist.length !== 0) {
+      let index = this.findWishInWishlist(updatedWish.id);
+      currentWishlist[index] = updatedWish;
+    }
+    this._wishes$.next(currentWishlist);
+    
+    if (this._selectedWish$.value) this.updateSelectedWish(updatedWish);
+  }
+
   private addWishToWishlist ( newWish : Wish) : void {
     if (this._currentReceiver$.value.id === newWish.receiver.id) {
       let wishlist = this._wishes$.value;
@@ -338,7 +384,7 @@ export class WishService {
     }
   }
   
-  private convertWishReservationResponseToUpdatedWish (wishReservationResponse: IWishReservationResponse, wish: Wish) : Observable<Wish>{
+  private convertWishReservationResponseToUpdatedWish (wishReservationResponse: IWishReservationResponse | IWishResponseWithFullCreatedBy, wish: Wish) : Observable<Wish>{
     return of(wishReservationResponse).pipe(
       // !! Dit is een nutteloze actie puur om ervoor te zorgen dat de wishResponse van deze call gelijk is aan deze van de getWishlist
       map(wishResponse => {
@@ -353,7 +399,7 @@ export class WishService {
     )
   }
 
-  private convertWishResponseToFullWishInstance(wishResponse : IWishResponse, receiver : Person) : Observable<Wish>{
+  private convertWishResponseToFullWishInstance(wishResponse : IWishResponse | IWishResponseWithFullCreatedBy, receiver : Person) : Observable<Wish>{
     // Create wish without reservation and closure
     let wish = this.createBasicWishInstanceFromResponse(wishResponse, receiver);
     // Fetch Person corresponding to closedBy and reservedBy objectID's
@@ -381,10 +427,23 @@ export class WishService {
     );
   }
 
-  private getFullReservationInfo ( reservation: IReservationResponse ) :  Observable<IReservation>{
+  private isInstanceOfIReservationResponseWithFullReservedBy(reservation: IReservationResponse | IReservationResponseWithFullReservedBy): reservation is IReservationResponseWithFullReservedBy {
+    if (typeof reservation.reservedBy === 'string') return false;
+    return 'firstName' in reservation.reservedBy && 'lastName' in reservation.reservedBy;
+  }
+
+  private getFullReservationInfo ( reservation: IReservationResponse | IReservationResponseWithFullReservedBy) :  Observable<IReservation>{
     let completeReservation : IReservation;
-    return (!reservation || !reservation.reservedBy) ? of(null) :
-      this.peopleService.getPersonById(reservation.reservedBy)
+    if (!reservation || !reservation.reservedBy) {return of(null) ;}
+    else if (this.isInstanceOfIReservationResponseWithFullReservedBy(reservation)) {
+      return of({
+      ...reservation, reservedBy: new Person(
+        reservation.reservedBy.id, 
+        reservation.reservedBy.firstName, 
+        reservation.reservedBy.lastName)
+      })
+    } else {
+      return this.peopleService.getPersonById(reservation.reservedBy)
         .pipe(
           map(reservedBy => {
             if (reservedBy) completeReservation = {
@@ -398,6 +457,7 @@ export class WishService {
             return of({ ...reservation, reservedBy: new Person(reservation.reservedBy, 'not', 'found') });
           })
         )
+    }
   }
 
   private getFullClosureInfo (closure: IClosureResponse): Observable<IClosure> {
@@ -449,7 +509,8 @@ export class WishService {
       wishResponse.description,
       wishResponse.amountWanted
     );
-    
+    wish.createdAt = wishResponse.createdAt;
+
     if (wishResponse.image?.public_id) wish.image = { publicId: wishResponse.image.public_id, version: wishResponse.image.version.toString() };
 
     if (wishResponse.giftFeedback) wish.giftFeedback = {

@@ -17,23 +17,23 @@ import { CommunicationService } from 'src/app/shared/services/communication.serv
 export class WishCardComponent extends WishItemComponent {
 
   constructor(
-    private modalSrv: NgbModal,
-    private wishSrv: WishService,
-    private notificationSrv: NotificationService,
-    private userSrv: UserService,
-    private imageSrv: CloudinaryService,
-    private peopleSrv: PeopleService,
-    private communicationSrv: CommunicationService
+    protected modalService: NgbModal,
+    protected wishService: WishService,
+    protected notificationService: NotificationService,
+    protected userService: UserService,
+    protected imageService: CloudinaryService,
+    protected peopleService: PeopleService,
+    protected communicationService: CommunicationService
   ) {
     super(
-      modalSrv, 
-      wishSrv, 
-      notificationSrv, 
-      userSrv,
-      imageSrv,
-      peopleSrv,
-      communicationSrv
-      );
+      modalService,
+      wishService,
+      notificationService,
+      userService,
+      imageService,
+      peopleService,
+      communicationService
+    );
   }
 
 }

@@ -96,16 +96,20 @@ export class WishItemComponent implements OnInit {
   };
 
   constructor(
-    private modalService: NgbModal,
-    private wishService: WishService,
-    private notificationService: NotificationService,
-    private userService: UserService,
-    private imageService: CloudinaryService,
-    private peopleService: PeopleService,
-    private communicationService: CommunicationService
+    protected modalService: NgbModal,
+    protected wishService: WishService,
+    protected notificationService: NotificationService,
+    protected userService: UserService,
+    protected imageService: CloudinaryService,
+    protected peopleService: PeopleService,
+    protected communicationService: CommunicationService
   ) { }
 
   ngOnInit(): void {
+    this.defineWishActions();
+  }
+
+  private defineWishActions(): void {
     if (!this.wish.userIsReceiver) this.wishActionItems.push(this.actionListItemConfigs.copy);
     if (this.wish.userIsReceiver || this.wish.userIsCreator) {
       this.wishActionItems.unshift(this.actionListItemConfigs.edit);
@@ -117,7 +121,7 @@ export class WishItemComponent implements OnInit {
     }
   }
 
-  blurWishCardStatus() : boolean {
+  canShowReservationStatus() : boolean {
     return !(this.wish.scenario === 'RESERVED_INCOGNITO_FOR_USER' || this.wish.scenario === 'OPEN_WISH_CREATED_BY_USER_FOR_ANOTHER' || this.wish.scenario === 'OPEN_WISH');
   }
   
