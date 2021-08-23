@@ -10,9 +10,10 @@ import { WishService } from '../../services/wish.service';
 })
 export class WishListComponent implements OnInit, OnChanges {
   @Input() receiver : Person;
+  @Input() wishlistFilter: wishStatus[];
   wishes: Wish[];
   loading: boolean = false;
-  @Input() wishlistFilter: wishStatus[];
+  activeTab: string = "Open";
   
   constructor( 
     private wishService : WishService
