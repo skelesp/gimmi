@@ -10,22 +10,40 @@ import { WishService } from '../../services/wish.service';
 })
 export class WishListComponent implements OnInit, OnChanges {
   @Input() receiver : Person;
+  @Input() wishlistFilter: wishStatus[];
   wishes: Wish[];
   loading: boolean = false;
-  wishlistFilter: wishStatus[] = ["Open", "Received", "Reserved"];
+  activeTab: string = "Open";
   
   constructor( 
     private wishService : WishService
   ) { }
   
   ngOnChanges(changes: SimpleChanges): void {
-    this.loading = true;
-    this.wishService.getWishlist(this.receiver).subscribe(
-      _ => this.loading = false
-    );
+    if (changes.receiver) {
+      this.loading = true;
+      this.wishService.getWishlist(this.receiver).subscribe(
+        _ => {
+          this.loading = false;
+          this.setWishlistFilter('Open');
+        }
+      );
+    }
   }
 
   ngOnInit(): void {
     this.wishService.wishes.subscribe(wishes => this.wishes = wishes );
+  }
+
+  setWishlistFilter(filter: string) {
+    switch (filter) {
+      case 'Received':
+        this.wishlistFilter = ['Fulfilled'];
+        break;
+      case 'Open':
+      default:
+        this.wishlistFilter = ['Open', 'Received', 'Reserved'];
+        break;
+    }
   }
 }
