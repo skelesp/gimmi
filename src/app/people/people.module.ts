@@ -9,6 +9,8 @@ import { WishesModule } from '../wishes/wishes.module';
 import { ExtraInfoComponent } from './components/extra-info/extra-info.component';
 import { ExtraInfoViewComponent } from './components/extra-info/extra-info-view/extra-info-view.component';
 import { ExtraInfoEditComponent } from './components/extra-info/extra-info-edit/extra-info-edit.component';
+import { ShareComponent } from './components/share/share.component';
+import { SharePopupComponent } from './components/share/share-popup/share-popup.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { ExtraInfoEditComponent } from './components/extra-info/extra-info-edit/
     PersonDashboardComponent,
     ExtraInfoComponent,
     ExtraInfoViewComponent,
-    ExtraInfoEditComponent
+    ExtraInfoEditComponent,
+    ShareComponent,
+    SharePopupComponent
   ],
   imports: [
     SharedModule,
