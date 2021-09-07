@@ -11,6 +11,7 @@ import { ExtraInfoViewComponent } from './components/extra-info/extra-info-view/
 import { ExtraInfoEditComponent } from './components/extra-info/extra-info-edit/extra-info-edit.component';
 import { ShareComponent } from './components/share/share.component';
 import { SharePopupComponent } from './components/share/share-popup/share-popup.component';
+import { WhatsappButtonComponent } from './components/share/whatsapp-button/whatsapp-button.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SharePopupComponent } from './components/share/share-popup/share-popup.
     ExtraInfoViewComponent,
     ExtraInfoEditComponent,
     ShareComponent,
-    SharePopupComponent
+    SharePopupComponent,
+    WhatsappButtonComponent
   ],
   imports: [
     SharedModule,

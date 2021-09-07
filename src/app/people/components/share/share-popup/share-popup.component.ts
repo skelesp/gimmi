@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -6,13 +6,16 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './share-popup.component.html',
   styleUrls: ['./share-popup.component.css']
 })
-export class SharePopupComponent implements OnInit {
-
+export class SharePopupComponent {
+  @Input() linkToShare : string;
+  message: string = 'Hey, op volgende link vind je mijn wensenlijst voor een cadeautje.';
+  
   constructor(
     public activeModal: NgbActiveModal
   ) { }
 
-  ngOnInit(): void {
+  generateMessage () : string {
+    return encodeURIComponent(`${this.message} ${this.linkToShare}`);
   }
 
 }

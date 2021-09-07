@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from 'src/environments/environment';
+import { Person } from '../../models/person.model';
 import { SharePopupComponent } from './share-popup/share-popup.component';
 
 @Component({
@@ -9,18 +11,17 @@ import { SharePopupComponent } from './share-popup/share-popup.component';
   templateUrl: './share.component.html',
   styleUrls: ['./share.component.css']
 })
-export class ShareComponent implements OnInit {
+export class ShareComponent {
+  @Input() personToShare: Person;
   shareIcon: IconDefinition = faShareAlt;
 
   constructor(
     private modalService: NgbModal
   ) { }
 
-  ngOnInit(): void {
-  }
-
   activate() {
-    this.modalService.open(SharePopupComponent);
+    let sharePopup = this.modalService.open(SharePopupComponent);
+    sharePopup.componentInstance.linkToShare = environment.rootSiteUrl + '/people/' + this.personToShare?.id;    
   }
 
 }

@@ -8,7 +8,7 @@
             <h1>{{person?.firstName}} {{person?.lastName}}</h1>
         </div>
         <div class="col col-sm-4 float-left">
-            <gimmi-share></gimmi-share>
+            <gimmi-share [personToShare]="person"></gimmi-share>
             <a  class="badge badge-pill badge-secondary float-right" 
                 [hidden]='currrentUser?.id === person?.id'
                 [routerLink]='["/people", currrentUser?.id]'
