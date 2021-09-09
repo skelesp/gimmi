@@ -14,6 +14,7 @@ import { EmailInputComponent } from './components/form-components/email-input/em
 import { PasswordInputComponent } from './components/form-components/password-input/password-input.component';
 import { PasswordCheckComponent } from './components/form-components/password-check/password-check.component';
 import { ImagesModule } from '../images/images.module';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ImagesModule } from '../images/images.module';
     RouterModule,
     HttpClientModule,
     ReactiveFormsModule,
-    ImagesModule
+    ImagesModule,
+    DeviceDetectorModule.forRoot()
   ],
   exports: [
     CommonModule,
@@ -48,7 +50,8 @@ import { ImagesModule } from '../images/images.module';
     EmailInputComponent,
     PasswordInputComponent,
     PasswordCheckComponent,
-    ImagesModule
+    ImagesModule,
+    DeviceDetectorModule
   ]
 })
 export class SharedModule { }
