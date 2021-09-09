@@ -6,5 +6,10 @@
 </div>
 
 <div class="modal-body" id="modal-body" NgbAutoFocus>
-    <gimmi-whatsapp-button [message]="generateMessage()"></gimmi-whatsapp-button>
+    <div class="container">
+        Link naar de pagina:
+        <input type="text" class="form-control form-control-sm" aria-label="wishlist link" [value]="linkToShare" readonly>
+        <div class="my-2"><gimmi-copy-to-clipboard-button [url]="linkToShare"></gimmi-copy-to-clipboard-button></div>
+        <gimmi-whatsapp-button [message]="generateMessage()"></gimmi-whatsapp-button>
+    </div>
 </div>

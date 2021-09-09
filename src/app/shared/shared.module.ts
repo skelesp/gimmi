@@ -15,6 +15,7 @@ import { PasswordInputComponent } from './components/form-components/password-in
 import { PasswordCheckComponent } from './components/form-components/password-check/password-check.component';
 import { ImagesModule } from '../images/images.module';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
     HttpClientModule,
     ReactiveFormsModule,
     ImagesModule,
-    DeviceDetectorModule.forRoot()
+    DeviceDetectorModule.forRoot(),
+    ClipboardModule
   ],
   exports: [
     CommonModule,
@@ -51,7 +53,8 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
     PasswordInputComponent,
     PasswordCheckComponent,
     ImagesModule,
-    DeviceDetectorModule
+    DeviceDetectorModule,
+    ClipboardModule
   ]
 })
 export class SharedModule { }
