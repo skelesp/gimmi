@@ -21,7 +21,8 @@ export class ShareComponent {
 
   activate() {
     let sharePopup = this.modalService.open(SharePopupComponent);
-    sharePopup.componentInstance.linkToShare = environment.rootSiteUrl + '/people/' + this.personToShare?.id;    
+    sharePopup.componentInstance.linkToShare = environment.rootSiteUrl + '/people/' + this.personToShare?.id;
+    sharePopup.componentInstance.personToShare = this.personToShare;
   }
 
 }

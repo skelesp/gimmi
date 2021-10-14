@@ -13,6 +13,7 @@ import { ShareComponent } from './components/share/share.component';
 import { SharePopupComponent } from './components/share/share-popup/share-popup.component';
 import { WhatsappButtonComponent } from './components/share/whatsapp-button/whatsapp-button.component';
 import { CopyToClipboardButtonComponent } from './components/share/copy-to-clipboard-button/copy-to-clipboard-button.component';
+import { MailToButtonComponent } from './components/share/mail-to-button/mail-to-button.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { CopyToClipboardButtonComponent } from './components/share/copy-to-clipb
     ShareComponent,
     SharePopupComponent,
     WhatsappButtonComponent,
-    CopyToClipboardButtonComponent
+    CopyToClipboardButtonComponent,
+    MailToButtonComponent
   ],
   imports: [
     SharedModule,
