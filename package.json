@@ -28,6 +28,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
+    "@types/facebook-js-sdk": "^3.3.5",
     "angularx-social-login": "^3.3.1",
     "bootstrap": "^4.4.0",
     "cloudinary-core": "^2.11.3",
