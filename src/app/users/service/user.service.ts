@@ -175,13 +175,22 @@ export class UserService {
     //Remove user
     localStorage.removeItem("currentUser");
     this.currentUserSubject?.next(null); // On init of this service, currentUserSubject isn't created when logout is called for expired token.
+
+    this.notificationService.showNotification(
+      "Je gebruiker is nu uitgelogd.",
+      "info",
+      'Uitgelogd'
+    );
+    location.reload();
   }
 
   /**
    * @description Logout from Social account
    */
   public logoutFromSocialAccount () {
-    this.socialAuthService.signOut();
+    this.socialAuthService.signOut().then(() => {
+      this.logout("SOCIAL_ACCOUNT_LOGOUT");
+    });
   }
 
   /**
