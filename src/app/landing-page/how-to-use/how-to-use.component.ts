@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { faListAlt, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { UserService } from 'src/app/users/service/user.service';
 import { User } from 'src/app/users/models/user.model';
@@ -11,9 +11,9 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./how-to-use.component.css']
 })
 export class HowToUseComponent implements OnInit, OnDestroy {
-  registerIcon = faUserPlus;
-  listIcon = faListAlt;
-  sendIcon = faPaperPlane;
+  registerIcon : IconDefinition = faUserPlus;
+  listIcon : IconDefinition = faListAlt;
+  sendIcon : IconDefinition = faPaperPlane;
   currentUser : User;
   currentUserSubscription : Subscription;
   
