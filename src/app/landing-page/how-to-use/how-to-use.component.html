@@ -32,10 +32,11 @@
                 van een vriend op jouw lijstje!</p>
         </div>
         <div class="col-lg-3 col-md-6 text-center">
-            <fa-icon 
-                [icon]="sendIcon" size="4x" class="text-danger"
-                ngbTooltip="Communiceer je lijst" tooltipClass="customTooltip" placement="bottom-left"
-            ></fa-icon>
+            <fa-icon *ngIf="!currentUser?.id" [icon]="sendIcon" size="4x" ></fa-icon>
+            <gimmi-share [shareIcon]="sendIcon" [personToShare]="currentUser" [iconSize]="'4x'" *ngIf="currentUser?.id"
+                         ngbTooltip="Communiceer je lijst" tooltipClass="customTooltip" placement="bottom-left"
+                         class="text-danger">
+            </gimmi-share>
             <h3>Verspreid je lijst</h3>
             <p class="text-muted">Nodig al je vrienden uit om jouw wensen te ontdekken, zo laat je ze eindelijk
                 weten wat jouw ultieme cadeau is.</p>

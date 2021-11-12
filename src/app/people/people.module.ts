@@ -38,7 +38,8 @@ import { FacebookShareButtonComponent } from './components/share/facebook-share-
   ],
   exports: [
     PeopleSearchComponent,
-    InviteComponent
+    InviteComponent,
+    ShareComponent
   ]
 })
 export class PeopleModule { }

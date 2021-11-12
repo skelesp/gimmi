@@ -13,7 +13,8 @@ import { SharePopupComponent } from './share-popup/share-popup.component';
 })
 export class ShareComponent {
   @Input() personToShare: Person;
-  shareIcon: IconDefinition = faShareAlt;
+  @Input() shareIcon: IconDefinition = faShareAlt;
+  @Input() iconSize: string = "lg";
 
   constructor(
     private modalService: NgbModal
