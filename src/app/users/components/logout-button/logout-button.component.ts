@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import { UserService } from '../../service/user.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
 import { User } from '../../models/user.model';
 
 @Component({
@@ -16,22 +15,14 @@ export class LogoutButtonComponent {
   logoutIcon = faSignOutAlt;
 
   constructor(
-    private userService: UserService,
-    private notificationService: NotificationService
+    private userService: UserService
   ) { }
 
   logout(): void {
     this.userService.logout("USER_EVENT");
-    this.notificationService.showNotification(
-      "Je gebruiker is nu uitgelogd.",
-      "info",
-      'Uitgelogd'
-    );
-    location.reload();
   }
 
   logOutFacebook(): void {
     this.userService.logoutFromSocialAccount();
   }
-
 }

@@ -1,0 +1,7 @@
+<button type="button" class="btn btn-sm btn-social btn-outline-secondary" 
+    ngxClipboard
+    [cbContent]="url" 
+    (cbOnSuccess)="handleSuccess()" 
+    (cbOnError)="handleError()">
+    <fa-icon [icon]="copyIcon"></fa-icon> Kopieer naar klembord
+</button>

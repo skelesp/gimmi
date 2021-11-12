@@ -7,7 +7,11 @@ export class User {
         public loginStrategy: string,
         public token: string,
         public accounts: any
-    ) { }
+    ) { };
+
+    get fullName(): string { // TODO: User should extend Person so this duplication isn't needed anymore (name should come from Person class, not User Class)
+        return `${this.firstName} ${this.lastName}`;
+    }
 }
 
 export interface ILocalLoginInfo {

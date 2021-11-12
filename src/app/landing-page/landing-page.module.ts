@@ -8,6 +8,7 @@ import { LandingPageBannerComponent } from './landing-page-banner/landing-page-b
 import { HowToUseComponent } from './how-to-use/how-to-use.component';
 import { SocialButtonsComponent } from './social-buttons/social-buttons.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { PeopleModule } from '../people/people.module';
 
 
 @NgModule({
@@ -15,12 +16,14 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
     LandingPageComponent, 
     LandingPageBannerComponent, 
     HowToUseComponent, 
-    SocialButtonsComponent, PrivacyPolicyComponent
+    SocialButtonsComponent, 
+    PrivacyPolicyComponent
   ],
   imports: [
     CommonModule,
     LandingPageRoutingModule,
-    SharedModule
+    SharedModule,
+    PeopleModule
   ]
 })
 export class LandingPageModule { }

@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:5000/api/',
-  rootSiteUrl: 'http://localhost:4200',
+  rootSiteUrl: 'https://localhost:4200',
   cloudinary: {
     cloud_name: 'hunk4smqo',
     uploadPreset: 'wish_images',
