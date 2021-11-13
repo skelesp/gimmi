@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  title: "[DEV] Gimmi",
   apiUrl: 'http://localhost:5000/api/',
   rootSiteUrl: 'https://localhost:4200',
   cloudinary: {
