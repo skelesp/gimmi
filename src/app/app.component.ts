@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { NavigationError, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -8,10 +9,17 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public constructor(private titleService: Title) { }
+  public constructor(
+    private titleService: Title,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.setTitle(environment.title);
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationError) {
+        console.error(`Navigation to ${event.url} has encountered an error: ${event.error}`);
+      }
+    });
   }
 
   public setTitle(newTitle: string) {
