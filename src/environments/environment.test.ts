@@ -1,10 +1,6 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
-
 export const environment = {
-  production: false,
-  title: "[DEV] Gimmi",
+  title: "[TEST] Gimmi",
+  production: true,
   apiUrl: 'http://localhost:5000/api/',
   rootSiteUrl: 'https://localhost:4200',
   cloudinary: {
@@ -16,7 +12,7 @@ export const environment = {
       version: "1556702046"
     },
     temporaryImagePostfix: '_temp',
-    uploadWidget : {
+    uploadWidget: {
       text: {
         "nl": {
           "queue": {
@@ -104,3 +100,4 @@ export const environment = {
  * on performance if an error is thrown.
  */
 import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+
