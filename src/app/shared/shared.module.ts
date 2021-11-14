@@ -4,18 +4,21 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
+import { RouterModule } from '@angular/router';
+
+import { ImagesModule } from '../images/images.module';
+import { DeviceDetectorModule } from 'ngx-device-detector';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { BrandLogoComponent } from './components/brand-logo/brand-logo.component';
-import { RouterModule } from '@angular/router';
 import { CursorPointerDirective } from './directives/cursor-pointer.directive';
 import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
 import { BindQueryparamToInputDirective } from './directives/bind-queryparam-to-input.directive';
 import { EmailInputComponent } from './components/form-components/email-input/email-input.component';
 import { PasswordInputComponent } from './components/form-components/password-input/password-input.component';
 import { PasswordCheckComponent } from './components/form-components/password-check/password-check.component';
-import { ImagesModule } from '../images/images.module';
-import { DeviceDetectorModule } from 'ngx-device-detector';
-import { ClipboardModule } from 'ngx-clipboard';
+import { SocialButtonsComponent } from './components/social-buttons/social-buttons.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import { ClipboardModule } from 'ngx-clipboard';
     BindQueryparamToInputDirective, 
     EmailInputComponent,
     PasswordInputComponent,
-    PasswordCheckComponent
+    PasswordCheckComponent,
+    SocialButtonsComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +59,9 @@ import { ClipboardModule } from 'ngx-clipboard';
     PasswordCheckComponent,
     ImagesModule,
     DeviceDetectorModule,
-    ClipboardModule
+    ClipboardModule,
+    PrivacyPolicyComponent,
+    SocialButtonsComponent
   ]
 })
 export class SharedModule { }
