@@ -16,6 +16,7 @@ export class ModalsClosedGuard implements CanActivate {
 
     if (this.modalController.hasOpenModals() ) {
       this.modalController.dismissAll("Close on navigation");
+      console.info("[ModalsCloseGuard] Navigation cancelled because of open modal (which is closed now).");
       return false;
     }
 
