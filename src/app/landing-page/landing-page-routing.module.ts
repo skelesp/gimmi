@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ModalsClosedGuard } from '../shared/guards/modals-closed.guard';
 
 import { LandingPageComponent } from './landing-page.component';
 
-const routes: Routes = [{ path: '', component: LandingPageComponent }];
+const routes: Routes = [{ path: '', component: LandingPageComponent, canActivate: [ModalsClosedGuard] }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
