@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LandingPageBannerComponent } from './landing-page-banner.component';
 
@@ -6,7 +6,7 @@ describe('LandingPageBannerComponent', () => {
   let component: LandingPageBannerComponent;
   let fixture: ComponentFixture<LandingPageBannerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LandingPageBannerComponent ]
     })

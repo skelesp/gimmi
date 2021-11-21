@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WishDeleteComponent } from './wish-delete.component';
 
@@ -6,7 +6,7 @@ describe('WishDeleteComponent', () => {
   let component: WishDeleteComponent;
   let fixture: ComponentFixture<WishDeleteComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WishDeleteComponent ]
     })

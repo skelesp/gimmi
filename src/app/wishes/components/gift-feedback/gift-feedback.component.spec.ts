@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GiftFeedbackComponent } from './gift-feedback.component';
 
@@ -6,7 +6,7 @@ describe('GiftFeedbackComponent', () => {
   let component: GiftFeedbackComponent;
   let fixture: ComponentFixture<GiftFeedbackComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GiftFeedbackComponent ]
     })
