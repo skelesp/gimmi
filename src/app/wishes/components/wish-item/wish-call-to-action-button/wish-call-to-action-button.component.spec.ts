@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WishCallToActionButtonComponent } from './wish-call-to-action-button.component';
 
@@ -6,7 +6,7 @@ describe('WishCallToActionButtonComponent', () => {
   let component: WishCallToActionButtonComponent;
   let fixture: ComponentFixture<WishCallToActionButtonComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WishCallToActionButtonComponent ]
     })
