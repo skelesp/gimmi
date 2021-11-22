@@ -7,7 +7,6 @@ import { HttpClientModule } from "@angular/common/http";
 import { RouterModule } from '@angular/router';
 
 import { ImagesModule } from '../images/images.module';
-import { DeviceDetectorModule } from 'ngx-device-detector';
 import { ClipboardModule } from 'ngx-clipboard';
 
 import { BrandLogoComponent } from './components/brand-logo/brand-logo.component';
@@ -41,7 +40,6 @@ import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-poli
     HttpClientModule,
     ReactiveFormsModule,
     ImagesModule,
-    DeviceDetectorModule.forRoot(),
     ClipboardModule
   ],
   exports: [
@@ -58,7 +56,6 @@ import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-poli
     PasswordInputComponent,
     PasswordCheckComponent,
     ImagesModule,
-    DeviceDetectorModule,
     ClipboardModule,
     PrivacyPolicyComponent,
     SocialButtonsComponent
