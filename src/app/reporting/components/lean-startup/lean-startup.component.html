@@ -1,11 +1,9 @@
 <div class="chart-wrapper">
     <canvas baseChart 
-        [datasets]="lineChartData" 
-        [labels]="lineChartLabels" 
+        [data]="lineChartData" 
         [options]="lineChartOptions"
-        [colors]="lineChartColors" 
         [legend]="lineChartLegend" 
-        [chartType]="lineChartType" 
+        [type]="lineChartType" 
         [plugins]="lineChartPlugins">
     </canvas>
 </div>

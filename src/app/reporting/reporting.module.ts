@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChartsModule } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 
 import { ReportingRoutingModule } from './reporting-routing.module';
 import { ReportingComponent } from './reporting.component';
@@ -12,7 +12,7 @@ import { LeanStartupComponent } from './components/lean-startup/lean-startup.com
   imports: [
     CommonModule,
     ReportingRoutingModule,
-    ChartsModule
+    NgChartsModule
   ]
 })
 export class ReportingModule { }

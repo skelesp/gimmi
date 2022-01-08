@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartDataSets } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
+import { ChartDataset } from 'chart.js';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { LeanStartupRespone, ReportingService } from '../../services/reporting.service';
 
@@ -11,11 +10,9 @@ import { LeanStartupRespone, ReportingService } from '../../services/reporting.s
 })
 export class LeanStartupComponent implements OnInit {
   reportData: LeanStartupRespone;
-  lineChartData: ChartDataSets[] = [];
-  lineChartLabels: Label[] = [];
+  lineChartData: ChartDataset[] = [];
   lineChartType = 'line';
   lineChartLegend = true;
-  lineChartColors: Color[] = [];
   lineChartPlugins = [];
   lineChartOptions = {
     responsive: true,
@@ -73,8 +70,6 @@ export class LeanStartupComponent implements OnInit {
           pointBackgroundColor: '#9572f7'
         }
       ];
-
-      this.lineChartLabels = this.reportData.labels;
 
     }, error => {
       console.error(error);
