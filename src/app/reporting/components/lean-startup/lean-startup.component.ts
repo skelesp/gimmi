@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartDataset } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { LeanStartupRespone, ReportingService } from '../../services/reporting.service';
 
@@ -10,26 +10,24 @@ import { LeanStartupRespone, ReportingService } from '../../services/reporting.s
 })
 export class LeanStartupComponent implements OnInit {
   reportData: LeanStartupRespone;
-  lineChartData: ChartDataset[] = [];
   lineChartType = 'line';
   lineChartLegend = true;
-  lineChartPlugins = [];
-  lineChartOptions = {
+  lineChartData: ChartConfiguration['data'];
+  lineChartOptions : ChartConfiguration['options'] = {
     responsive: true,
     scales: {
-      yAxes: [
-        {
-          id: 'y-axis-1',
-          type: 'linear',
-          display: true,
-          position: 'left',
-          ticks: {
-            beginAtZero: true,
-            min: 0,
-            suggestedMax: 20
-          }
+      x: {},
+      y: {
+        type: 'linear',
+        display: true,
+        position: 'left',
+        beginAtZero: true,
+        min: 0,
+        suggestedMax: 100,
+        ticks: {
+           stepSize: 10
         }
-      ]
+      }
     },
     elements: {
       line: {
@@ -37,15 +35,19 @@ export class LeanStartupComponent implements OnInit {
         fill: false
       }
     },
-    legend: {
-      display: true,
-      position: 'right'
-    },
-    title:
-    {
-      display: true,
-      text: 'Lean startup dashboard',
-      fontSize: 24
+    plugins: {
+      legend: {
+        display: true,
+        position: 'right'
+      },
+      title:
+      {
+        display: true,
+        text: 'Lean startup dashboard',
+        font: {
+          size: 24
+        }
+      }
     }
   };
 
@@ -57,7 +59,9 @@ export class LeanStartupComponent implements OnInit {
   ngOnInit(): void {
     this.reportingService.getLeanStartupData().subscribe(response => {
       this.reportData = response;
-      this.lineChartData = [
+      console.info(this.reportData);
+      this.lineChartData = {
+        datasets: [
         {
           data: this.reportData.data[0],
           label: this.reportData.series[0],
@@ -69,7 +73,8 @@ export class LeanStartupComponent implements OnInit {
           borderColor: '#9572f7',
           pointBackgroundColor: '#9572f7'
         }
-      ];
+      ],
+      labels: this.reportData.labels};
 
     }, error => {
       console.error(error);
