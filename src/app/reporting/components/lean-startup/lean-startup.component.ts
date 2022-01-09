@@ -23,7 +23,10 @@ export class LeanStartupComponent implements OnInit {
         position: 'left',
         beginAtZero: true,
         min: 0,
-        suggestedMax: 20
+        suggestedMax: 100,
+        ticks: {
+           stepSize: 10
+        }
       }
     },
     elements: {
