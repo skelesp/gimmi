@@ -65,9 +65,12 @@ export class UserService {
    * @returns An observable with the logged in user object.
    */
   public authenticate (authInfo: ILocalLoginInfo ) : Observable<User> {
+    // Geen handleAErrorResponse hier: die maakt er een string van, en dan is de
+    // statuscode weg. De loginpagina moet 409 (account zonder wachtwoord, kwam
+    // vroeger via Facebook binnen) kunnen onderscheiden van een verkeerd
+    // wachtwoord, dus de oorspronkelijke respons moet intact doorkomen.
     return this.http$.post<IAuthResponse>(environment.apiUrl + 'authenticate', {...authInfo, account: 'local'})
       .pipe(
-        catchError(this.handleAErrorResponse),
         tap( authResponse => {
           this.persistentlySaveUserToken(authResponse.token);
           this.setUser(this.getUserFromStoredToken());

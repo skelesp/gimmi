@@ -14,6 +14,8 @@ import { environment } from 'src/environments/environment';
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   authenticationError: boolean = false;
+  /** Gezet wanneer dit account vroeger via Facebook inlogde en nog geen wachtwoord heeft. */
+  facebookAccountMessage: string = null;
   loggedInUser: User;
   currentUserSubscription: Subscription;
   redirectUrl: string;
@@ -40,13 +42,25 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userService.authenticate( credentials ).subscribe( user => {
       // Form handling
       this.authenticationError = false;
+      this.facebookAccountMessage = null;
       this.loginForm.reset();
-      
+
       this.userService.showAuthenticationConfirmation();
       this.userService.redirectAfterAuthentication();
 
     }, error => {
       console.error(error);
+
+      // Dit account kwam vroeger via Facebook binnen en heeft nog geen
+      // wachtwoord. Geen "verkeerde combinatie" tonen: dat stuurt iemand op
+      // zoek naar een wachtwoord dat nooit bestaan heeft.
+      if (error?.status === 409 && error?.error?.reason === 'FACEBOOK_ACCOUNT_WITHOUT_PASSWORD') {
+        this.facebookAccountMessage = error.error.message;
+        this.authenticationError = false;
+        return;
+      }
+
+      this.facebookAccountMessage = null;
       this.authenticationError = true;
     });
   }

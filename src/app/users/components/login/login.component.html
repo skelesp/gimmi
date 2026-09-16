@@ -16,6 +16,13 @@
                 Je probeerde {{redirectUrl}} te bereiken, maar hiervoor moet je ingelogd zijn. <br/>
                 Na een succesvolle login zullen we je meteen naar deze pagina brengen.
             </div>
+            <div *ngIf="facebookAccountMessage" class="alert alert-warning">
+                {{ facebookAccountMessage }} <br />
+                <gimmi-forgot-password-link
+                    [attemptedEmail]="loginForm.get('email').value"
+                    linkText="Wachtwoordreset aanvragen">
+                </gimmi-forgot-password-link>
+            </div>
             <div *ngIf="authenticationError" class="alert alert-danger">
                 De combinatie emailadres / wachtwoord is niet correct. <br /> 
                 <gimmi-forgot-password-link 
