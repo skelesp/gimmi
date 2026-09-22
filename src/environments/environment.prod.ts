@@ -1,7 +1,7 @@
 export const environment = {
   title: "Gimmi",
   production: true,
-  apiUrl: 'https://gimmi.herokuapp.com/api/',
+  apiUrl: 'https://api.gimmi.be/api/',
   rootSiteUrl: 'https://www.gimmi.be',
   cloudinary: {
     cloud_name: 'hunk4smqo',
