@@ -5,8 +5,7 @@ export class User {
         public firstName: string,
         public email: string,
         public loginStrategy: string,
-        public token: string,
-        public accounts: any
+        public token: string
     ) { };
 
     get fullName(): string { // TODO: User should extend Person so this duplication isn't needed anymore (name should come from Person class, not User Class)
@@ -17,16 +16,6 @@ export class User {
 export interface ILocalLoginInfo {
     email: string,
     password: string
-}
-
-export interface IFacebookUserInfo { //Zie SocialUser class van angularx-social-login
-    provider: string;
-    id: string;
-    authToken: string;
-    photoUrl: string;
-    email: string;
-    firstName: string;
-    lastName: string;
 }
 
 export interface IDecodedUserToken {
@@ -40,5 +29,4 @@ export interface IDecodedUserToken {
     exp: number;
     iat: number;
     loginStrategy: string;
-    accounts: any[];
 }
