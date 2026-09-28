@@ -1,7 +1,10 @@
 export const environment = {
   title: "[TEST] Gimmi",
   production: true,
-  apiUrl: 'https://api-test.gimmi.be/api/',
+  // Geen api-test.gimmi.be: test-gimmi draait op een Eco-dyno, en Heroku geeft
+  // daar geen certificaat uit. Bij de verhuizing naar Railway (p4b-move) moet
+  // deze regel dus nog een keer mee.
+  apiUrl: 'https://test-gimmi.herokuapp.com/api/',
   rootSiteUrl: 'https://test.gimmi.be',
   cloudinary: {
     cloud_name: 'hunk4smqo',
