@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "playwright test",
-    "e2e:cleanup": "node e2e/cleanup-smoke-users.ts"
+    "e2e:cleanup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/cleanup-smoke-users.ts"
   },
   "private": true,
   "dependencies": {
