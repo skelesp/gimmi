@@ -26,6 +26,10 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
+    // CI: npm run test:ci (headless, zonder sandbox op de GitHub-runner)
+    customLaunchers: {
+      ChromeHeadlessCI: { base: 'ChromeHeadless', flags: ['--no-sandbox'] }
+    },
     singleRun: false,
     restartOnFileChange: true
   });
