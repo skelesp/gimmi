@@ -67,9 +67,7 @@ test.describe('kernflows', () => {
         fouten.push(`${account.email}: ${(err as Error).message}`);
       }
     }
-    if (fouten.length) throw new Error(`Opruimen mislukt, draai npm run e2e:cleanup:
-${fouten.join('
-')}`);
+    if (fouten.length) throw new Error(['Opruimen mislukt, draai npm run e2e:cleanup:', ...fouten].join('\n'));
   });
 
   test('1. registreren', async ({ browser }) => {
