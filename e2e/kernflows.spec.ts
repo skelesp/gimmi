@@ -1,13 +1,15 @@
 import { test, expect, Browser, BrowserContext, Page } from '@playwright/test';
+import { deleteAccount, smokePassword } from './helpers/api';
 
 // Smoketests voor de zes kernflows. De tests bouwen op elkaar (de wens die in
 // test 3 wordt aangemaakt, wordt in test 4 gereserveerd), dus ze draaien serieel
-// en delen de gebruikers hieronder.
+// en delen de gebruikers hieronder. Na afloop verwijdert afterAll de gebruikers en hun
+// wensen weer via de API. Blijft er toch iets staan (run afgebroken): npm run e2e:cleanup.
 
 interface Account { firstName: string; lastName: string; email: string; password: string; id?: string; }
 
 const runId = Date.now().toString(36);
-const password = 'Smoke-test-1!';
+const password = smokePassword;
 const owner: Account = { firstName: 'Smoke', lastName: 'Eigenaar', email: `smoke+owner-${runId}@gimmi.be`, password };
 const giver: Account = { firstName: 'Smoke', lastName: 'Gever', email: `smoke+giver-${runId}@gimmi.be`, password };
 const wishTitle = `Smoke wens ${runId}`;
@@ -54,6 +56,22 @@ async function login(page: Page, account: Account): Promise<void> {
 test.describe.configure({ mode: 'serial' });
 
 test.describe('kernflows', () => {
+  test.afterAll(async () => {
+    // Ook opruimen als een test halverwege faalde. Wie nooit geregistreerd werd (geen id), slaan we over.
+    const fouten: string[] = [];
+    for (const account of [giver, owner]) {
+      if (!account.id) continue;
+      try {
+        await deleteAccount(account.id, account.email, account.password);
+      } catch (err) {
+        fouten.push(`${account.email}: ${(err as Error).message}`);
+      }
+    }
+    if (fouten.length) throw new Error(`Opruimen mislukt, draai npm run e2e:cleanup:
+${fouten.join('
+')}`);
+  });
+
   test('1. registreren', async ({ browser }) => {
     const { context, page } = await newUserPage(browser);
     await register(page, owner);
