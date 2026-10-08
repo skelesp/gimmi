@@ -1,0 +1,61 @@
+# Playwright-smoketests tegen de testomgeving (gimmi-test.pages.dev + test-gimmi), sc-2044.
+# Draait na elke push naar develop, zodra Cloudflare Pages die commit heeft gepubliceerd,
+# en handmatig via "Run workflow".
+name: Smoke
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: read
+
+# De flows maken testgebruikers aan; twee runs tegelijk zitten elkaar niet in de weg,
+# maar een volgende push hoeft een lopende run niet af te breken.
+concurrency:
+  group: smoke
+  cancel-in-progress: false
+
+env:
+  NG_CLI_ANALYTICS: 'false'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Wacht op de Cloudflare Pages-deploy van deze commit
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHECK: 'Cloudflare Pages: gimmi-test'
+        run: |
+          for i in $(seq 1 60); do
+            read -r status conclusion < <(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs" \
+              --jq ".check_runs | map(select(.name == \"$CHECK\")) | first | \"\(.status) \(.conclusion)\"" || true)
+            echo "poging $i: ${status:-geen check} ${conclusion}"
+            if [ "$status" = completed ]; then
+              [ "$conclusion" = success ] && exit 0
+              echo "::error::Cloudflare-deploy eindigde met '$conclusion'"; exit 1
+            fi
+            sleep 20
+          done
+          echo "::error::Geen afgeronde Cloudflare-deploy na 20 minuten"; exit 1
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
